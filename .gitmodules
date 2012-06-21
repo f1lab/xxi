@@ -1,0 +1,3 @@
+[submodule "lib/vendor/symfony"]
+	path = lib/vendor/symfony
+	url = git@github.com:b1rdex/symfony1.git
