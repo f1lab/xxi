@@ -11,10 +11,28 @@ default:
     #keywords:     symfony, project
     #language:     en
     #robots:       index, follow
+    viewport:      width=device-width, initial-scale=1.0
 
-  stylesheets:    [main.css]
+  stylesheets:
+    - bootstrap
+    #- bootstrap-responsive
+    - main
 
-  javascripts:    []
+  javascripts:
+    - jquery
+    - bootstrap-transition
+    - bootstrap-alert
+    - bootstrap-modal
+    - bootstrap-dropdown
+    - bootstrap-scrollspy
+    - bootstrap-tab
+    - bootstrap-tooltip
+    - bootstrap-popover
+    - bootstrap-button
+    - bootstrap-collapse
+    - bootstrap-carousel
+    - bootstrap-typeahead
+    - main
 
   has_layout:     true
   layout:         layout
