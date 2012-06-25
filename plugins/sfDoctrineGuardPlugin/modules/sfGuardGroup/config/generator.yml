@@ -23,3 +23,6 @@ generator:
 
       new:
         title: New Group
+
+      filter:
+        class: false

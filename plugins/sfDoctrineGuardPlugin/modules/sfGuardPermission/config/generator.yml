@@ -23,3 +23,6 @@ generator:
 
       form:
         display: [name, description, groups_list, users_list]
+
+      filter:
+        class: false

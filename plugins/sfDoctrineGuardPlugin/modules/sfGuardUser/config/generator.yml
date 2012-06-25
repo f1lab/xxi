@@ -29,3 +29,6 @@ generator:
 
       new:
         title: New User
+
+      filter:
+        class: false
