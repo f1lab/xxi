@@ -21,6 +21,10 @@
       <div class="container">
         <a href="<?php echo url_for('@homepage') ?>" class="brand">21 век</a>
 
+        <ul class="nav">
+          <li><a href="<?php echo url_for('@clients') ?>">Заказчики</a></li>
+        </ul>
+
         <ul class="nav pull-right"><?php if ($sf_user->isAuthenticated()): ?>
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -36,7 +40,15 @@
     </div>
   </div>
   <div class="container">
-    <div class="row"><?php echo $sf_content ?></div>
+    <?php if ($sf_user->hasFlash('message') and list($type, $title, $content)=$sf_user->getFlash('message')): ?>
+    <div class="alert alert-<?php echo $type ?>">
+      <a href="#" class="close" data-dismiss="alert">×</a>
+      <strong><?php echo $title ?></strong>
+      <?php echo $content ?>
+    </div>
+    <?php endif ?>
+
+    <?php echo $sf_content ?>
   </div>
 </body>
 </html>

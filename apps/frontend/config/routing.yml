@@ -6,6 +6,34 @@ homepage:
   url:   /
   param: { module: main, action: index }
 
+clients:
+  url:   /clients
+  param: { module: client, action: index }
+
+client:
+  url:   /clients/:id
+  param: { module: client, action: show }
+  requirements: { id: \d+ }
+
+client-new:
+  url:   /clients/new
+  param: { module: client, action: new }
+
+client-create:
+  url:   /clients/create
+  param: { module: client, action: create }
+
+client-edit:
+  url:   /clients/:id/edit
+  param: { module: client, action: edit }
+  requirements: { id: \d+ }
+
+client-del:
+  url:   /clients/:id/del
+  param: { module: client, action: del }
+  requirements: { id: \d+ }
+
+
 # generic rules
 # please, remove them by adding more specific rules
 default_index:
