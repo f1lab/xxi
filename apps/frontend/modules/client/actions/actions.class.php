@@ -26,14 +26,15 @@ class clientActions extends sfActions
   public function executeCreate(sfWebRequest $request)
   {
     $this->form = new ClientForm();
-    $this->processForm($request, $this->form, array('success', 'Отлично!', 'Пользователь добавлен.'), '@clients');
+    $this->processForm($request, $this->form, array('success', 'Отлично!', 'Клиент добавлен.'), '@clients');
     $this->setTemplate('new');
   }
 
   public function executeShow(sfWebRequest $request)
   {
-    $this->client = Doctrine_Core::getTable('Client')
-      ->find($request->getParameter('id'))
+    $this->client = Doctrine_Core::getTable('Client')->createQuery('a, a.Orders')
+      ->where('a.id = ?', $request->getParameter('id'))
+      ->fetchOne()
     ;
     $this->forward404Unless($this->client);
   }

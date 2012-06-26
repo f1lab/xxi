@@ -1,5 +1,5 @@
 <div class="page-header">
-  <h1>Заказчики</h1>
+  <h1>Клиенты</h1>
 </div>
 <div class="btn-toolbar">
   <div class="btn-group">

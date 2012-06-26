@@ -7,6 +7,15 @@
  */
 class OrderTable extends Doctrine_Table
 {
+    public static $states = array(
+      'calculating' => 'На просчёте',
+      'work' => 'В цех',
+      'working' => 'В работе',
+      'done' => 'Всё готово',
+      'submited' => 'Сдан',
+      'archived' => 'В архиве',
+      'debt' => 'Дебиторка'
+    );
     /**
      * Returns an instance of this class.
      *

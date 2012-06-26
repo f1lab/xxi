@@ -22,7 +22,8 @@
         <a href="<?php echo url_for('@homepage') ?>" class="brand">21 век</a>
 
         <ul class="nav">
-          <li><a href="<?php echo url_for('@clients') ?>">Заказчики</a></li>
+          <li><a href="<?php echo url_for('@clients') ?>">Клиенты</a></li>
+          <li><a href="<?php echo url_for('@orders') ?>">Заказы</a></li>
         </ul>
 
         <ul class="nav pull-right"><?php if ($sf_user->isAuthenticated()): ?>

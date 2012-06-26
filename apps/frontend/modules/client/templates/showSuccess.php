@@ -41,19 +41,21 @@
     <a href="" class="btn">Архивные</a>
   </div>
   <div class="btn-group">
-    <a href="" class="btn btn-primary">Добавить заказ</a>
+    <a href="<?php echo url_for('@order-new?client=' . $client->getId()) ?>" class="btn btn-primary">Добавить заказ</a>
   </div>
 </div>
-<?php if (isset($orders) and count($orders)): ?>
-<table>
+<?php if (true == ($orders=$client->getOrders()) and count($orders)): ?>
+<table class="table table-condensed table-bordered rows-clickable">
   <thead>
     <tr>
       <th>#</th>
+      <th>Статус</th>
     </tr>
   </thead>
   <tbody><?php foreach ($orders as $order): ?>
     <tr>
-      
+      <td><a href="<?php echo url_for('@order?id=' . $order->getId()) ?>"><?php echo $order->getId() ?></a></td>
+      <td><?php echo $order->getStateTranslated() ?></td>
     </tr>
   <?php endforeach ?></tbody>
 </table>

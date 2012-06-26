@@ -12,4 +12,8 @@
  */
 class Order extends BaseOrder
 {
+  public function getStateTranslated()
+  {
+    return OrderTable::$states[ $this->_get('state') ];
+  }
 }

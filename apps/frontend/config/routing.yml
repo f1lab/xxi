@@ -38,6 +38,31 @@ client-del:
   param: { module: client, action: del }
   requirements: { id: \d+ }
 
+orders:
+  url:   /orders
+  param: { module: order, action: index }
+
+order:
+  url:   /orders/:id
+  param: { module: order, action: show }
+  requirements: { id: \d+ }
+
+order-new:
+  url:   /orders/new
+  param: { module: order, action: new }
+
+order-create:
+  url:   /orders/create
+  param: { module: order, action: create }
+
+order-edit:
+  url:   /orders/:id/edit
+  param: { module: order, action: edit }
+  requirements: { id: \d+ }
+
+order-update:
+  url:   /orders/update
+  param: { module: order, action: update }
 
 # generic rules
 # please, remove them by adding more specific rules
