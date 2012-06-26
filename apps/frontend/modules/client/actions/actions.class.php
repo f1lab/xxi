@@ -38,6 +38,24 @@ class clientActions extends sfActions
     $this->forward404Unless($this->client);
   }
 
+  public function executeEdit(sfWebRequest $request)
+  {
+    $this->client = Doctrine_Core::getTable('Client')
+      ->find($request->getParameter('id'))
+    ;
+    $this->form = new ClientForm($this->client);
+  }
+
+  public function executeUpdate(sfWebRequest $request)
+  {
+    $this->client = Doctrine_Core::getTable('Client')
+      ->find($request->getParameter('id'))
+    ;
+    $this->form = new ClientForm($this->client);
+    $this->processForm($request, $this->form, array('success', 'Отлично!', 'Изменения сохранены.'), '@client?id=' . $this->client->getId());
+    $this->setTemplate('edit');
+  }
+
   public function processForm(sfWebRequest $request, sfForm $form, $flash=false, $redirect=false)
   {
     $form->bind(

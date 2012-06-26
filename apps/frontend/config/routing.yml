@@ -28,6 +28,11 @@ client-edit:
   param: { module: client, action: edit }
   requirements: { id: \d+ }
 
+client-update:
+  url:   /clients/:id/update
+  param: { module: client, action: update }
+  requirements: { id: \d+ }
+
 client-del:
   url:   /clients/:id/del
   param: { module: client, action: del }

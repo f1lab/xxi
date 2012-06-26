@@ -20,5 +20,7 @@ class ClientForm extends BaseClientForm
       'phone' => 'Телефон',
       'email' => 'Email',
     ));
+
+    $this->getValidatorSchema()->offsetSet('email', new sfValidatorEmail(array('required' => false)));
   }
 }
