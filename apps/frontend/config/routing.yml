@@ -69,6 +69,16 @@ order-update:
   param: { module: order, action: update }
   requirements: { id: \d+ }
 
+comment:
+  url:   /orders/:id/comment
+  param: { module: order, action: comment }
+  requirements: { id: \d+ }
+
+comment-delete:
+  url:   /orders/:order/comment/:id/delete
+  param: { module: order, action: deleteComment }
+  requirements: { order: \d+, id: \d+ }
+
 # generic rules
 # please, remove them by adding more specific rules
 default_index:

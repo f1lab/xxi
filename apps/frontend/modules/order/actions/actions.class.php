@@ -18,10 +18,14 @@ class orderActions extends sfActions
 
   public function executeShow(sfWebRequest $request)
   {
-    $this->order = Doctrine_Core::getTable('Order')
-      ->find($request->getParameter('id'))
+    $this->order = Doctrine_Core::getTable('Order')->createQuery('a, a.Comments b, b.Creator')
+      ->where('a.id = ?', $request->getParameter('id'))
+      ->fetchOne()
     ;
     $this->forward404Unless($this->order);
+
+    $this->commentForm = new CommentForm();
+    $this->commentForm->setDefault('order_id', $this->order->getId());
   }
 
   public function executeNew(sfWebRequest $request)
@@ -55,6 +59,13 @@ class orderActions extends sfActions
     $this->form = new OrderForm($this->order);
     $this->processForm($request, $this->form, array('success', 'Отлично!', 'Изменения сохранены.'), '@order?id=' . $this->order->getId());
     $this->setTemplate('edit');
+  }
+
+  public function executeComment(sfWebRequest $request)
+  {
+    $form = new CommentForm();
+    $this->processForm($request, $form, array('success', 'Отлично!', 'Комментарий добавлен.'));
+    $this->redirect('@order?id=' . $request->getParameter('id'));
   }
 
   public function processForm(sfWebRequest $request, sfForm $form, $flash=false, $redirect=false)

@@ -63,11 +63,42 @@
 
 <div class="btn-toolbar">
   <div class="btn-group">
-    <a href="<?php echo url_for('@order-edit?id=' . $order->getId()) ?>" class="btn">Редактировать</a>
+    <a href="<?php echo url_for('@order-edit?id=' . $order->getId()) ?>" class="btn btn-primary">Редактировать</a>
   </div>
 </div>
 
+<hr />
+
+<h2>Комментарии</h2>
+<?php if (true == ($comments = $order->getComments()) and isset($comments) and count($comments)):
+use_helper('Text');
+?>
+<section class="comments row">
+<?php foreach ($comments as $id=>$comment): ?>
+  <article class="comment well span6" id="comment-<?php echo $comment->getId() ?>">
+    <div class="meta clearfix muted">
+      <div class="author pull-left"><?php echo $comment->getCreator() ?></div>
+      <?php /* if ($comment->getCreatedBy() == $sf_user->getGuardUser()->getId()): ?>
+        <a href="<?php echo url_for('@comment-delete?id=' . $comment->getId() . '&order=' . $order->getId())
+          ?>" class="btn btn-mini pull-right"><i class="icon icon-remove"></i></a>
+      <?php endif */ ?>
+      <a href="#comment-<?php echo $comment->getId() ?>" class="date muted pull-right"><?php echo $comment->getCreatedAt() ?></a>
+    </div>
+    <div class="content">
+      <?php echo simple_format_text($comment->getText()) ?>
+    </div>
+  </article>
+<?php endforeach ?></section>
+<?php else: ?>
 <div class="alert alert-info">
-  <strong>Ждите!</strong>
-  Здесь будет комментирование заказа и вы сможете оставлять заметки.
+  <strong></strong>
+  Нет комментариев.
 </div>
+<?php endif ?>
+
+<form action="<?php echo url_for('@comment?id=' . $order->getId()) ?>" method="post" class="form-fluid">
+<?php echo $commentForm->renderUsing('bootstrap') ?>
+  <div class="form-actions">
+    <button type="submit" class="btn btn-success">Комментировать</button>
+  </div>
+</form>

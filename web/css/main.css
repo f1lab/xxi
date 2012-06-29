@@ -1,3 +1,8 @@
 .rows-clickable tbody tr {
   cursor: pointer;
 }
+
+.form-fluid input[type="text"],
+.form-fluid textarea {
+  width: 99%;
+}
