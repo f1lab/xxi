@@ -12,10 +12,8 @@ class orderActions extends sfActions
 {
   public function executeIndex(sfWebRequest $request)
   {
-    $this->orders = Doctrine_Core::getTable('Order')->createQuery('a, a.Client')
-      ->orderBy('created_at')
-      ->execute()
-    ;
+    $this->orders = $this->getUser()->getOrders($request->getParameter('state'));
+    $this->_state = $request->getParameter('state');
   }
 
   public function executeShow(sfWebRequest $request)

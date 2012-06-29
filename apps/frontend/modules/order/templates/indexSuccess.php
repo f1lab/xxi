@@ -5,25 +5,12 @@
   <div class="btn-group">
     <a href="<?php echo url_for('@order-new') ?>" class="btn btn-primary">Добавить заказ</a>
   </div>
+  <div class="btn-group pull-right">
+    <a href="<?php echo url_for('@orders') ?>" class="btn<?php echo $_state == 'active' ? ' active' : '' ?>">Текущие</a>
+  <?php foreach (OrderTable::$states as $state=>$stateTranslated): ?>
+    <a href="<?php echo url_for('@orders?state=' . $state) ?>" class="btn<?php echo $_state == $state ? ' active' : '' ?>"><?php echo $stateTranslated ?></a>
+  <?php endforeach ?>
+  </div>
 </div>
 
-<?php if (isset($orders) and count($orders)): ?>
-<table class="table table-condensed table-bordered rows-clickable">
-  <thead>
-    <tr>
-      <th>#</th>
-      <th>Статус</th>
-      <th>Заказчик</th>
-    </tr>
-  </thead>
-  <tbody><?php foreach ($orders as $order): ?>
-    <tr>
-      <td><a href="<?php echo url_for('@order?id=' . $order->getId()) ?>"><?php echo $order->getId() ?></a></td>
-      <td><?php echo $order->getStateTranslated() ?></td>
-      <td><?php echo $order->getClient() ?></td>
-    </tr>
-  <?php endforeach ?></tbody>
-</table>
-<?php else: ?>
-<p>Нет заказов.</p>
-<?php endif ?>
+<?php include_partial('global/orders', array('orders' => $orders, 'columns' => array('id', 'client_id', 'approved_at', 'due_date', 'state'))) ?>

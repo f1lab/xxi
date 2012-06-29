@@ -16,6 +16,7 @@ class OrderTable extends Doctrine_Table
       'archived' => 'В архиве',
       'debt' => 'Дебиторка'
     );
+
     /**
      * Returns an instance of this class.
      *

@@ -37,28 +37,13 @@
 <h2>Заказы</h2>
 <div class="btn-toolbar">
   <div class="btn-group">
-    <a href="" class="btn active">Текущие</a>
-    <a href="" class="btn">Архивные</a>
-  </div>
-  <div class="btn-group">
     <a href="<?php echo url_for('@order-new?client=' . $client->getId()) ?>" class="btn btn-primary">Добавить заказ</a>
   </div>
+  <div class="btn-group pull-right">
+    <a href="<?php echo url_for('@client?id=' . $client->getId()) ?>" class="btn<?php echo $_state == 'active' ? ' active' : '' ?>">Текущие</a>
+  <?php foreach (OrderTable::$states as $state=>$stateTranslated): ?>
+    <a href="<?php echo url_for('@client?id=' . $client->getId() . '&state=' . $state) ?>" class="btn<?php echo $_state == $state ? ' active' : '' ?>"><?php echo $stateTranslated ?></a>
+  <?php endforeach ?>
+  </div>
 </div>
-<?php if (true == ($orders=$client->getOrders()) and count($orders)): ?>
-<table class="table table-condensed table-bordered rows-clickable">
-  <thead>
-    <tr>
-      <th>#</th>
-      <th>Статус</th>
-    </tr>
-  </thead>
-  <tbody><?php foreach ($orders as $order): ?>
-    <tr>
-      <td><a href="<?php echo url_for('@order?id=' . $order->getId()) ?>"><?php echo $order->getId() ?></a></td>
-      <td><?php echo $order->getStateTranslated() ?></td>
-    </tr>
-  <?php endforeach ?></tbody>
-</table>
-<?php else: ?>
-<p>Нет заказов</p>
-<?php endif ?>
+<?php include_partial('global/orders', array('orders' => $client->getOrdersByState($_state), 'columns' => array('id', 'approved_at', 'due_date', 'state'))) ?>

@@ -32,7 +32,8 @@ class clientActions extends sfActions
 
   public function executeShow(sfWebRequest $request)
   {
-    $this->client = Doctrine_Core::getTable('Client')->createQuery('a, a.Orders')
+    $this->_state = $request->getParameter('state');
+    $this->client = Doctrine_Core::getTable('Client')->createQuery('a')
       ->where('a.id = ?', $request->getParameter('id'))
       ->fetchOne()
     ;

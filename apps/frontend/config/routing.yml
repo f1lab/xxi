@@ -11,9 +11,11 @@ clients:
   param: { module: client, action: index }
 
 client:
-  url:   /clients/:id
-  param: { module: client, action: show }
-  requirements: { id: \d+ }
+  url:   /clients/:id/:state
+  param: { module: client, action: show, state: active }
+  requirements:
+    id: \d+
+    state: <?php echo join('|', array_keys(OrderTable::$states)) ?>
 
 client-new:
   url:   /clients/new
@@ -39,8 +41,10 @@ client-del:
   requirements: { id: \d+ }
 
 orders:
-  url:   /orders
-  param: { module: order, action: index }
+  url:   /orders/:state
+  param: { module: order, action: index, state: active }
+  requirements:
+    state: <?php echo join('|', array_keys(OrderTable::$states)) ?>
 
 order:
   url:   /orders/:id
@@ -61,8 +65,9 @@ order-edit:
   requirements: { id: \d+ }
 
 order-update:
-  url:   /orders/update
+  url:   /orders/:id/update
   param: { module: order, action: update }
+  requirements: { id: \d+ }
 
 # generic rules
 # please, remove them by adding more specific rules

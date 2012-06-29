@@ -12,4 +12,15 @@
  */
 class Client extends BaseClient
 {
+  public function getOrdersByState($state)
+  {
+    return Doctrine_Core::getTable('Order')->createQuery('a')
+      ->where('a.created_by = ?', $this->getId())
+      ->andWhere('a.state '
+        . ($state == 'active' ? '!=' : '=') . ' ?',
+        ($state == 'active' ? 'archived' : $state)
+      )
+      ->execute()
+    ;
+  }
 }

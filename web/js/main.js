@@ -8,5 +8,9 @@ $(function() {
           })
         ;
       })
-    ;
+  ;
+
+  $('[rel="popover"]')
+    .popover()
+  ;
 });
