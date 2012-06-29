@@ -49,3 +49,19 @@ Order:
         - submited
         - archived
         - debt
+  relations:
+    Comments:
+      class: Comment
+      type: many
+      local: id
+      foreign: order_id
+
+Comment:
+  actAs: [Timestampable, Signable]
+  columns:
+    order_id:
+      type: integer
+      notnull: true
+    text:
+      type: clob
+      notnull: true
