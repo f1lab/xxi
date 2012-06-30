@@ -16,4 +16,19 @@ class Order extends BaseOrder
   {
     return OrderTable::$states[ $this->_get('state') ];
   }
+
+  public function getColorIndicator()
+  {
+    $colors = array(
+      'calculating' => '',
+      'work' => 'alert-error',
+      'working' => 'alert',
+      'done' => 'alert-success',
+      'submited' => '',
+      'archived' => '',
+      'debt' => ''
+    );
+
+    return $colors[ $this->getState() ];
+  }
 }

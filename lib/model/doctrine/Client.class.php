@@ -14,12 +14,30 @@ class Client extends BaseClient
 {
   public function getOrdersByState($state)
   {
-    return Doctrine_Core::getTable('Order')->createQuery('a')
-      ->where('a.created_by = ?', $this->getId())
-      ->andWhere('a.state '
-        . ($state == 'active' ? '!=' : '=') . ' ?',
-        ($state == 'active' ? 'archived' : $state)
-      )
+    $query = Doctrine_Core::getTable('Order')->createQuery('a')
+      ->orderBy('created_at')
+      ->where('a.created_by = ?', sfContext::getInstance()->getUser()->getGuardUser()->getId())
+      ->andWhere('a.client_id = ?', $this->getId())
+    ;
+
+    switch ($state) {
+      case 'active':
+        $query
+          ->andWhereNotIn('a.state', array(
+            'archived',
+            'debt',
+          ))
+        ;
+      break;
+
+      default:
+        $query
+          ->andWhere('a.state = ?', $state)
+        ;
+      break;
+    }
+
+    return $query
       ->execute()
     ;
   }

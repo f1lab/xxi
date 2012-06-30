@@ -4,13 +4,29 @@ class myUser extends sfGuardSecurityUser
 {
   public function getOrders($state)
   {
-    return Doctrine_Core::getTable('Order')->createQuery('a, a.Client')
+    $query = Doctrine_Core::getTable('Order')->createQuery('a, a.Client')
       ->orderBy('created_at')
       ->where('a.created_by = ?', $this->getGuardUser()->getId())
-      ->andWhere('a.state '
-        . ($state == 'active' ? '!=' : '=') . ' ?',
-        ($state == 'active' ? 'archived' : $state)
-      )
+    ;
+
+    switch ($state) {
+      case 'active':
+        $query
+          ->andWhereNotIn('a.state', array(
+            'archived',
+            'debt',
+          ))
+        ;
+      break;
+
+      default:
+        $query
+          ->andWhere('a.state = ?', $state)
+        ;
+      break;
+    }
+
+    return $query
       ->execute()
     ;
   }

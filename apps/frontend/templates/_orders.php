@@ -10,7 +10,13 @@
     </tr>
   </thead>
   <tbody><?php foreach ($orders as $order): ?>
-    <tr rel="popover" data-placement="top" data-title="Описание заказа" data-content="<?php echo $order->getDescription() ?>">
+    <tr
+      rel="popover"
+      data-placement="top"
+      data-title="Описание заказа"
+      data-content="<?php echo $order->getDescription() ?>"
+      class="<?php echo $order->getColorIndicator() ?>"
+    >
       <?php if (in_array('id', $columns)): ?><td><a href="<?php echo url_for('@order?id=' . $order->getId()) ?>"><?php echo $order->getId() ?></a></td><?php endif ?>
       <?php if (in_array('client_id', $columns)): ?><td><?php echo $order->getClient() ?></td><?php endif ?>
       <?php if (in_array('approved_at', $columns)): ?><td><?php echo $order->getApprovedAt() ?></td><?php endif ?>
