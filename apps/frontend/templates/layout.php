@@ -29,7 +29,7 @@
         <ul class="nav pull-right"><?php if ($sf_user->isAuthenticated()): ?>
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <?php echo $sf_user->getName() ?>
+              <?php echo true == ($name=$sf_user->getName()) ? $name . ' (' . $sf_user->getUsername() . ')' : $sf_user->getUsername() ?>
               <b class="caret"></b>
             </a>
             <ul class="dropdown-menu">

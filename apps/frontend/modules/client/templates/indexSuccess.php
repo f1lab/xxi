@@ -1,11 +1,15 @@
 <div class="page-header">
   <h1>Клиенты</h1>
 </div>
+
+<?php if ($sf_user->hasGroup('manager')): ?>
 <div class="btn-toolbar">
   <div class="btn-group">
     <a href="<?php echo url_for('@client-new') ?>" class="btn btn-primary">Добавить клиента</a>
   </div>
 </div>
+<?php endif ?>
+
 <table class="table table-condensed table-bordered rows-clickable">
   <thead>
   <tr>

@@ -29,16 +29,16 @@
     </tbody>
   </table>
   </div>
-  <div class="span4">
+  <div class="span4"><?php if ($sf_user->hasGroup('manager')): ?>
     <a href="<?php echo url_for('@client-edit?id=' . $client->getId()) ?>" class="btn">Редактировать</a>
-  </div>
+  <?php endif ?></div>
 </div>
 
 <h2>Заказы</h2>
-<div class="btn-toolbar">
-  <div class="btn-group">
+<div class="btn-toolbar clearfix">
+  <?php if ($sf_user->hasGroup('manager')): ?><div class="btn-group">
     <a href="<?php echo url_for('@order-new?client=' . $client->getId()) ?>" class="btn btn-primary">Добавить заказ</a>
-  </div>
+  </div><?php endif ?>
   <div class="btn-group pull-right">
     <a href="<?php echo url_for('@client?id=' . $client->getId()) ?>" class="btn<?php echo $_state == 'active' ? ' active' : '' ?>">Текущие</a>
   <?php foreach (OrderTable::$states as $state=>$stateTranslated): ?>

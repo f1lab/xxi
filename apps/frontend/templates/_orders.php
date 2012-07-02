@@ -7,6 +7,7 @@
       <?php if (in_array('approved_at', $columns)): ?><th>Дата согласования</th><?php endif ?>
       <?php if (in_array('due_date', $columns)): ?><th>Срок исполнения</th><?php endif ?>
       <?php if (in_array('state', $columns)): ?><th>Статус</th><?php endif ?>
+      <?php if (in_array('manager', $columns)): ?><th>Менеджер</th><?php endif ?>
     </tr>
   </thead>
   <tbody><?php foreach ($orders as $order): ?>
@@ -22,6 +23,7 @@
       <?php if (in_array('approved_at', $columns)): ?><td><?php echo $order->getApprovedAt() ?></td><?php endif ?>
       <?php if (in_array('due_date', $columns)): ?><td><?php echo $order->getDueDate() ?></td><?php endif ?>
       <?php if (in_array('state', $columns)): ?><td><?php echo $order->getStateTranslated() ?></td><?php endif ?>
+      <?php if (in_array('manager', $columns)): ?><td><?php echo $order->getCreator() ?></td><?php endif ?>
     </tr>
   <?php endforeach ?></tbody>
 </table>

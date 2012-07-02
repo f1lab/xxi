@@ -1,0 +1,14 @@
+all:
+  credentials: [[manager, director]]
+
+edit:
+  credentials: [manager]
+
+update:
+  credentials: [manager]
+
+new:
+  credentials: [manager]
+
+create:
+  credentials: [manager]

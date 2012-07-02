@@ -14,6 +14,7 @@ class ClientForm extends BaseClientForm
   {
     unset( $this['created_by'], $this['updated_by'], $this['deleted_at'] );
 
+    $this->getWidgetSchema()->offsetSet('name', new sfWidgetFormInputText(array(), array('placeholder' => 'Ф1 Лаб, ООО')));
     $this->getWidgetSchema()->setLabels(array(
       'name' => 'Наименование организации',
       'contact' => 'Контактное лицо',

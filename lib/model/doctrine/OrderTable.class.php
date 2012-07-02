@@ -17,6 +17,12 @@ class OrderTable extends Doctrine_Table
       'debt' => 'Дебиторка'
     );
 
+    public static $statesForWorker = array(
+      'work' => 'В цех',
+      'working' => 'В работе',
+      'done' => 'Всё готово',
+    );
+
     /**
      * Returns an instance of this class.
      *

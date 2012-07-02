@@ -12,8 +12,45 @@ class orderActions extends sfActions
 {
   public function executeIndex(sfWebRequest $request)
   {
-    $this->orders = $this->getUser()->getOrders($request->getParameter('state'));
+    $this->orders = array();
     $this->_state = $request->getParameter('state');
+
+    if ($this->getUser()->hasGroup('manager')) {
+      $this->orders = $this->getUser()->getOrders($request->getParameter('state'));
+
+    } else if ($this->getUser()->hasGroup('monitor')) {
+      $this->orders = Doctrine_Core::getTable('Order')->createQuery('a, a.Client, a.Creator')
+        ->orderBy('a.created_at asc')
+        ->whereNotIn('a.state', array('calculating', 'archived', 'debt'))
+        ->execute()
+      ;
+
+    } else if ($this->getUser()->hasGroup('worker')) {
+      $this->orders = Doctrine_Core::getTable('Order')->createQuery('a, a.Creator')
+        ->orderBy('a.created_at asc')
+      ;
+
+      if ($this->_state == 'active') {
+        $this->orders->whereIn('a.state', array('work', 'working', 'done'));
+      } else {
+        $this->orders->where('a.state = ?', $this->_state);
+      }
+
+      $this->orders = $this->orders->execute();
+
+    } else if ($this->getUser()->hasGroup('director')) {
+      $this->orders = Doctrine_Core::getTable('Order')->createQuery('a, a.Client, a.Creator')
+        ->orderBy('a.created_at asc')
+      ;
+
+      if ($this->_state == 'active') {
+        $this->orders->whereNotIn('a.state', array('archived', 'debt'));
+      } else {
+        $this->orders->where('a.state = ?', $this->_state);
+      }
+
+      $this->orders = $this->orders->execute();
+    }
   }
 
   public function executeShow(sfWebRequest $request)
@@ -26,6 +63,36 @@ class orderActions extends sfActions
 
     $this->commentForm = new CommentForm();
     $this->commentForm->setDefault('order_id', $this->order->getId());
+
+    $this->fields = array(
+      'client' => 'Клиент',
+      'creator' => 'Менеджер',
+      'description' => 'Описание заказа',
+      'dueDate' => 'Срок исполнения',
+      'approvedAt' => 'Дата согласования с заказчиком',
+      'files' => 'Файлы и коментарии к ним',
+      'installationCost' => 'Стоимость монтажа',
+      'designCost' => 'Стоимость дизайна',
+      'contractorsCost' => 'Стоимость работ подрядчиков',
+      'cost' => 'Стоимость работ',
+      'startedAt' => 'Дата поступления в работу',
+      'finishedAt' => 'Дата выполнения',
+      'submitedAt' => 'Дата сдачи заказа',
+      'stateTranslated' => 'Статус',
+    );
+
+    if ($this->getUser()->hasGroup('worker')) { // bidlo-magic: we need just part of fields, so bidlocode now
+      $workerFields = array_fill_keys(array(
+        'creator',
+        'description',
+        'dueDate',
+        'files',
+        'startedAt',
+        'finishedAt',
+        'stateTranslated',
+      ), ''); // => array('creator' => '', 'description' => '', etc…)
+      $this->fields = array_intersect_key($this->fields, $workerFields); // => array('creator' => 'Клиент', etc…)
+    }
   }
 
   public function executeNew(sfWebRequest $request)
@@ -49,6 +116,22 @@ class orderActions extends sfActions
       ->find($request->getParameter('id'))
     ;
     $this->form = new OrderForm($this->order);
+
+    //FIXME: it's fucking mess
+    $this->form->getWidgetSchema()->offsetUnset('client_id');
+    $this->form->getWidgetSchema()->offsetUnset('description');
+    $this->form->getWidgetSchema()->offsetUnset('due_date');
+    $this->form->getWidgetSchema()->offsetUnset('approved_at');
+    $this->form->getWidgetSchema()->offsetUnset('files');
+    $this->form->getWidgetSchema()->offsetUnset('installation_cost');
+    $this->form->getWidgetSchema()->offsetUnset('design_cost');
+    $this->form->getWidgetSchema()->offsetUnset('contractors_cost');
+    $this->form->getWidgetSchema()->offsetUnset('cost');
+    $this->form->getWidgetSchema()->offsetUnset('submited_at');
+    $this->form->getWidgetSchema()->offsetSet('state', new sfWidgetFormChoice(array(
+      'choices' => OrderTable::$statesForWorker,
+      'label' => 'Статус',
+    )));
   }
 
   public function executeUpdate(sfWebRequest $request)
@@ -57,6 +140,19 @@ class orderActions extends sfActions
       ->find($request->getParameter('id'))
     ;
     $this->form = new OrderForm($this->order);
+
+    //FIXME: it's fucking mess
+    $this->form->getValidatorSchema()->offsetUnset('client_id');
+    $this->form->getValidatorSchema()->offsetUnset('description');
+    $this->form->getValidatorSchema()->offsetUnset('due_date');
+    $this->form->getValidatorSchema()->offsetUnset('approved_at');
+    $this->form->getValidatorSchema()->offsetUnset('files');
+    $this->form->getValidatorSchema()->offsetUnset('installation_cost');
+    $this->form->getValidatorSchema()->offsetUnset('design_cost');
+    $this->form->getValidatorSchema()->offsetUnset('contractors_cost');
+    $this->form->getValidatorSchema()->offsetUnset('cost');
+    $this->form->getValidatorSchema()->offsetUnset('submited_at');
+
     $this->processForm($request, $this->form, array('success', 'Отлично!', 'Изменения сохранены.'), '@order?id=' . $this->order->getId());
     $this->setTemplate('edit');
   }
