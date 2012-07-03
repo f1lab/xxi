@@ -16,7 +16,17 @@ class orderActions extends sfActions
     $this->_state = $request->getParameter('state');
 
     if ($this->getUser()->hasGroup('manager')) {
-      $this->orders = $this->getUser()->getOrders($request->getParameter('state'));
+      $this->orders = Doctrine_Core::getTable('Order')->createQuery('a, a.Client, a.Creator')
+        ->orderBy('a.created_at asc')
+      ;
+
+      if ($this->_state == 'active') {
+        $this->orders->whereNotIn('a.state', array('archived', 'debt'));
+      } else {
+        $this->orders->where('a.state = ?', $this->_state);
+      }
+
+      $this->orders = $this->orders->execute();
 
     } else if ($this->getUser()->hasGroup('monitor')) {
       $this->orders = Doctrine_Core::getTable('Order')->createQuery('a, a.Client, a.Creator')
@@ -75,6 +85,8 @@ class orderActions extends sfActions
       'designCost' => 'Стоимость дизайна',
       'contractorsCost' => 'Стоимость работ подрядчиков',
       'cost' => 'Стоимость работ',
+      'recoil' => 'Откат',
+      'payMethodTranslated' => 'Способ оплаты',
       'startedAt' => 'Дата поступления в работу',
       'finishedAt' => 'Дата выполнения',
       'submitedAt' => 'Дата сдачи заказа',
@@ -117,21 +129,32 @@ class orderActions extends sfActions
     ;
     $this->form = new OrderForm($this->order);
 
-    //FIXME: it's fucking mess
-    $this->form->getWidgetSchema()->offsetUnset('client_id');
-    $this->form->getWidgetSchema()->offsetUnset('description');
-    $this->form->getWidgetSchema()->offsetUnset('due_date');
-    $this->form->getWidgetSchema()->offsetUnset('approved_at');
-    $this->form->getWidgetSchema()->offsetUnset('files');
-    $this->form->getWidgetSchema()->offsetUnset('installation_cost');
-    $this->form->getWidgetSchema()->offsetUnset('design_cost');
-    $this->form->getWidgetSchema()->offsetUnset('contractors_cost');
-    $this->form->getWidgetSchema()->offsetUnset('cost');
-    $this->form->getWidgetSchema()->offsetUnset('submited_at');
-    $this->form->getWidgetSchema()->offsetSet('state', new sfWidgetFormChoice(array(
-      'choices' => OrderTable::$statesForWorker,
-      'label' => 'Статус',
-    )));
+    if ($this->getUser()->hasGroup('worker')) {
+      //FIXME: it's fucking mess
+      $this->form->getWidgetSchema()
+        ->offsetUnset('client_id')
+        ->offsetUnset('description')
+        ->offsetUnset('due_date')
+        ->offsetUnset('approved_at')
+        ->offsetUnset('files')
+        ->offsetUnset('installation_cost')
+        ->offsetUnset('design_cost')
+        ->offsetUnset('contractors_cost')
+        ->offsetUnset('cost')
+        ->offsetUnset('submited_at')
+        ->offsetSet('state', new sfWidgetFormChoice(array(
+          'choices' => OrderTable::$statesForWorker,
+          'label' => 'Статус',
+        )))
+        ->offsetUnset('pay_method')
+        ->offsetUnset('recoil')
+      ;
+    } else {
+      $this->form->getWidgetSchema()
+        ->offsetUnset('started_at')
+        ->offsetUnset('finished_at')
+      ;
+    }
   }
 
   public function executeUpdate(sfWebRequest $request)
@@ -141,17 +164,28 @@ class orderActions extends sfActions
     ;
     $this->form = new OrderForm($this->order);
 
-    //FIXME: it's fucking mess
-    $this->form->getValidatorSchema()->offsetUnset('client_id');
-    $this->form->getValidatorSchema()->offsetUnset('description');
-    $this->form->getValidatorSchema()->offsetUnset('due_date');
-    $this->form->getValidatorSchema()->offsetUnset('approved_at');
-    $this->form->getValidatorSchema()->offsetUnset('files');
-    $this->form->getValidatorSchema()->offsetUnset('installation_cost');
-    $this->form->getValidatorSchema()->offsetUnset('design_cost');
-    $this->form->getValidatorSchema()->offsetUnset('contractors_cost');
-    $this->form->getValidatorSchema()->offsetUnset('cost');
-    $this->form->getValidatorSchema()->offsetUnset('submited_at');
+    if ($this->getUser()->hasGroup('worker')) {
+      //FIXME: it's fucking mess
+      $this->form->getValidatorSchema()
+        ->offsetUnset('client_id')
+        ->offsetUnset('description')
+        ->offsetUnset('due_date')
+        ->offsetUnset('approved_at')
+        ->offsetUnset('files')
+        ->offsetUnset('installation_cost')
+        ->offsetUnset('design_cost')
+        ->offsetUnset('contractors_cost')
+        ->offsetUnset('cost')
+        ->offsetUnset('submited_at')
+        ->offsetUnset('pay_method')
+        ->offsetUnset('recoil')
+      ;
+    } else {
+      $this->form->getValidatorSchema()
+        ->offsetUnset('started_at')
+        ->offsetUnset('finished_at')
+      ;
+    }
 
     $this->processForm($request, $this->form, array('success', 'Отлично!', 'Изменения сохранены.'), '@order?id=' . $this->order->getId());
     $this->setTemplate('edit');

@@ -20,15 +20,10 @@
 </div>
 
 <?php
-  $columns = array('id', 'client_id', 'approved_at', 'due_date', 'state');
+  $columns = array('id', 'client_id', 'approved_at', 'due_date', 'state', 'manager');
 
-  if ($sf_user->hasGroup('worker')) {
+  if ($sf_user->hasGroup('worker') or $sf_user->hasGroup('monitor')) {
     unset($columns[1]);
-    array_push($columns, 'manager');
-  }
-
-  if ($sf_user->hasGroup('monitor')) {
-    array_push($columns, 'manager');
   }
 
   include_partial('global/orders', array('orders' => $orders, 'columns' => $columns));

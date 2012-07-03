@@ -23,6 +23,12 @@ class OrderTable extends Doctrine_Table
       'done' => 'Всё готово',
     );
 
+    public static $payMethods = array(
+      '' => '',
+      'cash' => 'Наличный',
+      'non-cash' => 'Безналичный',
+    );
+
     /**
      * Returns an instance of this class.
      *

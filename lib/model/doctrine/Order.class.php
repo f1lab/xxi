@@ -17,6 +17,14 @@ class Order extends BaseOrder
     return OrderTable::$states[ $this->_get('state') ];
   }
 
+  public function getPayMethodTranslated()
+  {
+    return true == ($payMethod=$this->_get('pay_method'))
+      ? OrderTable::$payMethods[ $this->_get('pay_method') ]
+      : ''
+    ;
+  }
+
   public function getColorIndicator()
   {
     $colors = array(
@@ -29,6 +37,6 @@ class Order extends BaseOrder
       'debt' => ''
     );
 
-    return $colors[ $this->getState() ];
+    return $colors[ $this->_get('state') ];
   }
 }

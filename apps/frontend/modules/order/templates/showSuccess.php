@@ -15,7 +15,7 @@
 <?php endforeach ?>
 </table>
 
-<?php if ($sf_user->hasGroup('manager') or $sf_user->hasGroup('worker')): ?>
+<?php if ($sf_user->hasGroup('manager') && $order->getCreatedBy() == $sf_user->getGuardUser()->getId() or $sf_user->hasGroup('worker')): ?>
 <div class="btn-toolbar">
   <div class="btn-group">
     <a href="<?php echo url_for('@order-edit?id=' . $order->getId()) ?>" class="btn btn-primary">Редактировать</a>

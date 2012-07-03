@@ -35,6 +35,13 @@ Order:
     design_cost: string(255)
     contractors_cost: string(255)
     cost: string(255)
+    pay_method:
+      type: enum
+      values:
+        - ""
+        - cash
+        - non-cash
+    recoil: string(255)
     started_at: timestamp
     finished_at: timestamp
     submited_at: timestamp
