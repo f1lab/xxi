@@ -46,4 +46,4 @@
   <?php endforeach ?>
   </div>
 </div>
-<?php include_partial('global/orders', array('orders' => $client->getOrdersByState($_state), 'columns' => array('id', 'approved_at', 'due_date', 'state'))) ?>
+<?php include_partial('global/orders', array('orders' => $client->getOrdersByState($_state), 'columns' => array('id', 'approved_at', 'due_date', 'state', 'manager'))) ?>

@@ -28,5 +28,5 @@
   <?php endforeach ?></tbody>
 </table>
 <?php else: ?>
-<p>Нет заказов.</p>
+<div class="alert alert-info"><strong>Нет заказов</strong>.</div>
 <?php endif ?>

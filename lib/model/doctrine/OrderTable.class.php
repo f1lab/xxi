@@ -17,6 +17,14 @@ class OrderTable extends Doctrine_Table
       'debt' => 'Дебиторка'
     );
 
+    public static $statesForManager = array(
+      'calculating' => 'На просчёте',
+      'work' => 'В цех',
+      'submited' => 'Сдан',
+      'archived' => 'В архиве',
+      'debt' => 'Дебиторка'
+    );
+
     public static $statesForWorker = array(
       'work' => 'В цех',
       'working' => 'В работе',

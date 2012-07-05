@@ -14,6 +14,7 @@ class orderActions extends sfActions
   {
     $this->orders = array();
     $this->_state = $request->getParameter('state');
+    $this->_my = $request->getParameter('my');
 
     if ($this->getUser()->hasGroup('manager')) {
       $this->orders = Doctrine_Core::getTable('Order')->createQuery('a, a.Client, a.Creator')
@@ -21,9 +22,15 @@ class orderActions extends sfActions
       ;
 
       if ($this->_state == 'active') {
-        $this->orders->whereNotIn('a.state', array('archived', 'debt'));
+        $this->orders->andWhereNotIn('a.state', array('archived', 'debt'));
       } else {
-        $this->orders->where('a.state = ?', $this->_state);
+        $this->orders->andWhere('a.state = ?', $this->_state);
+      }
+
+      if ($this->_my == 'all') {
+
+      } else {
+        $this->orders->andWhere('a.created_by = ?', $this->getUser()->getGuardUser()->getId());
       }
 
       $this->orders = $this->orders->execute();
@@ -110,6 +117,13 @@ class orderActions extends sfActions
   public function executeNew(sfWebRequest $request)
   {
     $this->form = new OrderForm();
+    $this->form->getWidgetSchema()
+      ->offsetSet('state', new sfWidgetFormChoice(array(
+        'choices' => OrderTable::$statesForManager,
+        'label' => 'Статус',
+      )))
+    ;
+
     if ($request->getParameter('client')) {
       $this->form->setDefault('client_id', $request->getParameter('client'));
     }
@@ -118,6 +132,13 @@ class orderActions extends sfActions
   public function executeCreate(sfWebRequest $request)
   {
     $this->form = new OrderForm();
+    $this->form->getWidgetSchema()
+      ->offsetSet('state', new sfWidgetFormChoice(array(
+        'choices' => OrderTable::$statesForManager,
+        'label' => 'Статус',
+      )))
+    ;
+
     $this->processForm($request, $this->form, array('success', 'Отлично!', 'Заказ добавлен.'), '@orders');
     $this->setTemplate('new');
   }
@@ -153,6 +174,10 @@ class orderActions extends sfActions
       $this->form->getWidgetSchema()
         ->offsetUnset('started_at')
         ->offsetUnset('finished_at')
+        ->offsetSet('state', new sfWidgetFormChoice(array(
+          'choices' => OrderTable::$statesForManager,
+          'label' => 'Статус',
+        )))
       ;
     }
   }
@@ -184,6 +209,10 @@ class orderActions extends sfActions
       $this->form->getValidatorSchema()
         ->offsetUnset('started_at')
         ->offsetUnset('finished_at')
+        ->offsetSet('state', new sfWidgetFormChoice(array(
+          'choices' => OrderTable::$statesForManager,
+          'label' => 'Статус',
+        )))
       ;
     }
 

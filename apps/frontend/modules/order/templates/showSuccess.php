@@ -1,3 +1,4 @@
+<?php use_helper('Text') ?>
 <div class="page-header">
   <h1>Заказ №<?php echo $order->getId() ?></h1>
 </div>
@@ -10,12 +11,22 @@
 <?php foreach ($fields as $field=>$label): $field = 'get' . ucfirst($field); ?>
   <tr>
     <th scope="row"><?php echo $label ?></th>
-    <td><?php echo $order->$field() ?></td>
+    <td><?php
+    if ($field == 'getDescription' or $field == 'getFiles') {
+      echo simple_format_text($order->$field());
+    } else {
+      echo $order->$field();
+    }
+    ?></td>
   </tr>
 <?php endforeach ?>
 </table>
 
-<?php if ($sf_user->hasGroup('manager') && $order->getCreatedBy() == $sf_user->getGuardUser()->getId() or $sf_user->hasGroup('worker')): ?>
+<?php if (
+        $sf_user->hasGroup('manager') && $order->getCreatedBy() == $sf_user->getGuardUser()->getId()
+        or $sf_user->hasCredential('can_edit_all_orders')
+        or $sf_user->hasGroup('worker')
+      ): ?>
 <div class="btn-toolbar">
   <div class="btn-group">
     <a href="<?php echo url_for('@order-edit?id=' . $order->getId()) ?>" class="btn btn-primary">Редактировать</a>
@@ -26,9 +37,7 @@
 <hr />
 
 <h2>Комментарии</h2>
-<?php if (true == ($comments = $order->getComments()) and isset($comments) and count($comments)):
-use_helper('Text');
-?>
+<?php if (true == ($comments = $order->getComments()) and count($comments)): ?>
 <section class="comments row">
 <?php foreach ($comments as $id=>$comment): ?>
   <article class="comment well span6" id="comment-<?php echo $comment->getId() ?>">

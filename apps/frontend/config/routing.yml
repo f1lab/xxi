@@ -41,9 +41,10 @@ client-del:
   requirements: { id: \d+ }
 
 orders:
-  url:   /orders/:state
-  param: { module: order, action: index, state: active }
+  url:   /orders/:my/:state
+  param: { module: order, action: index, state: active, my: all }
   requirements:
+    my: my|all
     state: <?php echo join('|', array_keys(OrderTable::$states)) ?>
 
 order:
