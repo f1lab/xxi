@@ -153,27 +153,15 @@ class orderActions extends sfActions
     if ($this->getUser()->hasGroup('worker')) {
       //FIXME: it's fucking mess
       $this->form->getWidgetSchema()
-        ->offsetUnset('client_id')
-        ->offsetUnset('description')
-        ->offsetUnset('due_date')
-        ->offsetUnset('approved_at')
-        ->offsetUnset('files')
-        ->offsetUnset('installation_cost')
-        ->offsetUnset('design_cost')
-        ->offsetUnset('contractors_cost')
-        ->offsetUnset('cost')
-        ->offsetUnset('submited_at')
+        ->offsetUnset(array('client_id', 'description', 'due_date', 'approved_at', 'files', 'installation_cost', 'design_cost', 'contractors_cost', 'cost', 'submited_at','pay_method','recoil'))
         ->offsetSet('state', new sfWidgetFormChoice(array(
           'choices' => OrderTable::$statesForWorker,
           'label' => 'Статус',
         )))
-        ->offsetUnset('pay_method')
-        ->offsetUnset('recoil')
       ;
     } else {
       $this->form->getWidgetSchema()
-        ->offsetUnset('started_at')
-        ->offsetUnset('finished_at')
+        ->offsetUnset(array('started_at','finished_at'))
         ->offsetSet('state', new sfWidgetFormChoice(array(
           'choices' => OrderTable::$statesForManager,
           'label' => 'Статус',
@@ -192,21 +180,10 @@ class orderActions extends sfActions
     if ($this->getUser()->hasGroup('worker')) {
       //FIXME: it's fucking mess
       $this->form->getValidatorSchema()
-        ->offsetUnset('client_id')
-        ->offsetUnset('description')
-        ->offsetUnset('due_date')
-        ->offsetUnset('approved_at')
-        ->offsetUnset('files')
-        ->offsetUnset('installation_cost')
-        ->offsetUnset('design_cost')
-        ->offsetUnset('contractors_cost')
-        ->offsetUnset('cost')
-        ->offsetUnset('submited_at')
-        ->offsetUnset('pay_method')
-        ->offsetUnset('recoil')
+        ->offsetUnset(array('client_id', 'description', 'due_date', 'approved_at', 'files', 'installation_cost', 'design_cost', 'contractors_cost', 'cost', 'submited_at', 'pay_method', 'recoil'))
       ;
     } else {
-      $this->form->getValidatorSchema()
+      $this->form->getWidgetSchema()
         ->offsetUnset('started_at')
         ->offsetUnset('finished_at')
         ->offsetSet('state', new sfWidgetFormChoice(array(
