@@ -22,11 +22,14 @@
 <?php endforeach ?>
 </table>
 
-<?php if (
-        $sf_user->hasGroup('manager') && $order->getCreatedBy() == $sf_user->getGuardUser()->getId()
-        or $sf_user->hasCredential('can_edit_all_orders')
-        or $sf_user->hasGroup('worker')
-      ): ?>
+<?php
+  if ( //TODO: replace this mess with some permission or move this check to model
+    $sf_user->hasGroup('manager') && $order->getCreatedBy() == $sf_user->getGuardUser()->getId()
+    or $sf_user->hasCredential('can_edit_all_orders')
+    or $sf_user->hasGroup('worker')
+    or $sf_user->hasGroup('buhgalter')
+  ):
+?>
 <div class="btn-toolbar">
   <div class="btn-group">
     <a href="<?php echo url_for('@order-edit?id=' . $order->getId()) ?>" class="btn btn-primary">Редактировать</a>

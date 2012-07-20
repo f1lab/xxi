@@ -28,7 +28,7 @@ class orderActions extends sfActions
       }
 
       if ($this->_my == 'all') {
-
+        //
       } else {
         $this->orders->andWhere('a.created_by = ?', $this->getUser()->getGuardUser()->getId());
       }
@@ -55,7 +55,7 @@ class orderActions extends sfActions
 
       $this->orders = $this->orders->execute();
 
-    } else if ($this->getUser()->hasGroup('director')) {
+    } else if ($this->getUser()->hasGroup('director') or $this->getUser()->hasGroup('buhgalter')) {
       $this->orders = Doctrine_Core::getTable('Order')->createQuery('a, a.Client, a.Creator')
         ->orderBy('a.created_at asc')
       ;
@@ -94,6 +94,7 @@ class orderActions extends sfActions
       'cost' => 'Стоимость работ',
       'recoil' => 'Возврат денежных средств',
       'payMethodTranslated' => 'Способ оплаты',
+      'payed' => 'Внесённые средства',
       'startedAt' => 'Дата поступления в работу',
       'finishedAt' => 'Дата выполнения',
       'submitedAt' => 'Дата сдачи заказа',
@@ -150,15 +151,37 @@ class orderActions extends sfActions
     ;
     $this->form = new OrderForm($this->order);
 
+    //FIXME: it's fucking mess below
     if ($this->getUser()->hasGroup('worker')) {
-      //FIXME: it's fucking mess
       $this->form->getWidgetSchema()
-        ->offsetUnset(array('client_id', 'description', 'due_date', 'approved_at', 'files', 'installation_cost', 'design_cost', 'contractors_cost', 'cost', 'submited_at','pay_method','recoil'))
+        ->offsetUnset(array(
+          'client_id', 'description', 'due_date',
+          'approved_at', 'files', 'installation_cost',
+          'design_cost', 'contractors_cost',
+          'cost', 'submited_at','pay_method',
+          'recoil', 'payed',
+        ))
         ->offsetSet('state', new sfWidgetFormChoice(array(
           'choices' => OrderTable::$statesForWorker,
           'label' => 'Статус',
         )))
       ;
+
+    } elseif ($this->getUser()->hasGroup('buhgalter')) {
+      $this->form->getWidgetSchema()
+        ->offsetUnset(array(
+          'client_id', 'description', 'due_date',
+          'approved_at', 'files', 'installation_cost',
+          'design_cost', 'contractors_cost',
+          'cost', 'submited_at','pay_method',
+          'recoil', 'started_at', 'finished_at',
+        ))
+        ->offsetSet('state', new sfWidgetFormChoice(array(
+          'choices' => OrderTable::$statesForBuhgalter,
+          'label' => 'Статус',
+        )))
+      ;
+
     } else {
       $this->form->getWidgetSchema()
         ->offsetUnset(array('started_at','finished_at'))
@@ -177,23 +200,38 @@ class orderActions extends sfActions
     ;
     $this->form = new OrderForm($this->order);
 
+    //FIXME: it's fucking mess
     if ($this->getUser()->hasGroup('worker')) {
-      //FIXME: it's fucking mess
       $this->form->getValidatorSchema()
-        ->offsetUnset(array('client_id', 'description', 'due_date', 'approved_at', 'files', 'installation_cost', 'design_cost', 'contractors_cost', 'cost', 'submited_at', 'pay_method', 'recoil'))
+        ->offsetUnset(array(
+          'client_id', 'description', 'due_date',
+          'approved_at', 'files', 'installation_cost',
+          'design_cost', 'contractors_cost', 'cost',
+          'submited_at', 'pay_method', 'recoil',
+          'payed',
+        ))
       ;
+
+    } elseif ($this->getUser()->hasGroup('buhgalter')) {
+      $this->form->getValidatorSchema()
+        ->offsetUnset(array(
+          'client_id', 'description', 'due_date',
+          'approved_at', 'files', 'installation_cost',
+          'design_cost', 'contractors_cost', 'cost',
+          'submited_at', 'pay_method', 'recoil',
+        ))
+      ;
+
     } else {
-      $this->form->getWidgetSchema()
-        ->offsetUnset('started_at')
-        ->offsetUnset('finished_at')
-        ->offsetSet('state', new sfWidgetFormChoice(array(
-          'choices' => OrderTable::$statesForManager,
-          'label' => 'Статус',
-        )))
-      ;
+      //
     }
 
-    $this->processForm($request, $this->form, array('success', 'Отлично!', 'Изменения сохранены.'), '@order?id=' . $this->order->getId());
+    $this->processForm(
+      $request,
+      $this->form,
+      array('success', 'Отлично!', 'Изменения сохранены.'),
+      '@order?id=' . $this->order->getId()
+    );
     $this->setTemplate('edit');
   }
 
@@ -211,12 +249,13 @@ class orderActions extends sfActions
       $request->getFiles($form->getName())
     );
 
-    if ($form->isValid())
-    {
+    if ($form->isValid()) {
       $object = $form->save();
+
       if ($flash and is_array($flash)) {
         $this->getUser()->setFlash('message', $flash);
       }
+
       if ($redirect) {
         $this->redirect($redirect);
       }

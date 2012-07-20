@@ -46,4 +46,15 @@
   <?php endforeach ?>
   </div>
 </div>
-<?php include_partial('global/orders', array('orders' => $client->getOrdersByState($_state), 'columns' => array('id', 'approved_at', 'due_date', 'state', 'manager'))) ?>
+<?php
+include_partial(
+  'global/orders',
+  array(
+    'orders' => $client->getOrdersByState(
+      $_state,
+      ($sf_user->hasGroup('buhgalter')||$sf_user->hasGroup('director')) ? false : true // show just mine orders or all
+      // TODO: replace by permission `can view all orders'
+    ),
+    'columns' => array('id', 'approved_at', 'due_date', 'state', 'manager')
+  )
+) ?>

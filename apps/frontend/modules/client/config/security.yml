@@ -1,5 +1,5 @@
 all:
-  credentials: [[manager, director]]
+  credentials: [[manager, director, buhgalter]]
 
 edit:
   credentials: [manager]

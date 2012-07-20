@@ -12,11 +12,19 @@
  */
 class Client extends BaseClient
 {
-  public function getOrdersByState($state)
+  public function getOrdersByState($state, $viewOnlyMine=true)
   {
     $query = Doctrine_Core::getTable('Order')->createQuery('a')
       ->orderBy('created_at')
-      ->where('a.created_by = ?', sfContext::getInstance()->getUser()->getGuardUser()->getId())
+    ;
+
+    if ($viewOnlyMine) {
+      $query
+        ->andWhere('a.created_by = ?', sfContext::getInstance()->getUser()->getGuardUser()->getId())
+      ;
+    }
+
+    $query
       ->andWhere('a.client_id = ?', $this->getId())
     ;
 

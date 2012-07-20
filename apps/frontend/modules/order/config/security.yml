@@ -5,10 +5,10 @@ create:
   credentials: [manager]
 
 edit:
-  credentials: [[manager, worker]]
+  credentials: [[manager, worker, buhgalter]]
 
 update:
-  credentials: [[manager, worker]]
+  credentials: [[manager, worker, buhgalter]]
 
 show:
-  credentials: [[manager, worker, director]]
+  credentials: [[manager, worker, director, buhgalter]]
