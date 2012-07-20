@@ -43,7 +43,7 @@ class OrderForm extends BaseOrderForm
       'submited_at' => 'Дата сдачи заказа',
       'state' => 'Статус',
       'pay_method' => 'Способ оплаты',
-      'recoil' => 'Внесённые средства',
+      'recoil' => 'Возврат денежных средств',
     ));
   }
 }
