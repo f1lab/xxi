@@ -42,6 +42,7 @@ Order:
         - cash
         - non-cash
     recoil: string(255)
+    payed: string(255)
     started_at: timestamp
     finished_at: timestamp
     submited_at: timestamp

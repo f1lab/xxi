@@ -44,6 +44,7 @@ class OrderForm extends BaseOrderForm
       'state' => 'Статус',
       'pay_method' => 'Способ оплаты',
       'recoil' => 'Возврат денежных средств',
+      'payed' => 'Внесённые средства',
     ));
   }
 }
