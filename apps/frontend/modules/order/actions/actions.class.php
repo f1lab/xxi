@@ -92,7 +92,7 @@ class orderActions extends sfActions
       'designCost' => 'Стоимость дизайна',
       'contractorsCost' => 'Стоимость работ подрядчиков',
       'cost' => 'Стоимость работ',
-      'recoil' => 'Откат',
+      'recoil' => 'Внесённые средства',
       'payMethodTranslated' => 'Способ оплаты',
       'startedAt' => 'Дата поступления в работу',
       'finishedAt' => 'Дата выполнения',
