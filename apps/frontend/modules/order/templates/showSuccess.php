@@ -1,17 +1,24 @@
 <?php use_helper('Text') ?>
 <div class="page-header">
-  <ul class="pager pull-right"><?php $version = $order['version'] ?>
-    <li<?php if ($version-1 < 1): echo ' class="disabled"'; endif ?>>
-      <a href="<?php echo url_for('@order?id=' . $order->getId() . '&version=' . ($version-1))
+  <ul class="pager pull-right"><?php
+    $version = $order['version'];
+    $cantclick1 = $cantclick2 = false;
+  ?>
+    <li<?php if ($version-1 < 1):
+      $cantclick1 = true;
+      echo ' class="disabled"';
+    endif ?>>
+      <a href="<?php echo ($cantclick1 ? '#' : '') . url_for('@order?id=' . $order->getId() . '&version=' . ($version-1))
         ?>">← версия <?php echo $version-1 ?></a>
     </li>
     <li class="active">
       версия <?php echo $version ?> от <?php echo $order->getUpdatedAt() ?>
     </li>
     <li<?php if ($order->getAuditLog()->getMaxVersion($sf_data->getRaw('order')) == $version):
+      $cantclick2 = true;
       echo ' class="disabled"';
     endif ?>>
-      <a href="<?php echo url_for('@order?id=' . $order->getId() . '&version=' . ($version+1))
+      <a href="<?php echo ($cantclick2 ? '#' : '') . url_for('@order?id=' . $order->getId() . '&version=' . ($version+1))
         ?>">версия <?php echo $version+1 ?>→</a>
     </li>
   </ul>
