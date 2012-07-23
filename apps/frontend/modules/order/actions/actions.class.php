@@ -77,7 +77,11 @@ class orderActions extends sfActions
       ->fetchOne()
     ;
 
-    if ($request->hasParameter('version') and true == ($version=(int)$request->getParameter('version')) and $version >= 1) {
+    if (
+      $request->hasParameter('version')
+      and true == ($version=(int)$request->getParameter('version'))
+      and $version >= 1
+    ) {
       $this->order->revert($version);
     }
 
