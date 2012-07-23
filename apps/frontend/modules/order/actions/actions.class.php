@@ -76,6 +76,11 @@ class orderActions extends sfActions
       ->where('a.id = ?', $request->getParameter('id'))
       ->fetchOne()
     ;
+
+    if ($request->hasParameter('version') and true == ($version=(int)$request->getParameter('version')) and $version >= 1) {
+      $this->order->revert($version);
+    }
+
     $this->forward404Unless($this->order);
 
     $this->commentForm = new CommentForm();
