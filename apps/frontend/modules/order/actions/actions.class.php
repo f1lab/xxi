@@ -207,6 +207,14 @@ class orderActions extends sfActions
           'label' => 'Статус',
         )))
       ;
+
+      if ($this->order->getState() == 'working') {
+        $this->form->getWidgetSchema()
+          ->offsetUnset(array(
+            'state',
+          ))
+        ;
+      }
     }
   }
 
@@ -247,6 +255,14 @@ class orderActions extends sfActions
           'payed',
         ))
       ;
+
+      if ($this->order->getState() == 'working') {
+        $this->form->getValidatorSchema()
+          ->offsetUnset(array(
+            'state',
+          ))
+        ;
+      }
     }
 
     $this->processForm(
