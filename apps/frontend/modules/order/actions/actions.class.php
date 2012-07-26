@@ -177,7 +177,7 @@ class orderActions extends sfActions
           'approved_at', 'files', 'installation_cost',
           'design_cost', 'contractors_cost',
           'cost', 'submited_at','pay_method',
-          'recoil', 'payed',
+          'recoil', 'payed', 'delivery_cost',
         ))
         ->offsetSet('state', new sfWidgetFormChoice(array(
           'choices' => OrderTable::$statesForWorker,
@@ -192,7 +192,7 @@ class orderActions extends sfActions
           'approved_at', 'files', 'installation_cost',
           'design_cost', 'contractors_cost',
           'cost', 'submited_at','pay_method',
-          'recoil', 'started_at', 'finished_at',
+          'recoil', 'started_at', 'finished_at', 'delivery_cost',
         ))
         ->offsetSet('state', new sfWidgetFormChoice(array(
           'choices' => OrderTable::$statesForBuhgalter,
@@ -238,7 +238,7 @@ class orderActions extends sfActions
           'approved_at', 'files', 'installation_cost',
           'design_cost', 'contractors_cost', 'cost',
           'submited_at', 'pay_method', 'recoil',
-          'payed',
+          'payed', 'delivery_cost',
         ))
       ;
 
@@ -248,7 +248,7 @@ class orderActions extends sfActions
           'client_id', 'description', 'due_date',
           'approved_at', 'files', 'installation_cost',
           'design_cost', 'contractors_cost', 'cost',
-          'submited_at', 'pay_method', 'recoil',
+          'submited_at', 'pay_method', 'recoil', 'delivery_cost',
         ))
       ;
 
