@@ -132,7 +132,12 @@ class orderActions extends sfActions
         'choices' => OrderTable::$statesForManager,
         'label' => 'Статус',
       )))
-      ->offsetUnset('payed')
+      ->offsetUnset(array(
+        'payed',
+        'started_at',
+        'finished_at',
+        'submited_at',
+      ))
     ;
 
     if ($request->getParameter('client')) {
