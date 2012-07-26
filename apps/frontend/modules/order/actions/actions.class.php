@@ -193,7 +193,7 @@ class orderActions extends sfActions
           'client_id', 'description', 'due_date',
           'approved_at', 'files', 'installation_cost',
           'design_cost', 'contractors_cost',
-          'cost', 'submited_at','pay_method',
+          'cost', 'submited_at',
           'recoil', 'started_at', 'finished_at',
           'delivery_cost',
         ))
@@ -252,7 +252,7 @@ class orderActions extends sfActions
           'client_id', 'description', 'due_date',
           'approved_at', 'files', 'installation_cost',
           'design_cost', 'contractors_cost', 'cost',
-          'submited_at', 'pay_method', 'recoil', 'delivery_cost',
+          'submited_at', 'recoil', 'delivery_cost',
         ))
       ;
 
@@ -262,6 +262,7 @@ class orderActions extends sfActions
           'started_at',
           'finished_at',
           'payed',
+          'payed_at',
         ))
       ;
 
