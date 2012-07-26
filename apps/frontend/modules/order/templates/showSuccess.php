@@ -46,7 +46,9 @@
 
 <?php
   if ( //TODO: replace this mess with some permission or move this check to model
-    $sf_user->hasGroup('manager') && $order->getCreatedBy() == $sf_user->getGuardUser()->getId()
+    $sf_user->hasGroup('manager')
+      && $order->getCreatedBy() == $sf_user->getGuardUser()->getId()
+      && !in_array($order->getState(), array('debt', 'archived'))
     or $sf_user->hasCredential('can_edit_all_orders')
     or $sf_user->hasGroup('worker')
     or $sf_user->hasGroup('buhgalter')

@@ -132,6 +132,7 @@ class orderActions extends sfActions
         'choices' => OrderTable::$statesForManager,
         'label' => 'Статус',
       )))
+      ->offsetUnset('payed')
     ;
 
     if ($request->getParameter('client')) {
@@ -147,6 +148,9 @@ class orderActions extends sfActions
         'choices' => OrderTable::$statesForManager,
         'label' => 'Статус',
       )))
+    ;
+    $this->form->getValidatorSchema()
+      ->offsetUnset('payed')
     ;
 
     $this->processForm($request, $this->form, array('success', 'Отлично!', 'Заказ добавлен.'), '@orders');
@@ -191,9 +195,13 @@ class orderActions extends sfActions
         )))
       ;
 
-    } else {
+    } else { // manager
       $this->form->getWidgetSchema()
-        ->offsetUnset(array('started_at','finished_at'))
+        ->offsetUnset(array(
+          'started_at',
+          'finished_at',
+          'payed',
+        ))
         ->offsetSet('state', new sfWidgetFormChoice(array(
           'choices' => OrderTable::$statesForManager,
           'label' => 'Статус',
@@ -231,8 +239,14 @@ class orderActions extends sfActions
         ))
       ;
 
-    } else {
-      //
+    } else { // manager
+      $this->form->getValidatorSchema()
+        ->offsetUnset(array(
+          'started_at',
+          'finished_at',
+          'payed',
+        ))
+      ;
     }
 
     $this->processForm(
