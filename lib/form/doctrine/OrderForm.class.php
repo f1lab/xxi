@@ -33,6 +33,7 @@ class OrderForm extends BaseOrderForm
       ->offsetSet('pay_method', new sfWidgetFormChoice(array(
         'choices' => OrderTable::$payMethods
       )))
+      ->offsetSet('payed_at', new sfWidgetFormBootstrapDate())
     ;
 
     $this->getWidgetSchema()->setLabels(array(
@@ -53,6 +54,7 @@ class OrderForm extends BaseOrderForm
       'recoil' => 'Возврат денежных средств',
       'payed' => 'Внесённые средства',
       'delivery_cost' => 'Доставка',
+      'payed_at' => 'Дата полной оплаты',
     ));
   }
 }
