@@ -1,3 +1,5 @@
+<?php use_helper('Number') ?>
+
 <div class="page-header">
   <h1>Отчётность</h1>
 </div>
@@ -53,31 +55,31 @@
       <tbody>
         <tr>
           <td>Стоимость монтажа</td>
-          <td><?php echo $report->getInstallationCost() ?></td>
+          <td><?php echo format_number($report->getInstallationCost()) ?></td>
         </tr>
         <tr>
           <td>Стоимость монтажа</td>
-          <td><?php echo $report->getDesignCost() ?></td>
+          <td><?php echo format_number($report->getDesignCost()) ?></td>
         </tr>
         <tr>
           <td>Стоимость работ подрядчиков</td>
-          <td><?php echo $report->getContractorsCost() ?></td>
+          <td><?php echo format_number($report->getContractorsCost()) ?></td>
         </tr>
         <tr>
           <td>Стоимость работ</td>
-          <td><?php echo $report->getCost() ?></td>
+          <td><?php echo format_number($report->getCost()) ?></td>
         </tr>
         <tr>
           <td>Возврат денежных средств</td>
-          <td><?php echo $report->getRecoil() ?></td>
+          <td><?php echo format_number($report->getRecoil()) ?></td>
         </tr>
         <tr>
           <td>Внесённые средства</td>
-          <td><?php echo $report->getPayed() ?></td>
+          <td><?php echo format_number($report->getPayed()) ?></td>
         </tr>
         <tr>
           <td><strong>Сальдо</strong></td>
-          <td><strong><?php echo $report->getPayed() - $report->getRecoil() - $report->getCost() ?></strong></td>
+          <td><strong><?php echo format_number($report->getPayed() - $report->getRecoil() - $report->getCost()) ?></strong></td>
         </tr>
       </tbody>
     </table>

@@ -28,7 +28,6 @@
       Отчёт
       <small>за период <?php echo date('d.m.Y', strtotime($period['from'])) . '—' . date('d.m.Y', strtotime($period['to'])) ?></small>
     </h2>
-    <?php  ?>
     <table class="table table-striped table-condensed">
       <colgroup>
         <col class="span4" />

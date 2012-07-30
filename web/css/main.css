@@ -6,3 +6,8 @@
 .form-fluid textarea {
   width: 99%;
 }
+
+.formula [title] {
+  border-bottom: 1px dashed;
+  cursor: help;
+}
