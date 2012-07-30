@@ -104,6 +104,7 @@ class orderActions extends sfActions
       'recoil' => 'Возврат денежных средств',
       'payMethodTranslated' => 'Способ оплаты',
       'payed' => 'Внесённые средства',
+      'payed_at' => 'Дата полной оплаты',
       'startedAt' => 'Дата поступления в работу',
       'finishedAt' => 'Дата выполнения',
       'submitedAt' => 'Дата сдачи заказа',

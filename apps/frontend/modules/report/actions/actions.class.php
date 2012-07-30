@@ -97,6 +97,50 @@ class reportActions extends sfActions
 
   public function executeManagers(sfWebRequest $request)
   {
-    //
+    $this->form = new sfForm();
+    $this->form->getWidgetSchema()
+      ->offsetSet('from', new sfWidgetFormBootstrapDate(array(
+        'label' => 'Период',
+      )))
+      ->offsetSet('to', new sfWidgetFormBootstrapDate(array(
+        //
+      )))
+      ->setNameFormat('filter[%s]')
+    ;
+    $this->form->addCSRFProtection('123456789');
+    $this->form->getValidatorSchema()
+      ->offsetSet('from', new sfValidatorDate())
+      ->offsetSet('to', new sfValidatorDate(array(
+        'required' => false,
+      )))
+    ;
+
+    $this->period = array(
+      'from' => date('Y') . '-01-01',
+      'to' => date('Y-m-d'),
+    );
+
+    if ($request->isMethod('post')) {
+      $this->form->bind($request->getParameter('filter'));
+
+      if ($this->form->isValid()) {
+        if ($this->form->getValue('from')) {
+          $this->period['from'] = $this->form->getValue('from');
+        }
+
+        if ($this->form->getValue('to')) {
+          $this->period['to'] = $this->form->getValue('to');
+        }
+      }
+    }
+
+    $this->report = Doctrine_Core::getTable('sfGuardGroup')->createQuery('a, a.Users b')
+      ->andWhere('a.name = ?', 'manager')
+      ->select('a.*, b.*, c.*')
+      ->leftJoin('b.Orders c with (c.payed_at >= ? and c.payed_at <= ?) and c.state = ?', array($this->period['from'], $this->period['to'], 'archived'))
+      ->execute()
+      ->getFirst()
+      ->getUsers()
+    ;
   }
 }

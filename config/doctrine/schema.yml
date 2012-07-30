@@ -86,3 +86,12 @@ Comment:
     text:
       type: clob
       notnull: true
+
+sfGuardUser:
+  relations:
+    Orders:
+      class: Order
+      type: many
+      local: id
+      foreign: created_by
+      foreignAlias: Creator

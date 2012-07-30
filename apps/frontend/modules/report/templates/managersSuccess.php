@@ -1,3 +1,5 @@
+<?php use_helper('Number') ?>
+
 <div class="page-header">
   <h1>Отчётность</h1>
 </div>
@@ -7,31 +9,29 @@
 
   <div class="tab-content">
     <h2>Параметры отчёта</h2>
-    <form action="" method="post" class="well">
-      <div class="control-group">
-        <label for="" class="control-label">Период:</label>
+    <form action="?report" method="post" class="well">
+      <div class="control-group<?php if ($form['from']->hasError()): ?> error<?php endif ?>">
+        <?php echo $form['from']->renderLabel(null, array('class' => 'control-label')) ?>
 
         <div class="controls form-horizontal">
-          <div class="input-append date" id="order_payed_at_calendar" data-date-format="dd-mm-yyyy" data-date-language="ru">
-            <input class="span2" id="order_payed_at_input" type="text" value="" placeholder="from" readonly/><span class="add-on" id="order_payed_at_span"><i class="icon-calendar" style=""></i></span>
-          </div>
+          <?php echo $form['from']->render(array('placeholder' => 'from')) ?>
 
-          <div class="input-append date" id="order_payed_at_calendar" data-date-format="dd-mm-yyyy" data-date-language="ru">
-            <input class="span2" id="order_payed_at_input" type="text" value="" placeholder="to" readonly/><span class="add-on" id="order_payed_at_span"><i class="icon-calendar" style=""></i></span>
-          </div>
+          <?php echo $form['to']->render(array('placeholder' => 'to')) ?>
+          <?php if ($form['from']->hasError()): ?><div class="help-inline"><?php echo $form['from']->getError() ?></div><?php endif ?>
         </div>
       </div>
-
+      <?php echo $form['_csrf_token'] ?>
       <button type="submit" class="btn btn-primary">Получить отчёт</button>
     </form>
 
     <h2>
       Отчёт
-      <small>за период 01.04.2012—01.07.2012</small>
+      <small>за период <?php echo date('d.m.Y', strtotime($period['from'])) . '—' . date('d.m.Y', strtotime($period['to'])) ?></small>
     </h2>
+    <?php  ?>
     <table class="table table-striped table-condensed">
       <colgroup>
-        <col class="span3" />
+        <col class="span4" />
         <col class="span" />
         <col class="span2" />
         <col class="span2" />
@@ -44,42 +44,25 @@
           <th>Σ * 0,03</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody><?php
+        $allCounter = 0;
+        $allSumm = 0;
+        $allSummPercented = 0;
+      foreach ($sf_data->getRaw('report') as $manager): ?>
         <tr>
-          <td>Вася</td>
-          <td>2</td>
-          <td>12000</td>
-          <td>1200</td>
+          <td><?php echo $manager ?></td>
+          <td><?php $allCounter += $manager->getOrders()->count() and print format_number($manager->getOrders()->count()) ?></td>
+          <td><?php $allSumm += ($payed = array_reduce($manager->getOrders()->toArray(), function($result, $item) {
+            return $result += ($item['cost'] - $item['delivery_cost'] - $item['recoil']);
+          }, 0)) and print format_number($payed) ?></td>
+          <td><?php $allSummPercented += ($payed * 0.03) and print format_number($payed * 0.03) ?></td>
         </tr>
-        <tr>
-          <td>Петя</td>
-          <td>5</td>
-          <td>10000</td>
-          <td>1000</td>
-        </tr>
-        <tr>
-          <td>Федя</td>
-          <td>1</td>
-          <td>150000</td>
-          <td>15000</td>
-        </tr>
-        <tr>
-          <td>Игорь</td>
-          <td>8</td>
-          <td>179999</td>
-          <td>17999</td>
-        </tr>
-        <tr>
-          <td>Миша</td>
-          <td>1</td>
-          <td>1500</td>
-          <td>150</td>
-        </tr>
+      <?php endforeach ?>
         <tr>
           <td><strong>Итого</strong></td>
-          <td><strong>21</strong></td>
-          <td><strong>152000</strong></td>
-          <td><strong>15200</strong></td>
+          <td><strong><?php echo format_number($allCounter) ?></strong></td>
+          <td><strong><?php echo format_number($allSumm) ?></strong></td>
+          <td><strong><?php echo format_number($allSummPercented) ?></strong></td>
         </tr>
       </tbody>
     </table>

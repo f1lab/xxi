@@ -7,7 +7,7 @@
 
   <div class="tab-content">
     <h2>Параметры отчёта</h2>
-    <form action="" method="post" class="well">
+    <form action="?report" method="post" class="well">
       <div class="control-group<?php if ($form['from']->hasError()): ?> error<?php endif ?>">
         <?php echo $form['from']->renderLabel(null, array('class' => 'control-label')) ?>
 
