@@ -80,6 +80,23 @@ comment-delete:
   param: { module: order, action: deleteComment }
   requirements: { order: \d+, id: \d+ }
 
+reports:
+  url:   /reports
+  param: { module: report, action: index }
+
+report-costs:
+  url:   /reports/costs
+  param: { module: report, action: costs }
+
+report-managers:
+  url:   /reports/managers
+  param: { module: report, action: managers }
+
+report-workers:
+  url:   /reports/workers
+  param: { module: report, action: workers }
+
+
 # generic rules
 # please, remove them by adding more specific rules
 default_index:

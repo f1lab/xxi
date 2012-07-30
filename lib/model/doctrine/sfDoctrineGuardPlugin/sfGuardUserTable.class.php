@@ -16,4 +16,15 @@ class sfGuardUserTable extends PluginsfGuardUserTable
     {
         return Doctrine_Core::getTable('sfGuardUser');
     }
+
+    public function getManagers()
+    {
+      return Doctrine_Core::getTable('sfGuardGroup')->createQuery('a, a.Users')
+        ->where('a.name = ?', 'manager')
+        ->orderBy('a.Users.last_name')
+        ->execute()
+          ->getFirst()
+            ->getUsers()
+      ;
+    }
 }

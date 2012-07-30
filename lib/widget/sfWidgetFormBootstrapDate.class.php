@@ -65,7 +65,7 @@ class sfWidgetFormBootstrapDate extends sfWidgetForm
     ;
 
     $date = $value > 0 && !is_array($value)
-      ? date('d-m-Y', strtotime($value))
+      ? date('d-m-Y', /* strtotime */($value))
       : ''
     ;
 
@@ -77,9 +77,11 @@ class sfWidgetFormBootstrapDate extends sfWidgetForm
     $iid = $this->generateId($name).'_input';
     $sid = $this->generateId($name).'_span';
 
+    $attrs = isset($attributes['placeholder']) ? ' placeholder="' . $attributes['placeholder'] . '"' : '';
+
     $calendar = <<<HTML
     <div class="input-append date" id="{$calid}" data-date-format="dd-mm-yyyy" data-date-language="ru">
-      <input class="span2" id="{$iid}" type="text" value="{$date}" readonly><span class="add-on" id="{$sid}"><i class="icon-calendar" style=""></i></span>
+      <input class="span2" id="{$iid}" type="text" value="{$date}" readonly{$attrs}><span class="add-on" id="{$sid}"><i class="icon-calendar" style=""></i></span>
     </div>
 HTML;
     $return = ''

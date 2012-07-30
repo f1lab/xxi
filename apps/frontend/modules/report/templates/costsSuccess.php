@@ -1,0 +1,88 @@
+<div class="page-header">
+  <h1>Отчётность</h1>
+</div>
+
+<div class="tabbable tabs-left">
+  <?php include_partial('tabs', array('currentRoute' => $sf_context->getRouting()->getCurrentRouteName())) ?>
+
+  <div class="tab-content">
+    <h2>Параметры отчёта</h2>
+    <form action="" method="post" class="well">
+      <div class="control-group<?php if ($form['from']->hasError()): ?> error<?php endif ?>">
+        <?php echo $form['from']->renderLabel(null, array('class' => 'control-label')) ?>
+
+        <div class="controls form-horizontal">
+          <?php echo $form['from']->render(array('placeholder' => 'from')) ?>
+
+          <?php echo $form['to']->render(array('placeholder' => 'to')) ?>
+          <?php if ($form['from']->hasError()): ?><div class="help-inline"><?php echo $form['from']->getError() ?></div><?php endif ?>
+        </div>
+      </div>
+      
+      <div class="control-group">
+        <?php echo $form['manager']->renderLabel(null, array('class' => 'control-label')) ?>
+        
+        <div class="controls">
+          <?php echo $form['manager']->render() ?>
+        </div>
+      </div>
+      <?php echo $form['_csrf_token'] ?>
+      <button type="submit" class="btn btn-primary">Получить отчёт</button>
+    </form>
+
+    <h2>
+      Отчёт
+      <small>
+        за период <?php echo date('d.m.Y', strtotime($period['from'])) . '—' . date('d.m.Y', strtotime($period['to'])) ?>
+        <?php if ($manager and true == ($manager=Doctrine_Core::getTable('sfGuardUser')->find($manager))): ?>
+          по менеджеру <?php echo $manager->getFirstName() . ' ' . $manager->getLastName() ?>
+        <?php endif ?>
+      </small>
+    </h2>
+    <table class="table table-striped table-condensed">
+      <colgroup>
+        <col class="span3" />
+        <col />
+      </colgroup>
+      <thead>
+        <tr>
+          <th>Параметр</th>
+          <th>Значение, руб.</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Стоимость монтажа</td>
+          <td><?php echo $report->getInstallationCost() ?></td>
+        </tr>
+        <tr>
+          <td>Стоимость монтажа</td>
+          <td><?php echo $report->getDesignCost() ?></td>
+        </tr>
+        <tr>
+          <td>Стоимость работ подрядчиков</td>
+          <td><?php echo $report->getContractorsCost() ?></td>
+        </tr>
+        <tr>
+          <td>Стоимость работ</td>
+          <td><?php echo $report->getCost() ?></td>
+        </tr>
+        <tr>
+          <td>Возврат денежных средств</td>
+          <td><?php echo $report->getRecoil() ?></td>
+        </tr>
+        <tr>
+          <td>Внесённые средства</td>
+          <td><?php echo $report->getPayed() ?></td>
+        </tr>
+        <tr>
+          <td><strong>Сальдо</strong></td>
+          <td><strong><?php echo $report->getPayed() - $report->getRecoil() - $report->getCost() ?></strong></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="alert alert-info">
+      Количество заказов: <?php echo $report->getCount() ?>
+    </div>
+  </div>
+</div>
