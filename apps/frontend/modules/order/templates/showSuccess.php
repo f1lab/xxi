@@ -44,6 +44,7 @@
 <?php endforeach ?>
 </table>
 
+<div class="btn-toolbar">
 <?php
   if ( //TODO: replace this mess with some permission or move this check to model
     $sf_user->hasGroup('manager')
@@ -54,12 +55,20 @@
     or $sf_user->hasGroup('buhgalter')
   ):
 ?>
-<div class="btn-toolbar">
   <div class="btn-group">
     <a href="<?php echo url_for('@order-edit?id=' . $order->getId()) ?>" class="btn btn-primary">Редактировать</a>
   </div>
-</div>
 <?php endif ?>
+<?php
+  if (
+    $sf_user->hasCredential('can_print_orders')
+  ):
+?>
+  <div class="btn-group">
+    <a href="<?php echo url_for('@order-print?id=' . $order->getId()) ?>" class="btn">Распечатать бланк заказа</a>
+  </div>
+<?php endif ?>
+</div>
 
 <hr />
 

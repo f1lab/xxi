@@ -70,6 +70,11 @@ order-update:
   param: { module: order, action: update }
   requirements: { id: \d+ }
 
+order-print:
+  url:   /orders/:id/print
+  param: { module: order, action: print }
+  requirements: { id: \d+ }
+
 comment:
   url:   /orders/:id/comment
   param: { module: order, action: comment }

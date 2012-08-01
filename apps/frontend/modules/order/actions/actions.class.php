@@ -96,7 +96,7 @@ class orderActions extends sfActions
       'description' => 'Описание заказа',
       'dueDate' => 'Срок исполнения',
       'approvedAt' => 'Дата согласования с заказчиком',
-      'files' => 'Файлы и коментарии к ним',
+      'files' => 'Файлы и комментарии к ним',
       'installationCost' => 'Стоимость монтажа',
       'designCost' => 'Стоимость дизайна',
       'contractorsCost' => 'Стоимость работ подрядчиков',
@@ -283,6 +283,42 @@ class orderActions extends sfActions
       '@order?id=' . $this->order->getId()
     );
     $this->setTemplate('edit');
+  }
+
+  public function executePrint(sfWebRequest $request)
+  {
+    $order = Doctrine_Core::getTable('Order')
+      ->find($request->getParameter('id'))
+    ;
+
+    $this->forward404Unless($order);
+
+    header("Content-Type: application/msword");
+    header("Content-Disposition: attachment; filename=Бланк заказа на №" . $order->getId() . ".doc");
+    header("Pragma: no-cache");
+    header("Expires: 0");
+
+    $out = str_replace(
+      array(
+        '{manager}',
+        '{printed_at}',
+        '{order_id}',
+        '{files}',
+        '{description}',
+        '{due_date}',
+      ),
+      array(
+        $order->getCreator(),
+        date('d.m.Y'),
+        $order->getId(),
+        $order->getFiles(),
+        $order->getDescription(),
+        $order->getDueDate() ? date('d.m.Y', strtotime($order->getDueDate())) : '',
+      ),
+      file_get_contents(sfConfig::get('sf_upload_dir') . '/' . 'order.xml')
+    );
+
+    die($out);
   }
 
   public function executeComment(sfWebRequest $request)
