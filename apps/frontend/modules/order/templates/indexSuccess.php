@@ -44,10 +44,8 @@ if (
   include_partial('global/orders', array('orders' => $orders, 'columns' => $columns));
 ?>
 
-<?php if ($sf_user->hasGroup('monitor')): ?>
 <script type="text/javascript">
   setTimeout(function() {
     window.location.reload();
-  }, 15000);
+  }, 30000);
 </script>
-<?php endif ?>
