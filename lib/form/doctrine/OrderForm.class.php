@@ -25,7 +25,42 @@ class OrderForm extends BaseOrderForm
       ->offsetSet('state', new sfWidgetFormChoice(array(
         'choices' => OrderTable::$states,
       )))
-      ->offsetSet('due_date', new sfWidgetFormBootstrapDate())
+//      ->offsetSet('due_date', new sfWidgetFormBootstrapDate())
+      ->offsetSet('due_date', new sfWidgetFormDateTime(array(
+        'format' => '%date%   %time%',
+        'date' => array(
+          'format' => '%day% %month% %year%',
+          'years' => array(
+            date('Y') => date('Y'),
+            date('Y')+1 => date('Y')+1,
+          ),
+          'empty_values' => array(
+            'year' => 'год',
+            'month' => 'месяц',
+            'day' => 'день',
+          ),
+        ),
+        'time' => array(
+          'format_without_seconds' => '%hour% %minute%',
+          'minutes' => array(
+            0 => '00',
+            15 => 15,
+            30 => 30,
+            45 => 45,
+          ),
+          'empty_values' => array(
+            'hour' => 'час',
+            'minute' => 'минуты',
+          ),
+        ),
+      ), array(
+        'date' => array(
+          'class' => 'span2',
+        ),
+        'time' => array(
+          'class' => 'span1',
+        ),
+      )))
       ->offsetSet('approved_at', new sfWidgetFormBootstrapDate())
       ->offsetSet('started_at', new sfWidgetFormBootstrapDate())
       ->offsetSet('finished_at', new sfWidgetFormBootstrapDate())
