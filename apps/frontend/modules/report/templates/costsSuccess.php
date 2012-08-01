@@ -58,7 +58,7 @@
           <td><?php echo format_number($report->getInstallationCost()) ?></td>
         </tr>
         <tr>
-          <td>Стоимость монтажа</td>
+          <td>Стоимость дизайна</td>
           <td><?php echo format_number($report->getDesignCost()) ?></td>
         </tr>
         <tr>
@@ -66,7 +66,11 @@
           <td><?php echo format_number($report->getContractorsCost()) ?></td>
         </tr>
         <tr>
-          <td>Стоимость работ</td>
+          <td>Стоимость доставки</td>
+          <td><?php echo format_number($report->getDeliveryCost()) ?></td>
+        </tr>
+        <tr>
+          <td>Общая стоимость работ</td>
           <td><?php echo format_number($report->getCost()) ?></td>
         </tr>
         <tr>
