@@ -28,19 +28,30 @@
           <?php echo $form['manager']->render() ?>
         </div>
       </div>
+
+      <div class="control-group">
+        <?php echo $form['state']->renderLabel(null, array('class' => 'control-label')) ?>
+
+        <div class="controls">
+          <?php echo $form['state']->render() ?>
+        </div>
+      </div>
       <?php echo $form['_csrf_token'] ?>
       <button type="submit" class="btn btn-primary">Получить отчёт</button>
     </form>
 
-    <h2>
-      Отчёт
-      <small>
-        за период <?php echo date('d.m.Y', strtotime($period['from'])) . '—' . date('d.m.Y', strtotime($period['to'])) ?>
-        <?php if ($manager and true == ($manager=Doctrine_Core::getTable('sfGuardUser')->find($manager))): ?>
-          по менеджеру <?php echo $manager->getFirstName() . ' ' . $manager->getLastName() ?>
-        <?php endif ?>
-      </small>
-    </h2>
+    <h2>Отчёт</h2>
+    <div class="alert alert-info">
+      За период <?php echo date('d.m.Y', strtotime($period['from'])) . '—' . date('d.m.Y', strtotime($period['to'])) ?>
+
+      <?php if ($manager and true == ($manager=Doctrine_Core::getTable('sfGuardUser')->find($manager))): ?>
+        по менеджеру <?php echo $manager->getFirstName() . ' ' . $manager->getLastName() ?>
+      <?php else: ?>
+        по всем менеджерам
+      <?php endif ?>
+
+      в статусе «<?php echo $states[$state] ?>»
+    </div>
     <table class="table table-striped table-condensed">
       <colgroup>
         <col class="span3" />

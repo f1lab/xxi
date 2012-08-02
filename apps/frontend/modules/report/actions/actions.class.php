@@ -17,6 +17,12 @@ class reportActions extends sfActions
 
   public function executeCosts(sfWebRequest $request)
   {
+    $this->states = array(
+      'archived' => 'Архив',
+      'active' => 'Текущие',
+      'debt' => 'Дебиторка',
+    );
+
     $this->form = new sfForm();
     $this->form->getWidgetSchema()
       ->offsetSet('from', new sfWidgetFormBootstrapDate(array(
@@ -31,6 +37,10 @@ class reportActions extends sfActions
         'add_empty' => 'Все',
         'label' => 'Менеджер',
       )))
+      ->offsetSet('state', new sfWidgetFormChoice(array(
+        'choices' => $this->states,
+        'label' => 'Статус',
+      )))
       ->setNameFormat('filter[%s]')
     ;
     $this->form->addCSRFProtection('123456789');
@@ -43,6 +53,10 @@ class reportActions extends sfActions
         'model' => 'sfGuardUser',
         'required' => false,
       )))
+      ->offsetSet('state', new sfValidatorChoice(array(
+        'choices' => array_keys($this->states),
+        'required' => true,
+      )))
     ;
 
     $this->period = array(
@@ -50,6 +64,7 @@ class reportActions extends sfActions
       'to' => date('Y-m-d'),
     );
     $this->manager = false;
+    $this->state = 'archived';
 
     if ($request->isMethod('post')) {
       $this->form->bind($request->getParameter('filter'));
@@ -66,6 +81,10 @@ class reportActions extends sfActions
         if ($this->form->getValue('manager')) {
           $this->manager = $this->form->getValue('manager');
         }
+
+        if ($this->form->getValue('state')) {
+          $this->state = $this->form->getValue('state');
+        }
       }
     }
 
@@ -81,7 +100,24 @@ class reportActions extends sfActions
         sum(a.payed) payed
       ')
       ->from('Order a')
-      ->where('a.state = ?', 'archived')
+    ;
+
+    if ($this->state == 'active') {
+      $query
+        ->andWhereIn('a.state', array(
+          'work',
+          'working',
+          'done',
+          'submited',
+        ))
+      ;
+    } else {
+      $query
+        ->andWhere('a.state = ?', 'archived')
+      ;
+    }
+
+    $query
       ->andWhere('a.submited_at >= ? and a.submited_at <= ?', array($this->period['from'], $this->period['to']))
     ;
 
