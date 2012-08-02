@@ -105,6 +105,7 @@ class orderActions extends sfActions
       'payMethodTranslated' => 'Способ оплаты',
       'payed' => 'Внесённые средства',
       'payedAt' => 'Дата полной оплаты',
+      'expectedAt' => 'Планируемая дата выполнения',
       'startedAt' => 'Дата поступления в работу',
       'finishedAt' => 'Дата выполнения',
       'submitedAt' => 'Дата сдачи заказа',
@@ -117,6 +118,7 @@ class orderActions extends sfActions
         'description',
         'dueDate',
         'files',
+        'expectedAt',
         'startedAt',
         'finishedAt',
         'stateTranslated',
@@ -139,6 +141,7 @@ class orderActions extends sfActions
         'finished_at',
         'submited_at',
         'payed_at',
+        'expected_at',
       ))
     ;
 
@@ -153,7 +156,6 @@ class orderActions extends sfActions
     $this->form->getWidgetSchema()
       ->offsetSet('state', new sfWidgetFormChoice(array(
         'choices' => OrderTable::$statesForManager,
-        'label' => 'Статус',
       )))
       ->offsetUnset(array(
         'payed',
@@ -161,6 +163,7 @@ class orderActions extends sfActions
         'finished_at',
         'submited_at',
         'payed_at',
+        'expected_at',
       ))
     ;
     $this->form->getValidatorSchema()
@@ -191,7 +194,6 @@ class orderActions extends sfActions
         ))
         ->offsetSet('state', new sfWidgetFormChoice(array(
           'choices' => OrderTable::$statesForWorker,
-          'label' => 'Статус',
         )))
       ;
 
@@ -203,11 +205,10 @@ class orderActions extends sfActions
           'design_cost', 'contractors_cost',
           'cost', 'submited_at',
           'recoil', 'started_at', 'finished_at',
-          'delivery_cost',
+          'delivery_cost', 'expected_at',
         ))
         ->offsetSet('state', new sfWidgetFormChoice(array(
           'choices' => OrderTable::$statesForBuhgalter,
-          'label' => 'Статус',
         )))
       ;
 
@@ -218,10 +219,10 @@ class orderActions extends sfActions
           'finished_at',
           'payed',
           'payed_at',
+          'expected_at',
         ))
         ->offsetSet('state', new sfWidgetFormChoice(array(
           'choices' => OrderTable::$statesForManager,
-          'label' => 'Статус',
         )))
       ;
 
@@ -261,6 +262,7 @@ class orderActions extends sfActions
           'approved_at', 'files', 'installation_cost',
           'design_cost', 'contractors_cost', 'cost',
           'submited_at', 'recoil', 'delivery_cost',
+          'expected_at',
         ))
       ;
 
@@ -271,6 +273,7 @@ class orderActions extends sfActions
           'finished_at',
           'payed',
           'payed_at',
+          'expected_at',
         ))
       ;
 

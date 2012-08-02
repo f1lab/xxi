@@ -58,6 +58,7 @@ Order:
     recoil: string(255)
     payed: string(255)
     payed_at: timestamp
+    expected_at: timestamp
     started_at: timestamp
     finished_at: timestamp
     submited_at: timestamp

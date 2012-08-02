@@ -62,6 +62,7 @@ class OrderForm extends BaseOrderForm
         ),
       )))
       ->offsetSet('approved_at', new sfWidgetFormBootstrapDate())
+      ->offsetSet('expected_at', new sfWidgetFormBootstrapDate())
       ->offsetSet('started_at', new sfWidgetFormBootstrapDate())
       ->offsetSet('finished_at', new sfWidgetFormBootstrapDate())
       ->offsetSet('submited_at', new sfWidgetFormBootstrapDate())
@@ -90,6 +91,8 @@ class OrderForm extends BaseOrderForm
       'payed' => 'Внесённые средства',
       'delivery_cost' => 'Доставка',
       'payed_at' => 'Дата полной оплаты',
+      'state' => 'Статус',
+      'expected_at' => 'Планируемая дата выполнения',
     ));
   }
 }

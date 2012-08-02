@@ -46,6 +46,7 @@
         'getStartedAt',
         'getFinishedAt',
         'getSubmitedAt',
+        'getExpectedAt',
       ))
     ) {
       echo $order->$field()
