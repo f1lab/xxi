@@ -13,4 +13,8 @@ $(function() {
   $('[rel="popover"]')
     .popover()
   ;
+
+  $('table')
+    .tablesorter()
+  ;
 });
