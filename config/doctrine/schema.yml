@@ -53,6 +53,8 @@ Order:
         - ""
         - cash
         - non-cash
+        - barter
+        - settlement
     recoil: string(255)
     payed: string(255)
     payed_at: timestamp

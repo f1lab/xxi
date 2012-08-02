@@ -38,6 +38,8 @@ class OrderTable extends Doctrine_Table
       '' => '',
       'cash' => 'Наличный',
       'non-cash' => 'Безналичный',
+      'barter' => 'Бартер',
+      'settlement' => 'Взаиморасчёт',
     );
 
     /**
