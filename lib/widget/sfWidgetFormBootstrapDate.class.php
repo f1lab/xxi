@@ -39,11 +39,13 @@ class sfWidgetFormBootstrapDate extends sfWidgetForm
 
   protected function valuetotime($value)
   {
-    if(is_array($value))
+    if (is_array($value)) {
       return strtotime(implode('-', $value));
-    else if(!is_int($value))
+    } elseif (!is_int($value)) {
       return strtotime($value);
-    else return $value;
+    } else {
+      return $value;
+    }
   }
 
   /**
@@ -65,7 +67,7 @@ class sfWidgetFormBootstrapDate extends sfWidgetForm
     ;
 
     $date = $value > 0 && !is_array($value)
-      ? date('d-m-Y', /* strtotime */($value))
+      ? date('d-m-Y', $this->valuetotime($value))
       : ''
     ;
 

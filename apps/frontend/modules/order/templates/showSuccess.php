@@ -30,12 +30,28 @@
     <col class="span3" />
     <col />
   </colgroup>
-<?php foreach ($fields as $field=>$label): $field = 'get' . ucfirst($field); ?>
+<?php foreach ($fields as $field => $label):
+  $field = 'get' . ucfirst($field);
+?>
   <tr>
     <th scope="row"><?php echo $label ?></th>
     <td><?php
     if ($field == 'getDescription' or $field == 'getFiles') {
       echo simple_format_text($order->$field());
+    } elseif (
+      in_array($field, array(
+        'getDueDate',
+        'getApprovedAt',
+        'getPayedAt',
+        'getStartedAt',
+        'getFinishedAt',
+        'getSubmitedAt',
+      ))
+    ) {
+      echo $order->$field()
+        ? date('d.m.Y', strtotime($order->$field()))
+        : ''
+      ;
     } else {
       echo $order->$field();
     }

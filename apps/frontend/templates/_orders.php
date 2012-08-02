@@ -20,8 +20,8 @@
     >
       <?php if (in_array('id', $columns)): ?><td><a href="<?php echo url_for('@order?id=' . $order->getId()) ?>"><?php echo $order->getId() ?></a></td><?php endif ?>
       <?php if (in_array('client_id', $columns)): ?><td><?php echo $order->getClient() ?></td><?php endif ?>
-      <?php if (in_array('approved_at', $columns)): ?><td><?php echo $order->getApprovedAt() ?></td><?php endif ?>
-      <?php if (in_array('due_date', $columns)): ?><td><?php echo $order->getDueDate() ?></td><?php endif ?>
+      <?php if (in_array('approved_at', $columns)): ?><td><?php echo $order->getApprovedAt() ? date('d.m.Y', strtotime($order->getApprovedAt())): '' ?></td><?php endif ?>
+      <?php if (in_array('due_date', $columns)): ?><td><?php echo $order->getDueDate() ? date('d.m.Y', strtotime($order->getDueDate())) : '' ?></td><?php endif ?>
       <?php if (in_array('state', $columns)): ?><td><?php echo $order->getStateTranslated() ?></td><?php endif ?>
       <?php if (in_array('manager', $columns)): ?><td><?php echo $order->getCreator() ?></td><?php endif ?>
     </tr>

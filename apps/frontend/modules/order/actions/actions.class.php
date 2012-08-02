@@ -104,7 +104,7 @@ class orderActions extends sfActions
       'recoil' => 'Возврат денежных средств',
       'payMethodTranslated' => 'Способ оплаты',
       'payed' => 'Внесённые средства',
-      'payed_at' => 'Дата полной оплаты',
+      'payedAt' => 'Дата полной оплаты',
       'startedAt' => 'Дата поступления в работу',
       'finishedAt' => 'Дата выполнения',
       'submitedAt' => 'Дата сдачи заказа',
@@ -155,6 +155,13 @@ class orderActions extends sfActions
         'choices' => OrderTable::$statesForManager,
         'label' => 'Статус',
       )))
+      ->offsetUnset(array(
+        'payed',
+        'started_at',
+        'finished_at',
+        'submited_at',
+        'payed_at',
+      ))
     ;
     $this->form->getValidatorSchema()
       ->offsetUnset('payed')
