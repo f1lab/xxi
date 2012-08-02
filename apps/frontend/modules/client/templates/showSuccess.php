@@ -3,8 +3,12 @@
 </div>
 
 <div class="row">
-  <div class="span4">
+  <div class="span8">
   <table class="table table-condensed table-bordered">
+    <colgroup>
+      <col />
+      <col class="span5" />
+    </colgroup>
     <tbody>
       <tr>
         <th scope="row">#</th>
@@ -13,6 +17,14 @@
       <tr>
         <th scope="row">Наименование</th>
         <td><?php echo $client->getName() ?></td>
+      </tr>
+      <tr>
+        <th scope="row">Полное наименование</th>
+        <td><?php echo $client->getFullName() ?></td>
+      </tr>
+      <tr>
+        <th scope="row">Форма собственности</th>
+        <td><?php echo $client->getOwnershipTranslated() ?></td>
       </tr>
       <tr>
         <th scope="row">Контактное лицо</th>
@@ -25,6 +37,42 @@
       <tr>
         <th scope="row">Email</th>
         <td><?php echo $client->getEmail() ?></td>
+      </tr>
+      <tr>
+        <th scope="row">Юридический адрес</th>
+        <td><?php echo $client->getAddressJure() ?></td>
+      </tr>
+      <tr>
+        <th scope="row">ИНН</th>
+        <td><?php echo $client->getInn() ?></td>
+      </tr>
+      <tr>
+        <th scope="row">КПП</th>
+        <td><?php echo $client->getKpp() ?></td>
+      </tr>
+      <tr>
+        <th scope="row">Расчётный счёт</th>
+        <td><?php echo $client->getRs() ?></td>
+      </tr>
+      <tr>
+        <th scope="row">Наименование и адрес банка</th>
+        <td><?php echo $client->getBank() ?></td>
+      </tr>
+      <tr>
+        <th scope="row">БИК</th>
+        <td><?php echo $client->getBik() ?></td>
+      </tr>
+      <tr>
+        <th scope="row">Корр. счёт</th>
+        <td><?php echo $client->getKs() ?></td>
+      </tr>
+      <tr>
+        <th scope="row">ОГРН</th>
+        <td><?php echo $client->getOgrn() ?></td>
+      </tr>
+      <tr>
+        <th scope="row">ОКПО</th>
+        <td><?php echo $client->getOkpo() ?></td>
       </tr>
     </tbody>
   </table>

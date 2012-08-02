@@ -4,6 +4,17 @@ Client:
     name:
       type: string(255)
       notnull: true
+    full_name:
+      type: string(255)
+    ownership:
+      type: enum
+      values:
+        - ""
+        - ooo
+        - oao
+        - zao
+        - ip
+        - fiz
     contact:
       type: string(255)
       notnull: true
@@ -12,6 +23,24 @@ Client:
       notnull: true
     email:
       type: string(64)
+    address_jure:
+      type: string(255)
+    inn:
+      type: string(32)
+    kpp:
+      type: string(32)
+    rs:
+      type: string(32)
+    bank:
+      type: string(255)
+    bik:
+      type: string(32)
+    ks:
+      type: string(32)
+    ogrn:
+      type: string(32)
+    okpo:
+      type: string(32)
   relations:
     Orders:
       class: Order

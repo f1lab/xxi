@@ -49,4 +49,12 @@ class Client extends BaseClient
       ->execute()
     ;
   }
+
+  public function getOwnershipTranslated()
+  {
+    return true == ($ownership=$this->_get('ownership'))
+      ? ClientTable::$ownership[ $ownership ]
+      : ''
+    ;
+  }
 }

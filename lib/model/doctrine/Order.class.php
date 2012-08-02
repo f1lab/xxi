@@ -20,7 +20,7 @@ class Order extends BaseOrder
   public function getPayMethodTranslated()
   {
     return true == ($payMethod=$this->_get('pay_method'))
-      ? OrderTable::$payMethods[ $this->_get('pay_method') ]
+      ? OrderTable::$payMethods[ $payMethod ]
       : ''
     ;
   }

@@ -7,6 +7,15 @@
  */
 class ClientTable extends Doctrine_Table
 {
+    public static $ownership = array(
+      '' => '',
+      'ooo' => 'ООО',
+      'oao' => 'ОАО',
+      'zao' => 'ЗАО',
+      'ip' => 'ИП',
+      'phyz' => 'Физ. лицо',
+    );
+
     /**
      * Returns an instance of this class.
      *
