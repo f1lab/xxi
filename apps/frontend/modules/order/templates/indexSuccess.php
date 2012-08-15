@@ -50,7 +50,7 @@ if (
   }, 30000);
 </script>
 
-<?php if ($sf_user->hasCredential('monitor')): ?>
+<?php if ($sf_user->hasCredential('monitor') and !$sf_user->isSuperAdmin()): ?>
 <style type="text/css">
   .navbar,
   .page-header {
