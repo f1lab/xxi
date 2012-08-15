@@ -49,3 +49,12 @@ if (
     window.location.reload();
   }, 30000);
 </script>
+
+<?php if ($sf_user->hasCredential('monitor')): ?>
+<style type="text/css">
+  .navbar,
+  .page-header {
+    display: none;
+  }
+</style>
+<?php endif ?>
