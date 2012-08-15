@@ -194,6 +194,7 @@ class orderActions extends sfActions
         ))
         ->offsetSet('state', new sfWidgetFormChoice(array(
           'choices' => OrderTable::$statesForWorker,
+          'label' => 'Статус',
         )))
       ;
 
@@ -203,12 +204,19 @@ class orderActions extends sfActions
           'client_id', 'description', 'due_date',
           'approved_at', 'files', 'installation_cost',
           'design_cost', 'contractors_cost',
-          'cost', 'submited_at',
+          'submited_at',
           'recoil', 'started_at', 'finished_at',
           'delivery_cost', 'expected_at',
         ))
         ->offsetSet('state', new sfWidgetFormChoice(array(
           'choices' => OrderTable::$statesForBuhgalter,
+          'label' => 'Статус',
+        )))
+        ->offsetSet('cost', new sfWidgetFormInputText(array(
+          'label' => 'Общая стоимость работ',
+        ), array(
+          'readonly' => 'readonly',
+          'disabled' => 'disabled',
         )))
       ;
 
@@ -223,6 +231,7 @@ class orderActions extends sfActions
         ))
         ->offsetSet('state', new sfWidgetFormChoice(array(
           'choices' => OrderTable::$statesForManager,
+          'label' => 'Статус',
         )))
       ;
 
