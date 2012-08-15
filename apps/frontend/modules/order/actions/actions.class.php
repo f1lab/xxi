@@ -204,14 +204,10 @@ class orderActions extends sfActions
           'client_id', 'description', 'due_date',
           'approved_at', 'files', 'installation_cost',
           'design_cost', 'contractors_cost',
-          'submited_at',
+          'submited_at', 'state',
           'recoil', 'started_at', 'finished_at',
           'delivery_cost', 'expected_at',
         ))
-        ->offsetSet('state', new sfWidgetFormChoice(array(
-          'choices' => OrderTable::$statesForBuhgalter,
-          'label' => 'Статус',
-        )))
         ->offsetSet('cost', new sfWidgetFormInputText(array(
           'label' => 'Общая стоимость работ',
         ), array(
@@ -271,9 +267,18 @@ class orderActions extends sfActions
           'approved_at', 'files', 'installation_cost',
           'design_cost', 'contractors_cost', 'cost',
           'submited_at', 'recoil', 'delivery_cost',
-          'expected_at',
+          'expected_at', 'state',
         ))
       ;
+
+      $this->processForm2(
+        $request,
+        $this->form,
+        array('success', 'Отлично!', 'Изменения сохранены.'),
+        '@order?id=' . $this->order->getId()
+      );
+      $this->setTemplate('edit');
+      return;
 
     } else { // manager
       $this->form->getValidatorSchema()
@@ -355,6 +360,38 @@ class orderActions extends sfActions
     );
 
     if ($form->isValid()) {
+      $object = $form->save();
+
+      if ($flash and is_array($flash)) {
+        $this->getUser()->setFlash('message', $flash);
+      }
+
+      if ($redirect) {
+        $this->redirect($redirect);
+      }
+    }
+  }
+
+  public function processForm2(sfWebRequest $request, sfForm $form, $flash=false, $redirect=false)
+  {
+    $form->bind(
+      $request->getParameter($form->getName()),
+      $request->getFiles($form->getName())
+    );
+
+    if ($form->isValid()) {
+      $object = $form->getObject();
+      $values = $form->getValues();
+      if (in_array($object->getState(), array('archived', 'submited', 'debt'))) {
+        if ($object->getCost()) {
+          if ($values['payed'] >= $object->getCost()) {
+            $object->setState('archived');
+          } elseif ($values['payed'] and $values['payed'] < $object->getCost()) {
+            $object->setState('debt');
+          }
+        };
+      }
+
       $object = $form->save();
 
       if ($flash and is_array($flash)) {
