@@ -22,6 +22,14 @@ class OrderForm extends BaseOrderForm
     );
 
     $this->getWidgetSchema()
+      ->offsetSet('client_id', new sfWidgetFormDoctrineChoice(array(
+        'model' => $this->getRelatedModelName('Client'),
+        'add_empty' => false,
+        'order_by' => array(
+          'name',
+          'asc',
+        ),
+      )))
       ->offsetSet('state', new sfWidgetFormChoice(array(
         'choices' => OrderTable::$states,
       )))
