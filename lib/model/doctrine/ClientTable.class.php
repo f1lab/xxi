@@ -13,7 +13,7 @@ class ClientTable extends Doctrine_Table
       'oao' => 'ОАО',
       'zao' => 'ЗАО',
       'ip' => 'ИП',
-      'phyz' => 'Физ. лицо',
+      'fiz' => 'Физ. лицо',
     );
 
     /**
