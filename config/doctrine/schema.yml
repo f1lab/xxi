@@ -118,6 +118,20 @@ Comment:
     text:
       type: clob
       notnull: true
+  relations:
+    CommentReads:
+      type: many
+      local: id
+      foreign: comment_id
+
+CommentReads:
+  columns:
+    comment_id:
+      type: integer
+      notnull: true
+    user_id:
+      type: integer
+      notnull: true
 
 sfGuardUser:
   relations:
@@ -127,3 +141,8 @@ sfGuardUser:
       local: id
       foreign: created_by
       foreignAlias: Creator
+    CommentReads:
+      type: many
+      local: id
+      foreign: user_id
+      foreignAlias: Reader
