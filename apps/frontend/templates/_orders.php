@@ -8,9 +8,10 @@
       <?php if (in_array('due_date', $columns)): ?><th>Срок исполнения</th><?php endif ?>
       <?php if (in_array('state', $columns)): ?><th>Статус</th><?php endif ?>
       <?php if (in_array('manager', $columns)): ?><th>Менеджер</th><?php endif ?>
+      <?php if (in_array('comments', $columns)): ?><th>Комментарии</th><?php endif ?>
     </tr>
   </thead>
-  <tbody><?php foreach ($orders as $order): ?>
+  <tbody><?php foreach ($sf_data->getRaw('orders') as $order): ?>
     <tr
       rel="popover"
       data-placement="top"
@@ -24,6 +25,17 @@
       <?php if (in_array('due_date', $columns)): ?><td><?php echo $order->getDueDate() ? date('d.m.Y', strtotime($order->getDueDate())) : '' ?></td><?php endif ?>
       <?php if (in_array('state', $columns)): ?><td><?php echo $order->getStateTranslated() ?></td><?php endif ?>
       <?php if (in_array('manager', $columns)): ?><td><?php echo $order->getCreator() ?></td><?php endif ?>
+      <?php if (in_array('comments', $columns)):
+        $comments = $order->getComments()->count();
+        $commentsRead = array_reduce($order->getComments()->toArray(), function($return, $item) {
+          if ($item['read'] > 0) {
+            $return++;
+          }
+          return $return;
+        });
+      ?>
+        <td><span class="badge<?php echo $comments > $commentsRead ? ' badge-warning' : '' ?>" title="<?php echo $comments - $commentsRead ?> unread"><?php echo $comments ?></span></td>
+      <?php endif ?>
     </tr>
   <?php endforeach ?></tbody>
 </table>

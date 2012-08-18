@@ -50,3 +50,10 @@ table .headerSortUp:after {
   -moz-opacity: 0.6;
   opacity: 0.6;
 }
+
+.comment:target {
+  border-color: blue !important;
+}
+.comment.unread {
+  border-color: #F89406;
+}

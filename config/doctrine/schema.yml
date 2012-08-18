@@ -132,6 +132,10 @@ CommentReads:
     user_id:
       type: integer
       notnull: true
+  indexes:
+    unique_for_inserts:
+      fields: [comment_id, user_id]
+      type: unique
 
 sfGuardUser:
   relations:

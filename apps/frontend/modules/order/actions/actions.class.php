@@ -68,11 +68,21 @@ class orderActions extends sfActions
 
       $this->orders = $this->orders->execute();
     }
+
+    foreach ($this->orders as &$order) {
+      $t = Doctrine_Query::create()
+        ->select('*, (select count(*) from comment_reads where comment_id = c.id and user_id = ?) read')
+        ->from('Comment c')
+        ->andWhere('order_id = ?', $order->getId())
+        ->execute(array($this->getUser()->getGuardUser()->getId()))
+      ;
+      $order->setComments($t);
+    }
   }
 
   public function executeShow(sfWebRequest $request)
   {
-    $this->order = Doctrine_Core::getTable('Order')->createQuery('a, a.Comments b, b.Creator')
+    $this->order = Doctrine_Core::getTable('Order')->createQuery('a, a.Client')
       ->where('a.id = ?', $request->getParameter('id'))
       ->fetchOne()
     ;
@@ -86,6 +96,10 @@ class orderActions extends sfActions
     }
 
     $this->forward404Unless($this->order);
+    $this->order->setComments(Doctrine_Core::getTable('Comment')->createQuery('a, a.Creator b')
+        ->select('(select count(*) from comment_reads where comment_id = a.id and user_id = ?) read, a.*, b.*')
+        ->andWhere('a.order_id = ?', $this->order->getId())
+        ->execute(array($this->getUser()->getGuardUser()->getId())));
 
     $this->commentForm = new CommentForm();
     $this->commentForm->setDefault('order_id', $this->order->getId());

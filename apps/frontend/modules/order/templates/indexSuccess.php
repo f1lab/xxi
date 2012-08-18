@@ -35,7 +35,7 @@ if (
 </div>
 
 <?php
-  $columns = array('id', 'client_id', 'approved_at', 'due_date', 'state', 'manager');
+  $columns = array('id', 'client_id', 'approved_at', 'due_date', 'state', 'manager', 'comments');
 
   if ($sf_user->hasGroup('worker') or $sf_user->hasGroup('monitor')) {
     unset($columns[1]); // don't show client
@@ -46,7 +46,7 @@ if (
 
 <script type="text/javascript">
   setTimeout(function() {
-    window.location.reload();
+    //window.location.reload();
   }, 30000);
 </script>
 

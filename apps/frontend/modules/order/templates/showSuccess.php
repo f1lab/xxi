@@ -92,8 +92,8 @@
 <h2>Комментарии</h2>
 <?php if (true == ($comments = $order->getComments()) and count($comments)): ?>
 <section class="comments row">
-<?php foreach ($comments as $id=>$comment): ?>
-  <article class="comment well span6" id="comment-<?php echo $comment->getId() ?>">
+<?php foreach ($comments as $id => $comment): ?>
+  <article class="comment<?php echo $comment->getReadAndMarkAsRead() ? '' : ' unread' ?> well span6" id="comment-<?php echo $comment->getId() ?>">
     <div class="meta clearfix muted">
       <div class="author pull-left"><?php echo $comment->getCreator() ?></div>
       <?php /* if ($comment->getCreatedBy() == $sf_user->getGuardUser()->getId()): ?>

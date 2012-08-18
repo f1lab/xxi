@@ -12,4 +12,9 @@
  */
 class Comment extends BaseComment
 {
+  public function getReadAndMarkAsRead()
+  {
+    //call insert to make as read
+    return $this->_get('read');
+  }
 }
