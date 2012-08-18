@@ -14,7 +14,23 @@ class Comment extends BaseComment
 {
   public function getReadAndMarkAsRead()
   {
-    //call insert to make as read
+    if (!$this->_get('read')) {
+      // we need raw query because of `inser ignore'
+      $this->_table->getConnection()->exec("
+        INSERT IGNORE INTO
+        `comment_reads`
+        (
+          `id`,
+          `comment_id`,
+          `user_id`
+        ) VALUES (
+          NULL,
+          '" . $this->getId() . "',
+          '" . sfContext::getInstance()->getUser()->getGuardUser()->getId() . "'
+        );"
+      );
+    }
+
     return $this->_get('read');
   }
 }
