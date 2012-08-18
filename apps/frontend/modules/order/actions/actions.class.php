@@ -271,15 +271,6 @@ class orderActions extends sfActions
         ))
       ;
 
-      $this->processForm2(
-        $request,
-        $this->form,
-        array('success', 'Отлично!', 'Изменения сохранены.'),
-        '@order?id=' . $this->order->getId()
-      );
-      $this->setTemplate('edit');
-      return;
-
     } else { // manager
       $this->form->getValidatorSchema()
         ->offsetUnset(array(

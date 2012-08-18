@@ -20,13 +20,13 @@ class OrderTable extends Doctrine_Table
     public static $statesForManager = array(
       'calculating' => 'На просчёте',
       'work' => 'В цех',
-      'submited' => 'Сдан',
     );
 
     public static $statesForWorker = array(
       'work' => 'В цех',
       'working' => 'В работе',
       'done' => 'Всё готово',
+      'submited' => 'Сдан',
     );
 
     public static $statesForBuhgalter = array(
