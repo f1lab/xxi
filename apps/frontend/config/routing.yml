@@ -101,6 +101,9 @@ report-workers:
   url:   /reports/workers
   param: { module: report, action: workers }
 
+report-clients:
+  url:   /reports/clients
+  param: { module: report, action: clients }
 
 # generic rules
 # please, remove them by adding more specific rules

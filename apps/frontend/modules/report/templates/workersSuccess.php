@@ -31,14 +31,14 @@
     <?php  ?>
     <div class="well">
       <span class="formula">Фонд =
-        <span title="общая стоимость"><?php echo format_number($report->getCost()) ?></span>
-        − <span title="монтаж"><?php echo format_number($report->getInstallationCost()) ?></span>
-        − <span title="дизайн"><?php echo format_number($report->getDesignCost()) ?></span>
-        − <span title="подрядчики"><?php echo format_number($report->getContractorsCost()) ?></span>
-        − <span title="возврат"><?php echo format_number($report->getRecoil()) ?></span>
-        − <span title="доставка"><?php echo format_number($report->getDeliveryCost()) ?></span>
+        <span title="общая стоимость"><?php echo format_currency($report->getCost()) ?></span>
+        − <span title="монтаж"><?php echo format_currency($report->getInstallationCost()) ?></span>
+        − <span title="дизайн"><?php echo format_currency($report->getDesignCost()) ?></span>
+        − <span title="подрядчики"><?php echo format_currency($report->getContractorsCost()) ?></span>
+        − <span title="возврат"><?php echo format_currency($report->getRecoil()) ?></span>
+        − <span title="доставка"><?php echo format_currency($report->getDeliveryCost()) ?></span>
       </span> =
-        <?php echo format_number(
+        <?php echo format_currency(
           $report->getCost()
           - $report->getInstallationCost()
           - $report->getDesignCost()

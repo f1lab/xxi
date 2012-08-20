@@ -41,3 +41,6 @@ all:
 
     secure_module:          sfGuardAuth
     secure_action:          secure
+
+    default_culture:        ru
+    culture:                ru

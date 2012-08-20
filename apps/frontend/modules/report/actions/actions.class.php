@@ -234,4 +234,79 @@ class reportActions extends sfActions
       ->getFirst()
     ;
   }
+
+  public function executeClients(sfWebRequest $request)
+  {
+    $this->form = new sfForm();
+    $this->form->getWidgetSchema()
+      ->offsetSet('from', new sfWidgetFormBootstrapDate(array(
+        'label' => 'Период',
+      )))
+      ->offsetSet('to', new sfWidgetFormBootstrapDate(array(
+        //
+      )))
+      ->offsetSet('client', new sfWidgetFormDoctrineChoice(array(
+        'model' => 'Client',
+        'add_empty' => 'Все',
+        'label' => 'Клиент',
+      )))
+      ->setNameFormat('filter[%s]')
+    ;
+    $this->form->addCSRFProtection('123456789');
+    $this->form->getValidatorSchema()
+      ->offsetSet('from', new sfValidatorDate())
+      ->offsetSet('to', new sfValidatorDate(array(
+        'required' => false,
+      )))
+      ->offsetSet('client', new sfValidatorDoctrineChoice(array(
+        'model' => 'Client',
+        'required' => false,
+      )))
+    ;
+
+    $this->client = false;
+    $this->period = array(
+      'from' => date('Y') . '-01-01',
+      'to' => date('Y-m-d'),
+    );
+
+    if ($request->isMethod('post')) {
+      $this->form->bind($request->getParameter('filter'));
+
+      if ($this->form->isValid()) {
+        if ($this->form->getValue('from')) {
+          $this->period['from'] = $this->form->getValue('from');
+        }
+
+        if ($this->form->getValue('to')) {
+          $this->period['to'] = $this->form->getValue('to');
+        }
+
+        if ($this->form->getValue('client')) {
+          $this->client = $this->form->getValue('client');
+        }
+      }
+    }
+
+    $bounds = array(
+      'archived' => 'archived',
+      'debt' => 'debt',
+    );
+    if ($this->client) {
+      $bounds['client'] = $this->client;
+    }
+
+    $this->report = Doctrine_Query::create()
+      ->select('
+        (select sum(cost) from `order` where state not in (:archived, :debt) and deleted_at is null' . ($this->client ? ' and client_id = :client' : '') . ') as cost_active,
+        (select sum(payed) from `order` where state not in (:archived, :debt) and deleted_at is null' . ($this->client ? ' and client_id = :client' : '') . ') as payed_active,
+        (select sum(cost) from `order` where state = :archived and deleted_at is null' . ($this->client ? ' and client_id = :client' : '') . ') as cost_archived,
+        (select sum(cost) from `order` where state = :debt and deleted_at is null' . ($this->client ? ' and client_id = :client' : '') . ') as cost_debt
+      ')
+      ->from('Client') // bidlo-magic because Doctrine queries must have `from'
+      ->limit(1)
+      ->execute($bounds)
+      ->getFirst()
+    ;
+  }
 }

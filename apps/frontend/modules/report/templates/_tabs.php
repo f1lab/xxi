@@ -3,6 +3,7 @@
     'report-costs' => 'Просмотр стоимостей',
     'report-managers' => 'Зарплата менеджеров',
     'report-workers' => 'Фонд ЗП цеха',
+    'report-clients' => 'Клиенты',
   );
 ?>
 <ul class="nav nav-tabs"><?php foreach ($routes as $route => $anchor): ?>
