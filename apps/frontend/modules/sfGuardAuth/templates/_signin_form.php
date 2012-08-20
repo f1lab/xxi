@@ -8,7 +8,7 @@
     <form action="<?php echo url_for('@sf_guard_signin') ?>" method="post" class="form-horizontal">
     <?php echo $form->renderUsing('bootstrap') ?>
     <div class="form-actions">
-      <input type="submit" class="btn btn-primary btn-large" value="Войти" />
+      <input type="submit" class="btn btn-primary btn-large" value="Войти" tabindex="4"/>
     </div>
   </form>
   </div>
