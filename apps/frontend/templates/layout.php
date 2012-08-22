@@ -8,7 +8,6 @@
   <link rel="shortcut icon" href="/favicon.ico" />
   <?php include_stylesheets() ?>
   <?php include_javascripts() ?>
-  <script type="text/javascript" src="https://github.com/twitter/bootstrap/diff_blob/e877d125d7a2c673fec4e63600c2d8544c3128f6/docs/assets/js/jquery.tablesorter.js"></script>
   <style type="text/css">
     body {
       width: 1000px;

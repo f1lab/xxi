@@ -20,7 +20,8 @@ default:
     - main
 
   javascripts:
-    - "http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"
+    - jquery.min.js
+    - jquery.tablesorter.js
     - bootstrap.min.js
     - bootstrap-datepicker
     - bootstrap-datepicker.ru.js
