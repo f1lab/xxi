@@ -202,7 +202,7 @@ class orderActions extends sfActions
           'client_id', 'description', 'due_date',
           'approved_at', 'files', 'installation_cost',
           'design_cost', 'contractors_cost',
-          'cost', 'submited_at','pay_method',
+          'cost', 'pay_method',
           'recoil', 'payed', 'delivery_cost',
           'payed_at',
         ))
@@ -238,6 +238,7 @@ class orderActions extends sfActions
           'payed',
           'payed_at',
           'expected_at',
+          'submited_at',
         ))
         ->offsetSet('state', new sfWidgetFormChoice(array(
           'choices' => OrderTable::$statesForManager,
@@ -252,6 +253,15 @@ class orderActions extends sfActions
           ))
         ;
       }
+    }
+
+    if ($this->getUser()->hasCredential('can_set_all_states')) {
+      $this->form->getWidgetSchema()
+        ->offsetSet('state', new sfWidgetFormChoice(array(
+          'choices' => OrderTable::$states,
+          'label' => 'Статус',
+        )))
+      ;
     }
   }
 
@@ -269,7 +279,7 @@ class orderActions extends sfActions
           'client_id', 'description', 'due_date',
           'approved_at', 'files', 'installation_cost',
           'design_cost', 'contractors_cost', 'cost',
-          'submited_at', 'pay_method', 'recoil',
+          'pay_method', 'recoil',
           'payed', 'delivery_cost',
         ))
       ;
@@ -293,6 +303,7 @@ class orderActions extends sfActions
           'payed',
           'payed_at',
           'expected_at',
+          'submited_at',
         ))
       ;
 
