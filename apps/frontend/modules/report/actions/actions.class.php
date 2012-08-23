@@ -108,12 +108,12 @@ class reportActions extends sfActions
           'work',
           'working',
           'done',
-          'submited',
+          //'submited',
         ))
       ;
     } else {
       $query
-        ->andWhere('a.state = ?', 'archived')
+        ->andWhere('a.state = ?', $this->state)
       ;
     }
 

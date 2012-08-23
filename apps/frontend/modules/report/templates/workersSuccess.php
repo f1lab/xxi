@@ -31,20 +31,20 @@
     <?php  ?>
     <div class="well">
       <span class="formula">Фонд =
-        <span title="общая стоимость"><?php echo format_currency($report->getCost()) ?></span>
+        (<span title="общая стоимость"><?php echo format_currency($report->getCost()) ?></span>
         − <span title="монтаж"><?php echo format_currency($report->getInstallationCost()) ?></span>
         − <span title="дизайн"><?php echo format_currency($report->getDesignCost()) ?></span>
         − <span title="подрядчики"><?php echo format_currency($report->getContractorsCost()) ?></span>
         − <span title="возврат"><?php echo format_currency($report->getRecoil()) ?></span>
-        − <span title="доставка"><?php echo format_currency($report->getDeliveryCost()) ?></span>
+        − <span title="доставка"><?php echo format_currency($report->getDeliveryCost()) ?></span>) × <span title="процентная ставка">0,15</span>
       </span> =
         <?php echo format_currency(
-          $report->getCost()
+          ($report->getCost()
           - $report->getInstallationCost()
           - $report->getDesignCost()
           - $report->getContractorsCost()
           - $report->getRecoil()
-          - $report->getDeliveryCost()
+          - $report->getDeliveryCost()) * 0.15
         ) ?> руб.
     </div>
   </div>
