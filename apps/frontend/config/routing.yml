@@ -93,6 +93,10 @@ report-costs:
   url:   /reports/costs
   param: { module: report, action: costs }
 
+report-costs-active:
+  url:   /reports/costs/active
+  param: { module: report, action: costsActive }
+
 report-managers:
   url:   /reports/managers
   param: { module: report, action: managers }
