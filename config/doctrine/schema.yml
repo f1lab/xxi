@@ -71,11 +71,11 @@ Order:
     due_date: timestamp
     approved_at: timestamp
     files: clob
-    installation_cost: string(255)
-    design_cost: string(255)
-    contractors_cost: string(255)
-    delivery_cost: string(255)
-    cost: string(255)
+    installation_cost: integer
+    design_cost: integer
+    contractors_cost: integer
+    delivery_cost: integer
+    cost: integer
     pay_method:
       type: enum
       values:
@@ -84,8 +84,8 @@ Order:
         - non-cash
         - barter
         - settlement
-    recoil: string(255)
-    payed: string(255)
+    recoil: integer
+    payed: integer
     payed_at: timestamp
     expected_at: timestamp
     started_at: timestamp

@@ -31,7 +31,7 @@ EOF;
       ->update('Order')
       ->set('state', '?', 'archived')
       ->andWhereIn('state', array('submited', 'debt'))
-      ->andWhere('payed >= cost')
+      ->andWhere('COALESCE(payed, 0) >= COALESCE(cost, 0)')
       ->execute()
     ;
 
@@ -39,7 +39,7 @@ EOF;
       ->update('Order')
       ->set('state', '?', 'debt')
       ->andWhereIn('state', array('submited', 'archived'))
-      ->andWhere('payed < cost or payed is null')
+      ->andWhere('COALESCE(payed,0) < COALESCE(cost, 0)')
       ->execute()
     ;
 
