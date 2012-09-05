@@ -2,7 +2,7 @@
   <h1>Заказы</h1>
 </div>
 <div class="btn-toolbar clearfix">
-  <?php if ($sf_user->hasGroup('manager')): ?><div class="btn-group">
+  <?php if ($sf_user->hasGroup('manager') or $sf_user->hasCredential('can_create_orders')): ?><div class="btn-group">
     <a href="<?php echo url_for('@order-new') ?>" class="btn btn-primary">Добавить заказ</a>
   </div><?php endif ?>
 
@@ -26,7 +26,7 @@ if (
   </div>
 <?php endif ?>
 
-<?php if ($sf_user->hasGroup('manager')): ?>
+<?php if ($sf_user->hasGroup('manager') or $sf_user->hasCredential('can_create_orders')): ?>
   <div class="btn-group pull-right">
     <a href="<?php echo url_for('@orders?state=' . $_state . '&my=' . ($_my == 'my' ? 'all' : 'my'))
       ?>" class="btn<?php echo $_my == 'my' ? ' active' : '' ?>">Только мои</a>

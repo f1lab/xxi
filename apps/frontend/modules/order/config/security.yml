@@ -1,8 +1,8 @@
 new:
-  credentials: [manager]
+  credentials: [[manager, director]]
 
 create:
-  credentials: [manager]
+  credentials: [[manager, director]]
 
 edit:
   credentials: [[manager, worker, buhgalter, director]]

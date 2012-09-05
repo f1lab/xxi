@@ -230,6 +230,16 @@ class orderActions extends sfActions
         )))
       ;
 
+    } elseif ($this->getUser()->hasGroup('director')) {
+      $this->form->getWidgetSchema()
+        ->offsetUnset(array(
+          'expected_at',
+        ))
+        ->offsetSet('state', new sfWidgetFormChoice(array(
+          'choices' => OrderTable::$statesForManager,
+          'label' => 'Статус',
+        )))
+      ;
     } else { // manager
       $this->form->getWidgetSchema()
         ->offsetUnset(array(
@@ -295,6 +305,12 @@ class orderActions extends sfActions
         ))
       ;
 
+    } elseif ($this->getUser()->hasGroup('director')) {
+      $this->form->getValidatorSchema()
+        ->offsetUnset(array(
+          'expected_at',
+        ))
+      ;
     } else { // manager
       $this->form->getValidatorSchema()
         ->offsetUnset(array(
@@ -376,38 +392,6 @@ class orderActions extends sfActions
     );
 
     if ($form->isValid()) {
-      $object = $form->save();
-
-      if ($flash and is_array($flash)) {
-        $this->getUser()->setFlash('message', $flash);
-      }
-
-      if ($redirect) {
-        $this->redirect($redirect);
-      }
-    }
-  }
-
-  public function processForm2(sfWebRequest $request, sfForm $form, $flash=false, $redirect=false)
-  {
-    $form->bind(
-      $request->getParameter($form->getName()),
-      $request->getFiles($form->getName())
-    );
-
-    if ($form->isValid()) {
-      $object = $form->getObject();
-      $values = $form->getValues();
-      if (in_array($object->getState(), array('archived', 'submited', 'debt'))) {
-        if ($object->getCost()) {
-          if ($values['payed'] >= $object->getCost()) {
-            $object->setState('archived');
-          } elseif ($values['payed'] and $values['payed'] < $object->getCost()) {
-            $object->setState('debt');
-          }
-        };
-      }
-
       $object = $form->save();
 
       if ($flash and is_array($flash)) {

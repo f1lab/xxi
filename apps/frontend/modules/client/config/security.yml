@@ -2,13 +2,13 @@ all:
   credentials: [[manager, director, buhgalter]]
 
 edit:
-  credentials: [manager]
+  credentials: [[manager, director]]
 
 update:
-  credentials: [manager]
+  credentials: [[manager, director]]
 
 new:
-  credentials: [manager]
+  credentials: [[manager, director]]
 
 create:
-  credentials: [manager]
+  credentials: [[manager, director]]

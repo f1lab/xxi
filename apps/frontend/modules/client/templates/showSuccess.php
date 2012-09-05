@@ -77,7 +77,7 @@
     </tbody>
   </table>
   </div>
-  <div class="span4"><?php if ($sf_user->hasGroup('manager')): ?>
+  <div class="span4"><?php if ($sf_user->hasGroup('manager') or $sf_user->hasCredential('can_edit_clients')): ?>
     <a href="<?php echo url_for('@client-edit?id=' . $client->getId()) ?>" class="btn">Редактировать</a>
   <?php endif ?></div>
 </div>
