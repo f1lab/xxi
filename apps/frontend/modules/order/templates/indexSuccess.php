@@ -41,6 +41,18 @@ if (
     unset($columns[1]); // don't show client
   }
 
+  if ($sf_user->hasGroup('buhgalter')) {
+    $columns = array(
+      'id',
+      'client_id',
+      'cost',
+      'payed',
+      'pay_method',
+      'payed_at',
+      'comments',
+    );
+  }
+
   include_partial('global/orders', array('orders' => $orders, 'columns' => $columns));
 ?>
 
