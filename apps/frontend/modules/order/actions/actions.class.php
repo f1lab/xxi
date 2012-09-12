@@ -115,6 +115,7 @@ class orderActions extends sfActions
       'installationCost' => 'Стоимость монтажа',
       'designCost' => 'Стоимость дизайна',
       'contractorsCost' => 'Стоимость работ подрядчиков',
+      'deliveryCost' => 'Стоимость доставки',
       'cost' => 'Стоимость работ',
       'recoil' => 'Возврат денежных средств',
       'payMethodTranslated' => 'Способ оплаты',
