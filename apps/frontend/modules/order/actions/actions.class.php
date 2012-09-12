@@ -108,6 +108,7 @@ class orderActions extends sfActions
       'client' => 'Клиент',
       'creator' => 'Менеджер',
       'description' => 'Описание заказа',
+      'additional' => 'Доп. информация',
       'dueDate' => 'Срок исполнения',
       'approvedAt' => 'Дата согласования с заказчиком',
       'files' => 'Файлы и комментарии к ним',

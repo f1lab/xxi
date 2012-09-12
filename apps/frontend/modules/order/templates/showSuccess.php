@@ -36,19 +36,21 @@
   <tr>
     <th scope="row"><?php echo $label ?></th>
     <td><?php
-    if ($field == 'getDescription' or $field == 'getFiles') {
+    if (in_array($field, array(
+      'getDescription',
+      'getAdditional',
+      'getFiles',
+    ))) {
       echo simple_format_text($order->$field());
-    } elseif (
-      in_array($field, array(
-        'getDueDate',
-        'getApprovedAt',
-        'getPayedAt',
-        'getStartedAt',
-        'getFinishedAt',
-        'getSubmitedAt',
-        'getExpectedAt',
-      ))
-    ) {
+    } elseif (in_array($field, array(
+      'getDueDate',
+      'getApprovedAt',
+      'getPayedAt',
+      'getStartedAt',
+      'getFinishedAt',
+      'getSubmitedAt',
+      'getExpectedAt',
+    ))) {
       echo $order->$field()
         ? date('d.m.Y', strtotime($order->$field()))
         : ''

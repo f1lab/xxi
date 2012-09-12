@@ -83,6 +83,7 @@ class OrderForm extends BaseOrderForm
     $this->getWidgetSchema()->setLabels(array(
       'client_id' => 'Клиент',
       'description' => 'Описание заказа',
+      'additional' => 'Доп. информация',
       'due_date' => 'Срок исполнения',
       'approved_at' => 'Дата согласования с заказчиком',
       'files' => 'Файлы',
