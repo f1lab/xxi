@@ -35,7 +35,15 @@ if (
 </div>
 
 <?php
-  $columns = array('id', 'client_id', 'approved_at', 'due_date', 'state', 'manager', 'comments');
+  $columns = array(
+    'id',
+    'client_id',
+    'approved_at',
+    'due_date',
+    'state',
+    'manager',
+    'comments',
+  );
 
   if ($sf_user->hasGroup('monitor')) {
     unset($columns[1]); // don't show client
@@ -49,6 +57,9 @@ if (
       'payed',
       'pay_method',
       'payed_at',
+      'approved_at',
+      'submited_at',
+      'manager',
       'comments',
     );
   }
