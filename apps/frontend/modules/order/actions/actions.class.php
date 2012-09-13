@@ -327,7 +327,7 @@ class orderActions extends sfActions
         ))
       ;
 
-      if ($this->order->getState() == 'working') {
+      if ($this->order->getState() == 'working' and !$this->getUser()->hasCredential('can_set_all_states')) {
         $this->form->getValidatorSchema()
           ->offsetUnset(array(
             'state',
