@@ -207,6 +207,7 @@ class orderActions extends sfActions
           'cost', 'pay_method',
           'recoil', 'payed', 'delivery_cost',
           'payed_at',
+          'additional',
         ))
         ->offsetSet('state', new sfWidgetFormChoice(array(
           'choices' => OrderTable::$statesForWorker,
@@ -293,6 +294,7 @@ class orderActions extends sfActions
           'design_cost', 'contractors_cost', 'cost',
           'pay_method', 'recoil',
           'payed', 'delivery_cost',
+          'additional',
         ))
       ;
 
