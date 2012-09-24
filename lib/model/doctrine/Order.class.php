@@ -39,4 +39,9 @@ class Order extends BaseOrder
 
     return $colors[ $this->_get('state') ];
   }
+
+  public function getClientFullestName()
+  {
+    return $this->getClient()->getName() . ' (' . $this->getClient()->getOwnershipTranslated() . ' «' . $this->getClient()->getFullName() . '»)';
+  }
 }

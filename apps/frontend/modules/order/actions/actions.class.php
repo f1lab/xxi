@@ -105,7 +105,7 @@ class orderActions extends sfActions
     $this->commentForm->setDefault('order_id', $this->order->getId());
 
     $this->fields = array(
-      'client' => 'Клиент',
+      'clientFullestName' => 'Клиент',
       'creator' => 'Менеджер',
       'description' => 'Описание заказа',
       'additional' => 'Доп. информация',
