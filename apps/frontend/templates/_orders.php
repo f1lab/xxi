@@ -1,4 +1,22 @@
-<?php if (isset($orders) and count($orders) and true == ($columns = $sf_data->getRaw('columns'))): ?>
+<?php
+function pageLink($page) {
+  static $request = false;
+  if (!$request) {
+    $request = sfContext::getInstance()->getRequest();
+  }
+
+  return url_for(
+    '@orders?page='
+    . $page
+    . '&my='
+    . $request->getParameter('my')
+    . '&state='
+    . $request->getParameter('state')
+  );
+}
+?>
+
+<?php if (isset($pager) and true == ($orders = $sf_data->getRaw('pager')->getResults()) and count($orders) and true == ($columns = $sf_data->getRaw('columns'))): ?>
 <table class="table table-condensed table-bordered rows-clickable">
   <thead>
     <tr>
@@ -16,7 +34,7 @@
       <?php if (in_array('comments', $columns)): ?><th title="Комментарии"></th><?php endif ?>
     </tr>
   </thead>
-  <tbody><?php foreach ($sf_data->getRaw('orders') as $order): ?>
+  <tbody><?php foreach ($orders as $order): ?>
     <tr
       rel="popover"
       data-placement="top"
@@ -49,6 +67,25 @@
     </tr>
   <?php endforeach ?></tbody>
 </table>
+
+<?php if ($pager->haveToPaginate()): ?>
+  <div class="pagination">
+  <ul>
+    <li<?php echo ($pager->getPreviousPage() == $pager->getPage()) ? ' class="active"' : '' ?>>
+      <a href="<?php echo pageLink($pager->getPreviousPage()) ?>">&lt;</a>
+    </li>
+  <?php foreach ($pager->getLinks() as $page): ?>
+    <li<?php echo ($page == $pager->getPage()) ? ' class="active"' : '' ?>>
+      <a href="<?php echo pageLink($page) ?>"><?php echo $page ?></a>
+    </li>
+  <?php endforeach; ?>
+    <li<?php echo ($pager->getNextPage() == $pager->getPage()) ? ' class="active"' : '' ?>>
+      <a href="<?php echo pageLink($pager->getNextPage()) ?>">&gt;</a>
+    </li>
+  </ul>
+</div>
+<?php endif ?>
+
 <?php else: ?>
 <div class="alert alert-info"><strong>Нет заказов</strong>.</div>
 <?php endif ?>

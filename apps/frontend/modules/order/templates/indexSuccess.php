@@ -64,7 +64,7 @@ if (
     );
   }
 
-  include_partial('global/orders', array('orders' => $orders, 'columns' => $columns));
+  include_partial('global/orders', array('pager' => $pager, 'columns' => $columns));
 ?>
 
 <script type="text/javascript">

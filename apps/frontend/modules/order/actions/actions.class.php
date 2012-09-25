@@ -17,67 +17,70 @@ class orderActions extends sfActions
     $this->_my = $request->getParameter('my');
 
     if ($this->getUser()->hasGroup('manager')) {
-      $this->orders = Doctrine_Core::getTable('Order')->createQuery('a, a.Client, a.Creator')
+      $query = Doctrine_Core::getTable('Order')->createQuery('a, a.Client, a.Creator')
         ->orderBy('a.created_at asc')
       ;
 
       if ($this->_state == 'active') {
-        $this->orders->andWhereNotIn('a.state', array('archived', 'debt'));
+        $query->andWhereNotIn('a.state', array('archived', 'debt'));
       } else {
-        $this->orders->andWhere('a.state = ?', $this->_state);
+        $query->andWhere('a.state = ?', $this->_state);
       }
 
       if ($this->_my == 'all') {
         //
       } else {
-        $this->orders->andWhere('a.created_by = ?', $this->getUser()->getGuardUser()->getId());
+        $query->andWhere('a.created_by = ?', $this->getUser()->getGuardUser()->getId());
       }
 
-      $this->orders = $this->orders->execute();
-
     } else if ($this->getUser()->hasGroup('monitor')) {
-      $this->orders = Doctrine_Core::getTable('Order')->createQuery('a, a.Client, a.Creator')
+      $query = Doctrine_Core::getTable('Order')->createQuery('a, a.Client, a.Creator')
         ->orderBy('a.created_at asc')
         ->whereNotIn('a.state', array('calculating', 'archived', 'debt'))
-        ->execute()
       ;
 
     } else if ($this->getUser()->hasGroup('worker')) {
-      $this->orders = Doctrine_Core::getTable('Order')->createQuery('a, a.Creator')
+      $query = Doctrine_Core::getTable('Order')->createQuery('a, a.Creator')
         ->orderBy('a.created_at asc')
       ;
 
       if ($this->_state == 'active') {
-        $this->orders->whereIn('a.state', array('work', 'working', 'done'));
+        $query->whereIn('a.state', array('work', 'working', 'done'));
       } else {
-        $this->orders->where('a.state = ?', $this->_state);
+        $query->where('a.state = ?', $this->_state);
       }
-
-      $this->orders = $this->orders->execute();
 
     } else if ($this->getUser()->hasGroup('director') or $this->getUser()->hasGroup('buhgalter')) {
-      $this->orders = Doctrine_Core::getTable('Order')->createQuery('a, a.Client, a.Creator')
+      $query = Doctrine_Core::getTable('Order')->createQuery('a, a.Client, a.Creator')
         ->orderBy('a.created_at asc')
       ;
 
       if ($this->_state == 'active') {
-        $this->orders->whereNotIn('a.state', array('archived', 'debt'));
+        $query->whereNotIn('a.state', array('archived', 'debt'));
       } else {
-        $this->orders->where('a.state = ?', $this->_state);
+        $query->where('a.state = ?', $this->_state);
       }
-
-      $this->orders = $this->orders->execute();
     }
 
-    foreach ($this->orders as &$order) {
-      $t = Doctrine_Query::create()
+    $this->pager = new sfDoctrinePager(
+      'Order',
+      30
+    );
+    $this->pager->setQuery($query);
+    $this->pager->setPage($request->getParameter('page', 1));
+    $this->pager->init();
+
+    $orders = $this->pager->getResults();
+    foreach ($orders as &$order) {
+      $commentReads = Doctrine_Query::create()
         ->select('*, (select count(*) from comment_reads where comment_id = c.id and user_id = ?) read')
         ->from('Comment c')
         ->andWhere('order_id = ?', $order->getId())
         ->execute(array($this->getUser()->getGuardUser()->getId()))
       ;
-      $order->setComments($t);
+      $order->setComments($commentReads);
     }
+    $this->pager->setResults($orders);
   }
 
   public function executeShow(sfWebRequest $request)
