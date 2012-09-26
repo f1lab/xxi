@@ -16,7 +16,14 @@ function pageLink($page) {
 }
 ?>
 
-<?php if (isset($pager) and true == ($orders = $sf_data->getRaw('pager')->getResults()) and count($orders) and true == ($columns = $sf_data->getRaw('columns'))): ?>
+<?php
+if (
+  (
+    isset($pager) && true == ($orders = $sf_data->getRaw('pager')->getResults())
+    or isset($orders) && true == ($orders = $sf_data->getRaw('orders'))
+  ) and count($orders) and true == ($columns = $sf_data->getRaw('columns'))
+):
+?>
 <table class="table table-condensed table-bordered rows-clickable">
   <thead>
     <tr>
@@ -68,7 +75,7 @@ function pageLink($page) {
   <?php endforeach ?></tbody>
 </table>
 
-<?php if ($pager->haveToPaginate()): ?>
+<?php if (isset($pager) and $pager->haveToPaginate()): ?>
   <div class="pagination">
   <ul>
     <li<?php echo ($pager->getPreviousPage() == $pager->getPage()) ? ' class="active"' : '' ?>>
