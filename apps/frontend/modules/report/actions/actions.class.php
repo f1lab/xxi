@@ -301,6 +301,10 @@ class reportActions extends sfActions
       ->offsetSet('client', new sfWidgetFormDoctrineChoice(array(
         'model' => 'Client',
         'add_empty' => 'Все',
+        'order_by' => array(
+          'name',
+          'asc',
+        ),
         'label' => 'Клиент',
       )))
       ->setNameFormat('filter[%s]')
