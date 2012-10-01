@@ -29,6 +29,8 @@ class OrderForm extends BaseOrderForm
           'name',
           'asc',
         ),
+      ), array(
+        'class' => 'chzn-select',
       )))
       ->offsetSet('state', new sfWidgetFormChoice(array(
         'choices' => OrderTable::$states,

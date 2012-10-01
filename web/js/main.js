@@ -17,4 +17,8 @@ $(function() {
   $('table')
     .tablesorter()
   ;
+
+  $(".chzn-select")
+    .chosen()
+  ;
 });

@@ -17,6 +17,7 @@ default:
     - bootstrap
     - bootstrap-datepicker
     #- bootstrap-responsive
+    - chosen
     - main
 
   javascripts:
@@ -25,6 +26,7 @@ default:
     - bootstrap.min.js
     - bootstrap-datepicker
     - bootstrap-datepicker.ru.js
+    - chosen.jquery.min.js
     - main
 
   has_layout:     true
