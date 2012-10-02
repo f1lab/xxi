@@ -6,6 +6,15 @@
     <a href="<?php echo url_for('@order-new') ?>" class="btn btn-primary">Добавить заказ</a>
   </div><?php endif ?>
 
+  <?php if ($sf_user->hasCredential('can_use_search_in_orders')): ?><div class="btn-group">
+    <select name="" id="" style="float:left;margin-bottom:0;width:110px" class="span2 chzn-select" data-placeholder="Перейти к заказу" onchange="document.location.href = '<?php echo url_for('@orders') ?>/' + $(this).val()">
+      <option value=""></option>
+    <?php
+      $q = Doctrine_Core::getTable('Order')->createQuery('a')->select('a.id')->orderBy('id')->execute(array(), Doctrine_Core::HYDRATE_ARRAY);
+      foreach ($q as $order): ?>
+      <option value="<?php echo $order['id'] ?>"><?php echo $order['id'] ?></option>
+    <?php endforeach ?></select>
+  </div><?php endif ?>
 <?php
 if (
   $sf_user->hasGroup('manager')

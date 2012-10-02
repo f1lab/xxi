@@ -2,11 +2,12 @@
   <h1>Клиенты</h1>
 </div>
 
-<?php if ($sf_user->hasGroup('manager') or $sf_user->hasCredential('can_create_clients')): ?>
 <div class="btn-toolbar">
+<?php if ($sf_user->hasGroup('manager') or $sf_user->hasCredential('can_create_clients')): ?>
   <div class="btn-group">
     <a href="<?php echo url_for('@client-new') ?>" class="btn btn-primary">Добавить клиента</a>
   </div>
+<?php endif ?>
   <div class="btn-group">
     <select name="" id="" style="float:left;margin-bottom:0" onchange="document.location.href = '<?php echo url_for('@clients') ?>/' + $(this).val()" class="chzn-select" data-placeholder="Быстрый переход">
       <option value=""></option>
@@ -15,7 +16,6 @@
     <?php endforeach ?></select>
   </div>
 </div>
-<?php endif ?>
 
 <table class="table table-condensed table-bordered rows-clickable">
   <thead>

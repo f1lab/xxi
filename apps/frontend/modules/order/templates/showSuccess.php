@@ -55,6 +55,8 @@
         ? date('d.m.Y', strtotime($order->$field()))
         : ''
       ;
+    } elseif ($field == 'getClientFullestName') {
+      echo '<a href="' . url_for('@client?id=' . $order->getClient()->getId()) . '">' . $order->$field() . '</a>';
     } else {
       echo $order->$field();
     }
