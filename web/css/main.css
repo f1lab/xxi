@@ -57,3 +57,7 @@ table .headerSortUp:after {
 .comment.unread {
   border-color: #F89406;
 }
+
+.btn-group .chzn-container {
+  float: left;
+}

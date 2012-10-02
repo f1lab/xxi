@@ -7,6 +7,13 @@
   <div class="btn-group">
     <a href="<?php echo url_for('@client-new') ?>" class="btn btn-primary">Добавить клиента</a>
   </div>
+  <div class="btn-group">
+    <select name="" id="" style="float:left;margin-bottom:0" onchange="document.location.href = '<?php echo url_for('@clients') ?>/' + $(this).val()" class="chzn-select" data-placeholder="Быстрый переход">
+      <option value=""></option>
+    <?php foreach ($clients as $client): ?>
+      <option value="<?php echo $client->getId() ?>"><?php echo $client ?></option>
+    <?php endforeach ?></select>
+  </div>
 </div>
 <?php endif ?>
 
