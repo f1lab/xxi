@@ -12,7 +12,6 @@ class OrderTable extends Doctrine_Table
       'work' => 'В цех',
       'working' => 'В работе',
       'done' => 'Всё готово',
-      'submited' => 'Сдан',
       'archived' => 'В архиве',
       'debt' => 'Дебиторка',
     );
@@ -27,7 +26,6 @@ class OrderTable extends Doctrine_Table
       'work' => 'В цех',
       'working' => 'В работе',
       'done' => 'Всё готово',
-      'submited' => 'Сдан',
     );
 
     public static $statesForBuhgalter = array(
