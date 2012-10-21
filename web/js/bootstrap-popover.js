@@ -1,1 +1,0 @@
-../bootstrap/docs/assets/js/bootstrap-popover.js
