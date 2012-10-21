@@ -61,3 +61,7 @@ table .headerSortUp:after {
 .btn-group .chzn-container {
   float: left;
 }
+
+th[scope="row"] {
+  text-align: left;
+}
