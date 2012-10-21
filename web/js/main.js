@@ -11,7 +11,9 @@ $(function() {
   ;
 
   $('[rel="popover"]')
-    .popover()
+    .popover({
+      'trigger': 'hover'
+    })
   ;
 
   $('table')

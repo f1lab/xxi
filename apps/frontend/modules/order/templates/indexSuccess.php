@@ -44,36 +44,50 @@ if (
 </div>
 
 <?php
-  $columns = array(
-    'id',
-    'client_id',
-    'approved_at',
-    'due_date',
-    'state',
-    'manager',
-    'comments',
-  );
-
-  if ($sf_user->hasGroup('monitor')) {
-    unset($columns[1]); // don't show client
-  }
-
-  if ($sf_user->hasGroup('buhgalter')) {
-    $columns = array(
+  if ($_state == 'debt') {
+    include_partial('global/orders-debt', array('pager' => $pager, 'columns' => array(
       'id',
       'client_id',
-      'cost',
-      'payed',
-      'pay_method',
-      'payed_at',
       'approved_at',
       'submited_at',
       'manager',
+      'cost',
+      'payed',
+      'debt',
+      'comments',
+    )));
+  } else {
+    $columns = array(
+      'id',
+      'client_id',
+      'approved_at',
+      'due_date',
+      'state',
+      'manager',
       'comments',
     );
-  }
 
-  include_partial('global/orders', array('pager' => $pager, 'columns' => $columns));
+    if ($sf_user->hasGroup('monitor')) {
+      unset($columns[1]); // don't show client
+    }
+
+    if ($sf_user->hasGroup('buhgalter')) {
+      $columns = array(
+        'id',
+        'client_id',
+        'cost',
+        'payed',
+        'pay_method',
+        'payed_at',
+        'approved_at',
+        'submited_at',
+        'manager',
+        'comments',
+      );
+    }
+
+    include_partial('global/orders', array('pager' => $pager, 'columns' => $columns));
+  }
 ?>
 
 <script type="text/javascript">
