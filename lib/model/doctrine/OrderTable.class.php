@@ -23,6 +23,7 @@ class OrderTable extends Doctrine_Table
     );
 
     public static $statesForWorker = array(
+      'calculating' => 'На просчёте',
       'work' => 'В цех',
       'working' => 'В работе',
       'done' => 'Всё готово',

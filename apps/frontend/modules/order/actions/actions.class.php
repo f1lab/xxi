@@ -45,7 +45,7 @@ class orderActions extends sfActions
       ;
 
       if ($this->_state == 'active') {
-        $query->whereIn('a.state', array('work', 'working', 'done'));
+        $query->whereIn('a.state', array('work', 'working', 'done', 'calculating'));
       } else {
         $query->where('a.state = ?', $this->_state);
       }
