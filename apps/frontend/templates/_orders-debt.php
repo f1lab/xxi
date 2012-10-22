@@ -35,6 +35,8 @@ if (
       <?php if (in_array('cost', $columns)): ?><th>Стоимость</th><?php endif ?>
       <?php if (in_array('payed', $columns)): ?><th>Внесено</th><?php endif ?>
       <?php if (in_array('debt', $columns)): ?><th>Долг</th><?php endif ?>
+      <?php if (in_array('bill_made', $columns)): ?><th>Счёт сф.</th><?php endif ?>
+      <?php if (in_array('bill_given', $columns)): ?><th>Счёт пол.</th><?php endif ?>
       <?php if (in_array('comments', $columns)): ?><th title="Комментарии"></th><?php endif ?>
     </tr>
   </thead>
@@ -54,6 +56,8 @@ if (
       <?php if (in_array('cost', $columns)): ?><td><?php echo $order->getCost() ?></td><?php endif ?>
       <?php if (in_array('payed', $columns)): ?><td><?php echo $order->getPayed() ?></td><?php endif ?>
       <?php if (in_array('debt', $columns)): ?><td><?php echo $order->getCost() - $order->getPayed() ?></td><?php endif ?>
+      <?php if (in_array('bill_made', $columns)): ?><td><input type="checkbox" readonly<?php echo $order->getBillMade() ? ' checked' : '' ?>></td><?php endif ?>
+      <?php if (in_array('bill_given', $columns)): ?><td><input type="checkbox" readonly<?php echo $order->getBillGiven() ? ' checked' : '' ?>></td><?php endif ?>
       <?php if (in_array('comments', $columns)):
         $comments = $order->getComments()->count();
         $commentsRead = array_reduce($order->getComments()->toArray(), function($return, $item) {

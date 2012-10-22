@@ -108,6 +108,8 @@ class OrderForm extends BaseOrderForm
       'state' => 'Статус',
       'expected_at' => 'Планируемая дата выполнения',
       'area' => 'Участок',
+      'bill_made' => 'Счёт сформирован',
+      'bill_given' => 'Счёт получен заказчиком',
     ));
   }
 }

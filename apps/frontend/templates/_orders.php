@@ -38,6 +38,8 @@ if (
       <?php if (in_array('pay_method', $columns)): ?><th>Способ оплаты</th><?php endif ?>
       <?php if (in_array('payed_at', $columns)): ?><th>Дата полной оплаты</th><?php endif ?>
       <?php if (in_array('manager', $columns)): ?><th>Менеджер</th><?php endif ?>
+      <?php if (in_array('bill_made', $columns)): ?><th>Счёт сф.</th><?php endif ?>
+      <?php if (in_array('bill_given', $columns)): ?><th>Счёт пол.</th><?php endif ?>
       <?php if (in_array('comments', $columns)): ?><th title="Комментарии"></th><?php endif ?>
     </tr>
   </thead>
@@ -58,8 +60,10 @@ if (
       <?php if (in_array('cost', $columns)): ?><td><?php echo $order->getCost() ?></td><?php endif ?>
       <?php if (in_array('payed', $columns)): ?><td><?php echo $order->getPayed() ?></td><?php endif ?>
       <?php if (in_array('pay_method', $columns)): ?><td><?php echo $order->getPayMethodTranslated() ?></td><?php endif ?>
-      <?php if (in_array('payed_at', $columns)): ?><td><?php echo $order->getPayedAt() ?></td><?php endif ?>
+      <?php if (in_array('payed_at', $columns)): ?><td><?php echo $order->getPayedAt() ? date('d.m.Y', strtotime($order->getPayedAt())) : '' ?></td><?php endif ?>
       <?php if (in_array('manager', $columns)): ?><td><?php echo $order->getCreator()->getFirstName() . ' ' . $order->getCreator()->getLastName() ?></td><?php endif ?>
+      <?php if (in_array('bill_made', $columns)): ?><td><input type="checkbox" readonly<?php echo $order->getBillMade() ? ' checked' : '' ?>></td><?php endif ?>
+      <?php if (in_array('bill_given', $columns)): ?><td><input type="checkbox" readonly<?php echo $order->getBillGiven() ? ' checked' : '' ?>></td><?php endif ?>
       <?php if (in_array('comments', $columns)):
         $comments = $order->getComments()->count();
         $commentsRead = array_reduce($order->getComments()->toArray(), function($return, $item) {

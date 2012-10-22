@@ -130,6 +130,8 @@ class orderActions extends sfActions
       'submitedAt' => 'Дата сдачи заказа',
       'stateTranslated' => 'Статус',
       'areaTranslated' => 'Участок',
+      'billMade' => 'Счёт сформирован ',
+      'billGiven' => 'Счёт получен заказчиком',
     );
 
     if ($this->getUser()->hasGroup('worker')) { // bidlo-magic: we need just part of fields, so bidlocode now
@@ -162,6 +164,9 @@ class orderActions extends sfActions
         'submited_at',
         'payed_at',
         'expected_at',
+        'area',
+        'bill_made',
+        'bill_given',
       ))
     ;
 
@@ -184,6 +189,9 @@ class orderActions extends sfActions
         'submited_at',
         'payed_at',
         'expected_at',
+        'area',
+        'bill_made',
+        'bill_given',
       ))
     ;
     $this->form->getValidatorSchema()
@@ -212,6 +220,8 @@ class orderActions extends sfActions
           'recoil', 'payed', 'delivery_cost',
           'payed_at',
           'additional',
+          'bill_made',
+          'bill_given',
         ))
         ->offsetSet('state', new sfWidgetFormChoice(array(
           'choices' => OrderTable::$statesForWorker,
@@ -257,7 +267,9 @@ class orderActions extends sfActions
           'payed_at',
           'expected_at',
           'submited_at',
-          'area'
+          'area',
+          'bill_made',
+          'bill_given',
         ))
         ->offsetSet('state', new sfWidgetFormChoice(array(
           'choices' => OrderTable::$statesForManager,
@@ -301,6 +313,8 @@ class orderActions extends sfActions
           'pay_method', 'recoil',
           'payed', 'delivery_cost',
           'additional',
+          'bill_made',
+          'bill_given',
         ))
       ;
 
@@ -332,6 +346,8 @@ class orderActions extends sfActions
           'expected_at',
           'submited_at',
           'area',
+          'bill_made',
+          'bill_given',
         ))
       ;
 

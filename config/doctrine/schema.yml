@@ -115,6 +115,14 @@ Order:
         - sublimation
         - cutter
         - serigraphy
+    bill_made:
+      type: boolean
+      notnull: true
+      default: false
+    bill_given:
+      type: boolean
+      notnull: true
+      default: false
   relations:
     Comments:
       class: Comment
