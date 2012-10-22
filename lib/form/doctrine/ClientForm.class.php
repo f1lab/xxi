@@ -35,7 +35,7 @@ class ClientForm extends BaseClientForm
         'ks' => 'Корр. счёт',
         'ogrn' => 'ОГРН',
         'okpo' => 'ОКПО',
-        'discount' => 'Скидка',
+        'discount' => 'Скидка, %',
         'buhgalter' => 'ФИО бухгалтера',
         'buhgalter_phone' => 'Телефон бухгалтера',
       ))

@@ -20,6 +20,36 @@ $(function() {
     .tablesorter()
   ;
 
+  $('.makePizdatoWithDiscount')
+    .find('option')
+      .each(function(a, b) {
+        var
+          $this = $(this),
+          temp = $this.text().split('|')
+        ;
+
+        $(this)
+          .text(temp[0])
+          .data('discount', temp[1])
+        ;
+      })
+      .end()
+    .on('change', function() {
+      var
+        $this = $(this),
+        $element = $this.find('option[value="' + $this.val() + '"]')
+      ;
+
+      $this
+        .parent()
+          .find('span#discount')
+            .remove()
+            .end()
+          .append('<span id="discount" style="padding-left: 10px">Скидка: ' + $element.data('discount') + '%</span>')
+      ;
+    })
+  ;
+
   $(".chzn-select")
     .chosen()
   ;

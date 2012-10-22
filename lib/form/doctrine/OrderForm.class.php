@@ -29,8 +29,9 @@ class OrderForm extends BaseOrderForm
           'name',
           'asc',
         ),
+        'method' => 'getNameWithDiscount',
       ), array(
-        'class' => 'chzn-select',
+        'class' => 'chzn-select makePizdatoWithDiscount',
       )))
       ->offsetSet('state', new sfWidgetFormChoice(array(
         'choices' => OrderTable::$states,
