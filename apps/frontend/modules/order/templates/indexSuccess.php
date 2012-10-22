@@ -67,10 +67,16 @@ if (
       'state',
       'manager',
       'comments',
+      'bill_made',
+      'bill_given',
     );
 
     if ($sf_user->hasGroup('monitor')) {
-      unset($columns[1]); // don't show client
+      unset (
+        $columns['client_id'],
+        $columns['bill_made'],
+        $columns['bill_given']
+      );
     }
 
     if ($sf_user->hasGroup('buhgalter')) {
@@ -85,14 +91,7 @@ if (
         'submited_at',
         'manager',
         'comments',
-        'bill_made',
-        'bill_given',
       );
-    }
-
-    if ($sf_user->hasGroup('director')) {
-      array_push($columns, 'bill_made');
-      array_push($columns, 'bill_given');
     }
 
     include_partial('global/orders', array('pager' => $pager, 'columns' => $columns));
