@@ -35,6 +35,9 @@ class OrderForm extends BaseOrderForm
       ->offsetSet('state', new sfWidgetFormChoice(array(
         'choices' => OrderTable::$states,
       )))
+      ->offsetSet('area', new sfWidgetFormChoice(array(
+        'choices' => OrderTable::$area,
+      )))
       ->offsetSet('due_date', new sfWidgetFormBootstrapDate())
       /* ->offsetSet('due_date', new sfWidgetFormDateTime(array(
         'format' => '%date%   %time%',
@@ -104,6 +107,7 @@ class OrderForm extends BaseOrderForm
       'payed_at' => 'Дата полной оплаты',
       'state' => 'Статус',
       'expected_at' => 'Планируемая дата выполнения',
+      'area' => 'Участок',
     ));
   }
 }

@@ -7,47 +7,60 @@
  */
 class OrderTable extends Doctrine_Table
 {
-    public static $states = array(
-      'calculating' => 'На просчёте',
-      'work' => 'В цех',
-      'working' => 'В работе',
-      'done' => 'Всё готово',
-      'archived' => 'В архиве',
-      'debt' => 'Дебиторка',
-    );
+  public static $states = array(
+    'calculating' => 'На просчёте',
+    'work' => 'В цех',
+    'working' => 'В работе',
+    'done' => 'Всё готово',
+    'archived' => 'В архиве',
+    'debt' => 'Дебиторка',
+  );
 
-    public static $statesForManager = array(
-      'calculating' => 'На просчёте',
-      'work' => 'В цех',
-    );
+  public static $statesForManager = array(
+    'calculating' => 'На просчёте',
+    'work' => 'В цех',
+  );
 
-    public static $statesForWorker = array(
-      'calculating' => 'На просчёте',
-      'work' => 'В цех',
-      'working' => 'В работе',
-      'done' => 'Всё готово',
-    );
+  public static $statesForWorker = array(
+    'calculating' => 'На просчёте',
+    'work' => 'В цех',
+    'working' => 'В работе',
+    'done' => 'Всё готово',
+  );
 
-    public static $statesForBuhgalter = array(
-      'archived' => 'В архиве',
-      'debt' => 'Дебиторка',
-    );
+  public static $statesForBuhgalter = array(
+    'archived' => 'В архиве',
+    'debt' => 'Дебиторка',
+  );
 
-    public static $payMethods = array(
-      '' => '',
-      'cash' => 'Наличный',
-      'non-cash' => 'Безналичный',
-      'barter' => 'Бартер',
-      'settlement' => 'Взаиморасчёт',
-    );
+  public static $payMethods = array(
+    '' => '',
+    'cash' => 'Наличный',
+    'non-cash' => 'Безналичный',
+    'barter' => 'Бартер',
+    'settlement' => 'Взаиморасчёт',
+  );
 
-    /**
-     * Returns an instance of this class.
-     *
-     * @return object OrderTable
-     */
-    public static function getInstance()
-    {
-        return Doctrine_Core::getTable('Order');
-    }
+  public static $area = array(
+    '' => '',
+    'pvc' => 'PVC',
+    'laser' => 'ЛАЗЕР',
+    'engraver' => 'ГРАВЕР',
+    'mymaka' => 'МИМАКА',
+    'outdoor' => 'НАРУЖНАЯ РЕКЛАМА',
+    'lfp' => 'ПЕЧАТЬ ШФП',
+    'sublimation' => 'СУБЛИМАЦИЯ',
+    'cutter' => 'ФРЕЗЕР',
+    'serigraphy' => 'ШЕЛКОГРАФИЯ',
+  );
+
+  /**
+   * Returns an instance of this class.
+   *
+   * @return object OrderTable
+   */
+  public static function getInstance()
+  {
+      return Doctrine_Core::getTable('Order');
+  }
 }

@@ -103,6 +103,18 @@ Order:
         - submited
         - archived
         - debt
+    area:
+      type: enum
+      values:
+        - pvc
+        - laser
+        - engraver
+        - mymaka
+        - outdoor
+        - lfp
+        - sublimation
+        - cutter
+        - serigraphy
   relations:
     Comments:
       class: Comment

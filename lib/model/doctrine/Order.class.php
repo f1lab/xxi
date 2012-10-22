@@ -25,6 +25,11 @@ class Order extends BaseOrder
     ;
   }
 
+  public function getAreaTranslated()
+  {
+    return OrderTable::$area[ $this->_get('area') ];
+  }
+
   public function getColorIndicator()
   {
     $colors = array(

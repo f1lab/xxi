@@ -129,6 +129,7 @@ class orderActions extends sfActions
       'finishedAt' => 'Дата выполнения',
       'submitedAt' => 'Дата сдачи заказа',
       'stateTranslated' => 'Статус',
+      'areaTranslated' => 'Участок',
     );
 
     if ($this->getUser()->hasGroup('worker')) { // bidlo-magic: we need just part of fields, so bidlocode now
@@ -227,6 +228,7 @@ class orderActions extends sfActions
           'submited_at', 'state',
           'recoil', 'started_at', 'finished_at',
           'delivery_cost', 'expected_at',
+          'area'
         ))
         ->offsetSet('cost', new sfWidgetFormInputText(array(
           'label' => 'Общая стоимость работ',
@@ -255,6 +257,7 @@ class orderActions extends sfActions
           'payed_at',
           'expected_at',
           'submited_at',
+          'area'
         ))
         ->offsetSet('state', new sfWidgetFormChoice(array(
           'choices' => OrderTable::$statesForManager,
@@ -309,6 +312,7 @@ class orderActions extends sfActions
           'design_cost', 'contractors_cost', 'cost',
           'submited_at', 'recoil', 'delivery_cost',
           'expected_at', 'state',
+          'area'
         ))
       ;
 
@@ -327,6 +331,7 @@ class orderActions extends sfActions
           'payed_at',
           'expected_at',
           'submited_at',
+          'area',
         ))
       ;
 
