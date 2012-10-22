@@ -41,6 +41,12 @@ Client:
       type: string(32)
     okpo:
       type: string(32)
+    discount:
+      type: string(4)
+    buhgalter:
+      type: string(128)
+    buhgalter_phone:
+      type: string(32)
   relations:
     Orders:
       class: Order

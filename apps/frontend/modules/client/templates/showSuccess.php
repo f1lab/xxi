@@ -30,6 +30,18 @@
           <th scope="row">Email</th>
           <td><?php echo $client->getEmail() ?></td>
         </tr>
+        <tr>
+          <th scope="row">ФИО бухгалтера</th>
+          <td><?php echo $client->getBuhgalter() ?></td>
+        </tr>
+        <tr>
+          <th scope="row">Телефон бухгалтера</th>
+          <td><?php echo $client->getBuhgalterPhone() ?></td>
+        </tr>
+        <tr>
+          <th scope="row">Скидка</th>
+          <td><?php echo $client->getDiscount() ?></td>
+        </tr>
       </tbody>
     </table>
 
