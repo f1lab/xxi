@@ -36,7 +36,7 @@ if (
       <?php if (in_array('cost', $columns)): ?><th>Стоимость</th><?php endif ?>
       <?php if (in_array('payed', $columns)): ?><th>Внесено</th><?php endif ?>
       <?php if (in_array('pay_method', $columns)): ?><th>Способ оплаты</th><?php endif ?>
-      <?php if (in_array('payed_at', $columns)): ?><th>Дата полной оплаты</th><?php endif ?>
+      <?php if (in_array('payed_at', $columns)): ?><th>Дата оплаты</th><?php endif ?>
       <?php if (in_array('manager', $columns)): ?><th>Менеджер</th><?php endif ?>
       <?php if (in_array('bill_made', $columns)): ?><th>Счёт сф.</th><?php endif ?>
       <?php if (in_array('bill_given', $columns)): ?><th>Счёт пол.</th><?php endif ?>

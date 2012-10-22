@@ -65,3 +65,7 @@ table .headerSortUp:after {
 th[scope="row"] {
   text-align: left;
 }
+
+.table thead th {
+  vertical-align: middle;
+}
