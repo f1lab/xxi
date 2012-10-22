@@ -15,33 +15,15 @@
       <option value="<?php echo $order['id'] ?>"><?php echo $order['id'] ?></option>
     <?php endforeach ?></select>
   </div><?php endif ?>
-<?php
-if (
-  $sf_user->hasGroup('manager')
-  or $sf_user->hasGroup('worker')
-  or $sf_user->hasGroup('director')
-  or $sf_user->hasGroup('buhgalter')
-): ?>
-  <div class="btn-group pull-right">
-    <a href="<?php echo url_for('@orders?state=active&my=' . $_my) ?>" class="btn<?php
-      echo $_state == 'active' ? ' active' : '' ?>">Текущие</a>
-  <?php
-    $states = $sf_user->hasGroup('worker') ? OrderTable::$statesForWorker : OrderTable::$states;
-    foreach ($states as $state=>$stateTranslated):
-  ?>
-    <a href="<?php echo url_for('@orders?state=' . $state . '&my=' . $_my) ?>" class="btn<?php
-      echo $_state == $state ? ' active' : '' ?>"><?php echo $stateTranslated ?></a>
-  <?php endforeach ?>
-  </div>
-<?php endif ?>
 
-<?php if ($sf_user->hasGroup('manager') or $sf_user->hasCredential('can_create_orders')): ?>
   <div class="btn-group pull-right">
-    <a href="<?php echo url_for('@orders?state=' . $_state . '&my=' . ($_my == 'my' ? 'all' : 'my'))
-      ?>" class="btn<?php echo $_my == 'my' ? ' active' : '' ?>">Только мои</a>
+    <a class="btn toggler collapsed" data-toggle="collapse" href="#filterator">
+      <i class="icon icon-list"></i> Фильтровать…
+    </a>
   </div>
-<?php endif ?>
 </div>
+
+<div id="filterator" class="collapse"><?php include_partial('filter', array('form' => $filter)) ?></div>
 
 <?php
   if ($_state == 'debt') {
