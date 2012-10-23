@@ -53,12 +53,4 @@ $(function() {
   $(".chzn-select")
     .chosen()
   ;
-
-  $('.toggler')
-    .click(function() {
-      $(this)
-        .toggleClass('active')
-      ;
-    })
-  ;
 });

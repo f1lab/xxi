@@ -20,10 +20,10 @@
           <?php if ($form['from']->hasError()): ?><div class="help-inline"><?php echo $form['from']->getError() ?></div><?php endif ?>
         </div>
       </div>
-
+      
       <div class="control-group">
         <?php echo $form['manager']->renderLabel(null, array('class' => 'control-label')) ?>
-
+        
         <div class="controls">
           <?php echo $form['manager']->render() ?>
         </div>

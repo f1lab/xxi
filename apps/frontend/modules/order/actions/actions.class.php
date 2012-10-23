@@ -81,8 +81,6 @@ class orderActions extends sfActions
       $order->setComments($commentReads);
     }
     $this->pager->setResults($orders);
-
-    $this->filter = new OrderFormFilter();
   }
 
   public function executeShow(sfWebRequest $request)
