@@ -22,7 +22,7 @@ class orderActions extends sfActions
       ;
 
       if ($this->_state == 'active') {
-        $query->andWhereNotIn('a.state', array('archived', 'debt', 'submited'));
+        $query->andWhereNotIn('a.state', array('archived', 'debt'));
       } else {
         $query->andWhere('a.state = ?', $this->_state);
       }
