@@ -54,9 +54,10 @@
 
   <div class="control-group<?php if ($form['state']->hasError()): ?> error<?php endif ?>">
     <?php echo $form['state']->renderLabel(null, array('class' => 'control-label')) ?>
-    <div class="controls">
+    <div class="controls form-horizontal">
       <?php echo $form['state']->render() ?>
       <?php if ($form['state']->hasError()): ?><div class="help-inline"><?php echo $form['state']->getError() ?></div><?php endif ?>
+       <a href="#" onclick="return resetNearestSelect(this)" class="muted">очистить</a>
     </div>
   </div>
 

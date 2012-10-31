@@ -62,3 +62,17 @@ $(function() {
     })
   ;
 });
+
+function resetNearestSelect(that) {
+  $(that)
+    .parent()
+      .find('select')
+        .eq(0)
+          .find('option[selected]')
+            .removeAttr('selected')
+            .end()
+          .trigger('liszt:updated')
+  ;
+
+  return false;
+}

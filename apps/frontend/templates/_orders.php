@@ -1,17 +1,15 @@
 <?php
+use_helper('Text');
+
 function pageLink($page) {
   static $request = false;
   if (!$request) {
     $request = sfContext::getInstance()->getRequest();
   }
 
-  return url_for(
-    '@orders?page='
-    . $page
-    . '&my='
-    . $request->getParameter('my')
-    . '&state='
-    . $request->getParameter('state')
+  return url_for2(
+    'orders',
+    array_merge(array('page' => $page), $request->getParameterHolder()->getAll())
   );
 }
 ?>
@@ -48,7 +46,7 @@ if (
       rel="popover"
       data-placement="top"
       data-title="Описание заказа"
-      data-content="<?php echo $order->getDescription() ?>"
+      data-content="<?php echo simple_format_text(str_replace('"', '&quot;', $order->getDescription())) ?>"
       class="<?php echo $order->getColorIndicator() ?>"
     >
       <?php if (in_array('id', $columns)): ?><td><a href="<?php echo url_for('@order?id=' . $order->getId()) ?>"><?php echo $order->getId() ?></a></td><?php endif ?>

@@ -82,3 +82,20 @@ th[scope="row"] {
 .container {
   width: auto;
 }
+
+.form-horizontal .chzn-container {
+  vertical-align: middle;
+}
+
+form a[href="#"] {
+  text-decoration: none;
+  border-bottom: 1px dashed;
+}
+
+.dropdown-menu {
+  min-width: 100%;
+}
+
+.datepicker.dropdown-menu {
+  min-width: auto;
+}
