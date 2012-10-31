@@ -25,6 +25,15 @@
     </div>
   </div>
 
+  <div class="control-group<?php if ($form['approved_at_from']->hasError()): ?> error<?php endif ?>">
+    <?php echo $form['approved_at_from']->renderLabel(null, array('class' => 'control-label')) ?>
+    <div class="controls form-horizontal">
+      <?php echo $form['approved_at_from']->render(array('placeholder' => 'from')) ?>
+      <?php echo $form['approved_at_to']->render(array('placeholder' => 'to')) ?>
+      <?php if ($form['approved_at_from']->hasError()): ?><div class="help-inline"><?php echo $form['approved_at_from']->getError() ?></div><?php endif ?>
+    </div>
+  </div>
+
   <div class="control-group<?php if ($form['submited_at_from']->hasError()): ?> error<?php endif ?>">
     <?php echo $form['submited_at_from']->renderLabel(null, array('class' => 'control-label')) ?>
     <div class="controls form-horizontal">
@@ -75,5 +84,7 @@
     </div>
   </div>
 
+  <?php $form->renderHiddenFields() ?>
   <button type="submit" class="btn btn-primary">Отфильтровать</button>
+  <a href="<?php echo url_for('@orders') ?>" class="btn">Отменить</a>
 </form>

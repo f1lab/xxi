@@ -13,60 +13,13 @@ class orderActions extends sfActions
   public function executeIndex(sfWebRequest $request)
   {
     $this->orders = array();
-    $this->_state = $request->getParameter('state');
-    $this->_my = $request->getParameter('my');
-
-    if ($this->getUser()->hasGroup('manager')) {
-      $query = Doctrine_Core::getTable('Order')->createQuery('a, a.Client, a.Creator')
-        ->orderBy('a.created_at asc')
-      ;
-
-      if ($this->_state == 'active') {
-        $query->andWhereNotIn('a.state', array('archived', 'debt'));
-      } else {
-        $query->andWhere('a.state = ?', $this->_state);
-      }
-
-      if ($this->_my == 'all') {
-        //
-      } else {
-        $query->andWhere('a.created_by = ?', $this->getUser()->getGuardUser()->getId());
-      }
-
-    } else if ($this->getUser()->hasGroup('monitor')) {
-      $query = Doctrine_Core::getTable('Order')->createQuery('a, a.Client, a.Creator')
-        ->orderBy('a.created_at asc')
-        ->whereNotIn('a.state', array('calculating', 'archived', 'debt'))
-      ;
-
-    } else if ($this->getUser()->hasGroup('worker')) {
-      $query = Doctrine_Core::getTable('Order')->createQuery('a, a.Creator')
-        ->orderBy('a.created_at asc')
-      ;
-
-      if ($this->_state == 'active') {
-        $query->whereIn('a.state', array('work', 'working', 'done', 'calculating'));
-      } else {
-        $query->where('a.state = ?', $this->_state);
-      }
-
-    } else if ($this->getUser()->hasGroup('director') or $this->getUser()->hasGroup('buhgalter')) {
-      $query = Doctrine_Core::getTable('Order')->createQuery('a, a.Client, a.Creator')
-        ->orderBy('a.created_at asc')
-      ;
-
-      if ($this->_state == 'active') {
-        $query->whereNotIn('a.state', array('archived', 'debt'));
-      } else {
-        $query->where('a.state = ?', $this->_state);
-      }
-    }
+    $this->filter = new OrderFormFilter();
 
     $this->pager = new sfDoctrinePager(
       'Order',
       30
     );
-    $this->pager->setQuery($query);
+    $this->pager->setQuery($this->filter->getFilterQuery($request, $this->getUser()));
     $this->pager->setPage($request->getParameter('page', 1));
     $this->pager->init();
 
@@ -81,8 +34,6 @@ class orderActions extends sfActions
       $order->setComments($commentReads);
     }
     $this->pager->setResults($orders);
-
-    $this->filter = new OrderFormFilter();
   }
 
   public function executeShow(sfWebRequest $request)

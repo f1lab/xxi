@@ -16,68 +16,58 @@
     <?php endforeach ?></select>
   </div><?php endif ?>
 
-  <div class="btn-group pull-right">
-    <a class="btn toggler collapsed" data-toggle="collapse" href="#filterator">
-      <i class="icon icon-list"></i> Фильтровать…
-    </a>
-  </div>
+  <?php if (!$sf_user->hasGroup('monitor')): ?>
+    <div class="btn-group pull-right">
+      <a class="btn toggler collapsed" data-toggle="collapse" href="#filterator">
+        <i class="icon icon-list"></i> Фильтровать…
+      </a>
+    </div>
+  <?php endif ?>
 </div>
 
-<div id="filterator" class="collapse"><?php include_partial('filter', array('form' => $filter)) ?></div>
+  <?php if (!$sf_user->hasGroup('monitor')): ?>
+    <div id="filterator" class="collapse"><?php include_partial('filter', array('form' => $filter)) ?></div>
+  <?php endif ?>
 
 <?php
-  if ($_state == 'debt') {
-    include_partial('global/orders-debt', array('pager' => $pager, 'columns' => array(
-      'id',
-      'client_id',
-      'approved_at',
-      'submited_at',
-      'manager',
-      'cost',
-      'payed',
-      'debt',
-      'comments',
-      'bill_made',
-      'bill_given',
-    )));
-  } else {
+  $columns = array(
+    'id',
+    'client_id',
+    'approved_at',
+    'due_date',
+    'state',
+    'manager',
+    'comments',
+    'bill_made',
+    'bill_given',
+  );
+
+  if ($sf_user->hasGroup('monitor')) {
+    unset (
+      $columns['client_id'],
+      $columns['bill_made'],
+      $columns['bill_given']
+    );
+  }
+
+  if ($sf_user->hasGroup('buhgalter')) {
     $columns = array(
       'id',
       'client_id',
+      'cost',
+      'payed',
+      'pay_method',
+      'payed_at',
       'approved_at',
-      'due_date',
-      'state',
+      'submited_at',
       'manager',
       'comments',
       'bill_made',
       'bill_given',
     );
-
-    if ($sf_user->hasGroup('monitor')) {
-      unset (
-        $columns['client_id'],
-        $columns['bill_made'],
-        $columns['bill_given']
-      );
-    }
-
-    if ($sf_user->hasGroup('buhgalter')) {
-      $columns = array(
-        'id',
-        'client_id',
-        'cost',
-        'payed',
-        'pay_method',
-        'payed_at',
-        'approved_at',
-        'submited_at',
-        'manager',
-        'comments',
-      );
-    }
-
-    include_partial('global/orders', array('pager' => $pager, 'columns' => $columns));
   }
+
+  include_partial('global/orders', array('pager' => $pager, 'columns' => $columns));
 ?>
 
 <script type="text/javascript">

@@ -10,8 +10,7 @@
   <?php include_javascripts() ?>
   <style type="text/css">
     body {
-      width: 1000px;
-      margin: 0 auto;
+      margin: 0 2em;
     }
   </style>
 </head>

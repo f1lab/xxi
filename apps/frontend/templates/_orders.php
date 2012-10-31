@@ -80,7 +80,7 @@ if (
 </table>
 
 <?php if (isset($pager) and $pager->haveToPaginate()): ?>
-  <div class="pagination">
+  <div class="pagination pagination-centered">
   <ul>
     <li<?php echo ($pager->getPreviousPage() == $pager->getPage()) ? ' class="active"' : '' ?>>
       <a href="<?php echo pageLink($pager->getPreviousPage()) ?>">&lt;</a>
