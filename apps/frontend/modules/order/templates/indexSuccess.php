@@ -84,17 +84,18 @@
   include_partial('global/orders', array('pager' => $pager, 'columns' => $columns));
 ?>
 
-<script type="text/javascript">
-  setTimeout(function() {
-    window.location.reload();
-  }, 30000);
-</script>
 
 <?php if ($sf_user->hasCredential('monitor') and !$sf_user->isSuperAdmin()): ?>
-<style type="text/css">
-  .navbar,
-  .page-header {
-    display: none;
-  }
-</style>
+  <script type="text/javascript">
+    setTimeout(function() {
+      window.location.reload();
+    }, 30000);
+  </script>
+
+  <style type="text/css">
+    .navbar,
+    .page-header {
+      display: none;
+    }
+  </style>
 <?php endif ?>

@@ -129,6 +129,12 @@ class OrderFormFilter extends BaseOrderFormFilter
       ));
     }
 
+    if ($user->hasCredential('manager')) {
+      $this->setDefault('created_by', array(
+        $user->getGuardUser()->getId(),
+      ));
+    }
+
     if ($request->hasParameter($this->getName())) {
       $this->bind($request->getParameter($this->getName()));
     }
