@@ -86,7 +86,7 @@
 
 <script type="text/javascript">
   setTimeout(function() {
-    //window.location.reload();
+    window.location.reload();
   }, 30000);
 </script>
 
