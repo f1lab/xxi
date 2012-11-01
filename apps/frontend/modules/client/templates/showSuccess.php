@@ -123,14 +123,13 @@
   </div><?php endif ?>
   <div class="btn-group pull-right">
     <a href="<?php echo url_for('@client?id=' . $client->getId()) ?>" class="btn<?php echo $_state == 'active' ? ' active' : '' ?>">Текущие</a>
-  <?php foreach (OrderTable::$states as $state=>$stateTranslated): ?>
+  <?php foreach (OrderTable::$states as $state => $stateTranslated): if ($state == 'submited') { continue; }?>
     <a href="<?php echo url_for('@client?id=' . $client->getId() . '&state=' . $state) ?>" class="btn<?php echo $_state == $state ? ' active' : '' ?>"><?php echo $stateTranslated ?></a>
   <?php endforeach ?>
   </div>
 </div>
 <?php
-  $columns = array('id', 'approved_at', 'due_date', 'state', 'manager');
-  $columns4debt = array(
+  $columns = array(
     'id',
     'client_id',
     'approved_at',
@@ -142,13 +141,12 @@
   );
 
   include_partial(
-    $_state == 'debt' ? 'global/orders-debt' : 'global/orders',
+    'global/orders',
     array(
       'orders' => $client->getOrdersByState(
         $_state,
-        ($sf_user->hasGroup('buhgalter')||$sf_user->hasGroup('director')) ? false : true // show just mine orders or all
-        // TODO: replace by permission `can view all orders'
+        !$sf_user->hasCredential('can_view_all_orders_of_client')
       ),
-      'columns' => $_state == 'debt' ? $columns4debt : $columns,
+      'columns' => $columns,
     )
   );
