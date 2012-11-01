@@ -17,7 +17,7 @@ class orderActions extends sfActions
 
     $this->pager = new sfDoctrinePager(
       'Order',
-      30
+      100
     );
     $this->pager->setQuery($this->filter->getFilterQuery($request, $this->getUser()));
     $this->pager->setPage($request->getParameter('page', 1));
@@ -87,7 +87,8 @@ class orderActions extends sfActions
       'billGiven' => 'Счёт получен заказчиком',
     );
 
-    if ($this->getUser()->hasGroup('worker')) { // bidlo-magic: we need just part of fields, so bidlocode now
+    if ($this->getUser()->hasGroup('worker') or $this->getUser()->hasGroup('monitor')) {
+      // bidlo-magic: we need just part of fields, so bidlocode now
       $workerFields = array_fill_keys(array(
         'creator',
         'description',
@@ -97,6 +98,8 @@ class orderActions extends sfActions
         'startedAt',
         'finishedAt',
         'stateTranslated',
+        'areaTranslated',
+        'submitedAt'
       ), ''); // => array('creator' => '', 'description' => '', etc…)
       $this->fields = array_intersect_key($this->fields, $workerFields); // => array('creator' => 'Клиент', etc…)
     }

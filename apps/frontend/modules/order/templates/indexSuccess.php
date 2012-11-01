@@ -16,7 +16,21 @@
     <?php endforeach ?></select>
   </div><?php endif ?>
 
-  <?php if (!$sf_user->hasGroup('monitor')): ?>
+<?php
+  if ($sf_user->hasGroup('monitor')):
+    if (true == ($hasToCheck = $sf_request->hasParameter('order_filters'))) {
+      $requestedState = sfContext::getInstance()->getRequest()->getParameter('order_filters')['state'];
+    }
+?>
+    <div class="btn-group pull-right">
+      <a href="<?php echo url_for('@orders') ?>" class="btn<?php
+        echo !$hasToCheck ? ' active' : '' ?>">Текущие</a>
+    <?php foreach (OrderTable::$statesForMonitor as $state=>$stateTranslated): ?>
+      <a href="<?php echo url_for('@orders?order_filters[state][]=' . $state) ?>" class="btn<?php
+        echo $hasToCheck && in_array($state, $requestedState) ? ' active' : '' ?>"><?php echo $stateTranslated ?></a>
+    <?php endforeach ?>
+    </div>
+  <?php else: ?>
     <div class="btn-group pull-right">
       <a class="btn toggler collapsed" data-toggle="collapse" href="#filterator">
         <i class="icon icon-list"></i> Фильтровать…

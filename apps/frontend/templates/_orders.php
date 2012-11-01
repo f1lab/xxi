@@ -9,7 +9,7 @@ function pageLink($page) {
 
   return url_for2(
     'orders',
-    array_merge(array('page' => $page), $request->getParameterHolder()->getAll())
+    array_merge($request->getParameterHolder()->getAll(), array('page' => $page))
   );
 }
 ?>

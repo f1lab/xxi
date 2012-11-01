@@ -30,6 +30,12 @@ class OrderTable extends Doctrine_Table
     'submited' => 'Сдан',
   );
 
+  public static $statesForMonitor = array(
+    'work' => 'В цех',
+    'working' => 'В работе',
+    'done' => 'Всё готово',
+  );
+
   public static $statesForBuhgalter = array(
     'archived' => 'В архиве',
     'debt' => 'Дебиторка',

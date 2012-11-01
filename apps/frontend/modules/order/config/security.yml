@@ -11,4 +11,4 @@ update:
   credentials: [[manager, worker, buhgalter, director]]
 
 show:
-  credentials: [[manager, worker, director, buhgalter]]
+  credentials: [[manager, worker, director, buhgalter, monitor]]

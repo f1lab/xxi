@@ -121,134 +121,129 @@ class OrderFormFilter extends BaseOrderFormFilter
   {
     $query = Doctrine_Core::getTable('Order')->createQuery('a, a.Client, a.Creator');
 
-    if ($user->hasGroup('monitor')) {
-      $query->whereNotIn('a.state', array('calculating', 'archived', 'debt'));
-    } else {
-      if ($user->hasGroup('worker')) {
-        $this->setDefault('state', array(
-          'work',
-          'working',
-          'done',
-          'calculating',
-        ));
+    if ($user->hasGroup('worker') or $user->hasGroup('monitor')) {
+      $this->setDefault('state', array(
+        'work',
+        'working',
+        'done',
+      ));
+    }
+
+    if ($request->hasParameter($this->getName())) {
+      $this->bind($request->getParameter($this->getName()));
+    }
+
+    if (true == ($values = array_merge($this->getDefaults(), $this->getValues()))) {
+      if (count($values['client_id'])) {
+        $query->andWhereIn('client_id', $values['client_id']);
       }
 
-      if ($request->hasParameter($this->getName())) {
-        $this->bind($request->getParameter($this->getName()));
+      if (count($values['created_by'])) {
+        $query->andWhereIn('created_by', $values['created_by']);
       }
 
-      if (true == ($values = array_merge($this->getDefaults(), $this->getValues()))) {
-        if (count($values['client_id'])) {
-          $query->andWhereIn('client_id', $values['client_id']);
-        }
+      if (
+        $values['created_at_from']['day']
+        and $values['created_at_from']['month']
+        and $values['created_at_from']['year']
+      ) {
+        $query->andWhere('created_at >= ?', date(
+          'Y-m-d 00:00:00',
+          mktime(0, 0, 0, $values['created_at_from']['month'], $values['created_at_from']['day'], $values['created_at_from']['year']))
+        );
+      }
 
-        if (count($values['created_by'])) {
-          $query->andWhereIn('created_by', $values['created_by']);
-        }
+      if (
+        $values['created_at_to']['day']
+        and $values['created_at_to']['month']
+        and $values['created_at_to']['year']
+      ) {
+        $query->andWhere('created_at <= ?', date(
+          'Y-m-d 23:59:59',
+          mktime(0, 0, 0, $values['created_at_to']['month'], $values['created_at_to']['day'], $values['created_at_to']['year']))
+        );
+      }
 
-        if (
-          $values['created_at_from']['day']
-          and $values['created_at_from']['month']
-          and $values['created_at_from']['year']
-        ) {
-          $query->andWhere('created_at >= ?', date(
-            'Y-m-d 00:00:00',
-            mktime(0, 0, 0, $values['created_at_from']['month'], $values['created_at_from']['day'], $values['created_at_from']['year']))
-          );
-        }
+      if (
+        $values['approved_at_from']['day']
+        and $values['approved_at_from']['month']
+        and $values['approved_at_from']['year']
+      ) {
+        $query->andWhere('approved_at >= ?', date(
+          'Y-m-d 00:00:00',
+          mktime(0, 0, 0, $values['approved_at_from']['month'], $values['approved_at_from']['day'], $values['approved_at_from']['year']))
+        );
+      }
 
-        if (
-          $values['created_at_to']['day']
-          and $values['created_at_to']['month']
-          and $values['created_at_to']['year']
-        ) {
-          $query->andWhere('created_at <= ?', date(
-            'Y-m-d 23:59:59',
-            mktime(0, 0, 0, $values['created_at_to']['month'], $values['created_at_to']['day'], $values['created_at_to']['year']))
-          );
-        }
+      if (
+        $values['approved_at_to']['day']
+        and $values['approved_at_to']['month']
+        and $values['approved_at_to']['year']
+      ) {
+        $query->andWhere('approved_at <= ?', date(
+          'Y-m-d 23:59:59',
+          mktime(0, 0, 0, $values['approved_at_to']['month'], $values['approved_at_to']['day'], $values['approved_at_to']['year']))
+        );
+      }
 
-        if (
-          $values['approved_at_from']['day']
-          and $values['approved_at_from']['month']
-          and $values['approved_at_from']['year']
-        ) {
-          $query->andWhere('approved_at >= ?', date(
-            'Y-m-d 00:00:00',
-            mktime(0, 0, 0, $values['approved_at_from']['month'], $values['approved_at_from']['day'], $values['approved_at_from']['year']))
-          );
-        }
+      if (
+        $values['submited_at_from']['day']
+        and $values['submited_at_from']['month']
+        and $values['submited_at_from']['year']
+      ) {
+        $query->andWhere('submited_at >= ?', date(
+          'Y-m-d 00:00:00',
+          mktime(0, 0, 0, $values['submited_at_from']['month'], $values['submited_at_from']['day'], $values['submited_at_from']['year']))
+        );
+      }
 
-        if (
-          $values['approved_at_to']['day']
-          and $values['approved_at_to']['month']
-          and $values['approved_at_to']['year']
-        ) {
-          $query->andWhere('approved_at <= ?', date(
-            'Y-m-d 23:59:59',
-            mktime(0, 0, 0, $values['approved_at_to']['month'], $values['approved_at_to']['day'], $values['approved_at_to']['year']))
-          );
-        }
+      if (
+        $values['submited_at_to']['day']
+        and $values['submited_at_to']['month']
+        and $values['submited_at_to']['year']
+      ) {
+        $query->andWhere('submited_at <= ?', date(
+          'Y-m-d 23:59:59',
+          mktime(0, 0, 0, $values['submited_at_to']['month'], $values['submited_at_to']['day'], $values['submited_at_to']['year']))
+        );
+      }
 
-        if (
-          $values['submited_at_from']['day']
-          and $values['submited_at_from']['month']
-          and $values['submited_at_from']['year']
-        ) {
-          $query->andWhere('submited_at >= ?', date(
-            'Y-m-d 00:00:00',
-            mktime(0, 0, 0, $values['submited_at_from']['month'], $values['submited_at_from']['day'], $values['submited_at_from']['year']))
-          );
-        }
+      if (
+        $values['payed_at_from']['day']
+        and $values['payed_at_from']['month']
+        and $values['payed_at_from']['year']
+      ) {
+        $query->andWhere('payed_at >= ?', date(
+          'Y-m-d 00:00:00',
+          mktime(0, 0, 0, $values['payed_at_from']['month'], $values['payed_at_from']['day'], $values['payed_at_from']['year']))
+        );
+      }
 
-        if (
-          $values['submited_at_to']['day']
-          and $values['submited_at_to']['month']
-          and $values['submited_at_to']['year']
-        ) {
-          $query->andWhere('submited_at <= ?', date(
-            'Y-m-d 23:59:59',
-            mktime(0, 0, 0, $values['submited_at_to']['month'], $values['submited_at_to']['day'], $values['submited_at_to']['year']))
-          );
-        }
+      if (
+        $values['payed_at_to']['day']
+        and $values['payed_at_to']['month']
+        and $values['payed_at_to']['year']
+      ) {
+        $query->andWhere('payed_at <= ?', date(
+          'Y-m-d 23:59:59',
+          mktime(0, 0, 0, $values['payed_at_to']['month'], $values['payed_at_to']['day'], $values['payed_at_to']['year']))
+        );
+      }
 
-        if (
-          $values['payed_at_from']['day']
-          and $values['payed_at_from']['month']
-          and $values['payed_at_from']['year']
-        ) {
-          $query->andWhere('payed_at >= ?', date(
-            'Y-m-d 00:00:00',
-            mktime(0, 0, 0, $values['payed_at_from']['month'], $values['payed_at_from']['day'], $values['payed_at_from']['year']))
-          );
-        }
+      if (count($values['state']) and $values['state'][0]) {
+        $query->andWhereIn('state', $values['state']);
+      }
 
-        if (
-          $values['payed_at_to']['day']
-          and $values['payed_at_to']['month']
-          and $values['payed_at_to']['year']
-        ) {
-          $query->andWhere('payed_at <= ?', date(
-            'Y-m-d 23:59:59',
-            mktime(0, 0, 0, $values['payed_at_to']['month'], $values['payed_at_to']['day'], $values['payed_at_to']['year']))
-          );
-        }
+      if (count($values['area']) and $values['area'][0]) {
+        $query->andWhereIn('area', $values['area']);
+      }
 
-        if (count($values['state']) and $values['state'][0]) {
-          $query->andWhereIn('state', $values['state']);
-        }
+      if (isset($values['bill_made']) and in_array($values['bill_made'], array("0", "1"), true)) {
+        $query->andWhere('bill_made = ?', (bool)$values['bill_made']);
+      }
 
-        if (count($values['area']) and $values['area'][0]) {
-          $query->andWhereIn('area', $values['area']);
-        }
-
-        if (isset($values['bill_made']) and in_array($values['bill_made'], array("0", "1"), true)) {
-          $query->andWhere('bill_made = ?', (bool)$values['bill_made']);
-        }
-
-        if (isset($values['bill_given']) and in_array($values['bill_given'], array("0", "1"), true)) {
-          $query->andWhere('bill_given = ?', (bool)$values['bill_given']);
-        }
+      if (isset($values['bill_given']) and in_array($values['bill_given'], array("0", "1"), true)) {
+        $query->andWhere('bill_given = ?', (bool)$values['bill_given']);
       }
     }
 

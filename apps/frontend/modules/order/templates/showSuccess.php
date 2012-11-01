@@ -123,9 +123,11 @@
 </div>
 <?php endif ?>
 
+<?php if (!$sf_user->hasGroup('monitor')): ?>
 <form action="<?php echo url_for('@comment?id=' . $order->getId()) ?>" method="post" class="form-fluid">
 <?php echo $commentForm->renderUsing('bootstrap') ?>
   <div class="form-actions">
     <button type="submit" class="btn btn-success">Комментировать</button>
   </div>
 </form>
+<?php endif ?>
