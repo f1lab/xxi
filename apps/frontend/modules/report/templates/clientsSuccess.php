@@ -23,7 +23,7 @@
 
       <div class="control-group">
         <?php echo $form['client']->renderLabel(null, array('class' => 'control-label')) ?>
-        
+
         <div class="controls">
           <?php echo $form['client']->render() ?>
         </div>

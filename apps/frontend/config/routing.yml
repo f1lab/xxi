@@ -109,6 +109,10 @@ report-clients:
   url:   /reports/clients
   param: { module: report, action: clients }
 
+report-debt:
+  url:   /reports/debt
+  param: { module: report, action: debt }
+
 # generic rules
 # please, remove them by adding more specific rules
 default_index:

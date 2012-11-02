@@ -366,4 +366,59 @@ class reportActions extends sfActions
       ->getFirst()
     ;
   }
+
+  public function executeDebt(sfWebRequest $request)
+  {
+    $this->form = new sfForm();
+    $this->form->getWidgetSchema()
+      ->offsetSet('from', new sfWidgetFormBootstrapDate(array(
+        'label' => 'Период',
+      )))
+      ->offsetSet('to', new sfWidgetFormBootstrapDate(array(
+        //
+      )))
+      ->setNameFormat('filter[%s]')
+    ;
+    $this->form->addCSRFProtection('123456789');
+    $this->form->getValidatorSchema()
+      ->offsetSet('from', new sfValidatorDate())
+      ->offsetSet('to', new sfValidatorDate(array(
+        'required' => false,
+      )))
+    ;
+
+    $this->period = array(
+      'from' => date('Y') . '-01-01',
+      'to' => date('Y-m-d'),
+    );
+
+    if ($request->isMethod('post')) {
+      $this->form->bind($request->getParameter('filter'));
+
+      if ($this->form->isValid()) {
+        if ($this->form->getValue('from')) {
+          $this->period['from'] = $this->form->getValue('from');
+        }
+
+        if ($this->form->getValue('to')) {
+          $this->period['to'] = $this->form->getValue('to');
+        }
+
+        if ($this->form->getValue('client')) {
+          $this->client = $this->form->getValue('client');
+        }
+      }
+    }
+
+    $this->report = Doctrine_Query::create()
+      ->select('a.client_id, count(*) as orders, sum(a.cost) cost, sum(a.payed) payed, b.*')
+      ->from('Order a')
+      ->leftJoin('a.Client b')
+      ->andWhere('a.state = ?', 'debt')
+      ->andWhere('a.submited_at >= ? and a.submited_at <= ?', array($this->period['from'], $this->period['to']))
+      ->groupBy('a.client_id')
+      ->orderBy('b.name')
+      ->execute()
+    ;
+  }
 }

@@ -5,6 +5,7 @@
     'report-managers' => 'Зарплата менеджеров',
     'report-workers' => 'Фонд ЗП цеха',
     'report-clients' => 'Клиенты',
+    'report-debt' => 'Дебиторка',
   );
 ?>
 <ul class="nav nav-tabs"><?php foreach ($routes as $route => $anchor): ?>
