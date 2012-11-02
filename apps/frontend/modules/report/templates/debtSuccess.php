@@ -57,7 +57,7 @@
       заказов — <?php echo $sumOrders ?>,
       стоимость — <?php echo format_currency($sumCost) ?>,
       оплачено — <?php echo format_currency($sumPayed) ?>,
-      долг — <?php echo format_currency($sumPayed) ?>.
+      долг — <?php echo format_currency($sumDebt) ?>.
     </div>
   </div>
 </div>
