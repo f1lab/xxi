@@ -223,13 +223,14 @@ class reportActions extends sfActions
       }
     }
 
-    $this->report = Doctrine_Core::getTable('sfGuardGroup')->createQuery('a, a.Users b')
-      ->andWhere('a.name = ?', 'manager')
-      ->select('a.*, b.*, c.*')
+    $this->report = Doctrine_Query::create()
+      ->from('sfGuardUser b')
+      ->select('b.*, count(c.id) orderscount, sum(c.cost) orderscost, sum(c.delivery_cost) ordersdeliverycost, sum(c.recoil) ordersrecoilcost')
+      ->leftJoin('b.Groups a')
       ->leftJoin('b.Orders c with ((c.payed_at >= ? and c.payed_at <= ?) and c.state = ?)', array($this->period['from'], $this->period['to'], 'archived'))
+      ->andWhere('a.name = ?', 'manager')
+      ->groupBy('b.id')
       ->execute()
-      ->getFirst()
-      ->getUsers()
     ;
   }
 

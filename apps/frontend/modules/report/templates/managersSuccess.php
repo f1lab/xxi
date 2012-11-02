@@ -44,16 +44,13 @@
         </tr>
       </thead>
       <tbody><?php
-      $allCounter = 0;
-      $allSumm = 0;
-      $allSummPercented = 0;
-      foreach ($sf_data->getRaw('report') as $manager): ?>
+      $allCounter = $allSumm = $allSummPercented = 0;
+      foreach ($report as $manager): ?>
         <tr>
           <td><?php echo $manager ?></td>
-          <td><?php $allCounter += $manager->getOrders()->count(); echo format_number($manager->getOrders()->count()) ?></td>
-          <td><?php $allSumm += ($payed = array_reduce($manager->getOrders()->toArray(), function($result, $item) {
-            return $result += ($item['cost'] - $item['delivery_cost'] - $item['recoil']);
-          }, 0)); echo format_currency($payed) ?></td>
+          <td><?php $allCounter += $manager->getOrderscount(); echo format_number($manager->getOrderscount()) ?></td>
+          <td><?php $allSumm += ($payed = $manager->getOrderscost() - $manager->getOrdersdeliverycost() - $manager->getOrdersrecoilcost());
+            echo format_currency($payed) ?></td>
           <td><?php $allSummPercented += ($payed * 0.03); echo format_currency($payed * 0.03) ?></td>
         </tr>
       <?php endforeach ?>
