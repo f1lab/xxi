@@ -224,7 +224,7 @@ class orderActions extends sfActions
           'expected_at',
           'submited_at',
           'area',
-          'bill_given',
+          'bill_made',
         ))
         ->offsetSet('state', new sfWidgetFormChoice(array(
           'choices' => OrderTable::$statesForManager,
@@ -301,7 +301,7 @@ class orderActions extends sfActions
           'expected_at',
           'submited_at',
           'area',
-          'bill_given',
+          'bill_made',
         ))
       ;
 
