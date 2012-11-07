@@ -344,6 +344,7 @@ class orderActions extends sfActions
         '{files}',
         '{description}',
         '{due_date}',
+        '{started_at}',
       ),
       array(
         $order->getCreator(),
@@ -352,6 +353,7 @@ class orderActions extends sfActions
         $order->getFiles(),
         $order->getDescription(),
         $order->getDueDate() ? date('d.m.Y', strtotime($order->getDueDate())) : '',
+        $order->getStartedAt() ? date('d.m.Y', strtotime($order->getStartedAt())) : ''
       ),
       file_get_contents(sfConfig::get('sf_upload_dir') . '/' . 'order.xml')
     );
