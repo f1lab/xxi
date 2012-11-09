@@ -17,7 +17,7 @@ $(function() {
   ;
 
   $('table')
-    .tablesorter()
+    .tablesorter({dateFormat: 'uk'})
   ;
 
   $('.makePizdatoWithDiscount')
