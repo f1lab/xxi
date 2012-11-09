@@ -25,7 +25,7 @@ class ClientForm extends BaseClientForm
         'phone' => 'Телефон',
         'email' => 'Email',
         'full_name' => 'Полное наименование',
-        'ownership' => 'Форма собсвенности',
+        'ownership' => 'Форма собственности',
         'address_jure' => 'Юридический адрес',
         'inn' => 'ИНН',
         'kpp' => 'КПП',
