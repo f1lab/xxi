@@ -270,6 +270,7 @@ class orderActions extends sfActions
           'additional',
           'bill_made',
           'bill_given',
+          'payed_at',
         ))
       ;
 
