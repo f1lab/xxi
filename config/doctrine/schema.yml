@@ -53,6 +53,9 @@ Client:
       type: many
       local: id
       foreign: client_id
+  indexes:
+    deleted_at:
+      fields: [deleted_at]
 
 Order:
   actAs:
@@ -135,6 +138,17 @@ Order:
       type: many
       local: id
       foreign: order_id
+  indexes:
+    state:
+      fields: [state]
+    deleted_at:
+      fields: [deleted_at]
+    kasha_malasha:
+      fields: [submited_at, finished_at, payed_at, started_at, expected_at, due_date, created_at]
+    bills:
+      fields: [bill_made, bill_given]
+    area:
+      fields: [area]
 
 Comment:
   actAs: [Timestampable, Signable]
