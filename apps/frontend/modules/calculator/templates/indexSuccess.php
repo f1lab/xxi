@@ -1,6 +1,6 @@
 <script type="text/javascript">
   var products = {
-    'sfp-solvet': {
+    /* 'sfp-solvet': {
       'materials': [
         {
           'name': 'Баннер литой 510г.',
@@ -130,7 +130,7 @@
           'space': [10,20,30,40,50,100]
         }
       }
-    },
+    }, */
     /* 'sfp-solvet-eco': {
       'materials': [
       
@@ -143,13 +143,13 @@
         {
           'name': 'Самоклеящаяся пленка (глянцевая/матовая/прозрачная) 140г/м^2, 85мкр',
           'widths': [
-            '1,37',
-            '1,52'
+            '137',
+            '152'
           ]
         }, {
           'name': 'Самоклеящаяся пленка металик  (серебро/золото) 140г/м^2, 85мкр',
           'widths': [
-            '1,37'
+            '137'
           ]
         }
       ],
@@ -165,19 +165,73 @@
     }
   };
 
+var calculator = products.stickers;
+
+var materialsTemplate = ''
+  + '  <label for="materials" class="control-label">Материал / ширина рулона</label>'
+  + '  <div class="controls">'
+  + '    <select name="materials" id="materials">'
+  + '      <option value="">выберите</option>'
+  + '      $OPTIONS'
+  + '    </select>'
+  + ''
+  + '    <select name="widths" id="widths">'
+  + '      <option value="">сначала выберите материал</option>'
+  + '    </select>'
+  + '  </div>'
+;
+
+var materialsOptionTemplate = ''
+  + '      <option value="" data-widths="$WIDTHS">$NAME</option>'
+;
+
+function renderMaterialsChooser(materials) {
+  var materialsOptions = $(materials).map(function() {
+    return materialsOptionTemplate
+      .replace('$NAME', this.name)
+      .replace('$WIDTHS', this.widths.join())
+    ;
+  });
+
+  return materialsTemplate
+    .replace('$OPTIONS', materialsOptions.toArray().join('\n'))
+  ;
+}
+
+$.fn.fillSelect = function (options) {
+  var $optionTemplate = $('<option></option>');
+
+  $(this).html($(options).map(function(a, b, c) {
+    if (!b || b == 'undefined') return false;
+
+    var result = $optionTemplate.clone()
+      .val(b)
+      .text(b)
+    ;
+
+    return result;
+  }).toArray());
+}
+
+$(function () {
+  $('#materials-container')
+    .html(renderMaterialsChooser(calculator.materials))
+      .find('#materials')
+        .change(function() {
+          $('#widths')
+            .fillSelect(($(this).find(':selected').data('widths') + ',').split(','))
+          ;
+        })
+      .end()
+  ;
+})
 </script>
 
 <form action="" method="post" class="form-horizontal">
-  <div class="control-group">
-    <label for="type" class="control-label">Материал</label>
-    <div class="controls">
-      <select name="type" id="type">
-        <option value="">Самоклеящаяся пленка (глянцевая/матовая/прозрачная) 140г/м^2, 85мкр</option>
-        <option value="">Самоклеящаяся пленка металик  (серебро/золото) 140г/м^2, 85мкр</option>
-      </select>
-    </div>
+  <div class="control-group" id="materials-container">
+    
   </div>
-
+<!--
   <div class="control-group">
     <label for="width" class="control-label">Ширина рулона</label>
     <div class="controls">
@@ -211,5 +265,5 @@
         <option value="">Требуется</option>
       </select>
     </div>
-  </div>
+  </div>-->
 </form>
