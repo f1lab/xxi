@@ -140,6 +140,14 @@
     'debt',
   );
 
+  if ($sf_request->getParameter('state') == 'debt') {
+    $columns = array_merge($columns, array(
+      'bill_made',
+      'bill_given',
+      'docs_given',
+    ));
+  }
+
   include_partial(
     'global/orders',
     array(
