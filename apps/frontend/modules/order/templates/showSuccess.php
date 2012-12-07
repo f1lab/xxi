@@ -60,6 +60,7 @@
     } elseif (in_array($field, array(
       'getBillMade',
       'getBillGiven',
+      'getDocsGiven',
     ))) {
       echo $order->$field() ? 'Да' : 'Нет';
     } else {

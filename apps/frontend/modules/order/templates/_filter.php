@@ -85,6 +85,14 @@
     </div>
   </div>
 
+  <div class="control-group<?php if ($form['docs_given']->hasError()): ?> error<?php endif ?>">
+    <?php echo $form['docs_given']->renderLabel(null, array('class' => 'control-label')) ?>
+    <div class="controls">
+      <?php echo $form['docs_given']->render() ?>
+      <?php if ($form['docs_given']->hasError()): ?><div class="help-inline"><?php echo $form['docs_given']->getError() ?></div><?php endif ?>
+    </div>
+  </div>
+
   <?php $form->renderHiddenFields() ?>
   <button type="submit" class="btn btn-primary">Отфильтровать</button>
   <a href="<?php echo url_for('@orders') ?>" class="btn">Отменить</a>

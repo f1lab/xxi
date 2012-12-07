@@ -55,6 +55,7 @@ class OrderFormFilter extends BaseOrderFormFilter
       )))
       ->offsetSet('bill_made', new sfWidgetFormChoice(array('choices' => array('' => 'да или нет', 1 => 'да', 0 => 'нет'))))
       ->offsetSet('bill_given', new sfWidgetFormChoice(array('choices' => array('' => 'да или нет', 1 => 'да', 0 => 'нет'))))
+      ->offsetSet('docs_given', new sfWidgetFormChoice(array('choices' => array('' => 'да или нет', 1 => 'да', 0 => 'нет'))))
       ->offsetSet('created_at_from', new sfWidgetFormBootstrapDate())
       ->offsetSet('created_at_to', new sfWidgetFormBootstrapDate())
       ->offsetSet('approved_at_from', new sfWidgetFormBootstrapDate())
@@ -74,6 +75,7 @@ class OrderFormFilter extends BaseOrderFormFilter
         'area' => 'Участок',
         'bill_made' => 'Счёт сформирован',
         'bill_given' => 'Счёт доставлен',
+        'docs_given' => 'Документы выданы',
       ))
       ->setNameFormat('order_filters[%s]')
     ;
@@ -85,6 +87,7 @@ class OrderFormFilter extends BaseOrderFormFilter
       ->offsetSet('area', new sfValidatorPass())
       ->offsetSet('bill_made', new sfValidatorPass())
       ->offsetSet('bill_given', new sfValidatorPass())
+      ->offsetSet('docs_given', new sfValidatorPass())
       ->offsetSet('created_at_from', new sfValidatorPass())
       ->offsetSet('created_at_to', new sfValidatorPass())
       ->offsetSet('approved_at_from', new sfValidatorPass())
@@ -250,6 +253,10 @@ class OrderFormFilter extends BaseOrderFormFilter
 
       if (isset($values['bill_given']) and in_array($values['bill_given'], array("0", "1"), true)) {
         $query->andWhere('bill_given = ?', (bool)$values['bill_given']);
+      }
+
+      if (isset($values['docs_given']) and in_array($values['docs_given'], array("0", "1"), true)) {
+        $query->andWhere('docs_given = ?', (bool)$values['docs_given']);
       }
     }
 

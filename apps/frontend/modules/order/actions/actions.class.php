@@ -85,6 +85,7 @@ class orderActions extends sfActions
       'areaTranslated' => 'Участок',
       'billMade' => 'Счёт сформирован ',
       'billGiven' => 'Счёт получен заказчиком',
+      'docsGiven' => 'Документы выданы',
     );
 
     if ($this->getUser()->hasGroup('worker') or $this->getUser()->hasGroup('monitor')) {
@@ -123,6 +124,7 @@ class orderActions extends sfActions
         'area',
         'bill_made',
         'bill_given',
+        'docs_given',
       ))
     ;
 
@@ -148,6 +150,7 @@ class orderActions extends sfActions
         'area',
         'bill_made',
         'bill_given',
+        'docs_given',
       ))
     ;
     $this->form->getValidatorSchema()
@@ -178,6 +181,7 @@ class orderActions extends sfActions
           'additional',
           'bill_made',
           'bill_given',
+          'docs_given',
         ))
         ->offsetSet('state', new sfWidgetFormChoice(array(
           'choices' => OrderTable::$statesForWorker,
@@ -268,9 +272,10 @@ class orderActions extends sfActions
           'pay_method', 'recoil',
           'payed', 'delivery_cost',
           'additional',
+          'payed_at',
           'bill_made',
           'bill_given',
-          'payed_at',
+          'docs_given',
         ))
       ;
 

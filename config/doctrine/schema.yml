@@ -132,6 +132,10 @@ Order:
       type: boolean
       notnull: true
       default: false
+    docs_given:
+      type: boolean
+      notnull: true
+      default: false
   relations:
     Comments:
       class: Comment

@@ -54,13 +54,15 @@
     'comments',
     'bill_made',
     'bill_given',
+    'docs_given',
   );
 
   if ($sf_user->hasGroup('monitor')) {
     unset (
       $columns['client_id'],
       $columns['bill_made'],
-      $columns['bill_given']
+      $columns['bill_given'],
+      $columns['docs_given']
     );
   }
 
@@ -78,6 +80,7 @@
       'comments',
       'bill_made',
       'bill_given',
+      'docs_given',
     );
   }
 

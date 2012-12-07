@@ -38,6 +38,7 @@ if (
       <?php if (in_array('manager', $columns)): ?><th>Менеджер</th><?php endif ?>
       <?php if (in_array('bill_made', $columns)): ?><th>Счёт сф.</th><?php endif ?>
       <?php if (in_array('bill_given', $columns)): ?><th>Счёт пол.</th><?php endif ?>
+      <?php if (in_array('docs_given', $columns)): ?><th>Док-ты выданы</th><?php endif ?>
       <?php if (in_array('comments', $columns)): ?><th title="Комментарии"></th><?php endif ?>
     </tr>
   </thead>
@@ -62,6 +63,7 @@ if (
       <?php if (in_array('manager', $columns)): ?><td><?php echo $order->getCreator()->getFirstName() . ' ' . $order->getCreator()->getLastName() ?></td><?php endif ?>
       <?php if (in_array('bill_made', $columns)): ?><td><input type="checkbox" readonly<?php echo $order->getBillMade() ? ' checked' : '' ?>></td><?php endif ?>
       <?php if (in_array('bill_given', $columns)): ?><td><input type="checkbox" readonly<?php echo $order->getBillGiven() ? ' checked' : '' ?>></td><?php endif ?>
+      <?php if (in_array('docs_given', $columns)): ?><td><input type="checkbox" readonly<?php echo $order->getDocsGiven() ? ' checked' : '' ?>></td><?php endif ?>
       <?php if (in_array('comments', $columns)):
         $comments = $order->getComments()->count();
         $commentsRead = array_reduce($order->getComments()->toArray(), function($return, $item) {
