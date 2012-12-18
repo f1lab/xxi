@@ -167,6 +167,16 @@
 
 var calculator = products.stickers;
 
+var controlTemplate = ''
+  + '  <label for="$ID" class="control-label">$LABEL</label>'
+  + '  <div class="controls">'
+  + '    <select name="$NAME" id="$ID">'
+//  + '      <option value="">выберите</option>'
+  + '      $OPTIONS'
+  + '    </select>'
+  + '  </div>'
+;
+
 var materialsTemplate = ''
   + '  <label for="materials" class="control-label">Материал / ширина рулона</label>'
   + '  <div class="controls">'
@@ -174,22 +184,23 @@ var materialsTemplate = ''
   + '      <option value="">выберите</option>'
   + '      $OPTIONS'
   + '    </select>'
-  + ''
-  + '    <select name="widths" id="widths">'
-  + '      <option value="">сначала выберите материал</option>'
-  + '    </select>'
+//  + ''
+//  + '    <select name="widths" id="widths">'
+//  + '      <option value="">сначала выберите материал</option>'
+//  + '    </select>'
   + '  </div>'
 ;
 
 var materialsOptionTemplate = ''
-  + '      <option value="" data-widths="$WIDTHS">$NAME</option>'
+  + '      <option value="" data-widths="$WIDTHS" data-material-index="$MATERIALINDEX">$NAME</option>'
 ;
 
 function renderMaterialsChooser(materials) {
-  var materialsOptions = $(materials).map(function() {
+  var materialsOptions = $(materials).map(function(index) {
     return materialsOptionTemplate
       .replace('$NAME', this.name)
       .replace('$WIDTHS', this.widths.join())
+      .replace('$MATERIALINDEX', index)
     ;
   });
 
@@ -211,16 +222,33 @@ $.fn.fillSelect = function (options) {
 
     return result;
   }).toArray());
+
+  return $(this);
 }
 
 $(function () {
+ 
+
+  $('#fields-container')
+    .html(controlTemplate.replace(/\$ID/g, 'fields').replace('$LABEL', 'Поля'))
+      .find('#fields')
+        .fillSelect(calculator.options.fields)
+  ;
+
   $('#materials-container')
     .html(renderMaterialsChooser(calculator.materials))
       .find('#materials')
         .change(function() {
-          $('#widths')
+          console.log($('#widths') && true);
+          $('#widths') || (
+            $('#widths-container')
+              .html(controlTemplate.replace(/\$ID/g, 'widths').replace('$LABEL', 'Ширина рулона'))
+              .find('#widths')
+          )
             .fillSelect(($(this).find(':selected').data('widths') + ',').split(','))
           ;
+
+          
         })
       .end()
   ;
@@ -231,39 +259,16 @@ $(function () {
   <div class="control-group" id="materials-container">
     
   </div>
-<!--
-  <div class="control-group">
-    <label for="width" class="control-label">Ширина рулона</label>
-    <div class="controls">
-      <select name="width" id="width">
-        <option value="">1,37</option>
-        <option value="">1,52</option>
-      </select>
-    </div>
+
+  <div class="control-group" id="widths-container">
+    
   </div>
 
-  <div class="control-group">
-    <label for="marging" class="control-label">Поля</label>
-    <div class="controls">
-      <select name="marging" id="marging">
-        <option value="">0</option>
-        <option value="">1</option>
-        <option value="">3</option>
-        <option value="">5</option>
-        <option value="">10</option>
-        <option value="">15</option>
-        <option value="">20</option>
-      </select>
+  <div class="options-container">
+    <div class="control-group" id="fields-container">
+      
     </div>
-  </div>
 
-  <div class="control-group">
-    <label for="lamination" class="control-label">Ламинация</label>
-    <div class="controls">
-      <select name="lamination" id="lamination">
-        <option value="">Не требуется</option>
-        <option value="">Требуется</option>
-      </select>
-    </div>
-  </div>-->
+    
+  </div>
 </form>
