@@ -8,7 +8,6 @@ var controlTemplate = ''
   + '  <label for="$ID" class="control-label">$LABEL</label>'
   + '  <div class="controls">'
   + '    <select name="$NAME" id="$ID">'
-//  + '      <option value="">выберите</option>'
   + '      $OPTIONS'
   + '    </select>'
   + '  </div>'
@@ -21,22 +20,17 @@ var materialsTemplate = ''
   + '      <option value="">выберите</option>'
   + '      $OPTIONS'
   + '    </select>'
-//  + ''
-//  + '    <select name="widths" id="widths">'
-//  + '      <option value="">сначала выберите материал</option>'
-//  + '    </select>'
   + '  </div>'
 ;
 
 var materialsOptionTemplate = ''
-  + '      <option value="" data-widths="$WIDTHS" data-material-index="$MATERIALINDEX">$NAME</option>'
+  + '      <option value="" data-material-index="$MATERIALINDEX">$NAME</option>'
 ;
 
 function renderMaterialsChooser(materials) {
   var materialsOptions = $(materials).map(function(index) {
     return materialsOptionTemplate
       .replace('$NAME', this.name)
-      .replace('$WIDTHS', this.widths.join())
       .replace('$MATERIALINDEX', index)
     ;
   });
@@ -50,7 +44,7 @@ $.fn.fillSelect = function (options) {
   var $optionTemplate = $('<option></option>');
 
   $(this).html($(options).map(function(a, b, c) {
-    if (!b || b == 'undefined') return false;
+    if ((!b || b == 'undefined') && b !== 0) return false;
 
     var result = $optionTemplate.clone()
       .val(b)
@@ -64,29 +58,24 @@ $.fn.fillSelect = function (options) {
 }
 
 $(function () {
-  /* $('#fields-container')
-    .html(controlTemplate.replace(/\$ID/g, 'fields').replace('$LABEL', 'Поля'))
-      .find('#fields')
-        .fillSelect(calculator.options.fields)
-  ; */
-
   $('#materials-container')
     .html(renderMaterialsChooser(calculator.materials))
       .find('#materials')
         .change(function() {
           $('#options-container, #widths-container').empty();
+          var material = calculator.materials[$('#materials :selected').data('material-index')];
 
-          $('#materials :selected').data('material-index') !== undefined
+          material !== undefined
           && $('#widths-container')
             .html(controlTemplate.replace(/\$ID/g, 'widths').replace('$LABEL', 'Ширина рулона'))
             .find('#widths')
-              .fillSelect(($(this).find(':selected').data('widths') + ',').split(','))
+              .fillSelect((material.widths + ',').split(','))
             .end()
           && $.each(
             $.extend(
               {},
               calculator.options,
-              calculator.materials[$('#materials :selected').data('material-index')].options || {}
+              material.options || {}
             ),
             function(optionName, optionObject) {
               if (!optionObject) {
@@ -104,8 +93,48 @@ $(function () {
                   .fillSelect(optionObject.values)
                 .end()
               ;
-          });
+            }
+          );
         })
       .end()
+  ;
+
+  $('#calculateIt')
+    .click(function(e) {
+      e.preventDefault();
+
+      var
+        materialObject = calculator.materials[$('#materials :selected').data('material-index')],
+        result = ''
+      ;
+
+      if (materialObject && materialObject.name) {
+        var
+          width = Number($('#width').val()),
+          height = Number($('#height').val()),
+          quantity = Number($('#quantity').val()),
+          material = materialObject.name,
+          materialCost = materialObject.cost,
+          options = [],
+          cost = Math.ceil(materialCost * width * height * quantity)
+        ;
+
+        result = ''
+          + 'Продукция: ' + calculator.name + '\n'
+          + 'Материал: ' + material + ' см\n'
+          + 'Ширина: ' + width + ' см\n'
+          + 'Высота: ' + height + ' см\n'
+          + 'Количество: ' + quantity + ' шт.\n'
+          + '\n'
+          + 'Цена: ' + cost + ' руб.\n'
+        ;
+      } else {
+        result = 'Ничего не выбрано.';
+      }
+
+      $('#calculationProposal')
+        .text(result)
+      ;
+    })
   ;
 })
