@@ -1,5 +1,6 @@
 var products = {
   'sfp-solvet': {
+    'name': 'ШФП Сольвет',
     'materials': [
       {
         'name': 'Баннер литой 510г.',

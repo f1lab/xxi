@@ -1,4 +1,4 @@
-var calculator = products.stickers;
+var calculator = undefined;//products.stickers;
 
 var controlGroupTemplate = ''
   + '<div class="control-group">$CONTROLS</div>'
@@ -57,7 +57,7 @@ $.fn.fillSelect = function (options) {
   return $(this);
 }
 
-$(function () {
+function initCalculator() {
   $('#materials-container')
     .html(renderMaterialsChooser(calculator.materials))
       .find('#materials')
@@ -97,6 +97,27 @@ $(function () {
           );
         })
       .end()
+  ;
+}
+
+$(function () {
+  $('.nav-tabs')
+    .find('a')
+      .click(function(e) {
+        e.preventDefault();
+        $(this)
+          .parents('ul')
+            .find('li')
+              .removeClass('active')
+            .end()
+          .end()
+          .parents('li')
+            .addClass('active')
+        ;
+
+        calculator = products[$(this).data('product-index')];
+        initCalculator(calculator);
+      })
   ;
 
   $('#calculateIt')
