@@ -182,7 +182,13 @@ var products = {
       'fields': {
         'label': 'Поля',
         'values': [
-          0,1,3,5,10,15,20
+          0,
+          1,
+          3,
+          5,
+          10,
+          15,
+          20
         ]
       },
       'lamination': {
@@ -191,7 +197,11 @@ var products = {
           'не требуется',
           'требуется'
         ],
-        'cost': 300
+        'pricing': 'square',
+        'cost': [
+          0,
+          0.03
+        ]
       }
     }
   }

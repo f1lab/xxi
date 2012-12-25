@@ -7,6 +7,7 @@
   <div class="tab-content">
     <form action="" method="post" class="form-horizontal">
       <div class="control-group" id="materials-container">
+        <div class="alert alert-info">Выберите калькулятор.</div>
       </div>
 
       <div class="control-group" id="widths-container">
@@ -56,7 +57,7 @@
   #calculationProposal {
     position: absolute;
     right: 3em;
-    width: 700px;
+    width: 42%;
     height: 200px;
   }
 </style>
