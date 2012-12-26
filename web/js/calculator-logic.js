@@ -97,11 +97,16 @@ function initCalculator() {
             }
           );
         })
+        .change()
       .end()
   ;
 
   $('#params-container, .form-actions')
     .show()
+  ;
+
+  $('#calculateIt')
+    .click()
   ;
 }
 
