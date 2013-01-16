@@ -107,6 +107,7 @@ class OrderFormFilter extends BaseOrderFormFilter
         'working',
         'done',
         'submited',
+        'prepress',
       ),
       'area' => array(),
       'created_at_from' => array('day' => '01', 'month' => '01', 'year' => date('Y')),
@@ -129,6 +130,7 @@ class OrderFormFilter extends BaseOrderFormFilter
         'work',
         'working',
         'done',
+        'prepress',
       ));
     }
 
