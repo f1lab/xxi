@@ -48,8 +48,6 @@
   </div>
 </div>
 
-
-
 <script type="text/javascript" src="/js/calculator-products.js?<?php echo rand() ?>"></script>
 <script type="text/javascript" src="/js/calculator-logic.js?<?php echo rand() ?>"></script>
 

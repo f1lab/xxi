@@ -15,11 +15,13 @@ class OrderTable extends Doctrine_Table
     'submited' => 'Сдан',
     'archived' => 'В архиве',
     'debt' => 'Дебиторка',
+    'prepress' => 'Препресс',
   );
 
   public static $statesForManager = array(
     'calculating' => 'На просчёте',
     'work' => 'В цех',
+    'prepress' => 'Препресс',
   );
 
   public static $statesForWorker = array(
@@ -28,6 +30,7 @@ class OrderTable extends Doctrine_Table
     'working' => 'В работе',
     'done' => 'Всё готово',
     'submited' => 'Сдан',
+    'prepress' => 'Препресс',
   );
 
   public static $statesForMonitor = array(

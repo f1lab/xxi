@@ -80,6 +80,10 @@ comment:
   param: { module: order, action: comment }
   requirements: { id: \d+ }
 
+comment-unread:
+  url:   /orders/comment/unread
+  param: { module: order, action: unread }
+
 comment-delete:
   url:   /orders/:order/comment/:id/delete
   param: { module: order, action: deleteComment }
@@ -113,7 +117,23 @@ report-debt:
   url:   /reports/debt
   param: { module: report, action: debt }
 
-# generic rules
+users-show:
+  url:   /users
+  param: { module: users, action: index }
+
+users-settings:
+  url:   /users/settings
+  param: { module: users, action: settings  }
+  
+users-create:
+  url:   /users/create
+  param: { module: users, action: create }
+
+users-edit:
+  url:   /users/edit
+  param: { module: users, action: edit }
+
+  # generic rules
 # please, remove them by adding more specific rules
 default_index:
   url:   /:module

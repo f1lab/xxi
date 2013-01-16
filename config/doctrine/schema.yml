@@ -112,6 +112,7 @@ Order:
         - submited
         - archived
         - debt
+        - prepress
     area:
       type: enum
       values:

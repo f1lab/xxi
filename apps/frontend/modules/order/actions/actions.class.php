@@ -393,4 +393,49 @@ class orderActions extends sfActions
       }
     }
   }
+
+  public function executeUnread(sfWebRequest $request){
+
+    $user = $this->getUser()->getGuardUser()->getId();
+    $countUnreadedTickets = 0;
+    if($this->getUser()->hasGroup('manager'))
+    {
+      $query = "SELECT DISTINCT o.id, c.`id`, cr.`id` FROM
+                `order` o
+                left join `comment` c ON o.id = c.order_id
+                left join `comment_reads` cr on cr.`comment_id` = c.`id` AND cr.`user_id` =".$user."
+                WHERE o.created_by =".$user." AND c.id IS NOT NULL
+                AND cr.id IS NULL
+                AND o.deleted_at IS NULL
+                AND ( o.`state`='work'
+                OR o.`state`='working'
+                OR o.`state`='done'
+                OR o.`state`='calculating'
+                OR o.`state`='submited')";
+    }
+
+    if($this->getUser()->hasGroup('worker'))
+    {
+      $query = "SELECT DISTINCT o.id, c.`id`, cr.`id` FROM
+                `order` o
+                left join `comment` c ON o.id = c.order_id
+                left join `comment_reads` cr on cr.`comment_id` = c.`id` AND cr.`user_id` =".$user."
+                WHERE o.created_by =".$user." AND c.id IS NOT NULL
+                AND cr.id IS NULL
+                AND o.deleted_at IS NULL
+                AND ( o.`state`='work'
+                OR o.`state`='working'
+                OR o.`state`='done')";
+    }
+
+	  $executedQuery = Doctrine_Manager::connection()
+        ->execute($query)
+        ->fetchAll(PDO::FETCH_COLUMN)
+      ;
+      $countUnreadedTickets = count($executedQuery);
+    return $this->renderText(json_encode(array(
+    'countUnreadedTickets' => $countUnreadedTickets,
+    )));
+  }
 }
+

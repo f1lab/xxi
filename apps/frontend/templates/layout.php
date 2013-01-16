@@ -15,6 +15,7 @@
   </style>
 </head>
 <body>
+<script src="/js/notifications.js"></script>
   <div class="navbar">
     <div class="navbar-inner">
       <div class="container">
@@ -23,10 +24,13 @@
         <ul class="nav">
           <li><a href="<?php echo url_for('@clients') ?>">Клиенты</a></li>
           <li><a href="<?php echo url_for('@orders') ?>">Заказы</a></li>
+          
 
         <?php if ($sf_user->hasCredential('can_view_reports')): ?>
           <li><a href="<?php echo url_for('@reports') ?>">Отчётность</a></li>
         <?php endif ?>
+        <li><a href="<?php echo url_for('@users-settings') ?>">Мои настройки</a></li>
+        
         </ul>
 
         <ul class="nav pull-right"><?php if ($sf_user->isAuthenticated()): ?>
