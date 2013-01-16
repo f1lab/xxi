@@ -411,7 +411,8 @@ class orderActions extends sfActions
                 OR o.`state`='working'
                 OR o.`state`='done'
                 OR o.`state`='calculating'
-                OR o.`state`='submited')";
+                OR o.`state`='submited'
+                OR o.`state`='prepress')";
     }
 
     if($this->getUser()->hasGroup('worker'))
@@ -425,7 +426,8 @@ class orderActions extends sfActions
                 AND o.deleted_at IS NULL
                 AND ( o.`state`='work'
                 OR o.`state`='working'
-                OR o.`state`='done')";
+                OR o.`state`='done'
+                OR o.`state`='prepress')";
     }
 
 	  $executedQuery = Doctrine_Manager::connection()
