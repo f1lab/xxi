@@ -15,16 +15,28 @@ class sfGuardUserAdminForm extends BasesfGuardUserAdminForm
    */
   public function configure()
   {
+    unset (
+      $this['updated_at'],
+      $this['created_at'],
+      $this['salt'],
+      $this['algorithm'],
+      $this['last_login']
+    );
+    
     $this->widgetSchema->setLabels(array(
       'first_name' => 'Имя',
       'last_name' => 'Фамилия',
-      'username' => 'Имя пользователя',
-      'email_address' => 'Почтовый ящик',
+      'email_address' => 'Электронный адрес',
       'permissions_list' => 'Права',
       'password' => 'Пароль',
-      'groups_list' => 'Компания',
-      'responsible_for_company_list' => 'Отвечает за компанию',
+      'salt'=>'соль',
+      'groups_list'=>'Группа',
+      'username'=>'Имя пользователя',
       'password_again' => 'Повторите пароль',
-    ));
+      'is_super_admin' => 'Права администратора',
+      'is_active' => 'Включен',
+      
+    ));  
+   
   }
 }

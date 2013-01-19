@@ -4,10 +4,10 @@
   <thead>
     <tr>
       <th>Id</th>
+      <th>Имя пользователя</th>
       <th>Имя</th>
       <th>Фамилия</th>
       <th>Электронный адрес</th>
-      <th>Имя пользователя</th>
       <th>Активирован</th>
       <th>Админ</th>
       <th>Последний вход</th>
@@ -25,11 +25,11 @@
   <br>
     <?php foreach ($sf_guard_users as $sf_guard_user): ?>
     <tr>
-      <td><a href="<?php echo url_for('users/edit?id='.$sf_guard_user->getId()) ?>"><?php echo $sf_guard_user->getId() ?></a></td>
+      <td><?php echo $sf_guard_user->getId() ?></a></td>
+      <td><a href="<?php echo url_for('users/edit?id='.$sf_guard_user->getId()) ?>"><?php echo $sf_guard_user->getUsername() ?></td>
       <td><?php echo $sf_guard_user->getFirstName() ?></td>
       <td><?php echo $sf_guard_user->getLastName() ?></td>
       <td><?php echo $sf_guard_user->getEmailAddress() ?></td>
-      <td><?php echo $sf_guard_user->getUsername() ?></td>
       <td><?php echo $sf_guard_user->getIsActive() ?></td>
       <td><?php echo $sf_guard_user->getIsSuperAdmin() ?></td>
       <td><?php echo $sf_guard_user->getLastLogin() ?></td>

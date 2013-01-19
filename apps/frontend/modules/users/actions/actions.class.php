@@ -19,7 +19,7 @@ class usersActions extends sfActions
 
   public function executeNew(sfWebRequest $request)
   {
-    $this->form = new sfGuardUserForm();
+    $this->form = new sfGuardUserAdminForm();
   }
 
   public function executeCreate(sfWebRequest $request)
@@ -35,18 +35,17 @@ class usersActions extends sfActions
 
   public function executeEdit(sfWebRequest $request)
   {
-    $this->forward404Unless($sf_guard_user = Doctrine_Core::getTable('sfGuardUser')->find(array($request->getParameter('id'))), sprintf('Object sf_guard_user does not exist (%s).', $request->getParameter('id')));
-    $this->form = new sfGuardUserForm($sf_guard_user);
+    
+    $this->forward404Unless($sf_guard_user = Doctrine_Core::getTable('sfGuardUser')->find(array($request->getParameter('id'))), sprintf('Object sf_guard_user does not exist (%s).', $request->getParameter('sf_guard_user')));
+    $this->form = new sfGuardUserAdminForm($sf_guard_user);
   }
 
   public function executeUpdate(sfWebRequest $request)
   {
     $this->forward404Unless($request->isMethod(sfRequest::POST) || $request->isMethod(sfRequest::PUT));
     $this->forward404Unless($sf_guard_user = Doctrine_Core::getTable('sfGuardUser')->find(array($request->getParameter('id'))), sprintf('Object sf_guard_user does not exist (%s).', $request->getParameter('id')));
-    $this->form = new sfGuardUserForm($sf_guard_user);
-
+    $this->form = new sfGuardUserAdminForm($sf_guard_user);
     $this->processForm($request, $this->form);
-
     $this->setTemplate('edit');
   }
 
@@ -66,8 +65,9 @@ class usersActions extends sfActions
     if ($form->isValid())
     {
       $sf_guard_user = $form->save();
-
+      $this->getUser()->setFlash('message', array('success', 'Отлично!', 'Изменения сохранены'));
       $this->redirect('users/edit?id='.$sf_guard_user->getId());
+      
     }
   }
   public function executeSettings(sfWebRequest $request)

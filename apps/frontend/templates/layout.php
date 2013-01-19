@@ -30,7 +30,9 @@
           <li><a href="<?php echo url_for('@reports') ?>">Отчётность</a></li>
         <?php endif ?>
         <li><a href="<?php echo url_for('@users-settings') ?>">Мои настройки</a></li>
-        
+        <?php if ($sf_user->isSuperadmin()): ?>
+          <li><a href="<?php echo url_for('@users-show') ?>">Пользователи</a></li>
+        <?php endif ?>
         </ul>
 
         <ul class="nav pull-right"><?php if ($sf_user->isAuthenticated()): ?>

@@ -132,7 +132,6 @@ users-create:
 users-edit:
   url:   /users/edit
   param: { module: users, action: edit }
-
   # generic rules
 # please, remove them by adding more specific rules
 default_index:
