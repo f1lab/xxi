@@ -101,6 +101,7 @@ Order:
     started_at: timestamp
     finished_at: timestamp
     submited_at: timestamp
+    execution_time: time
     state:
       type: enum
       notnull: true

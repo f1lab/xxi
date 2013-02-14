@@ -65,7 +65,8 @@ class orderActions extends sfActions
       'creator' => 'Менеджер',
       'description' => 'Описание заказа',
       'additional' => 'Доп. информация',
-      'dueDate' => 'Срок исполнения',
+      'dueDate' => 'Срок исполнения (Дата)',
+      'executionTime' => 'Срок исполнения (Время)',
       'approvedAt' => 'Дата согласования с заказчиком',
       'files' => 'Файлы и комментарии к ним',
       'installationCost' => 'Стоимость монтажа',
@@ -96,6 +97,7 @@ class orderActions extends sfActions
         'dueDate',
         'files',
         'expectedAt',
+        'executionTime',
         'startedAt',
         'finishedAt',
         'stateTranslated',
@@ -169,10 +171,11 @@ class orderActions extends sfActions
     $this->form = new OrderForm($this->order);
 
     //FIXME: it's fucking mess below
+    
     if ($this->getUser()->hasGroup('worker')) {
       $this->form->getWidgetSchema()
         ->offsetUnset(array(
-          'client_id', 'description', 'due_date',
+          'client_id', 'description', 'due_date','execution_time',
           'approved_at', 'files', 'installation_cost',
           'design_cost', 'contractors_cost',
           'cost', 'pay_method',
@@ -192,7 +195,7 @@ class orderActions extends sfActions
     } elseif ($this->getUser()->hasGroup('buhgalter')) {
       $this->form->getWidgetSchema()
         ->offsetUnset(array(
-          'client_id', 'description', 'due_date',
+          'client_id', 'description', 'due_date','execution_time',
           'approved_at', 'files', 'installation_cost',
           'design_cost', 'contractors_cost',
           'submited_at', 'state',
@@ -264,9 +267,11 @@ class orderActions extends sfActions
 
     //FIXME: it's fucking mess
     if ($this->getUser()->hasGroup('worker')) {
+   
+
       $this->form->getValidatorSchema()
         ->offsetUnset(array(
-          'client_id', 'description', 'due_date',
+          'client_id', 'description', 'due_date','execution_time',
           'approved_at', 'files', 'installation_cost',
           'design_cost', 'contractors_cost', 'cost',
           'pay_method', 'recoil',
@@ -282,7 +287,7 @@ class orderActions extends sfActions
     } elseif ($this->getUser()->hasGroup('buhgalter')) {
       $this->form->getValidatorSchema()
         ->offsetUnset(array(
-          'client_id', 'description', 'due_date',
+          'client_id', 'description', 'due_date','execution_time',
           'approved_at', 'files', 'installation_cost',
           'design_cost', 'contractors_cost', 'cost',
           'submited_at', 'recoil', 'delivery_cost',
@@ -350,6 +355,7 @@ class orderActions extends sfActions
         '{files}',
         '{description}',
         '{due_date}',
+        '{execution_time}',
         '{started_at}',
       ),
       array(
@@ -359,6 +365,7 @@ class orderActions extends sfActions
         $order->getFiles(),
         $order->getDescription(),
         $order->getDueDate() ? date('d.m.Y', strtotime($order->getDueDate())) : '',
+        $order->getExecutionTime(),
         $order->getStartedAt() ? date('d.m.Y', strtotime($order->getStartedAt())) : ''
       ),
       file_get_contents(sfConfig::get('sf_upload_dir') . '/' . 'order.xml')
