@@ -4,7 +4,7 @@ function chek(){
         // console.log(data);
         if(data.countUnreadedTickets > 0){
                 var n = window.webkitNotifications.createNotification(
-                        "http://xxi.lan/img/new.png",
+                        "http://95.154.108.210//img/new.png",
                         "Новых комментариев " + data.countUnreadedTickets,
                         ""
                         );
@@ -13,7 +13,7 @@ function chek(){
                 setTimeout(function () {n.cancel();}, 20000);
                 };
                 n.onclick = function(){
-                              window.open("http://xxi.lan");
+                              window.open("http://95.154.108.210");
                               n.cancel();     
                             }
                 n.show();
