@@ -238,14 +238,6 @@ class orderActions extends sfActions
           'label' => 'Статус',
         )))
       ;
-
-      if ($this->order->getState() == 'working') {
-        $this->form->getWidgetSchema()
-          ->offsetUnset(array(
-            'state',
-          ))
-        ;
-      }
     }
 
     if ($this->getUser()->hasCredential('can_set_all_states')) {

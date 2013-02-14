@@ -229,7 +229,13 @@
       <?php echo $form['docs_given']->renderLabel()?>
       <?php echo $form['docs_given']->render()?><br>
       <?php echo $form['docs_given']->renderError()?>
-  </fieldset>  
+    </fieldset> 
+    <fieldset>
+    <legend>Статусы</legend> 
+      <?php echo $form['state']->renderLabel()?>
+      <?php echo $form['state']->render()?><br>
+      <?php echo $form['state']->renderError()?>
+    </fieldset>
   <?php endif?>
   
   <?php echo $form->renderHiddenFields()?>
