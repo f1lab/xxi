@@ -66,6 +66,12 @@
       <?php echo $form['recoil']->renderLabel()?>
       <?php echo $form['recoil']->render()?><br>
       <?php echo $form['recoil']->renderError()?>
+      <?php echo $form['payed']->renderLabel()?>
+      <?php echo $form['payed']->render()?><br>
+      <?php echo $form['payed']->renderError()?>
+      <?php echo $form['payed_at']->renderLabel()?>
+      <?php echo $form['payed_at']->render()?><br>
+      <?php echo $form['payed_at']->renderError()?>
   </fieldset>  
   <fieldset>
     <legend>Статусы</legend> 
@@ -147,6 +153,12 @@
       <?php echo $form['pay_method']->renderLabel()?>
       <?php echo $form['pay_method']->render()?><br>
       <?php echo $form['pay_method']->renderError()?>
+      <?php echo $form['payed']->renderLabel()?>
+      <?php echo $form['payed']->render()?><br>
+      <?php echo $form['payed']->renderError()?>
+      <?php echo $form['payed_at']->renderLabel()?>
+      <?php echo $form['payed_at']->render()?><br>
+      <?php echo $form['payed_at']->renderError()?>
     </fieldset> 
     <fieldset>
     <legend>Бухгалтерия</legend> 
