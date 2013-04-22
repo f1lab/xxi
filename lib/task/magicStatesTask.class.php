@@ -6,7 +6,7 @@ class magicStatesTask extends sfBaseTask
   {
     $this->addOptions(array(
       new sfCommandOption('application', null, sfCommandOption::PARAMETER_REQUIRED, 'The application name'),
-      new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev'),
+      new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'prod'),
       new sfCommandOption('connection', null, sfCommandOption::PARAMETER_REQUIRED, 'The connection name', 'doctrine'),
     ));
 
@@ -25,8 +25,8 @@ EOF;
   {
     // initialize the database connection
     $databaseManager = new sfDatabaseManager($this->configuration);
-    $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
-
+    $connection = $databaseManager->getDatabase($options['connection'])->getConnection(); 
+    echo $options['env'];
     $archived = Doctrine_Query::create()
       ->update('Order')
       ->set('state', '?', 'archived')
