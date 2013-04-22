@@ -12,7 +12,7 @@ class ClientForm extends BaseClientForm
 {
   public function configure()
   {
-    unset( $this['created_by'], $this['updated_by'], $this['deleted_at'] );
+    unset( $this['created_by'], $this['updated_by'], $this['deleted_at'],$this['ownership'] );
 
     $this->getWidgetSchema()
       ->offsetSet('name', new sfWidgetFormInputText(array(), array('placeholder' => 'Ф1 Лаб')))

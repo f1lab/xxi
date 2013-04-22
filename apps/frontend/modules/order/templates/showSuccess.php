@@ -99,6 +99,27 @@
 <?php endif ?>
 </div>
 
+<?php
+  if ($sf_user->hasGroup('buhgalter')):
+?>
+  <div class="btn-group">
+      <a href="<?php echo url_for('@order-printaccount?id=' . $order->getId()) ?>" target="_blank" class="btn">Распечатать счет</a>
+      <?php if($order->getSubmitedAt() != 0):?>
+        <a href="<?php echo url_for('@order-printinvoice?id=' . $order->getId()) ?>" target="_blank" class="btn">Распечатать счет-фактуру</a>
+        <a href="<?php echo url_for('@order-printwaybill?id=' . $order->getId()) ?>" target="_blank" class="btn">Распечатать ТТН</a>
+      <?php endif;?>
+  </div>
+<?php endif;?>
+<?php
+  if ($sf_user->hasGroup('worker')):
+?>
+  <div class="btn-group">
+      <?php if($order->getSubmitedAt() != 0):?>
+        <a href="<?php echo url_for('@order-printinvoice?id=' . $order->getId()) ?>" target="_blank" class="btn">Распечатать счет-фактуру</a>
+        <a href="<?php echo url_for('@order-printwaybill?id=' . $order->getId()) ?>" target="_blank" class="btn">Распечатать ТТН</a>
+      <?php endif;?>
+  </div>
+<?php endif;?>
 <hr />
 
 <h2>Комментарии</h2>

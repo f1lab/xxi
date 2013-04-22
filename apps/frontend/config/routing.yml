@@ -10,6 +10,10 @@ clients:
   url:   /clients
   param: { module: client, action: index }
 
+invoice:
+  url:   /invoice
+  param: { module: order, action:invoice }
+  
 client:
   url:   /clients/:id/:state
   param: { module: client, action: show, state: active }
@@ -73,6 +77,21 @@ order-update:
 order-print:
   url:   /orders/:id/print
   param: { module: order, action: print }
+  requirements: { id: \d+ }
+
+order-printaccount:
+  url:   /orders/:id/print-account
+  param: { module: order, action: printAccount }
+  requirements: { id: \d+ }
+
+order-printinvoice:
+  url:   /orders/:id/print-invoice
+  param: { module: order, action: printInvoice }
+  requirements: { id: \d+ }
+
+order-printwaybill:
+  url:   /orders/:id/print-waybill
+  param: { module: order, action: printWaybill }
   requirements: { id: \d+ }
 
 comment:

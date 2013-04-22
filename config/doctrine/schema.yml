@@ -144,6 +144,12 @@ Order:
       type: many
       local: id
       foreign: order_id
+# Invoices:
+# class: Invoice
+# local: id
+# foreign: order_id
+# foreignAlias: Invoices
+# foreignType: many
   indexes:
     state:
       fields: [state]
@@ -197,3 +203,22 @@ sfGuardUser:
       local: id
       foreign: user_id
       foreignAlias: Reader
+Invoice:
+  columns:
+    order_id:
+      type: integer
+      notnull: true
+    description:
+      type: string(255)
+      notnull: true
+    number:
+      type: float
+      notnull: true
+    price:
+      type: float
+      notnull: true
+    sum:
+      type: float
+      notnull: true    
+  relations:
+    Order: { local: order_id, foreign: id, onDelete: CASCADE, foreignAlias: Invoices }

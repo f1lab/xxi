@@ -365,6 +365,26 @@ class orderActions extends sfActions
 
     die($out);
   }
+  
+  public function executePrintAccount(sfWebRequest $request)
+  {
+    $this->order = Doctrine_Core::getTable('Order')
+      ->find($request->getParameter('id'));
+      $this->setLayout(false);
+  }
+  
+  public function executePrintInvoice(sfWebRequest $request)
+  {
+    $this->order = Doctrine_Core::getTable('Order')
+      ->find($request->getParameter('id'));
+      $this->setLayout(false);
+  }
+  public function executePrintWaybill(sfWebRequest $request)
+  {
+    $this->order = Doctrine_Core::getTable('Order')
+      ->find($request->getParameter('id'));
+      $this->setLayout(false);
+  }
 
   public function executeComment(sfWebRequest $request)
   {
@@ -437,6 +457,9 @@ class orderActions extends sfActions
     return $this->renderText(json_encode(array(
     'countUnreadedTickets' => $countUnreadedTickets,
     )));
+  }
+  public function executeInvoice(sfWebRequest $request){
+   $this->form = new InvoiceForm();
   }
 }
 

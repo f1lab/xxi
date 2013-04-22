@@ -1,14 +1,58 @@
 <div class="page-header">
   <h1>Добавить заказ</h1>
 </div>
-
+<?php use_stylesheets_for_form($form) ?>
+<?php use_javascripts_for_form($form) ?>
 <form action="<?php echo url_for('@order-create') ?>" method="post">
   <?php //echo $form->renderUsing('bootstrap') ?>
-  <fieldset>
     <legend>Основная информация</legend>
       <?php echo $form['client_id']->renderLabel()?>
       <?php echo $form['client_id']->render()?><br>
       <?php echo $form['client_id']->renderError()?><br>
+    <fieldset>
+      <table>
+        <head>
+          <tr>
+            <td>Описание заказа</td>
+            <td>Кол-во</td>
+            <td>Цена</td>
+            <td>Сумма</td>
+          </tr>
+        </head>
+        <body>
+       
+          
+        
+       
+        <tr>
+          <td>
+          <?php echo $form['new_Invoices']['0']['description']->render();?>
+          </td>
+          <td>
+          <?php echo $form['new_Invoices']['0']['number']->render();?>
+          </td>
+          <td>
+          <?php echo $form['new_Invoices']['0']['price']->render();?>
+          </td>
+        <td>
+          <?php echo $form['new_Invoices']['0']['sum']->render();?>
+        </td>
+        <td>
+          <div style="color:red">
+            <?php echo $form['new_Invoices']['0']['description']->renderError();?>
+            <?php echo $form['new_Invoices']['0']['number']->renderError();?>
+            <?php echo $form['new_Invoices']['0']['price']->renderError();?>
+            <?php echo $form['new_Invoices']['0']['sum']->renderError();?>
+          </div>
+        </td>
+      
+        </tr>
+        <tr>
+          <td><button type="button" class="ahAddRelation" rel="new_Invoices">+</button></td>
+        </tr>
+        </body>
+      </table>
+  
       <?php echo $form['description']->renderLabel()?>
       <?php echo $form['description']->render()?><br>
       <span class="text-error">

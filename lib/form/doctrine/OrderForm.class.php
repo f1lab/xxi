@@ -20,6 +20,30 @@ class OrderForm extends BaseOrderForm
       $this['deleted_at'],
       $this['version']
     );
+    $this->embedRelations(array(
+    'Invoices' => array(
+      'considerNewFormEmptyFields'    => array('description', 'number', 'price', 'sum'),
+      // 'considerNewFormEmptyFields'    => array('name', 'repo_path', 'repo_username', 'repo_password'),
+      'noNewForm'                     => false,
+      // 'noNewForm'                     => true,
+      'newFormLabel'                  => 'Новый выпрос',
+      'newFormClass'                  => 'InvoiceForm',
+      'newFormClassArgs'              => array(array('sf_user' => $this->getOption('sf_user'))),
+      'displayEmptyRelations'         => true,
+      'formClass'                     => 'InvoiceForm',
+      'formClassArgs'                 => array(array('ah_add_delete_checkbox' => true)),
+      'newFormAfterExistingRelations' => true,
+      'formFormatter'                 => null,
+      'multipleNewForms'              => true,
+      'newFormsInitialCount'          => 1,
+      'newFormsContainerForm'         => null, // pass BaseForm object here or we will create ahNewRelationsContainerForm
+      'newRelationButtonLabel'        => '+',
+      'newRelationAddByCloning'       => true,
+      'newRelationUseJSFramework'     => 'jQuery',
+      // 'customEmbeddedFormLabelMethod' => 'getLabelTitle'
+        )
+      )
+    ); 
 
     $this->getWidgetSchema()
       ->offsetSet('client_id', new sfWidgetFormDoctrineChoice(array(
@@ -87,43 +111,9 @@ class OrderForm extends BaseOrderForm
       ->offsetSet('payed_at', new sfWidgetFormBootstrapDate())
     ;
     $this->setValidator('description', new sfValidatorString(
-                                    array('required' => true),
-                                    array('required' => 'Поле не должно быть пустым.')));
-    /* $this->setValidators(array(
-      'id'                => new sfValidatorChoice(array('choices' => array($this->getObject()->get('id')), 'empty_value' => $this->getObject()->get('id'), 'required' => false)),
-      'client_id'         => new sfValidatorDoctrineChoice(array('model' => $this->getRelatedModelName('Client'))),
-      'additional'        => new sfValidatorString(array('required' => false)),
-      'description'       => new sfValidatorString(
                                     array('required' => false),
-                                    array('required' => 'Поле не должно быть пустым.')),
-      'due_date'          => new sfValidatorDateTime(array('required' => false)),
-      'approved_at'       => new sfValidatorDateTime(array('required' => false)),
-      'files'             => new sfValidatorString(array('required' => false)),
-      'installation_cost' => new sfValidatorInteger(array('required' => false)),
-      'design_cost'       => new sfValidatorInteger(array('required' => false)),
-      'contractors_cost'  => new sfValidatorInteger(array('required' => false)),
-      'delivery_cost'     => new sfValidatorInteger(array('required' => false)),
-      'cost'              => new sfValidatorInteger(array('required' => false)),
-      'pay_method'        => new sfValidatorChoice(array('choices' => array(0 => '', 1 => 'cash', 2 => 'non-cash', 3 => 'barter', 4 => 'settlement'), 'required' => false)),
-      'recoil'            => new sfValidatorInteger(array('required' => false)),
-      'payed'             => new sfValidatorInteger(array('required' => false)),
-      'payed_at'          => new sfValidatorDateTime(array('required' => false)),
-      'expected_at'       => new sfValidatorDateTime(array('required' => false)),
-      'started_at'        => new sfValidatorDateTime(array('required' => false)),
-      'finished_at'       => new sfValidatorDateTime(array('required' => false)),
-      'submited_at'       => new sfValidatorDateTime(array('required' => false)),
-      'state'             => new sfValidatorChoice(array('choices' => array(0 => 'calculating', 1 => 'work', 2 => 'working', 3 => 'done', 4 => 'submited', 5 => 'archived', 6 => 'debt',7 => 'prepress'), 'required' => false)),
-      'area'              => new sfValidatorChoice(array('choices' => array(0 => 'pvc', 1 => 'laser', 2 => 'engraver', 3 => 'mymaka', 4 => 'outdoor', 5 => 'lfp', 6 => 'sublimation', 7 => 'cutter', 8 => 'serigraphy'), 'required' => false)),
-      'bill_made'         => new sfValidatorBoolean(array('required' => false)),
-      'bill_given'        => new sfValidatorBoolean(array('required' => false)),
-      'docs_given'        => new sfValidatorBoolean(array('required' => false)),
-      'created_at'        => new sfValidatorDateTime(),
-      'updated_at'        => new sfValidatorDateTime(),
-      'created_by'        => new sfValidatorDoctrineChoice(array('model' => $this->getRelatedModelName('Creator'), 'required' => false)),
-      'updated_by'        => new sfValidatorDoctrineChoice(array('model' => $this->getRelatedModelName('Updator'), 'required' => false)),
-      'deleted_at'        => new sfValidatorDateTime(array('required' => false)),
-      'version'           => new sfValidatorInteger(array('required' => false))
-    )); */
+                                    array('required' => 'Поле не должно быть пустым.')));
+
     
     $this->getWidgetSchema()->setLabels(array(
       'client_id' => 'Клиент',
@@ -153,5 +143,10 @@ class OrderForm extends BaseOrderForm
       'docs_given' => 'Документы выданы',
       'execution_time' => 'Время',
     ));
+    // $this->embedRelations(array(
+      // 'Invoices' => array(
+        // 'considerNewFormEmptyFields' => array('description', 'number', 'price', 'sum'),
+      // )
+    // ));
   }
 }
