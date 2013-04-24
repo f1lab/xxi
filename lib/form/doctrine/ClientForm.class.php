@@ -16,9 +16,9 @@ class ClientForm extends BaseClientForm
 
     $this->getWidgetSchema()
       ->offsetSet('name', new sfWidgetFormInputText(array(), array('placeholder' => 'Ф1 Лаб')))
-      ->offsetSet('ownership', new sfWidgetFormChoice(array(
-        'choices' => ClientTable::$ownership,
-      )))
+      // ->offsetSet('ownership', new sfWidgetFormChoice(array(
+        // 'choices' => ClientTable::$ownership,
+      // )))
       ->setLabels(array(
         'name' => 'Наименование организации',
         'contact' => 'Контактное лицо',

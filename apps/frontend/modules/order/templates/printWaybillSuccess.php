@@ -215,7 +215,7 @@
       </tr>
       <tr>
         <td colspan="4" style="border-bottom:1px solid silver;">
-          ООО «Фабрика 21 век», 690000, г. Владивосток, проспект 100 лет Владивостока, 145 - 24  <nobr>тел. 232-84-55,</nobr> <nobr>ИНН 2543024343,</nobr> <nobr>КПП 254301001,</nobr> <nobr>р/с 40702810900050000714</nobr> в ОАО ДАЛЬНЕВОСТОЧНЫЙ БАНК Г. ВЛАДИВОСТОК , <nobr>БИК 040507705,</nobr> <nobr>к/с 30101810900000000705</nobr>
+          <?php echo $company->getFullName()?>, <?php echo $company->getAddressJure()?>  <nobr>тел. <?php echo $company->getPhone()?>,</nobr> <nobr>ИНН <?php echo $company->getInn()?>,</nobr> <nobr>КПП <?php echo $company->getKpp()?>,</nobr> <nobr>р/с <?php echo $company->getRs()?></nobr> в <?php echo $company->getBank()?> , <nobr>БИК <?php echo $company->getBik()?>,</nobr> <nobr>к/с <?php echo $company->getKs()?></nobr>
         </td>
         <td style="text-align:right;vertical-align:bottom;">
           по ОКПО
@@ -258,6 +258,11 @@
           <?php echo $order->getClient()->getBank()?>	,
           <nobr>БИК <?php echo $order->getClient()->getBik()?>,</nobr>
           <nobr>к/с <?php echo $order->getClient()->getKs()?></nobr>
+          <nobr><?php if ($order->getClient()->getOkpo() !=""){
+                          echo ", ОКПО ".$order->getClient()->getOkpo();
+                      }
+                ?>
+          </nobr>
         </td>
         <td style="text-align:right;vertical-align:bottom;">
           по ОКПО
@@ -273,14 +278,7 @@
           <div class="f04-label" style="text-align:center;">
             (организация, адрес, телефон, факс, банковские реквизиты)
           </div>
-          ООО «Фабрика 21 век», 690000, г. Владивосток, проспект 100 лет Владивостока, 145 - 24
-          <nobr>тел. 232-84-55,</nobr>
-          <nobr>ИНН 2543024343,</nobr>
-          <nobr>КПП 254301001,</nobr>
-          <nobr>р/с 40702810900050000714</nobr>
-          в ОАО ДАЛЬНЕВОСТОЧНЫЙ БАНК Г. ВЛАДИВОСТОК ,
-          <nobr>БИК 040507705,</nobr>
-          <nobr>к/с 30101810900000000705</nobr>
+          <?php echo $company->getFullName()?>, <?php echo $company->getAddressJure()?>  <nobr>тел. <?php echo $company->getPhone()?>,</nobr> <nobr>ИНН <?php echo $company->getInn()?>,</nobr> <nobr>КПП <?php echo $company->getKpp()?>,</nobr> <nobr>р/с <?php echo $company->getRs()?></nobr> в <?php echo $company->getBank()?> , <nobr>БИК <?php echo $company->getBik()?>,</nobr> <nobr>к/с <?php echo $company->getKs()?></nobr>
         </td>
         <td style="text-align:right;vertical-align:bottom;">
           по ОКПО
@@ -305,6 +303,11 @@
           <?php echo $order->getClient()->getBank()?>	,
           <nobr>БИК <?php echo $order->getClient()->getBik()?>,</nobr>
           <nobr>к/с <?php echo $order->getClient()->getKs()?></nobr>
+          <nobr><?php if ($order->getClient()->getOkpo() !=""){
+                          echo ", ОКПО ".$order->getClient()->getOkpo();
+                      }
+                ?>
+          </nobr>
         </td>
         <td style="text-align:right;vertical-align:bottom;border-bottom:1px solid silver;">
           по ОКПО
@@ -399,7 +402,7 @@
           ТОВАРНАЯ НАКЛАДНАЯ&nbsp;
         </td>
         <td style="border-left:1px solid gray;border-top:1px solid gray;border-bottom:1px solid gray;border-right:1px solid silver;text-align:center;vertical-align:middle;">
-          <?php echo $order->getId()?>
+          <?php echo $order->getWaybillNumber()?>
         </td>
         <td style="border-left:1px solid silver;border-right:1px solid gray;border-top:1px solid gray;border-bottom:1px solid gray;text-align:center;vertical-align:middle;">
           <?php echo date("d.m.Y",strtotime($order->getSubmitedAt()))?>
@@ -518,10 +521,10 @@
 <!------ ТОВАРЫ ------>
 <?php //смотрим сколько всего позиций и если их меньше $countposonfpage то выводим все на экран ?>
 <?php $number = count($order->getInvoices()) //Количество позиций?>
-<?php $countposonfirstpage = 7 //количество на первой странице?>
-<?php $countposonfullpage = 15 //количество на полной странице?>
+<?php $countposonfirstpage = $settings->getWaybillCountPosOnFirstPage(); //количество на первой странице?>
+<?php $countposonfullpage = $settings->getWaybillCountPosOnFullPage(); //количество на полной странице?>
 <?php $globalcounter = $countposonfirstpage //общий счетчик для вывода?>
-<?php $countposonlastpage = 5  //количество на последней странице с футером?>
+<?php $countposonlastpage = $settings->getWaybillCountPosOnLastPage();  //количество на последней странице с футером?>
 <?php $fullpagecount =(int)(($number - $countposonfirstpage) / $countposonfullpage) //Количество страниц по 15 пунктов?>
 <?php $notfullpagecount =(($number - $countposonfirstpage) % $countposonfullpage) //Количество пунктов на неполную страницу?>
 <?php $sharesumm = 0; // Общая сумма ?>
@@ -3314,7 +3317,7 @@
 <?php endif;?>
 <div class="title-size">Параметры печати</div>
 <div class="print-options">
-<h4 id="t_tn" class="h" style="display: block;">Товарная накладная</h4><ul id="c_tn" class="doc h" style="display: block;"><li><input class="hide-doc" type="checkbox" id="tn-929" checked="">№ <a href="" title="Товарная накладная на сумму 40000.00"><?php echo $order->getId() ?></a><span> от <?php echo date("d.m.Y",strtotime($order->getSubmitedAt()))?></span></li></ul>
+<h4 id="t_tn" class="h" style="display: block;">Товарная накладная</h4><ul id="c_tn" class="doc h" style="display: block;"><li><input class="hide-doc" type="checkbox" id="tn-929" checked="">№ <a href="" title="Товарная накладная "><?php echo $order->getWaybillNumber() ?></a><span> от <?php echo date("d.m.Y",strtotime($order->getSubmitedAt()))?></span></li></ul>
 
 <h4><a href="" onclick="window.print();return false">Распечатать</a></h4>
 </body>

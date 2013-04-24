@@ -240,7 +240,7 @@ function morph($n, $f1, $f2, $f5) {
   padding:0cm 5.4pt 0cm 5.4pt;height:12.0pt'>
   <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
   normal'><span style='font-size:9.0pt;font-family:"Arial","sans-serif";
-  mso-fareast-font-family:"Times New Roman";mso-fareast-language:RU'><?php echo $order->getClient()->getBank();?><o:p></o:p></span></p>
+  mso-fareast-font-family:"Times New Roman";mso-fareast-language:RU'><?php echo $company->getBank()?><o:p></o:p></span></p>
   </td>
   <td width=51 nowrap colspan=4 style='width:38.6pt;border:solid windowtext 1.0pt;
   border-left:none;mso-border-top-alt:solid windowtext .5pt;mso-border-bottom-alt:
@@ -256,7 +256,7 @@ function morph($n, $f1, $f2, $f5) {
   padding:0cm 5.4pt 0cm 5.4pt;height:12.0pt'>
   <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
   normal'><span style='font-size:9.0pt;font-family:"Arial","sans-serif";
-  mso-fareast-font-family:"Times New Roman";mso-fareast-language:RU'><?php echo $order->getClient()->getBik();?><o:p></o:p></span></p>
+  mso-fareast-font-family:"Times New Roman";mso-fareast-language:RU'><?php echo $company->getBik()?><o:p></o:p></span></p>
   </td>
   <td width=36 nowrap valign=bottom style='width:27.0pt;padding:0cm 5.4pt 0cm 5.4pt;
   height:12.0pt'></td>
@@ -281,7 +281,7 @@ function morph($n, $f1, $f2, $f5) {
   height:11.25pt'>
   <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
   normal'><span style='font-size:9.0pt;font-family:"Arial","sans-serif";
-  mso-fareast-font-family:"Times New Roman";mso-fareast-language:RU'><?php echo $order->getClient()->getKs();?><o:p></o:p></span></p>
+  mso-fareast-font-family:"Times New Roman";mso-fareast-language:RU'><?php echo $company->getKs()?><o:p></o:p></span></p>
   </td>
   <td width=36 nowrap valign=bottom style='width:27.0pt;padding:0cm 5.4pt 0cm 5.4pt;
   height:11.25pt'></td>
@@ -314,7 +314,7 @@ function morph($n, $f1, $f2, $f5) {
   0cm 5.4pt 0cm 5.4pt;height:12.0pt'>
   <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
   normal'><span style='font-size:9.0pt;font-family:"Arial","sans-serif";
-  mso-fareast-font-family:"Times New Roman";mso-fareast-language:RU'><?php echo $order->getClient()->getInn();?><o:p></o:p></span></p>
+  mso-fareast-font-family:"Times New Roman";mso-fareast-language:RU'><?php echo $company->getInn()?><o:p></o:p></span></p>
   </td>
   <td width=35 nowrap colspan=2 style='width:26.35pt;border:none;mso-border-top-alt:
   solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:12.0pt'>
@@ -329,7 +329,7 @@ function morph($n, $f1, $f2, $f5) {
   0cm 5.4pt 0cm 5.4pt;height:12.0pt'>
   <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
   normal'><span style='font-size:9.0pt;font-family:"Arial","sans-serif";
-  mso-fareast-font-family:"Times New Roman";mso-fareast-language:RU'><?php echo $order->getClient()->getKpp();?><o:p></o:p></span></p>
+  mso-fareast-font-family:"Times New Roman";mso-fareast-language:RU'><?php echo $company->getKpp()?><o:p></o:p></span></p>
   </td>
   <td width=51 nowrap colspan=4 rowspan=4 valign=top style='width:38.6pt;
   border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;
@@ -349,7 +349,7 @@ function morph($n, $f1, $f2, $f5) {
   padding:0cm 5.4pt 0cm 5.4pt;height:12.0pt'>
   <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
   normal'><span style='font-size:9.0pt;font-family:"Arial","sans-serif";
-  mso-fareast-font-family:"Times New Roman";mso-fareast-language:RU'><?php echo $order->getClient()->getRs();?><o:p></o:p></span></p>
+  mso-fareast-font-family:"Times New Roman";mso-fareast-language:RU'><?php echo $company->getRs()?><o:p></o:p></span></p>
   </td>
   <td width=36 nowrap valign=bottom style='width:27.0pt;padding:0cm 5.4pt 0cm 5.4pt;
   height:12.0pt'></td>
@@ -362,7 +362,7 @@ function morph($n, $f1, $f2, $f5) {
   height:11.25pt'>
   <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
   normal'><span style='font-size:9.0pt;font-family:"Arial","sans-serif";
-  mso-fareast-font-family:"Times New Roman";mso-fareast-language:RU'>&quot;<?php echo $order->getClient()->getFullName();?></span>&quot;<o:p></o:p></span></p>
+  mso-fareast-font-family:"Times New Roman";mso-fareast-language:RU'><?php echo $company->getFullName()?></span><o:p></o:p></span></p>
   </td>
   <td width=36 nowrap valign=bottom style='width:27.0pt;padding:0cm 5.4pt 0cm 5.4pt;
   height:11.25pt'></td>
@@ -586,9 +586,8 @@ function morph($n, $f1, $f2, $f5) {
   height:25.35pt'>
   <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
   normal'><b><span style='font-size:9.0pt;font-family:"Arial","sans-serif";
-  mso-fareast-font-family:"Times New Roman";mso-fareast-language:RU'>ООО "Фабрика 21 век", ИНН 2543024343, КПП 254301001, 690000, Владивосток,
-   проспект 100 лет Владивостока, дом № 145, кв.24,
-  тел.: (423) 232-84-55, факс: (423) 232-84-55<o:p></o:p></span></b></p>
+  mso-fareast-font-family:"Times New Roman";mso-fareast-language:RU'><?php echo $company->getFullName()?>, ИНН <?php echo $company->getInn()?>, КПП <?php echo $company->getKpp()?>, <?php echo $company->getAddressJure()?>,
+  тел.: <?php echo $company->getPhone()?>, факс: <?php echo $company->getPhone()?><o:p></o:p></span></b></p>
   </td>
   <td width=36 nowrap valign=bottom style='width:27.0pt;padding:0cm 5.4pt 0cm 5.4pt;
   height:25.35pt'></td>
@@ -681,7 +680,7 @@ function morph($n, $f1, $f2, $f5) {
   <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
   normal'><b><span style='font-size:9.0pt;font-family:"Arial","sans-serif";
   mso-fareast-font-family:"Times New Roman";mso-fareast-language:RU'>
-  "<?php echo $order->getClient()->getFullName();?>", 
+  <?php echo $order->getClient()->getFullName();?>, 
   ИНН <?php echo $order->getClient()->getInn();?>, 
   <?php 
       if ($order->getClient()->getKpp() != ""){
@@ -1730,7 +1729,7 @@ function morph($n, $f1, $f2, $f5) {
   <p class=MsoNormal align=right style='margin-bottom:0cm;margin-bottom:.0001pt;
   text-align:right;line-height:normal'><span style='font-size:8.0pt;font-family:
   "Arial","sans-serif";mso-fareast-font-family:"Times New Roman";mso-fareast-language:
-  RU'>Горбунова И.Н.<o:p></o:p></span></p>
+  RU'><?php echo $company->getDirector()?><o:p></o:p></span></p>
   </td>
   <td width=11 nowrap valign=bottom style='width:8.4pt;padding:0cm 5.4pt 0cm 5.4pt;
   height:12.0pt'></td>
@@ -1776,7 +1775,7 @@ function morph($n, $f1, $f2, $f5) {
   <p class=MsoNormal align=right style='margin-bottom:0cm;margin-bottom:.0001pt;
   text-align:right;line-height:normal'><span style='font-size:8.0pt;font-family:
   "Arial","sans-serif";mso-fareast-font-family:"Times New Roman";mso-fareast-language:
-  RU'>Цуканова В.В.<o:p></o:p></span></p>
+  RU'><?php echo $company->getBuhgalter()?><o:p></o:p></span></p>
   </td>
   <td width=36 nowrap valign=bottom style='width:27.0pt;padding:0cm 5.4pt 0cm 5.4pt;
   height:12.0pt'></td>

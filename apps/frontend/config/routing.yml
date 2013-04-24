@@ -9,7 +9,15 @@ homepage:
 clients:
   url:   /clients
   param: { module: client, action: index }
+  
+company-settings:
+  url:   /company-settings/:id
+  param: { module: comsettings, action: show }
 
+share-settings:
+  url:   /share-settings/:id
+  param: { module: sharesettings, action: show}
+  
 invoice:
   url:   /invoice
   param: { module: order, action:invoice }

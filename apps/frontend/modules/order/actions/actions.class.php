@@ -158,7 +158,7 @@ class orderActions extends sfActions
     $this->form->getValidatorSchema()
       ->offsetUnset('payed')
     ;
-
+    
     $this->processForm($request, $this->form, array('success', 'Отлично!', 'Заказ добавлен.'), '@orders');
     $this->setTemplate('new');
   }
@@ -185,6 +185,7 @@ class orderActions extends sfActions
           'bill_made',
           'bill_given',
           'docs_given',
+          'waybill',
         ))
         ->offsetSet('state', new sfWidgetFormChoice(array(
           'choices' => OrderTable::$statesForWorker,
@@ -370,6 +371,8 @@ class orderActions extends sfActions
   {
     $this->order = Doctrine_Core::getTable('Order')
       ->find($request->getParameter('id'));
+    $this->company = Doctrine_Core::getTable('CompanySettings')
+      ->find(1);
       $this->setLayout(false);
   }
   
@@ -377,13 +380,36 @@ class orderActions extends sfActions
   {
     $this->order = Doctrine_Core::getTable('Order')
       ->find($request->getParameter('id'));
+    $this->company = Doctrine_Core::getTable('CompanySettings')
+      ->find(1);
+    $this->settings = Doctrine_Core::getTable('ShareSettings')
+      ->find(1);
+    if ($this->order->getWaybillNumber() == NULL)
+    {
+      $this->order->setWaybillNumber($this->settings->getWaybillCounter()+1);
+      $this->order->save();
+      $this->settings->setWaybillCounter($this->settings->getWaybillCounter()+1);
+      $this->settings->save();
+    }
+
       $this->setLayout(false);
   }
   public function executePrintWaybill(sfWebRequest $request)
   {
     $this->order = Doctrine_Core::getTable('Order')
       ->find($request->getParameter('id'));
+    $this->company = Doctrine_Core::getTable('CompanySettings')
+      ->find(1);
       $this->setLayout(false);
+    $this->settings = Doctrine_Core::getTable('ShareSettings')
+      ->find(1);
+    if ($this->order->getWaybillNumber() == NULL)
+    {
+      $this->order->setWaybillNumber($this->settings->getWaybillCounter()+1);
+      $this->order->save();
+      $this->settings->setWaybillCounter($this->settings->getWaybillCounter()+1);
+      $this->settings->save();
+    }
   }
 
   public function executeComment(sfWebRequest $request)

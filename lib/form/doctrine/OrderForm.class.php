@@ -117,7 +117,7 @@ class OrderForm extends BaseOrderForm
     
     $this->getWidgetSchema()->setLabels(array(
       'client_id' => 'Клиент',
-      'description' => 'Описание заказа',
+      'description' => 'Подробное описание заказа',
       'additional' => 'Доп. информация',
       'due_date' => 'Дата',
       'approved_at' => 'Дата согласования с заказчиком',
@@ -142,6 +142,7 @@ class OrderForm extends BaseOrderForm
       'bill_given' => 'Счёт получен заказчиком',
       'docs_given' => 'Документы выданы',
       'execution_time' => 'Время',
+      'waybill_number' => 'Номер ТТН',
     ));
     // $this->embedRelations(array(
       // 'Invoices' => array(

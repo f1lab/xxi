@@ -72,6 +72,7 @@
   .f04-td td {font-size:9px;line-height:10px;}
   .f04-td .micro {font-size:7px;line-height:8px;display:block;}
 </style>
+
 <body lang=RU style='tab-interval:35.4pt'>
 
 <div class=WordSection1>
@@ -104,7 +105,7 @@
   around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
   mso-element-top:6.75pt;mso-height-rule:exactly'><b><span style='font-size:
   14.0pt;font-family:"Arial","sans-serif";mso-fareast-font-family:"Times New Roman";
-  mso-fareast-language:RU'>Счет-фактура № <?php echo $order->getId()?> от <?php 
+  mso-fareast-language:RU'>Счет-фактура № <?php echo $order->getWaybillNumber()?> от <?php 
     $monthes = array(
     1 => 'Января', 2 => 'Февраля', 3 => 'Марта', 4 => 'Апреля',
     5 => 'Мая', 6 => 'Июня', 7 => 'Июля', 8 => 'Августа',
@@ -221,7 +222,7 @@
   around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
   mso-element-top:6.75pt;mso-height-rule:exactly'><span style='font-size:8.0pt;
   font-family:"Arial","sans-serif";mso-fareast-font-family:"Times New Roman";
-  mso-fareast-language:RU'>Продавец: ООО "Фабрика 21 век"<o:p></o:p></span></p>
+  mso-fareast-language:RU'>Продавец: <?php echo $company->getFullName()?><o:p></o:p></span></p>
   </td>
  </tr>
  <tr style='mso-yfti-irow:4;height:11.4pt'>
@@ -234,7 +235,7 @@
   around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
   mso-element-top:6.75pt;mso-height-rule:exactly'><span style='font-size:8.0pt;
   font-family:"Arial","sans-serif";mso-fareast-font-family:"Times New Roman";
-  mso-fareast-language:RU'>Адрес: 90000, г. Владивосток, проспект 100 лет Владивостока, 145 - 24 <o:p></o:p></span></p>
+  mso-fareast-language:RU'>Адрес: <?php echo $company->getAddressJure()?><o:p></o:p></span></p>
   </td>
  </tr>
  <tr style='mso-yfti-irow:5;height:11.4pt'>
@@ -247,7 +248,7 @@
   around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
   mso-element-top:6.75pt;mso-height-rule:exactly'><span style='font-size:8.0pt;
   font-family:"Arial","sans-serif";mso-fareast-font-family:"Times New Roman";
-  mso-fareast-language:RU'>ИНН/КПП продавца: 2543024343/254301001<o:p></o:p></span></p>
+  mso-fareast-language:RU'>ИНН/КПП продавца: <?php echo $company->getInn()?>/<?php echo $company->getKpp()?><o:p></o:p></span></p>
   </td>
  </tr>
  <tr style='mso-yfti-irow:6;height:11.4pt'>
@@ -1187,7 +1188,7 @@
   around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
   mso-element-top:6.75pt;mso-height-rule:exactly'><span style='font-size:8.0pt;
   font-family:"Arial","sans-serif";mso-fareast-font-family:"Times New Roman";
-  mso-fareast-language:RU'>Горбунова И.Н.<o:p></o:p></span></p>
+  mso-fareast-language:RU'><nobr><?php echo $company->getDirector()?></nobr><o:p></o:p></span></p>
   </td>
   <td width=185 colspan=5 valign=bottom style='width:138.5pt;padding:0cm 5.4pt 0cm 5.4pt;
   height:22.0pt'>
@@ -1239,7 +1240,7 @@
   around;mso-element-anchor-vertical:page;mso-element-anchor-horizontal:margin;
   mso-element-top:6.75pt;mso-height-rule:exactly'><span style='font-size:8.0pt;
   font-family:"Arial","sans-serif";mso-fareast-font-family:"Times New Roman";
-  mso-fareast-language:RU'>Цуканова В.В.<o:p></o:p></span></p>
+  mso-fareast-language:RU'><nobr><?php echo $company->getBuhgalter()?></nobr><o:p></o:p></span></p>
   </td>
   <td width=64 nowrap valign=bottom style='width:48.35pt;border:none;
   border-bottom:solid windowtext 1.0pt;mso-border-bottom-alt:solid windowtext .5pt;
@@ -1632,7 +1633,7 @@
 </div>
 <div class="title-size">Параметры печати</div>
 <div class="print-options">
-<h4 id="t_tn" class="h" style="display: block;">Товарная накладная</h4><ul id="c_tn" class="doc h" style="display: block;"><li><input class="hide-doc" type="checkbox" id="tn-929" checked="">№ <a href="" title="Счет-фактура"><?php echo $order->getId()?></a><span>от 
+<h4 id="t_tn" class="h" style="display: block;">Товарная накладная</h4><ul id="c_tn" class="doc h" style="display: block;"><li><input class="hide-doc" type="checkbox" id="tn-929" checked="">№ <a href="" title="Счет-фактура"><?php echo $order->getWaybillNumber()?></a><span>от 
   <?php 
         if ($order->getSubmitedAt()!=''){
           echo date("d.m.Y",strtotime($order->getSubmitedAt()));

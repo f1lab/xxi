@@ -29,10 +29,7 @@
         <?php if ($sf_user->hasCredential('can_view_reports')): ?>
           <li><a href="<?php echo url_for('@reports') ?>">Отчётность</a></li>
         <?php endif ?>
-        <li><a href="<?php echo url_for('@users-settings') ?>">Мои настройки</a></li>
-        <?php if ($sf_user->isSuperadmin()): ?>
-          <li><a href="<?php echo url_for('@users-show') ?>">Пользователи</a></li>
-        <?php endif ?>
+        
         </ul>
 
         <ul class="nav pull-right"><?php if ($sf_user->isAuthenticated()): ?>
@@ -42,6 +39,16 @@
               <b class="caret"></b>
             </a>
             <ul class="dropdown-menu">
+              <?php if ($sf_user->isSuperadmin() || $sf_user->hasGroup('diretor') || $sf_user->hasGroup('buhgalter')): ?>
+                <li><a href="<?php echo url_for('comsettings/show?id=1') ?>">Настройки компании</a></li>
+              <?php endif ?>
+              <?php if ($sf_user->isSuperadmin() || $sf_user->hasGroup('diretor') || $sf_user->hasGroup('buhgalter')): ?>
+                <li><a href="<?php echo url_for('sharesettings/show?id=1') ?>">Общие настройки</a></li>
+              <?php endif ?>
+              <?php if ($sf_user->isSuperadmin() || $sf_user->hasGroup('director')): ?>
+                <li><a href="<?php echo url_for('@users-show') ?>">Пользователи</a></li>
+              <?php endif ?>
+              <li><a href="<?php echo url_for('@users-settings') ?>">Мои настройки</a></li>
               <li><a href="<?php echo url_for('sf_guard_signout') ?>">Выйти</a></li>
             </ul>
           </li>
