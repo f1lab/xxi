@@ -7,13 +7,7 @@
   <?php //echo $form->renderUsing('bootstrap') ?>
   <?php echo $form->renderGlobalErrors() ?>
   <?php echo $form->renderHiddenFields()?>
-
-
-  <!--Director-->
-  <?php if ($sf_user->hasGroup('director')): ?>
-  <fieldset>
-    <legend>Основная информация</legend>
-    <table>
+  <table>
     <head>
       <tr>
         <td>Описание заказа</td>
@@ -77,6 +71,12 @@
     </tr>
     </body>
   </table>
+
+  <!--Director-->
+  <?php if ($sf_user->hasGroup('director')): ?>
+  <fieldset>
+    <legend>Основная информация</legend>
+    
       <?php echo $form['client_id']->renderLabel()?>
       <?php echo $form['client_id']->render()?><br>
       <?php echo $form['client_id']->renderError()?><br>
@@ -249,70 +249,6 @@
   <?php if ($sf_user->hasGroup('manager')): ?>
     <fieldset>
     <legend>Основная информация</legend>
-        <table>
-    <head>
-      <tr>
-        <td>Описание заказа</td>
-        <td>Кол-во</td>
-        <td>Цена</td>
-        <td>Сумма</td>
-        <td>На удаление</td>
-      </tr>
-    </head>
-    <body>
-
-    <?php foreach ($form['Invoices'] as $invoice ):?>
-      <tr>
-        <td>
-          <?php echo $invoice['description']->render();?>
-        </td>
-        <td>
-          <?php
-            //$this->sfFormFieldSchema->getWidget('number')->setAttribute('readonly', 'readonly');
-          //$invoice['number']->setAttribute('readonly', 'readonly'); ?>
-          <?php echo $invoice['number']->render(); ?>
-        </td>
-        <td>
-          <?php echo $invoice['price']->render(); ?>
-        </td>
-        <td>
-          <?php echo $invoice['sum']->render(); ?>
-        </td>
-        
-        <td align="center">
-          <input type="checkbox" name="order[Invoices][<?php echo $i;?>][delete_object]" id="order_Invoices_[<?php echo $i; $i++;?>]_delete_object">
-      </td>
-      <td>
-        <div style="color:red">
-          <?php echo $invoice['description']->renderError();?>
-          <?php echo $invoice['number']->renderError(); ?>
-          <?php echo $invoice['price']->renderError(); ?>
-          <?php echo $invoice['sum']->renderError(); ?>
-        </div>
-      </td>
-      </tr>
-      
-    <?php endforeach ?>
-    
-    <tr>
-      <td>
-      <?php echo $form['new_Invoices']['0']['description']->render();?>
-      </td>
-      <td>
-      <?php echo $form['new_Invoices']['0']['number']->render();?>
-      </td>
-      <td>
-      <?php echo $form['new_Invoices']['0']['price']->render();?>
-      </td>
-      <td>
-      <?php echo $form['new_Invoices']['0']['sum']->render();?>
-      </td>
-    </tr>
-    <tr>
-      <td><button type="button" class="ahAddRelation" rel="new_Invoices">+</button></td>
-    </tr>
-    </body>
-  </table>
       <?php echo $form['client_id']->renderLabel()?>
       <?php echo $form['client_id']->render()?><br>
       <?php echo $form['client_id']->renderError()?><br>

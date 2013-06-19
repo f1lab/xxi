@@ -487,5 +487,6 @@ class orderActions extends sfActions
   public function executeInvoice(sfWebRequest $request){
    $this->form = new InvoiceForm();
   }
+
 }
 

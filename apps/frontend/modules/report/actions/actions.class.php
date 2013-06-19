@@ -422,4 +422,70 @@ class reportActions extends sfActions
       ->execute()
     ;
   }
+     public function executeExportTo1C(sfWebRequest $request){
+      $this->form = new ExportForm();
+   }
+  public function executeDoExport(sfWebRequest $request){
+    $dateFrom = ''.$request->getParameter('from')['year'].'-'.$request->getParameter('from')['month'].'-'.$request->getParameter('from')['day'].' '.'00:'.'00:'.'00';
+    $dateF = date("Y-m-d H:i:s",strtotime($dateFrom));
+    $dateTo = ''.$request->getParameter('to')['year'].'-'.$request->getParameter('to')['month'].'-'.$request->getParameter('to')['day'].' '.'23:'.'00:'.'59';
+    if ($request->getParameter('to')['year'] == NULL)
+    {
+      $dateTo = date("Y-m-d H:i:s",time());
+    }
+    $dateT = date("Y-m-d H:i:s",strtotime($dateTo));
+    $orders =  Doctrine_Core::getTable('Order')->createQuery('a')
+      ->where('a.created_at >= ?', $dateF)
+      ->andWhere('a.created_at <= ?',$dateT)
+      ->execute();
+      $fp = fopen (sfConfig::get('sf_upload_dir') . '/' . '1C.xml', "w");
+      header('Content-Disposition: attachment; filename="1C.xml"');
+      header("Content-Type:  text/xml");
+      header("Content-Description: File Transfer");
+      fputs($fp,"<?xml version=\"1.0\" encoding=\"utf-8\"?>"."\n");
+      fputs($fp,"<pma_xml_export version=\"1.0\">"."\n");
+        fputs($fp,"<database name=\"xxi\">"."\n");
+    foreach($orders as $order){
+		if ($order->getPayMethod() == "non-cash"){
+          fputs($fp,"<bill name=\"bill\">"."\n");
+			fputs($fp,"<column name=\"number\">".$order->getId()."</column>"."\n");
+			fputs($fp,"<column name=\"date_of_create\">".$order->getCreatedAt()."</column>"."\n");
+			fputs($fp,"<column name=\"date_of_submit\">".$order->getSubmitedAt()."</column>"."\n");
+			fputs($fp,"<table name=\"client\">"."\n");
+              fputs($fp,"<column name=\"name\">".$order->getClient()->getName()."</column>"."\n");
+              fputs($fp,"<column name=\"full_name\">".$order->getClient()->getFullName()."</column>"."\n");
+              fputs($fp,"<column name=\"contact\">".$order->getClient()->getContact()."</column>"."\n");
+              fputs($fp,"<column name=\"phone\">".$order->getClient()->getPhone()."</column>"."\n");
+              fputs($fp,"<column name=\"email\">".$order->getClient()->getEmail()."</column>"."\n");
+              fputs($fp,"<column name=\"address_jure\">".$order->getClient()->getAddressJure()."</column>"."\n");
+              fputs($fp,"<column name=\"inn\">".$order->getClient()->getInn()."</column>"."\n");
+              fputs($fp,"<column name=\"kpp\">".$order->getClient()->getKpp()."</column>"."\n");
+              fputs($fp,"<column name=\"rs\">".$order->getClient()->getRs()."</column>"."\n");
+              fputs($fp,"<column name=\"bank\">".$order->getClient()->getBank()."</column>"."\n");
+              fputs($fp,"<column name=\"bik\">".$order->getClient()->getBik()."</column>"."\n");
+              fputs($fp,"<column name=\"ks\">".$order->getClient()->getKs()."</column>"."\n");
+              fputs($fp,"<column name=\"ogrn\">".$order->getClient()->getOgrn()."</column>"."\n");
+              fputs($fp,"<column name=\"okpo\">".$order->getClient()->getOkpo()."</column>"."\n");
+            fputs($fp,"</table> "."\n");
+            fputs($fp,"<table name=\"orders\">"."\n");
+              foreach($order->getInvoices() as $invoice){
+                fputs($fp,"<column name=\"description\">".$invoice->getDescription()."</column>"."\n");
+                fputs($fp,"<column name=\"number\">".$invoice->getNumber()."</column>"."\n");
+                fputs($fp,"<column name=\"price\">".$invoice->getPrice()."</column>"."\n");
+                fputs($fp,"<column name=\"sum\">".$invoice->getSum()."</column>"."\n");
+                }
+            fputs($fp,"</table> "."\n"); 
+          fputs($fp,"</bill> "."\n");
+		}
+	}
+        fputs($fp,"</database> "."\n");
+      fputs($fp,"</pma_xml_export>"."\n");
+      fputs($fp,"\n");  
+    fputs($fp,"\n");
+  fclose($fp);
+  echo file_get_contents(sfConfig::get('sf_upload_dir') . '/' . '1C.xml');  
+
+  //return sfView::NONE;
+  exit();
+  }
 }

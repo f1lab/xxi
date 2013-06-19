@@ -6,6 +6,7 @@
     'report-workers' => 'Фонд ЗП цеха',
     'report-clients' => 'Клиенты',
     'report-debt' => 'Дебиторка',
+    'export' => 'Выгрузка в 1С',
   );
 ?>
 <ul class="nav nav-tabs"><?php foreach ($routes as $route => $anchor): ?>
