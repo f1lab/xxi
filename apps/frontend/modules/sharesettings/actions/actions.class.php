@@ -71,9 +71,14 @@ class sharesettingsActions extends sfActions
     $form->bind($request->getParameter($form->getName()), $request->getFiles($form->getName()));
     if ($form->isValid())
     {
-      $share_settings = $form->save();
-
-      $this->redirect('sharesettings/edit?id='.$share_settings->getId());
+		$flash = array(
+        'success',
+        'Отлично!',
+        'Данные сохранены.',
+      );
+		$share_settings = $form->save();
+		$this->getUser()->setFlash('message', $flash);
+		$this->redirect('sharesettings/show?id='.$share_settings->getId());
     }
   }
 }

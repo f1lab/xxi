@@ -111,6 +111,13 @@
   </div>
 <?php endif;?>
 <?php
+  if ($sf_user->hasGroup('manager')):
+?>
+  <div class="btn-group">
+      <a href="<?php echo url_for('@order-printaccount?id=' . $order->getId()) ?>" target="_blank" class="btn">Распечатать счет</a>
+  </div>
+<?php endif;?>
+<?php
   if ($sf_user->hasGroup('worker')):
 ?>
   <div class="btn-group">

@@ -12,5 +12,14 @@ class ShareSettingsForm extends BaseShareSettingsForm
 {
   public function configure()
   {
+	$this
+      ->getWidgetSchema()
+            ->setLabels(array(
+              'waybill_count_pos_on_first_page' => 'Количество позиций на первой странице ТТН:',
+              'waybill_count_pos_on_full_page' => 'Количество позиций на полной странице ТТН:',
+              'waybill_count_pos_on_last_page' => 'Количество позиций на последней странице ТТН с полями:',
+              'waybill_counter' => 'Текущий номер ТТН и Счет-фактуры:',
+            ))
+    ;
   }
 }
