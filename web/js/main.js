@@ -61,6 +61,10 @@ $(function() {
       ;
     })
   ;
+
+  $('.datetimepickable').datetimepicker({
+    'language': 'ru'
+  });
 });
 
 function resetNearestSelect(that) {

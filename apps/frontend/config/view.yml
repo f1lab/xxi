@@ -16,6 +16,7 @@ default:
   stylesheets:
     - bootstrap
     - bootstrap-datepicker
+    - datetimepicker
     - timepicker.css
     #- bootstrap-responsive
     - chosen
@@ -27,6 +28,8 @@ default:
     - bootstrap.min.js
     - bootstrap-datepicker
     - bootstrap-datepicker.ru.js
+    - bootstrap-datetimepicker
+    - bootstrap-datetimepicker.ru.js
     - bootstrap-timepicker.js
     - chosen.jquery.min.js
     - main

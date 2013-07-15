@@ -93,7 +93,7 @@ form a[href="#"] {
 }
 
 .dropdown-menu {
-  min-width: 100%;
+  /* min-width: 100%; */
 }
 
 .datepicker.dropdown-menu {

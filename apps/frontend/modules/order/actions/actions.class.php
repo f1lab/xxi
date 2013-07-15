@@ -158,7 +158,7 @@ class orderActions extends sfActions
     $this->form->getValidatorSchema()
       ->offsetUnset('payed')
     ;
-    
+
     $this->processForm($request, $this->form, array('success', 'Отлично!', 'Заказ добавлен.'), '@orders');
     $this->setTemplate('new');
   }
@@ -171,15 +171,25 @@ class orderActions extends sfActions
     $this->form = new OrderForm($this->order);
 
     //FIXME: it's fucking mess below
-    
     if ($this->getUser()->hasGroup('worker')) {
       $this->form->getWidgetSchema()
         ->offsetUnset(array(
-          'client_id', 'description', 'due_date','execution_time',
-          'approved_at', 'files', 'installation_cost',
-          'design_cost', 'contractors_cost',
-          'cost', 'pay_method',
-          'recoil', 'payed', 'delivery_cost',
+          'finished_at',
+          'submited_at',
+          'client_id',
+          'description',
+          'due_date',
+          'execution_time',
+          'approved_at',
+          'files',
+          'installation_cost',
+          'design_cost',
+          'contractors_cost',
+          'cost',
+          'pay_method',
+          'recoil',
+          'payed',
+          'delivery_cost',
           'payed_at',
           'additional',
           'bill_made',
@@ -196,12 +206,22 @@ class orderActions extends sfActions
     } elseif ($this->getUser()->hasGroup('buhgalter')) {
       $this->form->getWidgetSchema()
         ->offsetUnset(array(
-          'client_id', 'description', 'due_date','execution_time',
-          'approved_at', 'files', 'installation_cost',
-          'design_cost', 'contractors_cost',
-          'submited_at', 'state',
-          'recoil', 'started_at', 'finished_at',
-          'delivery_cost', 'expected_at',
+          'client_id',
+          'description',
+          'due_date',
+          'execution_time',
+          'approved_at',
+          'files',
+          'installation_cost',
+          'design_cost',
+          'contractors_cost',
+          'submited_at',
+          'state',
+          'recoil',
+          'started_at',
+          'finished_at',
+          'delivery_cost',
+          'expected_at',
           'area'
         ))
         ->offsetSet('cost', new sfWidgetFormInputText(array(
@@ -222,6 +242,7 @@ class orderActions extends sfActions
           'label' => 'Статус',
         )))
       ;
+
     } else { // manager
       $this->form->getWidgetSchema()
         ->offsetUnset(array(
@@ -260,15 +281,24 @@ class orderActions extends sfActions
 
     //FIXME: it's fucking mess
     if ($this->getUser()->hasGroup('worker')) {
-   
-
       $this->form->getValidatorSchema()
         ->offsetUnset(array(
-          'client_id', 'description', 'due_date','execution_time',
-          'approved_at', 'files', 'installation_cost',
-          'design_cost', 'contractors_cost', 'cost',
-          'pay_method', 'recoil',
-          'payed', 'delivery_cost',
+          'finished_at',
+          'submited_at',
+          'client_id',
+          'description',
+          'due_date',
+          'execution_time',
+          'approved_at',
+          'files',
+          'installation_cost',
+          'design_cost',
+          'contractors_cost',
+          'cost',
+          'pay_method',
+          'recoil',
+          'payed',
+          'delivery_cost',
           'additional',
           'payed_at',
           'bill_made',
@@ -295,6 +325,7 @@ class orderActions extends sfActions
           'expected_at',
         ))
       ;
+
     } else { // manager
       $this->form->getValidatorSchema()
         ->offsetUnset(array(
@@ -366,50 +397,52 @@ class orderActions extends sfActions
 
     die($out);
   }
-  
+
   public function executePrintAccount(sfWebRequest $request)
   {
-    $this->order = Doctrine_Core::getTable('Order')
-      ->find($request->getParameter('id'));
-    $this->company = Doctrine_Core::getTable('CompanySettings')
-      ->find(1);
-      $this->setLayout(false);
+    $this->order = Doctrine_Core::getTable('Order')->find($request->getParameter('id'));
+    $this->company = Doctrine_Core::getTable('CompanySettings')->find(1);
+
+    $this->setLayout(false);
   }
-  
+
   public function executePrintInvoice(sfWebRequest $request)
   {
-    $this->order = Doctrine_Core::getTable('Order')
-      ->find($request->getParameter('id'));
-    $this->company = Doctrine_Core::getTable('CompanySettings')
-      ->find(1);
-    $this->settings = Doctrine_Core::getTable('ShareSettings')
-      ->find(1);
-    if ($this->order->getWaybillNumber() == NULL)
-    {
-      $this->order->setWaybillNumber($this->settings->getWaybillCounter()+1);
-      $this->order->save();
-      $this->settings->setWaybillCounter($this->settings->getWaybillCounter()+1);
-      $this->settings->save();
+    $this->order = Doctrine_Core::getTable('Order')->find($request->getParameter('id'));
+    $this->company = Doctrine_Core::getTable('CompanySettings')->find(1);
+    $this->settings = Doctrine_Core::getTable('ShareSettings')->find(1);
+
+    if ($this->order->getWaybillNumber() == null) {
+      $this->order
+        ->setWaybillNumber($this->settings->getWaybillCounter()+1)
+        ->save()
+      ;
+      $this->settings
+        ->setWaybillCounter($this->settings->getWaybillCounter()+1)
+        ->save()
+      ;
     }
 
-      $this->setLayout(false);
+    $this->setLayout(false);
   }
   public function executePrintWaybill(sfWebRequest $request)
   {
-    $this->order = Doctrine_Core::getTable('Order')
-      ->find($request->getParameter('id'));
-    $this->company = Doctrine_Core::getTable('CompanySettings')
-      ->find(1);
-      $this->setLayout(false);
-    $this->settings = Doctrine_Core::getTable('ShareSettings')
-      ->find(1);
-    if ($this->order->getWaybillNumber() == NULL)
-    {
-      $this->order->setWaybillNumber($this->settings->getWaybillCounter()+1);
-      $this->order->save();
-      $this->settings->setWaybillCounter($this->settings->getWaybillCounter()+1);
-      $this->settings->save();
+    $this->order = Doctrine_Core::getTable('Order')->find($request->getParameter('id'));
+    $this->company = Doctrine_Core::getTable('CompanySettings')->find(1);
+    $this->settings = Doctrine_Core::getTable('ShareSettings')->find(1);
+
+    if ($this->order->getWaybillNumber() == null) {
+      $this->order
+        ->setWaybillNumber($this->settings->getWaybillCounter()+1)
+        ->save()
+      ;
+      $this->settings
+        ->setWaybillCounter($this->settings->getWaybillCounter()+1)
+        ->save()
+      ;
     }
+
+    $this->setLayout(false);
   }
 
   public function executeComment(sfWebRequest $request)
@@ -450,12 +483,12 @@ class orderActions extends sfActions
     }
   }
 
-  public function executeUnread(sfWebRequest $request){
-
+  public function executeUnread(sfWebRequest $request)
+  {
     $user = $this->getUser()->getGuardUser()->getId();
     $countUnreadedTickets = 0;
-    if($this->getUser()->hasGroup('manager'))
-    {
+
+    if($this->getUser()->hasGroup('manager')) {
       $query = "SELECT DISTINCT o.id, c.`id`, cr.`id` FROM
                 `order` o
                 left join `comment` c ON o.id = c.order_id
@@ -471,8 +504,7 @@ class orderActions extends sfActions
                 OR o.`state`='prepress')";
     }
 
-    if($this->getUser()->hasGroup('worker'))
-    {
+    if($this->getUser()->hasGroup('worker')) {
       $query = "SELECT DISTINCT o.id, c.`id`, cr.`id` FROM
                 `order` o
                 left join `comment` c ON o.id = c.order_id
@@ -487,17 +519,18 @@ class orderActions extends sfActions
     }
 
 	  $executedQuery = Doctrine_Manager::connection()
-        ->execute($query)
-        ->fetchAll(PDO::FETCH_COLUMN)
-      ;
-      $countUnreadedTickets = count($executedQuery);
+      ->execute($query)
+      ->fetchAll(PDO::FETCH_COLUMN)
+    ;
+    $countUnreadedTickets = count($executedQuery);
+
     return $this->renderText(json_encode(array(
-    'countUnreadedTickets' => $countUnreadedTickets,
+      'countUnreadedTickets' => $countUnreadedTickets,
     )));
   }
-  public function executeInvoice(sfWebRequest $request){
-   $this->form = new InvoiceForm();
+
+  public function executeInvoice(sfWebRequest $request)
+  {
+    $this->form = new InvoiceForm();
   }
-
 }
-

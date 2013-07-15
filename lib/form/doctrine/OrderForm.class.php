@@ -43,7 +43,7 @@ class OrderForm extends BaseOrderForm
       // 'customEmbeddedFormLabelMethod' => 'getLabelTitle'
         )
       )
-    ); 
+    );
 
     $this->getWidgetSchema()
       ->offsetSet('client_id', new sfWidgetFormDoctrineChoice(array(
@@ -100,7 +100,7 @@ class OrderForm extends BaseOrderForm
         ),
       ))) */
       ->offsetSet('approved_at', new sfWidgetFormBootstrapDate())
-      ->offsetSet('expected_at', new sfWidgetFormBootstrapDate())
+      ->offsetSet('expected_at', new sfWidgetFormBootstrapDateTime())
       ->offsetSet('started_at', new sfWidgetFormBootstrapDate())
       ->offsetSet('finished_at', new sfWidgetFormBootstrapDate())
       ->offsetSet('submited_at', new sfWidgetFormBootstrapDate())
@@ -110,11 +110,7 @@ class OrderForm extends BaseOrderForm
       )))
       ->offsetSet('payed_at', new sfWidgetFormBootstrapDate())
     ;
-    $this->setValidator('description', new sfValidatorString(
-                                    array('required' => false),
-                                    array('required' => 'Поле не должно быть пустым.')));
 
-    
     $this->getWidgetSchema()->setLabels(array(
       'client_id' => 'Клиент',
       'description' => 'Подробное описание заказа',
@@ -153,5 +149,11 @@ class OrderForm extends BaseOrderForm
     $this->getWidgetSchema()->offsetGet('description')->setAttribute('class', 'input-block-level');
     $this->getWidgetSchema()->offsetGet('additional')->setAttribute('class', 'input-block-level');
     $this->getWidgetSchema()->offsetGet('files')->setAttribute('class', 'input-block-level');
+
+    $this
+      ->getValidatorSchema()
+      ->offsetSet('description', new sfValidatorString(array('required' => false), array('required' => 'Поле не должно быть пустым.')))
+      ->offsetSet('expected_at', new sfValidatorBootstrapDateTime(array('required' => false)))
+    ;
   }
 }
