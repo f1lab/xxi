@@ -149,5 +149,9 @@ class OrderForm extends BaseOrderForm
         // 'considerNewFormEmptyFields' => array('description', 'number', 'price', 'sum'),
       // )
     // ));
+
+    $this->getWidgetSchema()->offsetGet('description')->setAttribute('class', 'input-block-level');
+    $this->getWidgetSchema()->offsetGet('additional')->setAttribute('class', 'input-block-level');
+    $this->getWidgetSchema()->offsetGet('files')->setAttribute('class', 'input-block-level');
   }
 }
