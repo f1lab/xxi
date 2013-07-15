@@ -6,10 +6,6 @@ homepage:
   url:   /
   param: { module: main, action: index }
 
-clients:
-  url:   /clients
-  param: { module: client, action: index }
-  
 company-settings:
   url:   /company-settings/:id
   param: { module: comsettings, action: show }
@@ -17,11 +13,15 @@ company-settings:
 share-settings:
   url:   /share-settings/:id
   param: { module: sharesettings, action: show}
-  
+
 invoice:
   url:   /invoice
   param: { module: order, action:invoice }
-  
+
+clients:
+  url:   /clients
+  param: { module: client, action: index }
+
 client:
   url:   /clients/:id/:state
   param: { module: client, action: show, state: active }
@@ -50,6 +50,39 @@ client-update:
 client-del:
   url:   /clients/:id/del
   param: { module: client, action: del }
+  requirements: { id: \d+ }
+
+suppliers:
+  url:   /suppliers
+  param: { module: supplier, action: index }
+
+supplier:
+  url:   /suppliers/:id
+  param: { module: supplier, action: show }
+  requirements:
+    id: \d+
+
+supplier-new:
+  url:   /suppliers/new
+  param: { module: supplier, action: new }
+
+supplier-create:
+  url:   /suppliers/create
+  param: { module: supplier, action: create }
+
+supplier-edit:
+  url:   /suppliers/:id/edit
+  param: { module: supplier, action: edit }
+  requirements: { id: \d+ }
+
+supplier-update:
+  url:   /suppliers/:id/update
+  param: { module: supplier, action: update }
+  requirements: { id: \d+ }
+
+supplier-del:
+  url:   /clients/:id/del
+  param: { suppliers: supplier, action: del }
   requirements: { id: \d+ }
 
 orders:
@@ -151,7 +184,7 @@ users-show:
 users-settings:
   url:   /users/settings
   param: { module: users, action: settings  }
-  
+
 users-create:
   url:   /users/create
   param: { module: users, action: create }
@@ -159,7 +192,7 @@ users-create:
 export:
   url:   /export
   param: { module: report, action: exportTo1C }
-  
+
 do-export:
   url:   /do-export
   param: { module: report, action: doExport }

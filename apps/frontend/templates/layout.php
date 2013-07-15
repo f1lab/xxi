@@ -30,6 +30,8 @@
           <li><a href="<?php echo url_for('@reports') ?>">Отчётность</a></li>
         <?php endif ?>
         
+          <li><a href="<?php echo url_for('@suppliers') ?>">Поставщики</a></li>
+          <li><a href="<?php echo url_for('material/index') ?>">Материалы</a></li>
         </ul>
 
         <ul class="nav pull-right"><?php if ($sf_user->isAuthenticated()): ?>

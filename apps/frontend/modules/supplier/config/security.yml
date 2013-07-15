@@ -1,0 +1,14 @@
+all:
+  credentials: [[director]]
+
+edit:
+  credentials: [[director]]
+
+update:
+  credentials: [[director]]
+
+new:
+  credentials: [[director]]
+
+create:
+  credentials: [[director]]
