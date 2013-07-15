@@ -156,6 +156,14 @@ users-create:
   url:   /users/create
   param: { module: users, action: create }
 
+export:
+  url:   /export
+  param: { module: report, action: exportTo1C }
+  
+do-export:
+  url:   /do-export
+  param: { module: report, action: doExport }
+
 users-edit:
   url:   /users/edit
   param: { module: users, action: edit }

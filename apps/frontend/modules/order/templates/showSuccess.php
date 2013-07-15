@@ -127,6 +127,7 @@
       <?php endif;?>
   </div>
 <?php endif;?>
+        
 <hr />
 
 <h2>Комментарии</h2>
