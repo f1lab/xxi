@@ -33,6 +33,11 @@ class OrderTable extends Doctrine_Table
     'prepress' => 'Препресс',
   );
 
+  public static $statesForMaster = array(
+    'working' => 'В работе',
+    'done' => 'Всё готово',
+  );
+
   public static $statesForMonitor = array(
     'work' => 'В цех',
     'working' => 'В работе',

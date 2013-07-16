@@ -7,76 +7,153 @@
   <?php //echo $form->renderUsing('bootstrap') ?>
   <?php echo $form->renderGlobalErrors() ?>
   <?php echo $form->renderHiddenFields()?>
-  <table>
-    <head>
-      <tr>
-        <td>Описание заказа</td>
-        <td>Кол-во</td>
-        <td>Цена</td>
-        <td>Сумма</td>
-        <td>На удаление</td>
-      </tr>
-    </head>
-    <body>
 
-    <?php foreach ($form['Invoices'] as $invoice ):?>
-      <tr>
-        <td>
-          <?php echo $invoice['description']->render();?>
-        </td>
-        <td>
-          <?php
-            //$this->sfFormFieldSchema->getWidget('number')->setAttribute('readonly', 'readonly');
-          //$invoice['number']->setAttribute('readonly', 'readonly'); ?>
-          <?php echo $invoice['number']->render(); ?>
-        </td>
-        <td>
-          <?php echo $invoice['price']->render(); ?>
-        </td>
-        <td>
-          <?php echo $invoice['sum']->render(); ?>
-        </td>
-        
-        <td align="center">
-          <input type="checkbox" name="order[Invoices][<?php echo $i;?>][delete_object]" id="order_Invoices_[<?php echo $i; $i++;?>]_delete_object">
-      </td>
-      <td>
-        <div style="color:red">
-          <?php echo $invoice['description']->renderError();?>
-          <?php echo $invoice['number']->renderError(); ?>
-          <?php echo $invoice['price']->renderError(); ?>
-          <?php echo $invoice['sum']->renderError(); ?>
-        </div>
-      </td>
-      </tr>
-      
-    <?php endforeach ?>
-    
-    <tr>
-      <td>
-      <?php echo $form['new_Invoices']['0']['description']->render();?>
-      </td>
-      <td>
-      <?php echo $form['new_Invoices']['0']['number']->render();?>
-      </td>
-      <td>
-      <?php echo $form['new_Invoices']['0']['price']->render();?>
-      </td>
-      <td>
-      <?php echo $form['new_Invoices']['0']['sum']->render();?>
-      </td>
-    </tr>
-    <tr>
-      <td><button type="button" class="ahAddRelation" rel="new_Invoices">+</button></td>
-    </tr>
-    </body>
-  </table>
+  <?php if ($sf_user->hasCredential('can_edit_materials')): ?>
+    <fieldset>
+      <legend>Расход материалов</legend>
+      <table class="table-condensed add-remove-chzn-for-relations">
+        <thead>
+          <tr>
+            <td>Наименование материала</td>
+            <td>Кол-во (объём)</td>
+            <td>На удаление</td>
+          </tr>
+        </thead>
+        <tbody>
+          <?php if (count($form['Utilizations'])): ?>
+            <?php foreach ($form['Utilizations'] as $i => $invoice ):?>
+              <tr>
+                <td>
+                  <?php echo $invoice['material_id']->render();?>
+                </td>
+                <td>
+                  <?php echo $invoice['amount']->render(); ?>
+                </td>
+
+                <td align="center">
+                  <input type="checkbox" name="order[Utilizations][<?php echo $i;?>][delete_object]" id="order_Utilizations_[<?php echo $i; $i++;?>]_delete_object">
+                </td>
+                <td>
+                  <div style="color:red">
+                    <?php echo $invoice['material_id']->renderError();?>
+                    <?php echo $invoice['amount']->renderError(); ?>
+                  </div>
+                </td>
+              </tr>
+            <?php endforeach ?>
+          <?php else: ?>
+            <tr>
+              <td colspan="3"><div class="alert alert-info">Нет расходов</div></td>
+            </tr>
+          <?php endif ?>
+
+          <tr>
+            <td>Наименование материала</td>
+            <td>Кол-во (объём)</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>
+              <?php echo $form['new_Utilizations']['0']['material_id']->render();?>
+            </td>
+            <td>
+              <?php echo $form['new_Utilizations']['0']['amount']->render();?>
+            </td>
+            <td>
+              <div style="color:red">
+                <?php echo $form['new_Utilizations']['0']['material_id']->renderError();?>
+                <?php echo $form['new_Utilizations']['0']['amount']->renderError(); ?>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td><button type="button" class="ahAddRelation" rel="new_Utilizations">+</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </fieldset>
+  <?php endif ?>
+
+  <?php if (!$sf_user->hasGroup('master')): ?>
+    <fieldset>
+      <legend>Позиции заказа</legend>
+      <table>
+        <thead>
+          <tr>
+            <td>Описание заказа</td>
+            <td>Кол-во</td>
+            <td>Цена</td>
+            <td>Сумма</td>
+            <td>На удаление</td>
+          </tr>
+        </thead>
+        <tbody>
+          <?php foreach ($form['Invoices'] as $i => $invoice ):?>
+            <tr>
+              <td>
+                <?php echo $invoice['description']->render();?>
+              </td>
+              <td>
+                <?php
+                  //$this->sfFormFieldSchema->getWidget('number')->setAttribute('readonly', 'readonly');
+                //$invoice['number']->setAttribute('readonly', 'readonly'); ?>
+                <?php echo $invoice['number']->render(); ?>
+              </td>
+              <td>
+                <?php echo $invoice['price']->render(); ?>
+              </td>
+              <td>
+                <?php echo $invoice['sum']->render(); ?>
+              </td>
+
+              <td align="center">
+                <input type="checkbox" name="order[Invoices][<?php echo $i;?>][delete_object]" id="order_Invoices_[<?php echo $i; $i++;?>]_delete_object">
+              </td>
+              <td>
+                <div style="color:red">
+                  <?php echo $invoice['description']->renderError();?>
+                  <?php echo $invoice['number']->renderError(); ?>
+                  <?php echo $invoice['price']->renderError(); ?>
+                  <?php echo $invoice['sum']->renderError(); ?>
+                </div>
+              </td>
+            </tr>
+          <?php endforeach ?>
+
+          <tr>
+            <td>
+              <?php echo $form['new_Invoices']['0']['description']->render();?>
+            </td>
+            <td>
+              <?php echo $form['new_Invoices']['0']['number']->render();?>
+            </td>
+            <td>
+              <?php echo $form['new_Invoices']['0']['price']->render();?>
+            </td>
+            <td>
+              <?php echo $form['new_Invoices']['0']['sum']->render();?>
+            </td>
+          </tr>
+          <tr>
+            <td><button type="button" class="ahAddRelation" rel="new_Invoices">+</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </fieldset>
+  <?php else: ?>
+    <fieldset>
+    <legend>Статусы</legend>
+      <?php echo $form['state']->renderLabel()?>
+      <?php echo $form['state']->render()?><br>
+      <?php echo $form['state']->renderError()?>
+    </fieldset>
+  <?php endif ?>
 
   <!--Director-->
   <?php if ($sf_user->hasGroup('director')): ?>
   <fieldset>
     <legend>Основная информация</legend>
-    
+
       <?php echo $form['client_id']->renderLabel()?>
       <?php echo $form['client_id']->render()?><br>
       <?php echo $form['client_id']->renderError()?><br>
@@ -88,7 +165,7 @@
       <?php echo $form['additional']->renderLabel()?>
       <?php echo $form['additional']->render()?><br>
       <?php echo $form['additional']->renderError()?><br>
-      
+
       <?php echo $form['approved_at']->renderLabel()?>
       <?php echo $form['approved_at']->render()?><br>
       <?php echo $form['approved_at']->renderError()?>
@@ -96,9 +173,9 @@
       <?php echo $form['files']->render()?><br>
       <?php echo $form['files']->renderError()?><br>
   </fieldset>
-  
+
   <fieldset>
-    <legend>Сроки исполнения</legend> 
+    <legend>Сроки исполнения</legend>
       <?php echo $form['due_date']->renderLabel()?>
       <?php echo $form['due_date']->render()?><br>
       <?php echo $form['due_date']->renderError()?>
@@ -108,7 +185,7 @@
       <!-- Добавить время-->
   </fieldset>
   <fieldset>
-    <legend>Стоимости</legend> 
+    <legend>Стоимости</legend>
       <?php echo $form['installation_cost']->renderLabel()?>
       <?php echo $form['installation_cost']->render()?><br>
       <?php echo $form['installation_cost']->renderError()?>
@@ -126,7 +203,7 @@
       <?php echo $form['cost']->renderError()?>
   </fieldset>
   <fieldset>
-    <legend>Оплата</legend> 
+    <legend>Оплата</legend>
       <?php echo $form['pay_method']->renderLabel()?>
       <?php echo $form['pay_method']->render()?><br>
       <?php echo $form['pay_method']->renderError()?>
@@ -139,15 +216,15 @@
       <?php echo $form['payed_at']->renderLabel()?>
       <?php echo $form['payed_at']->render()?><br>
       <?php echo $form['payed_at']->renderError()?>
-  </fieldset>  
+  </fieldset>
   <fieldset>
-    <legend>Статусы</legend> 
+    <legend>Статусы</legend>
       <?php echo $form['state']->renderLabel()?>
       <?php echo $form['state']->render()?><br>
       <?php echo $form['state']->renderError()?>
   </fieldset>
   <fieldset>
-    <legend>Выполнение заказа</legend> 
+    <legend>Выполнение заказа</legend>
       <?php echo $form['started_at']->renderLabel()?>
       <?php echo $form['started_at']->render()?><br>
       <?php echo $form['started_at']->renderError()?>
@@ -162,7 +239,7 @@
       <?php echo $form['submited_at']->renderError()?>
   </fieldset>
   <fieldset>
-    <legend>Бухгалтерия</legend> 
+    <legend>Бухгалтерия</legend>
       <?php echo $form['bill_made']->renderLabel()?>
       <?php echo $form['bill_made']->render()?><br>
       <?php echo $form['bill_made']->renderError()?>
@@ -174,11 +251,11 @@
       <?php echo $form['docs_given']->renderError()?>
   </fieldset>
   <?php endif?>
- 
+
  <!--Worker-->
   <?php if ($sf_user->hasGroup('worker')): ?>
     <fieldset>
-      <legend>Выполнение заказа</legend> 
+      <legend>Выполнение заказа</legend>
       <?php echo $form['started_at']->renderLabel()?>
       <?php echo $form['started_at']->render()?><br>
       <?php echo $form['started_at']->renderError()?>
@@ -198,26 +275,26 @@
       <?php echo $form['state']->render()?><br>
       <?php echo $form['state']->renderError()?>
   </fieldset>
-       
+
   <?php endif?>
-  
+
   <!--Buhgalter-->
   <?php if ($sf_user->hasGroup('buhgalter')): ?>
     <fieldset>
     <legend>Основная информация</legend>
-      
+
       <?php echo $form['additional']->renderLabel()?>
       <?php echo $form['additional']->render()?><br>
       <?php echo $form['additional']->renderError()?><br>
     </fieldset>
     <fieldset>
-    <legend>Стоимости</legend> 
+    <legend>Стоимости</legend>
       <?php echo $form['cost']->renderLabel()?>
       <?php echo $form['cost']->render()?><br>
       <?php echo $form['cost']->renderError()?>
     </fieldset>
     <fieldset>
-    <legend>Оплата</legend> 
+    <legend>Оплата</legend>
       <?php echo $form['pay_method']->renderLabel()?>
       <?php echo $form['pay_method']->render()?><br>
       <?php echo $form['pay_method']->renderError()?>
@@ -227,9 +304,9 @@
       <?php echo $form['payed_at']->renderLabel()?>
       <?php echo $form['payed_at']->render()?><br>
       <?php echo $form['payed_at']->renderError()?>
-    </fieldset> 
+    </fieldset>
     <fieldset>
-    <legend>Бухгалтерия</legend> 
+    <legend>Бухгалтерия</legend>
       <?php echo $form['bill_made']->renderLabel()?>
       <?php echo $form['bill_made']->render()?><br>
       <?php echo $form['bill_made']->renderError()?>
@@ -244,7 +321,7 @@
       <?php echo $form['waybill_number']->renderError()?>
   </fieldset>
   <?php endif?>
-  
+
   <!--Manager-->
   <?php if ($sf_user->hasGroup('manager')): ?>
     <fieldset>
@@ -260,16 +337,16 @@
       <?php echo $form['additional']->renderLabel()?>
       <?php echo $form['additional']->render()?><br>
       <?php echo $form['additional']->renderError()?><br>
-      
+
       <?php echo $form['approved_at']->renderLabel()?>
       <?php echo $form['approved_at']->render()?><br>
       <?php echo $form['approved_at']->renderError()?>
       <?php echo $form['files']->renderLabel()?>
       <?php echo $form['files']->render()?><br>
       <?php echo $form['files']->renderError()?><br>
-    </fieldset>  
+    </fieldset>
     <fieldset>
-    <legend>Сроки исполнения</legend> 
+    <legend>Сроки исполнения</legend>
       <?php echo $form['due_date']->renderLabel()?>
       <?php echo $form['due_date']->render()?><br>
       <?php echo $form['due_date']->renderError()?>
@@ -278,7 +355,7 @@
       <?php echo $form['execution_time']->renderError()?>
     </fieldset>
     <fieldset>
-    <legend>Стоимости</legend> 
+    <legend>Стоимости</legend>
       <?php echo $form['installation_cost']->renderLabel()?>
       <?php echo $form['installation_cost']->render()?><br>
       <?php echo $form['installation_cost']->renderError()?>
@@ -296,32 +373,32 @@
       <?php echo $form['cost']->renderError()?>
     </fieldset>
     <fieldset>
-    <legend>Оплата</legend> 
+    <legend>Оплата</legend>
       <?php echo $form['pay_method']->renderLabel()?>
       <?php echo $form['pay_method']->render()?><br>
       <?php echo $form['pay_method']->renderError()?>
       <?php echo $form['recoil']->renderLabel()?>
       <?php echo $form['recoil']->render()?><br>
       <?php echo $form['recoil']->renderError()?>
-    </fieldset> 
+    </fieldset>
     <fieldset>
-    <legend>Бухгалтерия</legend> 
+    <legend>Бухгалтерия</legend>
       <?php echo $form['bill_given']->renderLabel()?>
       <?php echo $form['bill_given']->render()?><br>
       <?php echo $form['bill_given']->renderError()?>
       <?php echo $form['docs_given']->renderLabel()?>
       <?php echo $form['docs_given']->render()?><br>
       <?php echo $form['docs_given']->renderError()?>
-    </fieldset> 
+    </fieldset>
     <fieldset>
-    <legend>Статусы</legend> 
+    <legend>Статусы</legend>
       <?php echo $form['state']->renderLabel()?>
       <?php echo $form['state']->render()?><br>
       <?php echo $form['state']->renderError()?>
     </fieldset>
   <?php endif?>
-  
-  
+
+
   <div class="form-actions">
     <button type="submit" class="btn btn-primary">Сохранить</button>
     <a href="<?php echo url_for('@order?id=' . $order->getId()) ?>" class="btn">Назад</a>

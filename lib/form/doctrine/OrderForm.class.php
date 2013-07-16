@@ -20,10 +20,30 @@ class OrderForm extends BaseOrderForm
       $this['deleted_at'],
       $this['version']
     );
-    $this->embedRelations(array(
-    'Invoices' => array(
+
+    $utilizationsRelation = array('Utilizations' => array(
+      'considerNewFormEmptyFields'    => array('material_id', 'amount'),
+      'noNewForm'                     => false,
+      // 'noNewForm'                     => true,
+      'newFormLabel'                  => 'Новый выпрос',
+      'newFormClass'                  => 'UtilizationForm',
+      'newFormClassArgs'              => array(array('sf_user' => $this->getOption('sf_user'))),
+      'displayEmptyRelations'         => true,
+      'formClass'                     => 'UtilizationForm',
+      'formClassArgs'                 => array(array('ah_add_delete_checkbox' => true)),
+      'newFormAfterExistingRelations' => true,
+      'formFormatter'                 => null,
+      'multipleNewForms'              => true,
+      'newFormsInitialCount'          => 1,
+      'newFormsContainerForm'         => null, // pass BaseForm object here or we will create ahNewRelationsContainerForm
+      'newRelationButtonLabel'        => '+',
+      'newRelationAddByCloning'       => true,
+      'newRelationUseJSFramework'     => 'jQuery',
+      // 'customEmbeddedFormLabelMethod' => 'getLabelTitle'
+    ));
+
+    $invoicesRelation = array('Invoices' => array(
       'considerNewFormEmptyFields'    => array('description', 'number', 'price', 'sum'),
-      // 'considerNewFormEmptyFields'    => array('name', 'repo_path', 'repo_username', 'repo_password'),
       'noNewForm'                     => false,
       // 'noNewForm'                     => true,
       'newFormLabel'                  => 'Новый выпрос',
@@ -41,9 +61,12 @@ class OrderForm extends BaseOrderForm
       'newRelationAddByCloning'       => true,
       'newRelationUseJSFramework'     => 'jQuery',
       // 'customEmbeddedFormLabelMethod' => 'getLabelTitle'
-        )
-      )
-    );
+    ));
+
+    $this->embedRelations(array_merge(
+      sfContext::getInstance()->getUser()->hasCredential('can_edit_materials') ? $utilizationsRelation : [],
+      sfContext::getInstance()->getUser()->hasGroup('master') ? [] : $invoicesRelation
+    ));
 
     $this->getWidgetSchema()
       ->offsetSet('client_id', new sfWidgetFormDoctrineChoice(array(

@@ -132,6 +132,10 @@ class OrderFormFilter extends BaseOrderFormFilter
         'done',
         'prepress',
       ));
+    } elseif ($user->hasGroup('master')) {
+      $this->setDefault('state', array(
+        'working',
+      ));
     }
 
     if ($user->hasCredential('manager')) {

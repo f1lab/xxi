@@ -65,6 +65,22 @@ $(function() {
   $('.datetimepickable').datetimepicker({
     'language': 'ru'
   });
+
+  $('.add-remove-chzn-for-relations')
+    .find('tr')
+      .on('beforeclone.ah', function() {
+        $(this)
+          .find('.chzn-select')
+            .show()
+              .removeClass('chzn-done')
+              .next()
+                .remove()
+        ;
+      })
+      .on('afteradd.ah', function() {
+        $('.chzn-select').chosen();
+      })
+  ;
 });
 
 function resetNearestSelect(that) {

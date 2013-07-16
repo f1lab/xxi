@@ -85,3 +85,25 @@ RefSupplierMaterial:
       local: supplier_id
     Material:
       local: material_id
+
+Utilization:
+  columns:
+    order_id:
+      type: integer
+      notnull: true
+    material_id:
+      type: integer
+      notnull: true
+    amount:
+      type: decimal
+      notnull: true
+      scale: 4
+  relations:
+    Order:
+      local: order_id
+      foreign: id
+      foreignAlias: Utilizations
+    Material:
+      local: material_id
+      foreign: id
+      foreignAlias: Utilizations

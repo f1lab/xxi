@@ -243,6 +243,18 @@ class orderActions extends sfActions
         )))
       ;
 
+    } elseif ($this->getUser()->hasGroup('master')) {
+      $this->form->useFields(array(
+        'id',
+        'Utilizations',
+        'new_Utilizations',
+        'state',
+      ));
+      $this->form->getWidgetSchema()->offsetSet('state', new sfWidgetFormChoice(array(
+        'choices' => OrderTable::$statesForMaster,
+        'label' => 'Статус',
+      )));
+
     } else { // manager
       $this->form->getWidgetSchema()
         ->offsetUnset(array(
@@ -325,6 +337,14 @@ class orderActions extends sfActions
           'expected_at',
         ))
       ;
+
+    } elseif ($this->getUser()->hasGroup('master')) {
+      $this->form->useFields(array(
+        'id',
+        'Utilizations',
+        'new_Utilizations',
+        'state',
+      ));
 
     } else { // manager
       $this->form->getValidatorSchema()
