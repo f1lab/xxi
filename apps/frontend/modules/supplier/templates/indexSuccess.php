@@ -3,7 +3,7 @@
 </div>
 
 <div class="btn-toolbar">
-<?php if ($sf_user->hasGroup('director') or $sf_user->hasCredential('can_create_suppliers')): ?>
+<?php if ($sf_user->hasGroup('director') or $sf_user->hasCredential('can_edit_suppliers')): ?>
   <div class="btn-group">
     <a href="<?php echo url_for('@supplier-new') ?>" class="btn btn-primary">Добавить поставщика</a>
   </div>

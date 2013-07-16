@@ -24,14 +24,18 @@
         <ul class="nav">
           <li><a href="<?php echo url_for('@clients') ?>">Клиенты</a></li>
           <li><a href="<?php echo url_for('@orders') ?>">Заказы</a></li>
-          
 
-        <?php if ($sf_user->hasCredential('can_view_reports')): ?>
-          <li><a href="<?php echo url_for('@reports') ?>">Отчётность</a></li>
-        <?php endif ?>
-        
-          <li><a href="<?php echo url_for('@suppliers') ?>">Поставщики</a></li>
-          <li><a href="<?php echo url_for('material/index') ?>">Материалы</a></li>
+          <?php if ($sf_user->hasCredential('can_view_reports')): ?>
+            <li><a href="<?php echo url_for('@reports') ?>">Отчётность</a></li>
+          <?php endif ?>
+
+          <?php if ($sf_user->hasCredential('can_edit_suppliers')): ?>
+            <li><a href="<?php echo url_for('@suppliers') ?>">Поставщики</a></li>
+          <?php endif ?>
+
+          <?php if ($sf_user->hasCredential('can_edit_materials')): ?>
+            <li><a href="<?php echo url_for('material/index') ?>">Материалы</a></li>
+          <?php endif ?>
         </ul>
 
         <ul class="nav pull-right"><?php if ($sf_user->isAuthenticated()): ?>
