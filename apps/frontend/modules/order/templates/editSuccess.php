@@ -179,10 +179,6 @@
       <?php echo $form['due_date']->renderLabel()?>
       <?php echo $form['due_date']->render()?><br>
       <?php echo $form['due_date']->renderError()?>
-      <?php echo $form['execution_time']->renderLabel()?>
-      <?php echo $form['execution_time']->render()?><br>
-      <?php echo $form['execution_time']->renderError()?>
-      <!-- Добавить время-->
   </fieldset>
   <fieldset>
     <legend>Стоимости</legend>
@@ -350,9 +346,6 @@
       <?php echo $form['due_date']->renderLabel()?>
       <?php echo $form['due_date']->render()?><br>
       <?php echo $form['due_date']->renderError()?>
-      <?php echo $form['execution_time']->renderLabel()?>
-      <?php echo $form['execution_time']->render()?><br>
-      <?php echo $form['execution_time']->renderError()?>
     </fieldset>
     <fieldset>
     <legend>Стоимости</legend>

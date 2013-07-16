@@ -86,48 +86,13 @@ class OrderForm extends BaseOrderForm
       ->offsetSet('area', new sfWidgetFormChoice(array(
         'choices' => OrderTable::$area,
       )))
-      ->offsetSet('due_date', new sfWidgetFormBootstrapDate())
-      /* ->offsetSet('due_date', new sfWidgetFormDateTime(array(
-        'format' => '%date%   %time%',
-        'date' => array(
-          'format' => '%day% %month% %year%',
-          'years' => array(
-            date('Y') => date('Y'),
-            date('Y')+1 => date('Y')+1,
-          ),
-          'empty_values' => array(
-            'year' => 'год',
-            'month' => 'месяц',
-            'day' => 'день',
-          ),
-        ),
-        'time' => array(
-          'format_without_seconds' => '%hour% %minute%',
-          'minutes' => array(
-            0 => '00',
-            15 => 15,
-            30 => 30,
-            45 => 45,
-          ),
-          'empty_values' => array(
-            'hour' => 'час',
-            'minute' => 'минуты',
-          ),
-        ),
-      ), array(
-        'date' => array(
-          'class' => 'span2',
-        ),
-        'time' => array(
-          'class' => 'span1',
-        ),
-      ))) */
+      ->offsetSet('due_date', new sfWidgetFormBootstrapDateTime())
       ->offsetSet('approved_at', new sfWidgetFormBootstrapDate())
       ->offsetSet('expected_at', new sfWidgetFormBootstrapDateTime())
       ->offsetSet('started_at', new sfWidgetFormBootstrapDate())
       ->offsetSet('finished_at', new sfWidgetFormBootstrapDate())
       ->offsetSet('submited_at', new sfWidgetFormBootstrapDate())
-      ->offsetSet('execution_time', new sfWidgetFormBootstrapTime())
+      ->offsetSet('execution_time', new sfWidgetFormInputHidden())
       ->offsetSet('pay_method', new sfWidgetFormChoice(array(
         'choices' => OrderTable::$payMethods
       )))
@@ -138,7 +103,7 @@ class OrderForm extends BaseOrderForm
       'client_id' => 'Клиент',
       'description' => 'Подробное описание заказа',
       'additional' => 'Доп. информация',
-      'due_date' => 'Дата',
+      'due_date' => 'Дата / время',
       'approved_at' => 'Дата согласования с заказчиком',
       'files' => 'Файлы',
       'installation_cost' => 'Монтаж',
@@ -177,6 +142,7 @@ class OrderForm extends BaseOrderForm
       ->getValidatorSchema()
       ->offsetSet('description', new sfValidatorString(array('required' => false), array('required' => 'Поле не должно быть пустым.')))
       ->offsetSet('expected_at', new sfValidatorBootstrapDateTime(array('required' => false)))
+      ->offsetSet('execution_time', new sfValidatorBootstrapDateTime(array('required' => false)))
     ;
   }
 }

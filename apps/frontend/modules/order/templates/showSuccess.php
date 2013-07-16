@@ -43,20 +43,24 @@
     ))) {
       echo simple_format_text($order->$field());
     } elseif (in_array($field, array(
-      'getDueDate',
       'getApprovedAt',
       'getPayedAt',
       'getStartedAt',
       'getFinishedAt',
       'getSubmitedAt',
-      'getExpectedAt',
     ))) {
       echo $order->$field()
         ? date('d.m.Y', strtotime($order->$field()))
         : ''
       ;
-    } elseif (in_array($field, array('getExecutionTime',))){
-      echo $order->$field();
+    } elseif (in_array($field, array(
+      'getDueDate',
+      'getExpectedAt',
+    ))){
+      echo $order->$field()
+        ? date('d.m.Y H:i', strtotime($order->$field()))
+        : ''
+      ;
     } elseif ($field == 'getClientFullestName') {
       echo '<a href="' . url_for('@client?id=' . $order->getClient()->getId()) . '">' . $order->$field() . '</a>';
     } elseif (in_array($field, array(
