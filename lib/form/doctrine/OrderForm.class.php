@@ -64,7 +64,7 @@ class OrderForm extends BaseOrderForm
     ));
 
     $this->embedRelations(array_merge(
-      sfContext::getInstance()->getUser()->hasCredential('can_edit_materials') ? $utilizationsRelation : [],
+      sfContext::getInstance()->getUser()->hasCredential('can_spend_materials') ? $utilizationsRelation : [],
       sfContext::getInstance()->getUser()->hasGroup('master') ? [] : $invoicesRelation
     ));
 

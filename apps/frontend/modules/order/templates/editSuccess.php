@@ -8,7 +8,7 @@
   <?php echo $form->renderGlobalErrors() ?>
   <?php echo $form->renderHiddenFields()?>
 
-  <?php if ($sf_user->hasCredential('can_edit_materials')): ?>
+  <?php if ($sf_user->hasCredential('can_spend_materials')): ?>
     <fieldset>
       <legend>Расход материалов</legend>
       <table class="table-condensed add-remove-chzn-for-relations">
