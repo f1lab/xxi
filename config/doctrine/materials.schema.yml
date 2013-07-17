@@ -87,6 +87,9 @@ RefSupplierMaterial:
       local: material_id
 
 Utilization:
+  actAs:
+    Signable: ~
+    Timestampable: ~
   columns:
     order_id:
       type: integer

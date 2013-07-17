@@ -12,6 +12,13 @@ class UtilizationForm extends BaseUtilizationForm
 {
   public function configure()
   {
+    unset (
+      $this['created_at'],
+      $this['updated_at'],
+      $this['created_by'],
+      $this['updated_by']
+    );
+
     $this->getWidgetSchema()
       ->offsetSet('material_id', new sfWidgetFormDoctrineChoice(array(
         'model' => $this->getRelatedModelName('Material'),
