@@ -35,6 +35,7 @@ class SupplierForm extends BaseSupplierForm
       'discount' => 'Скидка, %',
       'buhgalter' => 'ФИО бухгалтера',
       'buhgalter_phone' => 'Телефон бухгалтера',
+      'materials_list' => 'Поставляемые материалы',
     ));
 
     $this->getValidatorSchema()->offsetSet('email', new sfValidatorEmail(array('required' => false)));

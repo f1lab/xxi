@@ -14,12 +14,12 @@
   <?php echo $form->renderUsing('bootstrap') ?>
 
   <div class="form-actions">
-    <button type="submit" class="btn btn-primary">Save</button>
+    <button type="submit" class="btn btn-primary">Сохранить</button>
 
-      <a href="<?php echo url_for('material/index') ?>" class="btn">Back to list</a>
+      <a href="<?php echo url_for('material/index') ?>" class="btn">Назад</a>
   
     <?php if (!$form->getObject()->isNew()): ?>
-      <?php echo link_to('Delete', 'material/delete?id='.$form->getObject()->getId(), array('method' => 'delete', 'confirm' => 'Are you sure?', 'class' => 'btn btn-warning pull-right')) ?>
+      <?php echo link_to('Удалить', 'material/delete?id='.$form->getObject()->getId(), array('method' => 'delete', 'confirm' => 'Are you sure?', 'class' => 'btn btn-warning pull-right')) ?>
     <?php endif; ?>
   </div>
 </form>
