@@ -479,18 +479,22 @@ class orderActions extends sfActions
     );
 
     if ($form->isValid()) {
-      if ($form->getValues()['state'] !== $form->getObject()->getState()) {
-        $objectSaver = $form->updateObject();
-        if ($form->getValues()['state'] == 'done') {
-          $objectSaver->setFinishedAt(date('Y-m-d H:i:s'));
-        } elseif ($form->getValues()['state'] == 'submited') {
-          $objectSaver->setSubmitedAt(date('Y-m-d H:i:s'));
+      if ($form instanceof OrderForm) {
+        if ($form->getValues()['state'] !== $form->getObject()->getState()) {
+          $objectSaver = $form->updateObject();
+          if ($form->getValues()['state'] == 'done') {
+            $objectSaver->setFinishedAt(date('Y-m-d H:i:s'));
+          } elseif ($form->getValues()['state'] == 'submited') {
+            $objectSaver->setSubmitedAt(date('Y-m-d H:i:s'));
+          }
+        } else {
+          $objectSaver = $form;
         }
-      } else {
-        $objectSaver = $form;
-      }
 
-      $object = $objectSaver->save();
+        $object = $objectSaver->save();
+      } else {
+        $form->save();
+      }
 
       if ($flash and is_array($flash)) {
         $this->getUser()->setFlash('message', $flash);
