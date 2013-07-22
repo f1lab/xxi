@@ -116,7 +116,7 @@
 </div>
 
 <h2>Материалы</h2>
-<?php if ($sf_user->hasGroup('director') or $sf_user->hasCredential('can_add_materials')): ?>
+<?php if ($sf_user->hasGroup('director') or $sf_user->hasCredential('can_edit_materials')): ?>
   <div class="btn-toolbar clearfix">
     <div class="btn-group">
       <a href="<?php echo url_for('material/new?client=' . $client->getId()) ?>" class="btn btn-primary">Добавить материал</a>
@@ -133,18 +133,14 @@
        <th>Стоимость</th>
     </thead>
     <tbody>
-      <?php foreach ($materials as $material): $totalPrice = 0; ?>
+      <?php foreach ($materials as $material): ?>
         <tr>
           <td><?php echo $material->getId() ?></td>
           <td><a href="<?php echo url_for('material/edit?id=' . $material->getId() . '&client=' . $client->getId()) ?>"><?php echo $material ?></a></td>
           <td><?php echo $material->getDimension() ?></td>
-          <td><?php $totalPrice += $material->getPrice(); echo $material->getPrice() ?></td>
+          <td><?php echo $material->getPrice() ?></td>
         </tr>
       <?php endforeach ?>
-      <tr>
-        <th colspan="3" scope="row">Итого</th>
-        <td><?php echo sprintf('%.2f', $totalPrice) ?></td>
-      </tr>
     </tbody>
   </table>
 <?php else: ?>
