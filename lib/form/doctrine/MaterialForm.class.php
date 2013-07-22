@@ -18,6 +18,7 @@ class MaterialForm extends BaseMaterialForm
 
     $this->getWidgetSchema()->setLabels(array(
       'name' => 'Наименование',
+      'price' => 'Стоимость',
       'dimension_id' => 'Размерность',
       'suppliers_list' => 'Поставщики',
     ));

@@ -177,6 +177,10 @@ report-debt:
   url:   /reports/debt
   param: { module: report, action: debt }
 
+report-materials:
+  url:   /reports/materials
+  param: { module: report, action: materials }
+
 users-show:
   url:   /users
   param: { module: users, action: index }

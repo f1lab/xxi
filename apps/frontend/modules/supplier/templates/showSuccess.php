@@ -125,19 +125,27 @@
 <?php endif ?>
 
 <?php if (true == ($materials = $client->getMaterials()) and count($materials)): ?>
-  <table>
+  <table class="table table-condensed table-bordered table-hover">
     <thead>
       <th>Id</th>
       <th>Наименование</th>
       <th>Размерность</th>
+       <th>Стоимость</th>
     </thead>
-    <tbody><?php foreach ($materials as $material): ?>
+    <tbody>
+      <?php foreach ($materials as $material): $totalPrice = 0; ?>
+        <tr>
+          <td><?php echo $material->getId() ?></td>
+          <td><a href="<?php echo url_for('material/edit?id=' . $material->getId() . '&client=' . $client->getId()) ?>"><?php echo $material ?></a></td>
+          <td><?php echo $material->getDimension() ?></td>
+          <td><?php $totalPrice += $material->getPrice(); echo $material->getPrice() ?></td>
+        </tr>
+      <?php endforeach ?>
       <tr>
-        <td><?php echo $material->getId() ?></td>
-        <td><a href="<?php echo url_for('material/edit?id=' . $material->getId() . '&client=' . $client->getId()) ?>"><?php echo $material ?></a></td>
-        <td><?php echo $material->getDimension() ?></td>
+        <th colspan="3" scope="row">Итого</th>
+        <td><?php echo sprintf('%.2f', $totalPrice) ?></td>
       </tr>
-    <?php endforeach ?></tbody>
+    </tbody>
   </table>
 <?php else: ?>
   <div class="alert alert-info">Нет материалов</div>

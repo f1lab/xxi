@@ -22,6 +22,10 @@ Material:
     dimension_id:
       type: integer
       notnull: true
+    price:
+      type: decimal
+      notnull: true
+      scale: 2
 
 Supplier:
   actAs:
