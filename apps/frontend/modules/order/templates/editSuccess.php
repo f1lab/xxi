@@ -261,12 +261,12 @@
       <?php echo $form['area']->renderLabel()?>
       <?php echo $form['area']->render()?><br>
       <?php echo $form['area']->renderError()?>
-      <?php /* echo $form['finished_at']->renderLabel()?>
+      <?php  echo $form['finished_at']->renderLabel()?>
       <?php echo $form['finished_at']->render()?><br>
       <?php echo $form['finished_at']->renderError()?>
       <?php echo $form['submited_at']->renderLabel()?>
       <?php echo $form['submited_at']->render()?><br>
-      <?php echo $form['submited_at']->renderError() */?>
+      <?php echo $form['submited_at']->renderError() ?>
       <?php echo $form['state']->renderLabel()?>
       <?php echo $form['state']->render()?><br>
       <?php echo $form['state']->renderError()?>
