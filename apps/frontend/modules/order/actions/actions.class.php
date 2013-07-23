@@ -115,19 +115,20 @@ class orderActions extends sfActions
         'choices' => OrderTable::$statesForManager,
         'label' => 'Статус',
       )))
-      ->offsetUnset(array(
-        'payed',
-        'started_at',
-        'finished_at',
-        'submited_at',
-        'payed_at',
-        'expected_at',
-        'area',
-        'bill_made',
-        'bill_given',
-        'docs_given',
-      ))
     ;
+
+    unset (
+      $this->form['payed'],
+      $this->form['started_at'],
+      $this->form['finished_at'],
+      $this->form['submited_at'],
+      $this->form['payed_at'],
+      $this->form['expected_at'],
+      $this->form['area'],
+      $this->form['bill_made'],
+      $this->form['bill_given'],
+      $this->form['docs_given']
+    );
 
     if ($request->getParameter('client')) {
       $this->form->setDefault('client_id', $request->getParameter('client'));
@@ -141,22 +142,20 @@ class orderActions extends sfActions
       ->offsetSet('state', new sfWidgetFormChoice(array(
         'choices' => OrderTable::$statesForManager,
       )))
-      ->offsetUnset(array(
-        'payed',
-        'started_at',
-        'finished_at',
-        'submited_at',
-        'payed_at',
-        'expected_at',
-        'area',
-        'bill_made',
-        'bill_given',
-        'docs_given',
-      ))
     ;
-    $this->form->getValidatorSchema()
-      ->offsetUnset('payed')
-    ;
+
+    unset (
+      $this->form['payed'],
+      $this->form['started_at'],
+      $this->form['finished_at'],
+      $this->form['submited_at'],
+      $this->form['payed_at'],
+      $this->form['expected_at'],
+      $this->form['area'],
+      $this->form['bill_made'],
+      $this->form['bill_given'],
+      $this->form['docs_given']
+    );
 
     $this->processForm($request, $this->form, array('success', 'Отлично!', 'Заказ добавлен.'), '@orders');
     $this->setTemplate('new');
@@ -479,7 +478,7 @@ class orderActions extends sfActions
     );
 
     if ($form->isValid()) {
-      if ($form instanceof OrderForm) {
+      if (0 and $form instanceof OrderForm and $form->getObject()->isNew()) { // bug in relations saving
         if ($form->getValues()['state'] !== $form->getObject()->getState()) {
           $objectSaver = $form->updateObject();
           if ($form->getValues()['state'] == 'done') {
