@@ -172,8 +172,8 @@ class orderActions extends sfActions
     if ($this->getUser()->hasGroup('worker')) {
       $this->form->getWidgetSchema()
         ->offsetUnset(array(
-          'finished_at',
-          'submited_at',
+          /* 'finished_at',
+          'submited_at', */
           'client_id',
           'description',
           'due_date',
@@ -293,8 +293,8 @@ class orderActions extends sfActions
     if ($this->getUser()->hasGroup('worker')) {
       $this->form->getValidatorSchema()
         ->offsetUnset(array(
-          'finished_at',
-          'submited_at',
+          /* 'finished_at',
+          'submited_at', */
           'client_id',
           'description',
           'due_date',
