@@ -27,6 +27,21 @@
   <h1>Заказ №<?php echo $order->getId() ?></h1>
 </div>
 
+<div class="tabbable" style="margin-top: 2em;">
+  <ul class="nav nav-tabs">
+    <li class="active"><a href="#tab-description" data-toggle="tab">Описание заказа</a></li>
+    <li><a href="#tab-utilization" data-toggle="tab">Расход материалов</a></li>
+  </ul>
+  <div class="tab-content">
+    <div class="tab-pane active" id="tab-description">
+      <?php include_partial('order-description-tab', ['order' => $order, 'fields' => $fields]) ?>
+    </div>
+    <div class="tab-pane" id="tab-utilization">
+      <?php include_partial('order-utilization-tab', ['order' => $order]) ?>
+    </div>
+  </div>
+</div>
+
 <div class="btn-toolbar">
   <?php
     if ( //TODO: replace this mess with some permission or move this check to model
@@ -64,21 +79,6 @@
       <a href="<?php echo url_for('@order-printwaybill?id=' . $order->getId()) ?>" target="_blank" class="btn">Распечатать ТТН</a>
     </div>
   <?php endif ?>
-</div>
-
-<div class="tabbable" style="margin-top: 2em;">
-  <ul class="nav nav-tabs">
-    <li class="active"><a href="#tab-description" data-toggle="tab">Описание заказа</a></li>
-    <li><a href="#tab-utilization" data-toggle="tab">Расход материалов</a></li>
-  </ul>
-  <div class="tab-content">
-    <div class="tab-pane active" id="tab-description">
-      <?php include_partial('order-description-tab', ['order' => $order, 'fields' => $fields]) ?>
-    </div>
-    <div class="tab-pane" id="tab-utilization">
-      <?php include_partial('order-utilization-tab', ['order' => $order]) ?>
-    </div>
-  </div>
 </div>
 
 <h2 class="page-header">Комментарии</h2>
