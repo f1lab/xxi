@@ -49,4 +49,18 @@ class Order extends BaseOrder
   {
     return $this->getClient()->getName() . ' (' . $this->getClient()->getOwnershipTranslated() . ' «' . $this->getClient()->getFullName() . '»)';
   }
+
+  public function preUpdate($event)
+  {
+    $order = $event->getInvoker();
+    $changes = $order->getModified(true);
+
+    if (isset($changes['state']) and $order->getState() !== $changes['state']) {
+      if ($order->getState() === 'done') {
+        $order->setFinishedAt(date('Y-m-d H:i:s'));
+      } elseif ($order->getState() === 'submited') {
+        $order->setSubmitedAt(date('Y-m-d H:i:s'));
+      }
+    }
+  }
 }

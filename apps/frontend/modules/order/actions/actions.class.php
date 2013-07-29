@@ -172,8 +172,8 @@ class orderActions extends sfActions
     if ($this->getUser()->hasGroup('worker')) {
       $this->form->getWidgetSchema()
         ->offsetUnset(array(
-          /* 'finished_at',
-          'submited_at', */
+          'finished_at',
+          'submited_at',
           'client_id',
           'description',
           'due_date',
@@ -293,8 +293,8 @@ class orderActions extends sfActions
     if ($this->getUser()->hasGroup('worker')) {
       $this->form->getValidatorSchema()
         ->offsetUnset(array(
-          /* 'finished_at',
-          'submited_at', */
+          'finished_at',
+          'submited_at',
           'client_id',
           'description',
           'due_date',
@@ -478,22 +478,7 @@ class orderActions extends sfActions
     );
 
     if ($form->isValid()) {
-      if (0 and $form instanceof OrderForm and $form->getObject()->isNew()) { // bug in relations saving
-        if ($form->getValues()['state'] !== $form->getObject()->getState()) {
-          $objectSaver = $form->updateObject();
-          if ($form->getValues()['state'] == 'done') {
-            $objectSaver->setFinishedAt(date('Y-m-d H:i:s'));
-          } elseif ($form->getValues()['state'] == 'submited') {
-            $objectSaver->setSubmitedAt(date('Y-m-d H:i:s'));
-          }
-        } else {
-          $objectSaver = $form;
-        }
-
-        $object = $objectSaver->save();
-      } else {
-        $form->save();
-      }
+      $form->save();
 
       if ($flash and is_array($flash)) {
         $this->getUser()->setFlash('message', $flash);

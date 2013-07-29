@@ -128,11 +128,6 @@ class OrderForm extends BaseOrderForm
       'execution_time' => 'Время',
       'waybill_number' => 'Номер ТТН',
     ));
-    // $this->embedRelations(array(
-      // 'Invoices' => array(
-        // 'considerNewFormEmptyFields' => array('description', 'number', 'price', 'sum'),
-      // )
-    // ));
 
     $this->getWidgetSchema()->offsetGet('description')->setAttribute('class', 'input-block-level');
     $this->getWidgetSchema()->offsetGet('additional')->setAttribute('class', 'input-block-level');
@@ -142,7 +137,6 @@ class OrderForm extends BaseOrderForm
       ->getValidatorSchema()
       ->offsetSet('description', new sfValidatorString(array('required' => false), array('required' => 'Поле не должно быть пустым.')))
       ->offsetSet('expected_at', new sfValidatorBootstrapDateTime(array('required' => false)))
-      ->offsetSet('execution_time', new sfValidatorBootstrapDateTime(array('required' => false)))
     ;
   }
 }
