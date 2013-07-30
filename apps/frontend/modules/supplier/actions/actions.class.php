@@ -35,7 +35,7 @@ class supplierActions extends sfActions
     $this->client = Doctrine_Query::create()
       ->from('Supplier s')
       ->leftJoin('s.Materials m')
-      ->innerJoin('m.Dimension d')
+      ->leftJoin('m.Dimension d')
       ->where('s.id = ?', $request->getParameter('id'))
       ->fetchOne()
     ;
