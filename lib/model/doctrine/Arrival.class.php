@@ -12,4 +12,13 @@
  */
 class Arrival extends BaseArrival
 {
+  public function getRemained()
+  {
+    return $this->getAmount() - (double)Doctrine_Query::create()
+      ->from('RefUtilizationArrival a')
+      ->select('sum(a.amount)')
+      ->addWhere('a.arrival_id = ?', $this->getId())
+      ->execute([], Doctrine_Core::HYDRATE_SINGLE_SCALAR)
+    ;
+  }
 }

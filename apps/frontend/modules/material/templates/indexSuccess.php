@@ -24,15 +24,23 @@
       <th>Всего пришло</th>
       <th>Всего потрачено</th>
       <th>Остаток</th>
+      <?php if ($sf_user->hasCredential('can_edit_arrivals')): ?>
+        <th>Действия</th>
+      <?php endif ?>
     </tr>
   </thead>
   <tbody><?php foreach ($materials as $material): ?>
     <tr>
         <td><a href="<?php echo url_for('material/edit?id='.$material->getId()) ?>"><?php echo $material->getId() ?></a></td>
         <td><?php echo $material->getNameWithDimension() ?></td>
-        <td><?php $arrived = $material->getArrivalsAmount(); echo $arrived ?></td>
-        <td><?php $utilized = $material->getUtilizationsAmount(); echo $utilized ?></td>
-        <td class="<?php if ($arrived - $utilized) echo $arrived - $utilized > 0 ? 'alert-success' : 'alert-error' ?>"><?php echo $arrived - $utilized ?></td>
+        <td><?php echo $material->getArrivalsAmount() ?></td>
+        <td><?php echo $material->getUtilizationsAmount() ?></td>
+        <td class="<?php if ($material->getRemainedAmount()) echo $material->getRemainedAmount() > 0 ? 'alert-success' : 'alert-error' ?>"><?php echo $material->getRemainedAmount() ?></td>
+      <?php if ($sf_user->hasCredential('can_edit_arrivals')): ?>
+        <td><?php if ($material->getArrivalsAmount()): ?>
+          <a href="<?php echo url_for('arrival/index?material_id=' . $material->getId()) ?>">показать поступления</a>
+        <?php endif ?></td>
+      <?php endif ?>
     </tr>
   <?php endforeach ?></tbody>
 </table>

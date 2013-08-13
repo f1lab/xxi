@@ -12,4 +12,17 @@
  */
 class Utilization extends BaseUtilization
 {
+  public function preSave($event)
+  {
+    $utilization = $event->getInvoker();
+    $changes = $utilization->getModified(true);
+
+    if ($changes['amount']) {
+      if ($changes['amount'] < $utilization->getAmount()) { // more utilized
+        // add some RefUtilizationArrival
+      } else { // less utilized
+        // remove some RefUtilizationArrival
+      }
+    }
+  }
 }

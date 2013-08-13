@@ -36,4 +36,9 @@ class Material extends BaseMaterial
       ->execute([], Doctrine_Core::HYDRATE_SINGLE_SCALAR)
     ;
   }
+
+  public function getRemainedAmount()
+  {
+    return $this->getArrivalsAmount() - $this->getUtilizationsAmount();
+  }
 }

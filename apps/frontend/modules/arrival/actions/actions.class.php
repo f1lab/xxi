@@ -12,10 +12,15 @@ class arrivalActions extends sfActions
 {
   public function executeIndex(sfWebRequest $request)
   {
-    $this->arrivals = Doctrine_Query::create()
+    $query = Doctrine_Query::create()
       ->from('Arrival a')
-      ->execute()
     ;
+
+    if ($request->hasParameter('material_id')) {
+      $query->addWhere('a.material_id = ?', $request->getParameter('material_id'));
+    }
+
+    $this->arrivals = $query->execute();
   }
 
   public function executeNew(sfWebRequest $request)

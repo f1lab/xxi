@@ -128,3 +128,23 @@ Utilization:
       local: material_id
       foreign: id
       foreignAlias: Utilizations
+
+# Из какого прихода сколько потратили материала
+RefUtilizationArrival:
+  columns:
+    utilization_id:
+      type: integer
+      primary: true
+    arrival_id:
+      type: integer
+      primary: true
+    amount:
+      type: integer
+      notnull: true
+  relations:
+    Utilization:
+      local: utilization_id
+      foreign: id
+    Arrival:
+      local: arrival_id
+      foreign: id

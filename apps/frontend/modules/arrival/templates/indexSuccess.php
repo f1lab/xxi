@@ -17,6 +17,7 @@
       <th>Поставщик</th>
       <th>Материал</th>
       <th>Количество</th>
+      <th>Остаток</th>
       <th>Цена за единицу</th>
     </tr>
   </thead>
@@ -28,6 +29,7 @@
       <td><?php echo $arrival->getSupplier() ?></td>
       <td><?php echo $arrival->getMaterial()->getNameWithDimension() ?></td>
       <td><?php echo $arrival->getAmount() ?></td>
+      <td><?php echo $arrival->getRemained() ?></td>
       <td><?php echo $arrival->getPrice() ?></td>
     </tr>
   <?php endforeach; ?></tbody>
