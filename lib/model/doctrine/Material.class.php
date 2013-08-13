@@ -16,4 +16,24 @@ class Material extends BaseMaterial
   {
     return $this->getName() . ', ' . $this->getDimension();
   }
+
+  public function getArrivalsAmount()
+  {
+    return (double)Doctrine_Query::create()
+      ->from('Arrival a')
+      ->select('count(a.amount)')
+      ->addWhere('a.material_id = ?', $this->getId())
+      ->execute([], Doctrine_Core::HYDRATE_SINGLE_SCALAR)
+    ;
+  }
+
+  public function getUtilizationsAmount()
+  {
+    return (double)Doctrine_Query::create()
+      ->from('Utilization u')
+      ->select('count(u.amount)')
+      ->addWhere('u.material_id = ?', $this->getId())
+      ->execute([], Doctrine_Core::HYDRATE_SINGLE_SCALAR)
+    ;
+  }
 }

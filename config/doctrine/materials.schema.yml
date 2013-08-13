@@ -1,3 +1,41 @@
+# Приход материала
+Arrival:
+  actAs:
+    SoftDelete: ~
+    Timestampable: ~
+    Signable: ~
+  columns:
+    arrived_at: # дата накладной
+      type: timestamp
+      notnull: true
+    bill: # накладная
+      type: string(255)
+      notnull: true
+    supplier_id:
+      type: integer
+      notnull: true
+    material_id:
+      type: integer
+      notnull: true
+    amount: # сколько пришло
+      type: decimal
+      notnull: true
+      scale: 4
+    price: # цена за 1
+      type: decimal
+      notnull: true
+      scale: 2
+  relations:
+    Material:
+      local: material_id
+      foreign: id
+      foreignAlias: Arrivals
+    Supplier:
+      local: supplier_id
+      foreign: id
+      foreignAlias: Arrivals
+
+ # Размерность материала
 Dimension:
   actAs:
     SoftDelete: ~
@@ -5,12 +43,6 @@ Dimension:
     name:
       type: string(255)
       notnull: true
-  relations:
-    Materials:
-      class: Material
-      type: many
-      local: id
-      foreign: dimension_id
 
 Material:
   actAs:
@@ -22,11 +54,13 @@ Material:
     dimension_id:
       type: integer
       notnull: true
-    price:
-      type: decimal
-      notnull: true
-      scale: 2
+  relations:
+    Dimension:
+      local: dimension_id
+      foreign: id
+      foreignAlias: Materials
 
+ # Поставщик материала
 Supplier:
   actAs:
     SoftDelete: ~
@@ -68,28 +102,8 @@ Supplier:
       type: string(128)
     buhgalter_phone:
       type: string(32)
-  relations:
-    Materials:
-      class: Material
-      refClass: RefSupplierMaterial
-      local: supplier_id
-      foreign: material_id
-      foreignAlias: Suppliers
 
-RefSupplierMaterial:
-  columns:
-    supplier_id:
-      type: integer
-      primary: true
-    material_id:
-      type: integer
-      primary: true
-  relations:
-    Supplier:
-      local: supplier_id
-    Material:
-      local: material_id
-
+# Расход материала
 Utilization:
   actAs:
     Signable: ~
@@ -101,7 +115,7 @@ Utilization:
     material_id:
       type: integer
       notnull: true
-    amount:
+    amount: # сколько затратили
       type: decimal
       notnull: true
       scale: 4

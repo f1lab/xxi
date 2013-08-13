@@ -18,11 +18,7 @@ class MaterialForm extends BaseMaterialForm
 
     $this->getWidgetSchema()->setLabels(array(
       'name' => 'Наименование',
-      'price' => 'Стоимость',
-      'dimension_id' => 'Размерность',
-      'suppliers_list' => 'Поставщики',
+      'dimension_id' => 'Единица измерения',
     ));
-
-    $this->getWidgetSchema()->offsetGet('suppliers_list')->setAttribute('class', 'chzn-select');
   }
 }

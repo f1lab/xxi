@@ -115,34 +115,38 @@
   <?php endif ?></div>
 </div>
 
-<h2>Материалы</h2>
-<?php if ($sf_user->hasGroup('director') or $sf_user->hasCredential('can_edit_materials')): ?>
+<h2>Поступления материалов</h2>
+<?php if ($sf_user->hasGroup('director') or $sf_user->hasCredential('can_edit_arrivals')): ?>
   <div class="btn-toolbar clearfix">
     <div class="btn-group">
-      <a href="<?php echo url_for('material/new?client=' . $client->getId()) ?>" class="btn btn-primary">Добавить материал</a>
+      <a href="<?php echo url_for('arrival/new?supplier_id=' . $client->getId()) ?>" class="btn btn-primary">Добавить поступление</a>
     </div>
   </div>
 <?php endif ?>
 
-<?php if (true == ($materials = $client->getMaterials()) and count($materials)): ?>
-  <table class="table table-condensed table-bordered table-hover">
+<?php if (true == ($arrivals = $client->getArrivals()) and count($arrivals)): ?>
+  <table class="table table-condensed table-bordered table-hover rows-clickable">
     <thead>
-      <th>Id</th>
-      <th>Наименование</th>
-      <th>Размерность</th>
-       <th>Стоимость</th>
+      <tr>
+        <th>Id</th>
+        <th>Дата поступления</th>
+        <th>Накладная</th>
+        <th>Материал</th>
+        <th>Количество</th>
+        <th>Цена за единицу</th>
+      </tr>
     </thead>
-    <tbody>
-      <?php foreach ($materials as $material): ?>
-        <tr>
-          <td><?php echo $material->getId() ?></td>
-          <td><a href="<?php echo url_for('material/edit?id=' . $material->getId() . '&client=' . $client->getId()) ?>"><?php echo $material ?></a></td>
-          <td><?php echo $material->getDimension() ?></td>
-          <td><?php echo $material->getPrice() ?></td>
-        </tr>
-      <?php endforeach ?>
-    </tbody>
+    <tbody><?php foreach ($arrivals as $arrival): ?>
+      <tr>
+        <td><a href="<?php echo url_for('arrival/edit?id='.$arrival->getId()) ?>"><?php echo $arrival->getId() ?></a></td>
+        <td><?php echo date('d.m.Y', strtotime($arrival->getArrivedAt())) ?></td>
+        <td><?php echo $arrival->getBill() ?></td>
+        <td><?php echo $arrival->getMaterial()->getNameWithDimension() ?></td>
+        <td><?php echo $arrival->getCount() ?></td>
+        <td><?php echo $arrival->getPrice() ?></td>
+      </tr>
+    <?php endforeach; ?></tbody>
   </table>
 <?php else: ?>
-  <div class="alert alert-info">Нет материалов</div>
+  <div class="alert alert-info">Нет поступлений</div>
 <?php endif ?>

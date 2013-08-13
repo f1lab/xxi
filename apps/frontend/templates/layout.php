@@ -36,6 +36,10 @@
           <?php if ($sf_user->hasCredential('can_edit_materials')): ?>
             <li><a href="<?php echo url_for('material/index') ?>">Материалы</a></li>
           <?php endif ?>
+
+          <?php if ($sf_user->hasCredential('can_edit_arrivals')): ?>
+            <li><a href="<?php echo url_for('arrival/index') ?>">Поступления материалов</a></li>
+          <?php endif ?>
         </ul>
 
         <ul class="nav pull-right"><?php if ($sf_user->isAuthenticated()): ?>
