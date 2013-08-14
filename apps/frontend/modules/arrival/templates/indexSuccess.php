@@ -22,7 +22,7 @@
     </tr>
   </thead>
   <tbody><?php foreach ($arrivals as $arrival): ?>
-    <tr>
+    <tr class="<?php if (!$arrival->getRemained()) echo ' muted' ?>">
       <td><a href="<?php echo url_for('arrival/edit?id='.$arrival->getId()) ?>"><?php echo $arrival->getId() ?></a></td>
       <td><?php echo date('d.m.Y', strtotime($arrival->getArrivedAt())) ?></td>
       <td><?php echo $arrival->getBill() ?></td>

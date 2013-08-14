@@ -21,10 +21,10 @@
           <td><?php echo date('d.m.Y H:i', strtotime($utilization->getCreatedAt())) ?></td>
           <td><?php echo $utilization->getCreator() ?></td>
           <td>
-            <abbr title="<?php echo $utilization->getAmount() . '×' . $utilization->getMaterial()->getPrice() ?>">
+            <abbr title="<?php echo $utilization->getAmount() . '×' . $utilization->getPriceForOne() ?>">
               <?php
-                $totalPrice += $utilization->getAmount() * $utilization->getMaterial()->getPrice();
-                echo sprintf('%.2f', $utilization->getAmount() * $utilization->getMaterial()->getPrice())
+                $totalPrice += $utilization->getPrice();
+                echo sprintf('%.2f', $utilization->getPrice())
               ?>
             </abbr>
           </td>

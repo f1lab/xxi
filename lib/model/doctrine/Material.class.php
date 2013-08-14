@@ -21,7 +21,7 @@ class Material extends BaseMaterial
   {
     return (double)Doctrine_Query::create()
       ->from('Arrival a')
-      ->select('count(a.amount)')
+      ->select('sum(a.amount)')
       ->addWhere('a.material_id = ?', $this->getId())
       ->execute([], Doctrine_Core::HYDRATE_SINGLE_SCALAR)
     ;
@@ -31,7 +31,7 @@ class Material extends BaseMaterial
   {
     return (double)Doctrine_Query::create()
       ->from('Utilization u')
-      ->select('count(u.amount)')
+      ->select('sum(u.amount)')
       ->addWhere('u.material_id = ?', $this->getId())
       ->execute([], Doctrine_Core::HYDRATE_SINGLE_SCALAR)
     ;
