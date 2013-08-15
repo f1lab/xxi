@@ -96,9 +96,10 @@ class reportActions extends sfActions
         sum(a.delivery_cost) delivery_cost,
         sum(a.cost) cost,
         sum(a.recoil) recoil,
-        sum(a.payed) payed
+        sum(p.amount) payed_sum
       ')
       ->from('Order a')
+      ->leftJoin('a.Pays p')
       ->andWhere('a.state = ?', $this->state)
       ->andWhere('a.submited_at >= ? and a.submited_at <= ?', array($this->period['from'], $this->period['to']))
     ;

@@ -90,11 +90,11 @@
         </tr>
         <tr>
           <td>Внесённые средства</td>
-          <td><?php echo format_currency($report->getPayed()) ?></td>
+          <td><?php echo format_currency($report->getPayedSum()) ?></td>
         </tr>
         <tr>
           <td><strong>Сальдо</strong></td>
-          <td><strong><?php echo format_currency($report->getPayed() - $report->getRecoil() - $report->getCost()) ?></strong></td>
+          <td><strong><?php echo format_currency($report->getPayedSum() - $report->getRecoil() - $report->getCost()) ?></strong></td>
         </tr>
       </tbody>
     </table>

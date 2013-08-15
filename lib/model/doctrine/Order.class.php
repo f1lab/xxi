@@ -63,4 +63,14 @@ class Order extends BaseOrder
       }
     }
   }
+
+  public function getPayed()
+  {
+    return Doctrine_Query::create()
+      ->from('Pay p')
+      ->select('sum(p.amount) as payed')
+      ->addWhere('p.order_id = ?', $this->getId())
+      ->execute([], Doctrine_Core::HYDRATE_SINGLE_SCALAR)
+    ;
+  }
 }
