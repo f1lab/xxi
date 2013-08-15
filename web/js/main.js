@@ -63,7 +63,8 @@ $(function() {
   ;
 
   $('.datetimepickable').datetimepicker({
-    'language': 'ru'
+    'language': 'ru',
+    'weekStart': 1
   });
 
   $('.add-remove-chzn-for-relations')
@@ -79,6 +80,21 @@ $(function() {
       })
       .on('afteradd.ah', function() {
         $('.chzn-select').chosen();
+      })
+  ;
+
+  $('.add-remove-datetimepicker-for-relations')
+    .find('tr')
+      .on('beforeclone.ah', function() {
+        $(this)
+          .find('.datetimepickable')
+            .datetimepicker('remove')
+        ;
+      })
+      .on('afteradd.ah', function() {
+        $('.datetimepickable').datetimepicker({
+          'language': 'ru'
+        });
       })
   ;
 });

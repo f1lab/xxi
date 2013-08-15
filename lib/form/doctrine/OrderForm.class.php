@@ -63,9 +63,32 @@ class OrderForm extends BaseOrderForm
       // 'customEmbeddedFormLabelMethod' => 'getLabelTitle'
     ));
 
+    $paysRelation = array('Pays' => array(
+      'considerNewFormEmptyFields'    => array('payed_at', 'amount'),
+      'noNewForm'                     => false,
+      // 'noNewForm'                     => true,
+      'newFormLabel'                  => 'Новый выпрос',
+      'newFormClass'                  => 'PayForm',
+      'newFormClassArgs'              => array(array('sf_user' => $this->getOption('sf_user'))),
+      'displayEmptyRelations'         => true,
+      'formClass'                     => 'PayForm',
+      'formClassArgs'                 => array(array('ah_add_delete_checkbox' => true)),
+      'newFormAfterExistingRelations' => true,
+      'formFormatter'                 => null,
+      'multipleNewForms'              => true,
+      'newFormsInitialCount'          => 1,
+      'newFormsContainerForm'         => null, // pass BaseForm object here or we will create ahNewRelationsContainerForm
+      'newRelationButtonLabel'        => '+',
+      'newRelationAddByCloning'       => false,
+      'newRelationUseJSFramework'     => 'jQuery',
+      // 'customEmbeddedFormLabelMethod' => 'getLabelTitle'
+    ));
+
+    $user = sfContext::getInstance()->getUser();
     $this->embedRelations(array_merge(
-      sfContext::getInstance()->getUser()->hasCredential('can_spend_materials') ? $utilizationsRelation : [],
-      sfContext::getInstance()->getUser()->hasGroup('master') ? [] : $invoicesRelation
+      $user->hasCredential('can_spend_materials') ? $utilizationsRelation : [],
+      $user->hasGroup('master') ? [] : $invoicesRelation,
+      $user->hasCredential('director') || $user->hasCredential('buhgalter') ? $paysRelation : []
     ));
 
     $this->getWidgetSchema()

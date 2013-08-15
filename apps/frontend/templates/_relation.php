@@ -1,4 +1,4 @@
-<table class="table-condensed add-remove-chzn-for-relations">
+<table class="table-condensed add-remove-chzn-for-relations add-remove-datetimepicker-for-relations">
   <thead>
     <tr>
       <?php foreach ($columns as $column => $label): ?>

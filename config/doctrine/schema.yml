@@ -57,19 +57,14 @@ Client:
     deleted_at:
       fields: [deleted_at]
 
+# Заказ
 Order:
   actAs:
-    Timestampable:
-      ~
-    Signable:
-      ~
-    SoftDelete:
-      ~
+    Timestampable: ~
+    Signable: ~
+    SoftDelete: ~
     Versionable:
       className: '%CLASS%AutoVersion'
-      deleteVersions: false
-      auditLog: true
-
   columns:
     client_id:
       type: integer
@@ -145,12 +140,6 @@ Order:
       type: many
       local: id
       foreign: order_id
-# Invoices:
-# class: Invoice
-# local: id
-# foreign: order_id
-# foreignAlias: Invoices
-# foreignType: many
   indexes:
     state:
       fields: [state]
@@ -163,47 +152,7 @@ Order:
     area:
       fields: [area]
 
-Comment:
-  actAs: [Timestampable, Signable]
-  columns:
-    order_id:
-      type: integer
-      notnull: true
-    text:
-      type: clob
-      notnull: true
-  relations:
-    CommentReads:
-      type: many
-      local: id
-      foreign: comment_id
-
-CommentReads:
-  columns:
-    comment_id:
-      type: integer
-      notnull: true
-    user_id:
-      type: integer
-      notnull: true
-  indexes:
-    unique_for_inserts:
-      fields: [comment_id, user_id]
-      type: unique
-
-sfGuardUser:
-  relations:
-    Orders:
-      class: Order
-      type: many
-      local: id
-      foreign: created_by
-      foreignAlias: Creator
-    CommentReads:
-      type: many
-      local: id
-      foreign: user_id
-      foreignAlias: Reader
+# Описание заказа
 Invoice:
   columns:
     order_id:
@@ -222,50 +171,30 @@ Invoice:
       type: float
       notnull: true    
   relations:
-    Order: { local: order_id, foreign: id, onDelete: CASCADE, foreignAlias: Invoices }
-    
-CompanySettings:
-  actAs: [Signable, SoftDelete]
-  columns:
-    name:
-      type: string(255)
-      notnull: true
-    full_name:
-      type: string(255)
-    phone:
-      type: string(128)
-      notnull: true
-    email:
-      type: string(64)
-    address_jure:
-      type: string(255)
-    inn:
-      type: string(32)
-    kpp:
-      type: string(32)
-    rs:
-      type: string(32)
-    bank:
-      type: string(255)
-    bik:
-      type: string(32)
-    ks:
-      type: string(32)
-    ogrn:
-      type: string(32)
-    okpo:
-      type: string(32)
-    buhgalter:
-      type: string(128)
-    director:
-      type: string(128)
+    Order:
+      local: order_id
+      foreign: id
+      onDelete: CASCADE
+      foreignAlias: Invoices
 
-ShareSettings:
+# Внесённые средства
+Pay:
+  actAs:
+    Signable: ~
+    Timestampable: ~
   columns:
-    waybill_count_pos_on_first_page: integer
-    waybill_count_pos_on_full_page: integer
-    waybill_count_pos_on_last_page: integer
-    waybill_counter: integer
-  
-  
-  
+    order_id:
+      type: integer
+      notnull: true
+    payed_at: # когда заплатили
+      type: timestamp
+      notnull: true
+    amount: # сколько заплатили
+      type: decimal
+      notnull: true
+      scale: 2
+  relations:
+    Order:
+      local: order_id
+      foreign: id
+      foreignAlias: Pays

@@ -1,0 +1,88 @@
+# Настройки компании
+CompanySettings:
+  actAs: [Signable, SoftDelete]
+  columns:
+    name:
+      type: string(255)
+      notnull: true
+    full_name:
+      type: string(255)
+    phone:
+      type: string(128)
+      notnull: true
+    email:
+      type: string(64)
+    address_jure:
+      type: string(255)
+    inn:
+      type: string(32)
+    kpp:
+      type: string(32)
+    rs:
+      type: string(32)
+    bank:
+      type: string(255)
+    bik:
+      type: string(32)
+    ks:
+      type: string(32)
+    ogrn:
+      type: string(32)
+    okpo:
+      type: string(32)
+    buhgalter:
+      type: string(128)
+    director:
+      type: string(128)
+
+# Общие настройки
+ShareSettings:
+  columns:
+    waybill_count_pos_on_first_page: integer
+    waybill_count_pos_on_full_page: integer
+    waybill_count_pos_on_last_page: integer
+    waybill_counter: integer
+
+# Каменты
+Comment:
+  actAs: [Timestampable, Signable]
+  columns:
+    order_id:
+      type: integer
+      notnull: true
+    text:
+      type: clob
+      notnull: true
+  relations:
+    CommentReads:
+      type: many
+      local: id
+      foreign: comment_id
+
+# Реф юзер-прочтённый камент
+CommentReads:
+  columns:
+    comment_id:
+      type: integer
+      notnull: true
+    user_id:
+      type: integer
+      notnull: true
+  indexes:
+    unique_for_inserts:
+      fields: [comment_id, user_id]
+      type: unique
+
+sfGuardUser:
+  relations:
+    Orders:
+      class: Order
+      type: many
+      local: id
+      foreign: created_by
+      foreignAlias: Creator
+    CommentReads:
+      type: many
+      local: id
+      foreign: user_id
+      foreignAlias: Reader

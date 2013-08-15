@@ -75,7 +75,15 @@
       <legend>Оплата</legend>
       <?php echo $form['pay_method']->renderRowUsing('bootstrap')?>
       <?php echo $form['recoil']->renderRowUsing('bootstrap')?>
-      <?php echo $form['payed']->renderRowUsing('bootstrap')?>
+      <?php include_partial('global/relation', [
+        'form' => $form,
+        'relationName' => 'Pays',
+        'columns' => [
+          'payed_at' => 'Дата оплаты',
+          'amount' => 'Сумма',
+        ],
+        'noRelationsMessage' => 'Нет оплат',
+      ]) ?>
       <?php echo $form['payed_at']->renderRowUsing('bootstrap')?>
     </fieldset>
 
@@ -148,7 +156,15 @@
     <fieldset>
       <legend>Оплата</legend>
       <?php echo $form['pay_method']->renderRowUsing('bootstrap')?>
-      <?php echo $form['payed']->renderRowUsing('bootstrap')?>
+      <?php include_partial('global/relation', [
+        'form' => $form,
+        'relationName' => 'Pays',
+        'columns' => [
+          'payed_at' => 'Дата оплаты',
+          'amount' => 'Сумма',
+        ],
+        'noRelationsMessage' => 'Нет оплат',
+      ]) ?>
       <?php echo $form['payed_at']->renderRowUsing('bootstrap')?>
     </fieldset>
 
