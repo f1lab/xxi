@@ -99,3 +99,15 @@ form a[href="#"] {
 .datepicker.dropdown-menu {
   min-width: auto;
 }
+
+legend {
+  margin-bottom: .2em;
+}
+
+legend + .control-group {
+  margin-top: 0;
+}
+
+fieldset {
+  margin-bottom: 1.2em;
+}

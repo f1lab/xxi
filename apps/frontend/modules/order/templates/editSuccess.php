@@ -1,390 +1,243 @@
 <div class="page-header">
   <h1>Редактировать заказ №<?php echo $order->getId() ?></h1>
 </div>
+
 <?php use_stylesheets_for_form($form) ?>
 <?php use_javascripts_for_form($form) ?>
+
 <form action="<?php echo url_for('@order-update?id=' . $order->getId()) ?>" method="post">
-  <?php //echo $form->renderUsing('bootstrap') ?>
   <?php echo $form->renderGlobalErrors() ?>
   <?php echo $form->renderHiddenFields()?>
 
   <?php if ($sf_user->hasCredential('can_spend_materials')): ?>
     <fieldset>
       <legend>Расход материалов</legend>
-      <table class="table-condensed add-remove-chzn-for-relations">
-        <thead>
-          <tr>
-            <td>Наименование материала</td>
-            <td>Кол-во (объём)</td>
-            <td>На удаление</td>
-          </tr>
-        </thead>
-        <tbody>
-          <?php if (count($form['Utilizations'])): ?>
-            <?php foreach ($form['Utilizations'] as $i => $invoice ):?>
-              <tr>
-                <td>
-                  <?php echo $invoice['material_id']->render();?>
-                </td>
-                <td>
-                  <?php echo $invoice['amount']->render(); ?>
-                </td>
-
-                <td align="center">
-                  <input type="checkbox" name="order[Utilizations][<?php echo $i;?>][delete_object]" id="order_Utilizations_[<?php echo $i; $i++;?>]_delete_object">
-                </td>
-                <td>
-                  <div style="color:red">
-                    <?php echo $invoice['material_id']->renderError();?>
-                    <?php echo $invoice['amount']->renderError(); ?>
-                  </div>
-                </td>
-              </tr>
-            <?php endforeach ?>
-          <?php else: ?>
-            <tr>
-              <td colspan="3"><div class="alert alert-info">Нет расходов</div></td>
-            </tr>
-          <?php endif ?>
-
-          <tr>
-            <td>Наименование материала</td>
-            <td>Кол-во (объём)</td>
-            <td></td>
-          </tr>
-          <tr>
-            <td>
-              <?php echo $form['new_Utilizations']['0']['material_id']->render();?>
-            </td>
-            <td>
-              <?php echo $form['new_Utilizations']['0']['amount']->render();?>
-            </td>
-            <td>
-              <div style="color:red">
-                <?php echo $form['new_Utilizations']['0']['material_id']->renderError();?>
-                <?php echo $form['new_Utilizations']['0']['amount']->renderError(); ?>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td><button type="button" class="ahAddRelation" rel="new_Utilizations">+</button></td>
-          </tr>
-        </tbody>
-      </table>
+      <?php include_partial('global/relation', [
+        'form' => $form,
+        'relationName' => 'Utilizations',
+        'columns' => [
+          'material_id' => 'Наименование материала',
+          'amount' => 'Кол-во (объём)',
+        ],
+        'noRelationsMessage' => 'Нет расходов',
+      ]) ?>
     </fieldset>
   <?php endif ?>
 
   <?php if (!$sf_user->hasGroup('master')): ?>
     <fieldset>
       <legend>Позиции заказа</legend>
-      <table>
-        <thead>
-          <tr>
-            <td>Описание заказа</td>
-            <td>Кол-во</td>
-            <td>Цена</td>
-            <td>Сумма</td>
-            <td>На удаление</td>
-          </tr>
-        </thead>
-        <tbody>
-          <?php foreach ($form['Invoices'] as $i => $invoice ):?>
-            <tr>
-              <td>
-                <?php echo $invoice['description']->render();?>
-              </td>
-              <td>
-                <?php
-                  //$this->sfFormFieldSchema->getWidget('number')->setAttribute('readonly', 'readonly');
-                //$invoice['number']->setAttribute('readonly', 'readonly'); ?>
-                <?php echo $invoice['number']->render(); ?>
-              </td>
-              <td>
-                <?php echo $invoice['price']->render(); ?>
-              </td>
-              <td>
-                <?php echo $invoice['sum']->render(); ?>
-              </td>
-
-              <td align="center">
-                <input type="checkbox" name="order[Invoices][<?php echo $i;?>][delete_object]" id="order_Invoices_[<?php echo $i; $i++;?>]_delete_object">
-              </td>
-              <td>
-                <div style="color:red">
-                  <?php echo $invoice['description']->renderError();?>
-                  <?php echo $invoice['number']->renderError(); ?>
-                  <?php echo $invoice['price']->renderError(); ?>
-                  <?php echo $invoice['sum']->renderError(); ?>
-                </div>
-              </td>
-            </tr>
-          <?php endforeach ?>
-
-          <tr>
-            <td>
-              <?php echo $form['new_Invoices']['0']['description']->render();?>
-            </td>
-            <td>
-              <?php echo $form['new_Invoices']['0']['number']->render();?>
-            </td>
-            <td>
-              <?php echo $form['new_Invoices']['0']['price']->render();?>
-            </td>
-            <td>
-              <?php echo $form['new_Invoices']['0']['sum']->render();?>
-            </td>
-          </tr>
-          <tr>
-            <td><button type="button" class="ahAddRelation" rel="new_Invoices">+</button></td>
-          </tr>
-        </tbody>
-      </table>
+      <?php include_partial('global/relation', [
+        'form' => $form,
+        'relationName' => 'Invoices',
+        'columns' => [
+          'description' => 'Описание заказа',
+          'number' => 'Кол-во',
+          'price' => 'Цена',
+          'sum' => 'Сумма',
+        ],
+        'noRelationsMessage' => 'Нет описания',
+      ]) ?>
     </fieldset>
   <?php else: ?>
     <fieldset>
     <legend>Статусы</legend>
-      <?php echo $form['state']->renderLabel()?>
-      <?php echo $form['state']->render()?><br>
-      <?php echo $form['state']->renderError()?>
+      <?php echo $form['state']->renderRowUsing('bootstrap')?>
     </fieldset>
   <?php endif ?>
 
   <!--Director-->
   <?php if ($sf_user->hasGroup('director')): ?>
-  <fieldset>
-    <legend>Основная информация</legend>
+    <fieldset>
+      <legend>Основная информация</legend>
+      <?php echo $form['client_id']->renderRowUsing('bootstrap')?>
+      <?php echo $form['description']->renderRowUsing('bootstrap')?>
+      <?php echo $form['additional']->renderRowUsing('bootstrap')?>
+      <?php echo $form['approved_at']->renderRowUsing('bootstrap')?>
+      <?php echo $form['files']->renderRowUsing('bootstrap')?>
+    </fieldset>
 
-      <?php echo $form['client_id']->renderLabel()?>
-      <?php echo $form['client_id']->render()?><br>
-      <?php echo $form['client_id']->renderError()?><br>
-      <?php echo $form['description']->renderLabel()?>
-      <?php echo $form['description']->render()?><br>
-      <span class="text-error">
-        <?php echo $form['description']->renderError()?>
-      </span><br>
-      <?php echo $form['additional']->renderLabel()?>
-      <?php echo $form['additional']->render()?><br>
-      <?php echo $form['additional']->renderError()?><br>
+    <fieldset>
+      <legend>Сроки исполнения</legend>
+      <?php echo $form['due_date']->renderRowUsing('bootstrap')?>
+    </fieldset>
 
-      <?php echo $form['approved_at']->renderLabel()?>
-      <?php echo $form['approved_at']->render()?><br>
-      <?php echo $form['approved_at']->renderError()?>
-      <?php echo $form['files']->renderLabel()?>
-      <?php echo $form['files']->render()?><br>
-      <?php echo $form['files']->renderError()?><br>
-  </fieldset>
+    <fieldset>
+      <legend>Стоимости</legend>
+      <?php echo $form['installation_cost']->renderRowUsing('bootstrap')?>
+      <?php echo $form['design_cost']->renderRowUsing('bootstrap')?>
+      <?php echo $form['contractors_cost']->renderRowUsing('bootstrap')?>
+      <?php echo $form['delivery_cost']->renderRowUsing('bootstrap')?>
+      <?php echo $form['cost']->renderRowUsing('bootstrap')?>
+    </fieldset>
 
-  <fieldset>
-    <legend>Сроки исполнения</legend>
-      <?php echo $form['due_date']->renderLabel()?>
-      <?php echo $form['due_date']->render()?><br>
-      <?php echo $form['due_date']->renderError()?>
-  </fieldset>
-  <fieldset>
-    <legend>Стоимости</legend>
-      <?php echo $form['installation_cost']->renderLabel()?>
-      <?php echo $form['installation_cost']->render()?><br>
-      <?php echo $form['installation_cost']->renderError()?>
-      <?php echo $form['design_cost']->renderLabel()?>
-      <?php echo $form['design_cost']->render()?><br>
-      <?php echo $form['design_cost']->renderError()?>
-      <?php echo $form['contractors_cost']->renderLabel()?>
-      <?php echo $form['contractors_cost']->render()?><br>
-      <?php echo $form['contractors_cost']->renderError()?>
-      <?php echo $form['delivery_cost']->renderLabel()?>
-      <?php echo $form['delivery_cost']->render()?><br>
-      <?php echo $form['delivery_cost']->renderError()?>
-      <?php echo $form['cost']->renderLabel()?>
-      <?php echo $form['cost']->render()?><br>
-      <?php echo $form['cost']->renderError()?>
-  </fieldset>
-  <fieldset>
-    <legend>Оплата</legend>
-      <?php echo $form['pay_method']->renderLabel()?>
-      <?php echo $form['pay_method']->render()?><br>
-      <?php echo $form['pay_method']->renderError()?>
-      <?php echo $form['recoil']->renderLabel()?>
-      <?php echo $form['recoil']->render()?><br>
-      <?php echo $form['recoil']->renderError()?>
-      <?php echo $form['payed']->renderLabel()?>
-      <?php echo $form['payed']->render()?><br>
-      <?php echo $form['payed']->renderError()?>
-      <?php echo $form['payed_at']->renderLabel()?>
-      <?php echo $form['payed_at']->render()?><br>
-      <?php echo $form['payed_at']->renderError()?>
-  </fieldset>
-  <fieldset>
-    <legend>Статусы</legend>
-      <?php echo $form['state']->renderLabel()?>
-      <?php echo $form['state']->render()?><br>
-      <?php echo $form['state']->renderError()?>
-  </fieldset>
-  <fieldset>
-    <legend>Выполнение заказа</legend>
-      <?php echo $form['started_at']->renderLabel()?>
-      <?php echo $form['started_at']->render()?><br>
-      <?php echo $form['started_at']->renderError()?>
-      <?php echo $form['area']->renderLabel()?>
-      <?php echo $form['area']->render()?><br>
-      <?php echo $form['area']->renderError()?>
-      <?php echo $form['finished_at']->renderLabel()?>
-      <?php echo $form['finished_at']->render()?><br>
-      <?php echo $form['finished_at']->renderError()?>
-      <?php echo $form['submited_at']->renderLabel()?>
-      <?php echo $form['submited_at']->render()?><br>
-      <?php echo $form['submited_at']->renderError()?>
-  </fieldset>
-  <fieldset>
-    <legend>Бухгалтерия</legend>
-      <?php echo $form['bill_made']->renderLabel()?>
-      <?php echo $form['bill_made']->render()?><br>
-      <?php echo $form['bill_made']->renderError()?>
-      <?php echo $form['bill_given']->renderLabel()?>
-      <?php echo $form['bill_given']->render()?><br>
-      <?php echo $form['bill_given']->renderError()?>
-      <?php echo $form['docs_given']->renderLabel()?>
-      <?php echo $form['docs_given']->render()?><br>
-      <?php echo $form['docs_given']->renderError()?>
-  </fieldset>
+    <fieldset>
+      <legend>Оплата</legend>
+      <?php echo $form['pay_method']->renderRowUsing('bootstrap')?>
+      <?php echo $form['recoil']->renderRowUsing('bootstrap')?>
+      <?php echo $form['payed']->renderRowUsing('bootstrap')?>
+      <?php echo $form['payed_at']->renderRowUsing('bootstrap')?>
+    </fieldset>
+
+    <fieldset>
+      <legend>Статусы</legend>
+      <?php echo $form['state']->renderRowUsing('bootstrap')?>
+    </fieldset>
+
+    <fieldset>
+      <legend>Выполнение заказа</legend>
+      <?php echo $form['started_at']->renderRowUsing('bootstrap')?>
+      <?php echo $form['area']->renderRowUsing('bootstrap')?>
+      <?php echo $form['finished_at']->renderRowUsing('bootstrap')?>
+      <?php echo $form['submited_at']->renderRowUsing('bootstrap')?>
+    </fieldset>
+
+    <fieldset>
+      <legend>Бухгалтерия</legend>
+      <div class="control-group<?php if ($form['bill_made']->hasError()): ?> error<?php endif ?>">
+        <div class="controls">
+          <label class="checkbox">
+            <?php echo $form['bill_made']->render() ?> <?php echo $form['bill_made']->renderLabelName() ?>
+          </label>
+          <?php if ($form['bill_made']->hasError()): ?><div class="help-inline"><?php echo $form['bill_made']->getError() ?></div><?php endif ?>
+        </div>
+      </div>
+      <div class="control-group<?php if ($form['bill_given']->hasError()): ?> error<?php endif ?>">
+        <div class="controls">
+          <label class="checkbox">
+            <?php echo $form['bill_given']->render() ?> <?php echo $form['bill_given']->renderLabelName() ?>
+          </label>
+          <?php if ($form['bill_given']->hasError()): ?><div class="help-inline"><?php echo $form['bill_given']->getError() ?></div><?php endif ?>
+        </div>
+      </div>
+      <div class="control-group<?php if ($form['docs_given']->hasError()): ?> error<?php endif ?>">
+        <div class="controls">
+          <label class="checkbox">
+          <?php echo $form['docs_given']->render() ?> <?php echo $form['docs_given']->renderLabelName() ?>
+          </label>
+          <?php if ($form['docs_given']->hasError()): ?><div class="help-inline"><?php echo $form['docs_given']->getError() ?></div><?php endif ?>
+        </div>
+      </div>
+      <?php echo $form['waybill_number']->renderRowUsing('bootstrap')?>
+    </fieldset>
   <?php endif?>
 
- <!--Worker-->
+  <!--Worker-->
   <?php if ($sf_user->hasGroup('worker')): ?>
     <fieldset>
       <legend>Выполнение заказа</legend>
-      <?php echo $form['started_at']->renderLabel()?>
-      <?php echo $form['started_at']->render()?><br>
-      <?php echo $form['started_at']->renderError()?>
-      <?php echo $form['expected_at']->renderLabel()?>
-      <?php echo $form['expected_at']->render()?><br>
-      <?php echo $form['expected_at']->renderError()?>
-      <?php echo $form['area']->renderLabel()?>
-      <?php echo $form['area']->render()?><br>
-      <?php echo $form['area']->renderError()?>
-      <?php echo $form['state']->renderLabel()?>
-      <?php echo $form['state']->render()?><br>
-      <?php echo $form['state']->renderError()?>
-  </fieldset>
-
+      <?php echo $form['started_at']->renderRowUsing('bootstrap')?>
+      <?php echo $form['expected_at']->renderRowUsing('bootstrap')?>
+      <?php echo $form['area']->renderRowUsing('bootstrap')?>
+      <?php echo $form['state']->renderRowUsing('bootstrap')?>
+    </fieldset>
   <?php endif?>
 
   <!--Buhgalter-->
   <?php if ($sf_user->hasGroup('buhgalter')): ?>
     <fieldset>
-    <legend>Основная информация</legend>
+      <legend>Основная информация</legend>
+      <?php echo $form['additional']->renderRowUsing('bootstrap')?>
+    </fieldset>
 
-      <?php echo $form['additional']->renderLabel()?>
-      <?php echo $form['additional']->render()?><br>
-      <?php echo $form['additional']->renderError()?><br>
-    </fieldset>
     <fieldset>
-    <legend>Стоимости</legend>
-      <?php echo $form['cost']->renderLabel()?>
-      <?php echo $form['cost']->render()?><br>
-      <?php echo $form['cost']->renderError()?>
+      <legend>Стоимости</legend>
+      <?php echo $form['cost']->renderRowUsing('bootstrap')?>
     </fieldset>
+
     <fieldset>
-    <legend>Оплата</legend>
-      <?php echo $form['pay_method']->renderLabel()?>
-      <?php echo $form['pay_method']->render()?><br>
-      <?php echo $form['pay_method']->renderError()?>
-      <?php echo $form['payed']->renderLabel()?>
-      <?php echo $form['payed']->render()?><br>
-      <?php echo $form['payed']->renderError()?>
-      <?php echo $form['payed_at']->renderLabel()?>
-      <?php echo $form['payed_at']->render()?><br>
-      <?php echo $form['payed_at']->renderError()?>
+      <legend>Оплата</legend>
+      <?php echo $form['pay_method']->renderRowUsing('bootstrap')?>
+      <?php echo $form['payed']->renderRowUsing('bootstrap')?>
+      <?php echo $form['payed_at']->renderRowUsing('bootstrap')?>
     </fieldset>
+
     <fieldset>
-    <legend>Бухгалтерия</legend>
-      <?php echo $form['bill_made']->renderLabel()?>
-      <?php echo $form['bill_made']->render()?><br>
-      <?php echo $form['bill_made']->renderError()?>
-      <?php echo $form['bill_given']->renderLabel()?>
-      <?php echo $form['bill_given']->render()?><br>
-      <?php echo $form['bill_given']->renderError()?>
-      <?php echo $form['docs_given']->renderLabel()?>
-      <?php echo $form['docs_given']->render()?><br>
-      <?php echo $form['docs_given']->renderError()?>
-      <?php echo $form['waybill_number']->renderLabel()?>
-      <?php echo $form['waybill_number']->render()?><br>
-      <?php echo $form['waybill_number']->renderError()?>
-  </fieldset>
+      <legend>Бухгалтерия</legend>
+      <div class="control-group<?php if ($form['bill_made']->hasError()): ?> error<?php endif ?>">
+        <div class="controls">
+          <label class="checkbox">
+            <?php echo $form['bill_made']->render() ?> <?php echo $form['bill_made']->renderLabelName() ?>
+          </label>
+          <?php if ($form['bill_made']->hasError()): ?><div class="help-inline"><?php echo $form['bill_made']->getError() ?></div><?php endif ?>
+        </div>
+      </div>
+      <div class="control-group<?php if ($form['bill_given']->hasError()): ?> error<?php endif ?>">
+        <div class="controls">
+          <label class="checkbox">
+            <?php echo $form['bill_given']->render() ?> <?php echo $form['bill_given']->renderLabelName() ?>
+          </label>
+          <?php if ($form['bill_given']->hasError()): ?><div class="help-inline"><?php echo $form['bill_given']->getError() ?></div><?php endif ?>
+        </div>
+      </div>
+      <div class="control-group<?php if ($form['docs_given']->hasError()): ?> error<?php endif ?>">
+        <div class="controls">
+          <label class="checkbox">
+          <?php echo $form['docs_given']->render() ?> <?php echo $form['docs_given']->renderLabelName() ?>
+          </label>
+          <?php if ($form['docs_given']->hasError()): ?><div class="help-inline"><?php echo $form['docs_given']->getError() ?></div><?php endif ?>
+        </div>
+      </div>
+      <?php echo $form['waybill_number']->renderRowUsing('bootstrap')?>
+    </fieldset>
   <?php endif?>
 
   <!--Manager-->
   <?php if ($sf_user->hasGroup('manager')): ?>
     <fieldset>
-    <legend>Основная информация</legend>
-      <?php echo $form['client_id']->renderLabel()?>
-      <?php echo $form['client_id']->render()?><br>
-      <?php echo $form['client_id']->renderError()?><br>
-      <?php echo $form['description']->renderLabel()?>
-      <?php echo $form['description']->render()?><br>
-      <span class="text-error">
-        <?php echo $form['description']->renderError()?>
-      </span><br>
-      <?php echo $form['additional']->renderLabel()?>
-      <?php echo $form['additional']->render()?><br>
-      <?php echo $form['additional']->renderError()?><br>
+      <legend>Основная информация</legend>
+      <?php echo $form['client_id']->renderRowUsing('bootstrap')?>
+      <?php echo $form['description']->renderRowUsing('bootstrap')?>
+      <?php echo $form['additional']->renderRowUsing('bootstrap')?>
+      <?php echo $form['approved_at']->renderRowUsing('bootstrap')?>
+      <?php echo $form['files']->renderRowUsing('bootstrap')?>
+    </fieldset>
 
-      <?php echo $form['approved_at']->renderLabel()?>
-      <?php echo $form['approved_at']->render()?><br>
-      <?php echo $form['approved_at']->renderError()?>
-      <?php echo $form['files']->renderLabel()?>
-      <?php echo $form['files']->render()?><br>
-      <?php echo $form['files']->renderError()?><br>
-    </fieldset>
     <fieldset>
-    <legend>Сроки исполнения</legend>
-      <?php echo $form['due_date']->renderLabel()?>
-      <?php echo $form['due_date']->render()?><br>
-      <?php echo $form['due_date']->renderError()?>
+      <legend>Сроки исполнения</legend>
+      <?php echo $form['due_date']->renderRowUsing('bootstrap')?>
     </fieldset>
+
     <fieldset>
-    <legend>Стоимости</legend>
-      <?php echo $form['installation_cost']->renderLabel()?>
-      <?php echo $form['installation_cost']->render()?><br>
-      <?php echo $form['installation_cost']->renderError()?>
-      <?php echo $form['design_cost']->renderLabel()?>
-      <?php echo $form['design_cost']->render()?><br>
-      <?php echo $form['design_cost']->renderError()?>
-      <?php echo $form['contractors_cost']->renderLabel()?>
-      <?php echo $form['contractors_cost']->render()?><br>
-      <?php echo $form['contractors_cost']->renderError()?>
-      <?php echo $form['delivery_cost']->renderLabel()?>
-      <?php echo $form['delivery_cost']->render()?><br>
-      <?php echo $form['delivery_cost']->renderError()?>
-      <?php echo $form['cost']->renderLabel()?>
-      <?php echo $form['cost']->render()?><br>
-      <?php echo $form['cost']->renderError()?>
+      <legend>Стоимости</legend>
+      <?php echo $form['installation_cost']->renderRowUsing('bootstrap')?>
+      <?php echo $form['design_cost']->renderRowUsing('bootstrap')?>
+      <?php echo $form['contractors_cost']->renderRowUsing('bootstrap')?>
+      <?php echo $form['delivery_cost']->renderRowUsing('bootstrap')?>
+      <?php echo $form['cost']->renderRowUsing('bootstrap')?>
     </fieldset>
+
     <fieldset>
-    <legend>Оплата</legend>
-      <?php echo $form['pay_method']->renderLabel()?>
-      <?php echo $form['pay_method']->render()?><br>
-      <?php echo $form['pay_method']->renderError()?>
-      <?php echo $form['recoil']->renderLabel()?>
-      <?php echo $form['recoil']->render()?><br>
-      <?php echo $form['recoil']->renderError()?>
+      <legend>Оплата</legend>
+      <?php echo $form['pay_method']->renderRowUsing('bootstrap')?>
+      <?php echo $form['recoil']->renderRowUsing('bootstrap')?>
     </fieldset>
+
     <fieldset>
-    <legend>Бухгалтерия</legend>
-      <?php echo $form['bill_given']->renderLabel()?>
-      <?php echo $form['bill_given']->render()?><br>
-      <?php echo $form['bill_given']->renderError()?>
-      <?php echo $form['docs_given']->renderLabel()?>
-      <?php echo $form['docs_given']->render()?><br>
-      <?php echo $form['docs_given']->renderError()?>
+      <legend>Бухгалтерия</legend>
+      <div class="control-group<?php if ($form['bill_given']->hasError()): ?> error<?php endif ?>">
+        <div class="controls">
+          <label class="checkbox">
+            <?php echo $form['bill_given']->render() ?> <?php echo $form['bill_given']->renderLabelName() ?>
+          </label>
+          <?php if ($form['bill_given']->hasError()): ?><div class="help-inline"><?php echo $form['bill_given']->getError() ?></div><?php endif ?>
+        </div>
+      </div>
+      <div class="control-group<?php if ($form['docs_given']->hasError()): ?> error<?php endif ?>">
+        <div class="controls">
+          <label class="checkbox">
+          <?php echo $form['docs_given']->render() ?> <?php echo $form['docs_given']->renderLabelName() ?>
+          </label>
+          <?php if ($form['docs_given']->hasError()): ?><div class="help-inline"><?php echo $form['docs_given']->getError() ?></div><?php endif ?>
+        </div>
+      </div>
     </fieldset>
+
     <fieldset>
-    <legend>Статусы</legend>
-      <?php echo $form['state']->renderLabel()?>
-      <?php echo $form['state']->render()?><br>
-      <?php echo $form['state']->renderError()?>
+      <legend>Статусы</legend>
+      <?php echo $form['state']->renderRowUsing('bootstrap')?>
     </fieldset>
   <?php endif?>
-
 
   <div class="form-actions">
     <button type="submit" class="btn btn-primary">Сохранить</button>

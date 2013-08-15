@@ -22,7 +22,6 @@ class UtilizationForm extends BaseUtilizationForm
     $this->getWidgetSchema()
       ->offsetSet('material_id', new sfWidgetFormDoctrineChoice(array(
         'model' => $this->getRelatedModelName('Material'),
-        'add_empty' => false,
         'method' => 'getNameWithDimension',
         'add_empty' => true,
       ), array(
@@ -30,5 +29,22 @@ class UtilizationForm extends BaseUtilizationForm
       )))
       ->offsetSet('order_id', new sfWidgetFormInputHidden())
     ;
+
+    $this->mergePostValidator(new UtilizationValidator());
+  }
+}
+
+class UtilizationValidator extends sfValidatorBase {
+  public function configure($options = [], $messages = [])
+  {
+    parent::configure();
+    $this->addMessage('not_enough_material', 'Недостаточно материала для такого расхода');
+  }
+
+  public function doClean($values) {
+    if ($values['amount'] > Doctrine_Core::getTable('Material')->find($values['material_id'])->getRemainedAmount()) {
+      $error = new sfValidatorError($this, 'not_enough_material', ['value' => $values]);
+      throw new sfValidatorErrorSchema($this, array('amount' => $error));
+    }
   }
 }
