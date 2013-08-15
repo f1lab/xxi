@@ -227,9 +227,10 @@ class reportActions extends sfActions
 
     $this->report = Doctrine_Query::create()
       ->from('sfGuardUser b')
-      ->select('b.*, count(c.id) orderscount, sum(c.cost) orderscost, sum(c.delivery_cost) ordersdeliverycost, sum(c.recoil) ordersrecoilcost')
+      ->select('b.*, count(c.id) orderscount, count(p.id) payscount, sum(p.amount) payed')
       ->leftJoin('b.Groups a')
-      ->leftJoin('b.Orders c with ((c.payed_at >= ? and c.payed_at <= ?) and c.state = ?)', array($this->period['from'], $this->period['to'], 'archived'))
+      ->leftJoin('b.Orders c')
+      ->leftJoin('c.Pays p with (p.payed_at >= ? and p.payed_at <= ?)', array($this->period['from'], $this->period['to']))
       ->andWhere('a.name = ?', 'manager')
       ->groupBy('b.id')
       ->execute()

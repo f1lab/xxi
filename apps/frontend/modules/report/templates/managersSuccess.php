@@ -38,25 +38,25 @@
       <thead>
         <tr>
           <th>Менеджер</th>
-          <th>Количество заказов</th>
+          <th>Количество проплат</th>
           <th>Σ</th>
           <th>Σ * 0,03</th>
         </tr>
       </thead>
       <tbody><?php
-      $allCounter = $allSumm = $allSummPercented = 0;
+      $allCounter = $allCounterPays = $allSumm = $allSummPercented = 0;
       foreach ($report as $manager): ?>
         <tr>
           <td><?php echo $manager ?></td>
-          <td><?php $allCounter += $manager->getOrderscount(); echo format_number($manager->getOrderscount()) ?></td>
-          <td><?php $allSumm += ($payed = $manager->getOrderscost() - $manager->getOrdersdeliverycost() - $manager->getOrdersrecoilcost());
+          <td><?php $allCounterPays += $manager->getPayscount(); echo format_number($manager->getPayscount()) ?></td>
+          <td><?php $allSumm += ($payed = (double)$manager->getPayed());
             echo format_currency($payed) ?></td>
           <td><?php $allSummPercented += ($payed * 0.03); echo format_currency($payed * 0.03) ?></td>
         </tr>
       <?php endforeach ?>
         <tr>
           <td><strong>Итого</strong></td>
-          <td><strong><?php echo format_number($allCounter) ?></strong></td>
+          <td><strong><?php echo format_number($allCounterPays) ?></strong></td>
           <td><strong><?php echo format_currency($allSumm) ?></strong></td>
           <td><strong><?php echo format_currency($allSummPercented) ?></strong></td>
         </tr>
