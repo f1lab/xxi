@@ -46,7 +46,7 @@
           <td><a href="<?php echo url_for('@client?id=' . $row->getClient()->getId() . '&state=debt') ?>"><?php echo $row->getClient()->getName() ?></a></td>
           <td><?php $sumOrders += $row->getOrders(); echo $row->getOrders() ?></td>
           <td><?php $sumCost += $row->getCost(); echo $row->getCost() ?></td>
-          <td><?php $sumPayed += $row->getPayed(); echo $row->getPayed() ?></td>
+          <td><?php $sumPayed += $row->getPayedSum(); echo $row->getPayedSum() ?></td>
           <td><?php $sumDebt += ($row->getCost() - $row->getPayed()); echo ($row->getCost() - $row->getPayed()) ?></td>
         </tr>
       <?php endforeach ?></tbody>
