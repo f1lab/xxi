@@ -46,5 +46,7 @@ class UtilizationValidator extends sfValidatorBase {
       $error = new sfValidatorError($this, 'not_enough_material', ['value' => $values]);
       throw new sfValidatorErrorSchema($this, array('amount' => $error));
     }
+
+    return $values;
   }
 }
