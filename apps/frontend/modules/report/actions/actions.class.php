@@ -360,7 +360,6 @@ class reportActions extends sfActions
     $this->report = Doctrine_Query::create()
       ->select('
         (select sum(cost) from `order` where state not in (:archived, :debt) and deleted_at is null' . ($this->client ? ' and client_id = :client' : '') . ') as cost_active,
-        (select sum(payed) from `order` where state not in (:archived, :debt) and deleted_at is null' . ($this->client ? ' and client_id = :client' : '') . ') as payed_active,
         (select sum(cost) from `order` where state = :archived and deleted_at is null' . ($this->client ? ' and client_id = :client' : '') . ') as cost_archived,
         (select sum(cost) from `order` where state = :debt and deleted_at is null' . ($this->client ? ' and client_id = :client' : '') . ') as cost_debt
       ')
@@ -369,6 +368,20 @@ class reportActions extends sfActions
       ->execute($bounds)
       ->getFirst()
     ;
+
+    $query = Doctrine_Query::create()
+      ->select('sum(p.amount) payed')
+      ->from('Pay p')
+      ->leftJoin('p.Order o')
+      ->addWhere('o.state not in (:archived, :debt)')
+      ->addWhere('o.deleted_at is null')
+    ;
+
+    if ($this->client) {
+      $query->addWhere('o.client_id = :client');
+    }
+
+    $this->payedActive = $query->execute($bounds, Doctrine_Core::HYDRATE_SINGLE_SCALAR);
   }
 
   public function executeDebt(sfWebRequest $request)

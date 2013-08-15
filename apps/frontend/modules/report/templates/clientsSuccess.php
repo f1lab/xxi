@@ -61,7 +61,7 @@
         </tr>
         <tr>
           <td>Внесённые средства <br />(сумма внесённых средств)</td>
-          <td><?php echo format_currency($report->getPayedActive()) ?></td>
+          <td><?php echo format_currency($payedActive) ?></td>
         </tr>
         <tr>
           <td>Объём выполненных заказов в архиве</td>
