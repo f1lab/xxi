@@ -15,6 +15,25 @@ class sfWidgetFormBootstrapDateTime extends sfWidgetForm
     $this->addOption('minView', '0');
   }
 
+  public static function javascriptDateFormat2Php($format)
+  {
+    return str_replace([
+      'yyyy',
+      'mm',
+      'dd',
+      'hh',
+      'ii',
+      'ss',
+    ], [
+      'Y',
+      'm',
+      'd',
+      'H',
+      'i',
+      's',
+    ], $format);
+  }
+
   public function render($name, $value = null, $attributes = array(), $errors = array())
   {
     $_ = function($value) {
@@ -22,7 +41,7 @@ class sfWidgetFormBootstrapDateTime extends sfWidgetForm
     };
 
     if ($value !== null) {
-      $value = date('Y-m-d H:i', strtotime($value));
+      $value = date(self::javascriptDateFormat2Php($this->getOption('format')), strtotime($value));
     }
 
     return <<<HTML
