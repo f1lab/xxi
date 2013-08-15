@@ -58,8 +58,12 @@ class Order extends BaseOrder
     if (isset($changes['state']) and $order->getState() !== $changes['state']) {
       if ($order->getState() === 'done') {
         $order->setFinishedAt(date('Y-m-d H:i:s'));
+
       } elseif ($order->getState() === 'submited') {
         $order->setSubmitedAt(date('Y-m-d H:i:s'));
+        if (!$order->getFinishedAt()) { // if u set state submited without setting state done there'll be no finishedAt date
+          $order->setFinishedAt(date('Y-m-d H:i:s'));
+        }
       }
     }
   }
