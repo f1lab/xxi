@@ -164,9 +164,10 @@ class reportActions extends sfActions
         sum(a.delivery_cost) delivery_cost,
         sum(a.cost) cost,
         sum(a.recoil) recoil,
-        sum(a.payed) payed
+        sum(p.amount) payed_sum
       ')
       ->from('Order a')
+      ->leftJoin('a.Pays p')
       ->andWhereIn('a.state', array(
         'work',
         'working',
