@@ -39,6 +39,5 @@ class SupplierForm extends BaseSupplierForm
     ));
 
     $this->getValidatorSchema()->offsetSet('email', new sfValidatorEmail(array('required' => false)));
-    $this->getWidgetSchema()->offsetGet('materials_list')->setAttribute('class', 'chzn-select');
   }
 }

@@ -142,7 +142,7 @@
         <td><?php echo date('d.m.Y', strtotime($arrival->getArrivedAt())) ?></td>
         <td><?php echo $arrival->getBill() ?></td>
         <td><?php echo $arrival->getMaterial()->getNameWithDimension() ?></td>
-        <td><?php echo $arrival->getCount() ?></td>
+        <td><?php echo $arrival->getAmount() ?></td>
         <td><?php echo $arrival->getPrice() ?></td>
       </tr>
     <?php endforeach; ?></tbody>
