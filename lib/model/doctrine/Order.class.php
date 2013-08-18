@@ -77,4 +77,9 @@ class Order extends BaseOrder
       ->execute([], Doctrine_Core::HYDRATE_SINGLE_SCALAR)
     ;
   }
+
+  public function getPayedOld()
+  {
+    return $this->_get('payed');
+  }
 }

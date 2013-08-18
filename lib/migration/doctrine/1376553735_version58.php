@@ -72,4 +72,28 @@ class Version58 extends Doctrine_Migration_Base
              ),
              ));
     }
+
+    public function postUp()
+    {
+      $ordersWithPays = Doctrine_Query::create()
+        ->from('Order o')
+        ->addWhere('o.payed > 0')
+        ->execute()
+      ;
+
+      if ($ordersWithPays) {
+        $transferedPays = new Doctrine_Collection('Pay');
+
+        foreach ($ordersWithPays as $order) {
+          $pay = (new Pay())->fromArray([
+            'order_id' => $order->getId(),
+            'payed_at' => $order->getPayedAt() ?: $order->getUpdatedAt(),
+            'amount' => $order->getPayedOld(),
+          ]);
+          $transferedPays->add($pay);
+        }
+
+        $transferedPays->save();
+      }
+    }
 }
