@@ -16,9 +16,12 @@ class MaterialForm extends BaseMaterialForm
       $this['deleted_at']
     );
 
-    $this->getWidgetSchema()->setLabels(array(
-      'name' => 'Наименование',
-      'dimension_id' => 'Единица измерения',
-    ));
+    $this->getWidgetSchema()
+      ->setLabels(array(
+        'name' => 'Наименование',
+        'dimension_id' => 'Единица измерения',
+      ))
+      ->offsetGet('name')->setAttribute('class', 'input-block-level')
+    ;
   }
 }

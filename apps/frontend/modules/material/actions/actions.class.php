@@ -13,7 +13,7 @@ class materialActions extends sfActions
   public function executeIndex(sfWebRequest $request)
   {
     $this->materials = Doctrine_Core::getTable('Material')
-      ->createQuery('a')
+      ->createQuery('a, a.Dimension')
       ->execute();
   }
 

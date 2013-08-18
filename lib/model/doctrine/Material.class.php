@@ -12,6 +12,9 @@
  */
 class Material extends BaseMaterial
 {
+  protected $arrivalsAmount = null;
+  protected $utilizationsAmount = null;
+
   public function getNameWithDimension()
   {
     return $this->getName() . ', ' . $this->getDimension();
@@ -19,22 +22,30 @@ class Material extends BaseMaterial
 
   public function getArrivalsAmount()
   {
-    return (double)Doctrine_Query::create()
-      ->from('Arrival a')
-      ->select('sum(a.amount)')
-      ->addWhere('a.material_id = ?', $this->getId())
-      ->execute([], Doctrine_Core::HYDRATE_SINGLE_SCALAR)
-    ;
+    if (null === $this->arrivalsAmount) {
+      $this->arrivalsAmount = (double)Doctrine_Query::create()
+        ->from('Arrival a')
+        ->select('sum(a.amount)')
+        ->addWhere('a.material_id = ?', $this->getId())
+        ->execute([], Doctrine_Core::HYDRATE_SINGLE_SCALAR)
+      ;
+    }
+
+    return $this->arrivalsAmount;
   }
 
   public function getUtilizationsAmount()
   {
-    return (double)Doctrine_Query::create()
-      ->from('Utilization u')
-      ->select('sum(u.amount)')
-      ->addWhere('u.material_id = ?', $this->getId())
-      ->execute([], Doctrine_Core::HYDRATE_SINGLE_SCALAR)
-    ;
+    if (null === $this->utilizationsAmount) {
+      $this->utilizationsAmount = (double)Doctrine_Query::create()
+        ->from('Utilization u')
+        ->select('sum(u.amount)')
+        ->addWhere('u.material_id = ?', $this->getId())
+        ->execute([], Doctrine_Core::HYDRATE_SINGLE_SCALAR)
+      ;
+    }
+
+    return $this->utilizationsAmount;
   }
 
   public function getRemainedAmount()
