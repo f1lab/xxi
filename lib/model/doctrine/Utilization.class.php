@@ -36,12 +36,11 @@ class Utilization extends BaseUtilization
   {
     $utilization = $event->getInvoker();
     $utilizationOld = $utilization->getModified(true);
-
     if ($utilization->isNew()) {
       $utilizationOld['amount'] = 0;
     }
 
-    if ($utilizationOld['amount'] or $utilization->isNew()) {
+    if (isset($utilizationOld['amount']) or $utilization->isNew()) {
       $arrivalSpendCollection = new Doctrine_Collection('RefUtilizationArrival');
 
       if ($utilizationOld['amount'] < $utilization->getAmount()) { // utilized more than saved
@@ -78,9 +77,7 @@ class Utilization extends BaseUtilization
           throw new Exception('No arrivals to spend');
         }
       } else { // less utilized than saved
-        throw new Exception('Not implemented');
-
-        /* $toReturn = $utilizationOld['amount'] - $utilization->getAmount();
+        $toReturn = $utilizationOld['amount'] - $utilization->getAmount();
 
         $arrivalSpents = Doctrine_Query::create()
           ->from('RefUtilizationArrival spent')
@@ -90,23 +87,30 @@ class Utilization extends BaseUtilization
           ->execute()
         ;
 
-        if ($arrivals and count($arrivals) and true == ($arrivals = $arrivals->getData())) { // get array of Doctrine_Records insteadof Doctrine_Collection
+        if ($arrivalSpents and count($arrivalSpents) and true == ($arrivalSpents = $arrivalSpents->getData())) { // get array of Doctrine_Records insteadof Doctrine_Collection
           while ($toReturn) {
             $arrivalSpent = array_pop($arrivalSpents);
-            $returned = ($arrival->getAmount() - $arrival->getSpend()) >= $toUtilize->getAmount()
-              ? $toUtilize->getAmount()
-              : $arrival->getAmount()
-            ;
 
-            $arrivalSpendCollection->add($arrivalSpend);
+            if ($arrivalSpent->getAmount() >= $toReturn) {
+              $returned = $toReturn;
+              $arrivalSpent->setAmount($arrivalSpent->getAmount() - $toReturn);
+              $arrivalSpendCollection->add($arrivalSpent);
+            } else {
+              $returned = $arrivalSpent->getAmount();
+              $arrivalSpent->delete();
+            }
             $toReturn -= $returned;
           }
         } else {
           throw new Exception('No arrivals to return'); // absurd
-        } */
+        }
       }
 
       $utilization->setRefUtilizationArrival($arrivalSpendCollection);
     }
+  }
+
+  public function preDelete($event) {
+    $event->getInvoker()->getRefUtilizationArrival()->delete();
   }
 }
