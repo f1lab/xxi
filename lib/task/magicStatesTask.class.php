@@ -25,23 +25,45 @@ EOF;
   {
     // initialize the database connection
     $databaseManager = new sfDatabaseManager($this->configuration);
-    $connection = $databaseManager->getDatabase($options['connection'])->getConnection(); 
-    echo $options['env'];
-    $archived = Doctrine_Query::create()
-      ->update('Order')
-      ->set('state', '?', 'archived')
-      ->andWhereIn('state', array('submited', 'debt'))
-      ->andWhere('COALESCE(payed, 0) >= COALESCE(cost, 0)')
-      ->execute()
-    ;
+    $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
 
-    $debted = Doctrine_Query::create()
-      ->update('Order')
-      ->set('state', '?', 'debt')
-      ->andWhereIn('state', array('submited', 'archived'))
-      ->andWhere('COALESCE(payed,0) < COALESCE(cost, 0)')
-      ->execute()
+    $archived = $debted = 0;
+
+    $toArchive = (array)Doctrine_Query::create()
+      ->from('Order o')
+      ->select('o.id, o.cost')
+      ->leftJoin('o.Pays p')
+      ->andWhereIn('o.state', array('submited', 'debt'))
+      ->having('COALESCE(sum(p.amount), 0) >= COALESCE(o.cost, 0)')
+      ->groupBy('o.id')
+      ->execute([], Doctrine_Core::HYDRATE_SINGLE_SCALAR)
     ;
+    if (count($toArchive)) {
+      $archived = Doctrine_Query::create()
+        ->update('Order')
+        ->set('state', '?', 'archived')
+        ->andWhereIn('id', $toArchive)
+        ->execute()
+      ;
+    }
+
+    $toDebt = (array)Doctrine_Query::create()
+      ->from('Order o')
+      ->select('o.id, o.cost')
+      ->leftJoin('o.Pays p')
+      ->andWhereIn('o.state', array('submited', 'archived'))
+      ->having('COALESCE(sum(p.amount), 0) < COALESCE(o.cost, 0)')
+      ->groupBy('o.id')
+      ->execute([], Doctrine_Core::HYDRATE_SINGLE_SCALAR)
+    ;
+    if (count($toDebt)) {
+      $debted = Doctrine_Query::create()
+        ->update('Order')
+        ->set('state', '?', 'debt')
+        ->andWhereIn('id', $toDebt)
+        ->execute()
+      ;
+    }
 
     echo print_r( array('archived' => $archived, 'debted' => $debted), 1 );
   }
