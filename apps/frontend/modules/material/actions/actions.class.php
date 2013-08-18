@@ -14,6 +14,7 @@ class materialActions extends sfActions
   {
     $this->materials = Doctrine_Core::getTable('Material')
       ->createQuery('a, a.Dimension')
+      ->addOrderBy('a.name')
       ->execute();
   }
 
@@ -25,6 +26,11 @@ class materialActions extends sfActions
         'suppliers_list' => (array) $request->getParameter('client'),
       ));
     }
+  }
+
+  public function executeShow(sfWebRequest $request)
+  {
+    $this->material = Doctrine_Core::getTable('Material')->find($request->getParameter('id'));
   }
 
   public function executeCreate(sfWebRequest $request)

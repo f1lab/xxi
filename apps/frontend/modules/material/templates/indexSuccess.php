@@ -7,7 +7,7 @@
     <a href="<?php echo url_for('material/new') ?>" class="btn btn-primary">Добавить</a>
   </div>
   <div class="btn-group">
-    <select name="" id="" style="float:left;margin-bottom:0" onchange="document.location.href = '<?php echo url_for('material/edit?id=') ?>/' + $(this).val()" class="chzn-select" data-placeholder="Быстрый переход">
+    <select name="" id="" style="float:left;margin-bottom:0" onchange="document.location.href = '<?php echo url_for('material/' . ($sf_user->hasCredential('can_edit_arrivals') ? 'show' : 'edit') . '?id=') ?>/' + $(this).val()" class="chzn-select" data-placeholder="Быстрый переход">
       <option value=""></option>
     <?php foreach ($materials as $material): ?>
       <option value="<?php echo $material->getId() ?>"><?php echo $material ?></option>
