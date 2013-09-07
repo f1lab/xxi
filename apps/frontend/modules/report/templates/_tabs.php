@@ -5,7 +5,7 @@
     'report-managers' => 'Зарплата',
     // 'report-workers' => 'Фонд ЗП цеха',
     'report-clients' => 'Клиенты',
-    // 'report-materials' => 'Материалы',
+    'report-materials' => 'Материалы',
     'report-debt' => 'Дебиторка',
     // 'export' => 'Выгрузка в 1С',
   );

@@ -67,6 +67,7 @@
         </tr>
       </tbody>
     </table>
+    <div class="alert alert-info"><small class="muted">Менеджер = (все оплаты по своим заказам за период – возвраты)*3%</small></div>
 
     <h3>Начальник отдела продаж</h3>
     <div class="alert alert-info">
@@ -88,7 +89,7 @@
         Σ = <?php echo $salesManagerResultMultiplied ?> руб.
       </abbr>
 
-      <small class="muted" style="display: block;">Начальник отдела продаж (НОП): (все оплаты за период – возвраты)*x%. До 1млн х=1, от 1млн до 2млн х=1.5, от 2млн до 3млн х=2, больше 3млн х=2.5</small>
+      <small class="muted" style="display: block;">Начальник отдела продаж (НОП) = (все оплаты за период – возвраты)*x%. До 1млн х=1, от 1млн до 2млн х=1.5, от 2млн до 3млн х=2, больше 3млн х=2.5</small>
     </div>
 
     <h3>Начальник цеха</h3>

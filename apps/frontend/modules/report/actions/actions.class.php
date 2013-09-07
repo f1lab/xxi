@@ -496,20 +496,34 @@ class reportActions extends sfActions
       ->offsetSet('to', new sfWidgetFormBootstrapDate(array(
         //
       )))
+      ->offsetSet('material_id', new sfWidgetFormDoctrineChoice(array(
+        'model' => 'Material',
+        'multiple' => true,
+        'label' => 'Материал',
+        'method' => 'getNameWithDimension',
+        'query' => Doctrine_Query::create()
+          ->from('Material m')
+          ->leftJoin('m.Dimension')
+          ->addOrderBy('m.name')
+      ), ['class' => 'chzn-select input-block-level']))
       ->setNameFormat('filter[%s]')
     ;
     $this->form->addCSRFProtection('123456789');
     $this->form->getValidatorSchema()
-      ->offsetSet('from', new sfValidatorDate())
+      ->offsetSet('from', new sfValidatorDate(array(
+        'required' => false,
+      )))
       ->offsetSet('to', new sfValidatorDate(array(
         'required' => false,
       )))
+      ->offsetSet('material_id', new sfValidatorDoctrineChoice(array('model' => 'Material', 'required' => false)))
     ;
 
     $this->period = array(
       'from' => date('Y') . '-01-01',
       'to' => date('Y-m-d'),
     );
+    $this->materials = [];
 
     if ($request->isMethod('post')) {
       $this->form->bind($request->getParameter('filter'));
@@ -522,22 +536,40 @@ class reportActions extends sfActions
         if ($this->form->getValue('to')) {
           $this->period['to'] = $this->form->getValue('to');
         }
+
+        if ($this->form->getValue('material_id')) {
+          $this->materials = $this->form->getValue('material_id');
+        }
       }
     }
 
-    $this->report = Doctrine_Core::getTable('Order')->createQuery('a')
+    $this->report = Doctrine_Query::create()
+      ->from('Material m')
       ->select('
-        sum(a.cost) cost,
-        sum(a.installation_cost) installation_cost,
-        sum(a.design_cost) design_cost,
-        sum(a.contractors_cost) contractors_cost,
-        sum(a.recoil) recoil,
-        sum(a.delivery_cost) delivery_cost,
-        count(*) count
+        m.name, d.name
+
+        , sum(u.amount) utilized_count
+        , sum(rua.amount * ua.price) utilized_sum
+
+        , sum(a.amount) arrived_count
+        , sum(a.amount * a.price) arrived_sum
+
+        , (sum(a.amount) - sum(u.amount)) remained_count
+        , (sum(a.amount * a.price) - sum(rua.amount * ua.price)) remained_sum
       ')
-      ->andWhere('a.finished_at >= ? and a.finished_at <= ?', array($this->period['from'], $this->period['to']))
+      ->leftJoin('m.Dimension d')
+      ->leftJoin('m.Utilizations u')
+      ->leftJoin('u.RefUtilizationArrival rua')
+      ->leftJoin('rua.Arrival ua')
+      ->leftJoin('m.Arrivals a')
+      ->orderBy('m.name')
+      ->groupBy('m.id')
+      ->having('utilized_count > 0 or arrived_count > 0 or remained_count > 0')
+      ->addWhere('(u.created_at >= :from and u.created_at <= :to) or (a.arrived_at >= :from and a.arrived_at <= :to)', [
+        'from' => $this->period['from'],
+        'to' => $this->period['to'],
+      ])
       ->execute()
-      ->getFirst()
     ;
   }
 

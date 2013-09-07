@@ -84,7 +84,7 @@
         ],
         'noRelationsMessage' => 'Нет оплат',
       ]) ?>
-      <?php echo $form['payed_at']->renderRowUsing('bootstrap')?>
+      <?php //echo $form['payed_at']->renderRowUsing('bootstrap')?>
     </fieldset>
 
     <fieldset>
@@ -165,7 +165,7 @@
         ],
         'noRelationsMessage' => 'Нет оплат',
       ]) ?>
-      <?php echo $form['payed_at']->renderRowUsing('bootstrap')?>
+      <?php //echo $form['payed_at']->renderRowUsing('bootstrap')?>
     </fieldset>
 
     <fieldset>
