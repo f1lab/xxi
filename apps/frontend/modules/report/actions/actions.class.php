@@ -20,6 +20,7 @@ class reportActions extends sfActions
     $this->states = array(
       'archived' => 'Архив',
       'debt' => 'Дебиторка',
+      'combo' => 'Архив + Дебиторка',
     );
 
     $this->form = new sfForm();
@@ -82,7 +83,7 @@ class reportActions extends sfActions
         }
 
         if ($this->form->getValue('state')) {
-          $this->state = $this->form->getValue('state');
+          $this->state = $this->form->getValue('state') === 'combo' ? ['archived', 'debt'] : (array)$this->form->getValue('state');
         }
       }
     }
@@ -100,7 +101,7 @@ class reportActions extends sfActions
       ')
       ->from('Order a')
       ->leftJoin('a.Pays p')
-      ->andWhere('a.state = ?', $this->state)
+      ->andWhereIn('a.state', $this->state)
       ->andWhere('a.submited_at >= ? and a.submited_at <= ?', array($this->period['from'], $this->period['to']))
     ;
 
@@ -227,13 +228,37 @@ class reportActions extends sfActions
 
     $this->report = Doctrine_Query::create()
       ->from('sfGuardUser b')
-      ->select('b.*, count(c.id) orderscount, count(p.id) payscount, sum(p.amount) payed')
-      ->leftJoin('b.Groups a')
+      ->select('b.*, count(c.id) orderscount, sum(c.recoil) recoiled, count(p.id) payscount, sum(p.amount) payed')
       ->leftJoin('b.Orders c')
       ->leftJoin('c.Pays p with (p.payed_at >= ? and p.payed_at <= ?)', array($this->period['from'], $this->period['to']))
-      ->andWhere('a.name = ?', 'manager')
       ->groupBy('b.id')
       ->execute()
+    ;
+
+    $this->salesManagerReport = Doctrine_Query::create()
+      ->from('Order o')
+      ->select('count(o.id) orderscount, count(p.id) payscount, sum(p.amount) payedsum, sum(o.recoil) recoiled')
+      ->leftJoin('o.Pays p with (p.payed_at >= ? and p.payed_at <= ?)', array($this->period['from'], $this->period['to']))
+      ->fetchOne()
+    ;
+
+    $this->workersChiefReport = Doctrine_Query::create()
+      ->from('Order o')
+      ->select('
+        count(o.id) orderscount,
+        sum(o.cost) costed,
+        sum(o.design_cost) designed,
+        sum(o.contractors_cost) contracted,
+        sum(o.recoil) recoiled,
+        (sum(o.cost) - sum(o.design_cost) - sum(o.contractors_cost) - sum(o.recoil)) report
+      ')
+      ->addWhere('o.submited_at >= ? and o.submited_at <= ?', array($this->period['from'], $this->period['to']))
+      ->andWhereIn('o.state', [
+        'submitted',
+        'archived',
+        'debt',
+      ])
+      ->fetchOne()
     ;
   }
 
@@ -297,7 +322,7 @@ class reportActions extends sfActions
     $this->form = new sfForm();
     $this->form->getWidgetSchema()
       ->offsetSet('from', new sfWidgetFormBootstrapDate(array(
-        'label' => 'Период',
+        'label' => 'Период даты создания заказов',
       )))
       ->offsetSet('to', new sfWidgetFormBootstrapDate(array(
         //
@@ -352,6 +377,8 @@ class reportActions extends sfActions
     $bounds = array(
       'archived' => 'archived',
       'debt' => 'debt',
+      'created_from' => $this->period['from'],
+      'created_to' => $this->period['to'],
     );
     if ($this->client) {
       $bounds['client'] = $this->client;
@@ -359,9 +386,26 @@ class reportActions extends sfActions
 
     $this->report = Doctrine_Query::create()
       ->select('
-        (select sum(cost) from `order` where state not in (:archived, :debt) and deleted_at is null' . ($this->client ? ' and client_id = :client' : '') . ') as cost_active,
-        (select sum(cost) from `order` where state = :archived and deleted_at is null' . ($this->client ? ' and client_id = :client' : '') . ') as cost_archived,
-        (select sum(cost) from `order` where state = :debt and deleted_at is null' . ($this->client ? ' and client_id = :client' : '') . ') as cost_debt
+        (select sum(cost) from `order` where
+          state not in (:archived, :debt)
+          and created_at >= :created_from and created_at <= :created_to
+          and deleted_at is null
+          ' . ($this->client ? ' and client_id = :client' : '') . '
+        ) as cost_active,
+
+        (select sum(cost) from `order` where
+          state = :archived
+          and created_at >= :created_from and created_at <= :created_to
+          and deleted_at is null
+          ' . ($this->client ? ' and client_id = :client' : '') . '
+        ) as cost_archived,
+
+        (select sum(cost) from `order` where
+          state = :debt
+          and created_at >= :created_from and created_at <= :created_to
+          and deleted_at is null
+          ' . ($this->client ? ' and client_id = :client' : '') . '
+        ) as cost_debt
       ')
       ->from('Client') // bidlo-magic because Doctrine queries must have `from'
       ->limit(1)
@@ -372,9 +416,11 @@ class reportActions extends sfActions
     $query = Doctrine_Query::create()
       ->select('sum(p.amount) payed')
       ->from('Pay p')
-      ->leftJoin('p.Order o')
-      ->addWhere('o.state not in (:archived, :debt)')
-      ->addWhere('o.deleted_at is null')
+      ->innerJoin('p.Order o with (
+        o.state not in (:archived, :debt)
+        and o.deleted_at is null
+        and (o.created_at >= :created_from and o.created_at <= :created_to)
+      )')
     ;
 
     if ($this->client) {

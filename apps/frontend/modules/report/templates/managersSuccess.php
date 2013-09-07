@@ -28,6 +28,8 @@
       Отчёт
       <small>за период <?php echo date('d.m.Y', strtotime($period['from'])) . '—' . date('d.m.Y', strtotime($period['to'])) ?></small>
     </h2>
+
+    <h3>Менеджеры</h3>
     <table class="table table-striped table-condensed">
       <colgroup>
         <col class="span4" />
@@ -45,12 +47,15 @@
       </thead>
       <tbody><?php
       $allCounter = $allCounterPays = $allSumm = $allSummPercented = 0;
-      foreach ($report as $manager): ?>
+      foreach ($report as $manager): if (!$manager->getPayscount()) continue; ?>
         <tr>
           <td><?php echo $manager ?></td>
           <td><?php $allCounterPays += $manager->getPayscount(); echo format_number($manager->getPayscount()) ?></td>
-          <td><?php $allSumm += ($payed = (double)$manager->getPayed());
-            echo format_currency($payed) ?></td>
+          <td>
+            <abbr title="<?php echo $manager->getPayed() ?> — <?php echo (double)$manager->getRecoiled() ?>">
+              <?php $allSumm += ($payed = (double)$manager->getPayed() - $manager->getRecoiled()); echo format_currency($payed) ?>
+            </abbr>
+          </td>
           <td><?php $allSummPercented += ($payed * 0.03); echo format_currency($payed * 0.03) ?></td>
         </tr>
       <?php endforeach ?>
@@ -62,5 +67,42 @@
         </tr>
       </tbody>
     </table>
+
+    <h3>Начальник отдела продаж</h3>
+    <div class="alert alert-info">
+      <?php
+        function computeResultMultiplier($result) {
+          /*
+            >3 2.5
+            >=2 2
+            >=1 1.5
+            1
+          */
+          return ($result > 3000000 ? 2.5 : ($result >= 2000000 ? 2 : ($result >= 1000000 ? 1.5 : 1))) / 100;
+        }
+        $salesManagerResult = $salesManagerReport->getPayedsum() - $salesManagerReport->getRecoiled();
+        $salesManagerMultiplier = computeResultMultiplier($salesManagerResult);
+        $salesManagerResultMultiplied = $salesManagerResult * $salesManagerMultiplier;
+      ?>
+      <abbr title="(<?php echo $salesManagerReport->getPayedsum() ?> — <?php echo $salesManagerReport->getRecoiled() ?>) × <?php echo $salesManagerMultiplier ?>">
+        Σ = <?php echo $salesManagerResultMultiplied ?> руб.
+      </abbr>
+
+      <small class="muted" style="display: block;">Начальник отдела продаж (НОП): (все оплаты за период – возвраты)*x%. До 1млн х=1, от 1млн до 2млн х=1.5, от 2млн до 3млн х=2, больше 3млн х=2.5</small>
+    </div>
+
+    <h3>Начальник цеха</h3>
+    <div class="alert alert-info">
+      <?php
+        $workersChiefResult = $workersChiefReport->getReport();
+        $workersChiefMultiplier = computeResultMultiplier($workersChiefResult);
+        $workersResultMultiplied = $workersChiefResult * $workersChiefMultiplier;
+      ?>
+      <abbr title="(<?php echo $workersChiefReport->getCosted() ?> — <?php echo $workersChiefReport->getDesigned() ?> — <?php echo $workersChiefReport->getContracted() ?> — <?php echo $workersChiefReport->getRecoiled() ?>) × <?php echo $workersChiefMultiplier ?>">
+        Σ = <?php echo $workersResultMultiplied ?> руб.
+      </abbr>
+
+      <small class="muted" style="display: block;">Начальник цеха = (сумма всех заказов в статусе сдан, архив, дебиторка – дизайн – работы подрядчиков – возвраты)*х%. До 1млн х=1, от 1млн до 2млн х=1.5, от 2млн до 3млн х=2, больше 3млн х=2.5</small>
+    </div>
   </div>
 </div>
