@@ -51,11 +51,7 @@
         <tr>
           <td><?php echo $manager ?></td>
           <td><?php $allCounterPays += $manager->getPayscount(); echo format_number($manager->getPayscount()) ?></td>
-          <td>
-            <abbr title="<?php echo $manager->getPayed() ?> — <?php echo (double)$manager->getRecoiled() ?>">
-              <?php $allSumm += ($payed = (double)$manager->getPayed() - $manager->getRecoiled()); echo format_currency($payed) ?>
-            </abbr>
-          </td>
+          <td><?php $allSumm += ($payed = (double)$manager->getPayed()); echo format_currency($payed) ?></td>
           <td><?php $allSummPercented += ($payed * 0.03); echo format_currency($payed * 0.03) ?></td>
         </tr>
       <?php endforeach ?>
@@ -67,7 +63,7 @@
         </tr>
       </tbody>
     </table>
-    <div class="alert alert-info"><small class="muted">Менеджер = (все оплаты по своим заказам за период – возвраты)*3%</small></div>
+    <div class="alert alert-info"><small class="muted">Менеджер = (все оплаты по своим заказам за период)*3%</small></div>
 
     <h3>Начальник отдела продаж</h3>
     <div class="alert alert-info">
@@ -81,15 +77,15 @@
           */
           return ($result > 3000000 ? 2.5 : ($result >= 2000000 ? 2 : ($result >= 1000000 ? 1.5 : 1))) / 100;
         }
-        $salesManagerResult = $salesManagerReport->getPayedsum() - $salesManagerReport->getRecoiled();
+        $salesManagerResult = $salesManagerReport->getPayedsum();
         $salesManagerMultiplier = computeResultMultiplier($salesManagerResult);
         $salesManagerResultMultiplied = $salesManagerResult * $salesManagerMultiplier;
       ?>
-      <abbr title="(<?php echo $salesManagerReport->getPayedsum() ?> — <?php echo $salesManagerReport->getRecoiled() ?>) × <?php echo $salesManagerMultiplier ?>">
+      <abbr title="<?php echo $salesManagerReport->getPayedsum() ?> × <?php echo $salesManagerMultiplier ?>">
         Σ = <?php echo $salesManagerResultMultiplied ?> руб.
       </abbr>
 
-      <small class="muted" style="display: block;">Начальник отдела продаж (НОП) = (все оплаты за период – возвраты)*x%. До 1млн х=1, от 1млн до 2млн х=1.5, от 2млн до 3млн х=2, больше 3млн х=2.5</small>
+      <small class="muted" style="display: block;">Начальник отдела продаж (НОП) = (все оплаты за период)*x%. До 1млн х=1, от 1млн до 2млн х=1.5, от 2млн до 3млн х=2, больше 3млн х=2.5</small>
     </div>
 
     <h3>Начальник цеха</h3>

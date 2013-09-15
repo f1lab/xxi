@@ -228,7 +228,7 @@ class reportActions extends sfActions
 
     $this->report = Doctrine_Query::create()
       ->from('sfGuardUser b')
-      ->select('b.*, count(c.id) orderscount, sum(c.recoil) recoiled, count(p.id) payscount, sum(p.amount) payed')
+      ->select('b.*, count(c.id) orderscount, count(p.id) payscount, sum(p.amount) payed')
       ->leftJoin('b.Orders c')
       ->leftJoin('c.Pays p with (p.payed_at >= ? and p.payed_at <= ?)', array($this->period['from'], $this->period['to']))
       ->groupBy('b.id')
@@ -237,7 +237,7 @@ class reportActions extends sfActions
 
     $this->salesManagerReport = Doctrine_Query::create()
       ->from('Order o')
-      ->select('count(o.id) orderscount, count(p.id) payscount, sum(p.amount) payedsum, sum(o.recoil) recoiled')
+      ->select('count(o.id) orderscount, count(p.id) payscount, sum(p.amount) payedsum')
       ->leftJoin('o.Pays p with (p.payed_at >= ? and p.payed_at <= ?)', array($this->period['from'], $this->period['to']))
       ->fetchOne()
     ;
@@ -516,7 +516,7 @@ class reportActions extends sfActions
       ->offsetSet('to', new sfValidatorDate(array(
         'required' => false,
       )))
-      ->offsetSet('material_id', new sfValidatorDoctrineChoice(array('model' => 'Material', 'required' => false)))
+      ->offsetSet('material_id', new sfValidatorDoctrineChoice(array('model' => 'Material', 'multiple' => true, 'required' => false)))
     ;
 
     $this->period = array(
@@ -565,10 +565,13 @@ class reportActions extends sfActions
       ->orderBy('m.name')
       ->groupBy('m.id')
       ->having('utilized_count > 0 or arrived_count > 0 or remained_count > 0')
-      ->addWhere('(u.created_at >= :from and u.created_at <= :to) or (a.arrived_at >= :from and a.arrived_at <= :to)', [
-        'from' => $this->period['from'],
-        'to' => $this->period['to'],
+      ->addWhere('(u.created_at >= ? and u.created_at <= ?) or (a.arrived_at >= ? and a.arrived_at <= ?)', [
+        $this->period['from'],
+        $this->period['to'],
+        $this->period['from'],
+        $this->period['to'],
       ])
+      ->andWhereIn('m.id', $this->materials)
       ->execute()
     ;
   }
