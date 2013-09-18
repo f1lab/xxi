@@ -20,6 +20,15 @@
           <?php if ($form['from']->hasError()): ?><div class="help-inline"><?php echo $form['from']->getError() ?></div><?php endif ?>
         </div>
       </div>
+
+      <div class="control-group">
+        <?php echo $form['material_id']->renderLabel(null, array('class' => 'control-label')) ?>
+
+        <div class="controls">
+          <?php echo $form['material_id']->render() ?>
+        </div>
+      </div>
+
       <?php echo $form['_csrf_token'] ?>
       <button type="submit" class="btn btn-primary">Получить отчёт</button>
     </form>
@@ -28,24 +37,56 @@
       Отчёт
       <small>за период <?php echo date('d.m.Y', strtotime($period['from'])) . '—' . date('d.m.Y', strtotime($period['to'])) ?></small>
     </h2>
-    <?php  ?>
-    <div class="well">
-      <span class="formula">Фонд =
-        (<span title="общая стоимость"><?php echo format_currency($report->getCost()) ?></span>
-        − <span title="монтаж"><?php echo format_currency($report->getInstallationCost()) ?></span>
-        − <span title="дизайн"><?php echo format_currency($report->getDesignCost()) ?></span>
-        − <span title="подрядчики"><?php echo format_currency($report->getContractorsCost()) ?></span>
-        − <span title="возврат"><?php echo format_currency($report->getRecoil()) ?></span>
-        − <span title="доставка"><?php echo format_currency($report->getDeliveryCost()) ?></span>) × <span title="процентная ставка">0,15</span>
-      </span> =
-        <?php echo format_currency(
-          ($report->getCost()
-          - $report->getInstallationCost()
-          - $report->getDesignCost()
-          - $report->getContractorsCost()
-          - $report->getRecoil()
-          - $report->getDeliveryCost()) * 0.15
-        ) ?> руб.
-    </div>
+    <table class="table table-condensed table-hover">
+      <colgroup>
+        <col class="span4" />
+        <col class="span" />
+        <col class="span2" />
+        <col class="span2" />
+      </colgroup>
+      <thead>
+        <tr>
+          <th>Материал</th>
+
+          <th>Затрачено</th>
+          <th>Затрачено на сумму</th>
+
+          <th>Поступило</th>
+          <th>Поступило на сумму</th>
+
+          <th>Остаток</th>
+          <th>Остаток на сумму</th>
+        </tr>
+      </thead>
+      <tbody><?php
+      $utilized = $utilizedSum = $arrived = $arrivedSum = $remained = $remainedSum = 0;
+      foreach ($report as $material): ?>
+        <tr>
+          <td><a href="<?php echo url_for('material/show?id=' . $material->getId()) ?>"><?php echo $material->getNameWithDimension() ?></a></td>
+
+          <td><?php $utilized += $material->getUtilizedCount(); echo $material->getUtilizedCount() ?></td>
+          <td><?php $utilizedSum += $material->getUtilizedSum(); echo format_currency($material->getUtilizedSum()) ?></td>
+
+          <td><?php $arrived += $material->getArrivedCount(); echo $material->getArrivedCount() ?></td>
+          <td><?php $arrivedSum += $material->getArrivedSum(); echo format_currency($material->getArrivedSum()) ?></td>
+
+          <td><?php $remained += $material->getRemainedCount(); echo $material->getRemainedCount() ?></td>
+          <td><?php $remainedSum += $material->getRemainedSum(); echo format_currency($material->getRemainedSum()) ?></td>
+        </tr>
+      <?php endforeach ?>
+        <tr>
+          <td><strong>Итого</strong></td>
+
+          <td><strong><?php echo format_number($utilized) ?></strong></td>
+          <td><strong><?php echo format_currency($utilizedSum) ?></strong></td>
+
+          <td><strong><?php echo format_number($arrived) ?></strong></td>
+          <td><strong><?php echo format_currency($arrivedSum) ?></strong></td>
+
+          <td><strong><?php echo format_number($remained) ?></strong></td>
+          <td><strong><?php echo format_currency($remainedSum) ?></strong></td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </div>

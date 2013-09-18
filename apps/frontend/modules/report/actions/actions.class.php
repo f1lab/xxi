@@ -20,6 +20,7 @@ class reportActions extends sfActions
     $this->states = array(
       'archived' => 'Архив',
       'debt' => 'Дебиторка',
+      'combo' => 'Архив + Дебиторка',
     );
 
     $this->form = new sfForm();
@@ -82,7 +83,7 @@ class reportActions extends sfActions
         }
 
         if ($this->form->getValue('state')) {
-          $this->state = $this->form->getValue('state');
+          $this->state = $this->form->getValue('state') === 'combo' ? ['archived', 'debt'] : (array)$this->form->getValue('state');
         }
       }
     }
@@ -100,7 +101,7 @@ class reportActions extends sfActions
       ')
       ->from('Order a')
       ->leftJoin('a.Pays p')
-      ->andWhere('a.state = ?', $this->state)
+      ->andWhereIn('a.state', $this->state)
       ->andWhere('a.submited_at >= ? and a.submited_at <= ?', array($this->period['from'], $this->period['to']))
     ;
 
@@ -228,12 +229,36 @@ class reportActions extends sfActions
     $this->report = Doctrine_Query::create()
       ->from('sfGuardUser b')
       ->select('b.*, count(c.id) orderscount, count(p.id) payscount, sum(p.amount) payed')
-      ->leftJoin('b.Groups a')
       ->leftJoin('b.Orders c')
       ->leftJoin('c.Pays p with (p.payed_at >= ? and p.payed_at <= ?)', array($this->period['from'], $this->period['to']))
-      ->andWhere('a.name = ?', 'manager')
       ->groupBy('b.id')
       ->execute()
+    ;
+
+    $this->salesManagerReport = Doctrine_Query::create()
+      ->from('Order o')
+      ->select('count(o.id) orderscount, count(p.id) payscount, sum(p.amount) payedsum')
+      ->leftJoin('o.Pays p with (p.payed_at >= ? and p.payed_at <= ?)', array($this->period['from'], $this->period['to']))
+      ->fetchOne()
+    ;
+
+    $this->workersChiefReport = Doctrine_Query::create()
+      ->from('Order o')
+      ->select('
+        count(o.id) orderscount,
+        sum(o.cost) costed,
+        sum(o.design_cost) designed,
+        sum(o.contractors_cost) contracted,
+        sum(o.recoil) recoiled,
+        (sum(o.cost) - sum(o.design_cost) - sum(o.contractors_cost) - sum(o.recoil)) report
+      ')
+      ->addWhere('o.submited_at >= ? and o.submited_at <= ?', array($this->period['from'], $this->period['to']))
+      ->andWhereIn('o.state', [
+        'submitted',
+        'archived',
+        'debt',
+      ])
+      ->fetchOne()
     ;
   }
 
@@ -297,7 +322,7 @@ class reportActions extends sfActions
     $this->form = new sfForm();
     $this->form->getWidgetSchema()
       ->offsetSet('from', new sfWidgetFormBootstrapDate(array(
-        'label' => 'Период',
+        'label' => 'Период даты создания заказов',
       )))
       ->offsetSet('to', new sfWidgetFormBootstrapDate(array(
         //
@@ -352,6 +377,8 @@ class reportActions extends sfActions
     $bounds = array(
       'archived' => 'archived',
       'debt' => 'debt',
+      'created_from' => $this->period['from'],
+      'created_to' => $this->period['to'],
     );
     if ($this->client) {
       $bounds['client'] = $this->client;
@@ -359,9 +386,26 @@ class reportActions extends sfActions
 
     $this->report = Doctrine_Query::create()
       ->select('
-        (select sum(cost) from `order` where state not in (:archived, :debt) and deleted_at is null' . ($this->client ? ' and client_id = :client' : '') . ') as cost_active,
-        (select sum(cost) from `order` where state = :archived and deleted_at is null' . ($this->client ? ' and client_id = :client' : '') . ') as cost_archived,
-        (select sum(cost) from `order` where state = :debt and deleted_at is null' . ($this->client ? ' and client_id = :client' : '') . ') as cost_debt
+        (select sum(cost) from `order` where
+          state not in (:archived, :debt)
+          and created_at >= :created_from and created_at <= :created_to
+          and deleted_at is null
+          ' . ($this->client ? ' and client_id = :client' : '') . '
+        ) as cost_active,
+
+        (select sum(cost) from `order` where
+          state = :archived
+          and created_at >= :created_from and created_at <= :created_to
+          and deleted_at is null
+          ' . ($this->client ? ' and client_id = :client' : '') . '
+        ) as cost_archived,
+
+        (select sum(cost) from `order` where
+          state = :debt
+          and created_at >= :created_from and created_at <= :created_to
+          and deleted_at is null
+          ' . ($this->client ? ' and client_id = :client' : '') . '
+        ) as cost_debt
       ')
       ->from('Client') // bidlo-magic because Doctrine queries must have `from'
       ->limit(1)
@@ -372,9 +416,11 @@ class reportActions extends sfActions
     $query = Doctrine_Query::create()
       ->select('sum(p.amount) payed')
       ->from('Pay p')
-      ->leftJoin('p.Order o')
-      ->addWhere('o.state not in (:archived, :debt)')
-      ->addWhere('o.deleted_at is null')
+      ->innerJoin('p.Order o with (
+        o.state not in (:archived, :debt)
+        and o.deleted_at is null
+        and (o.created_at >= :created_from and o.created_at <= :created_to)
+      )')
     ;
 
     if ($this->client) {
@@ -450,20 +496,34 @@ class reportActions extends sfActions
       ->offsetSet('to', new sfWidgetFormBootstrapDate(array(
         //
       )))
+      ->offsetSet('material_id', new sfWidgetFormDoctrineChoice(array(
+        'model' => 'Material',
+        'multiple' => true,
+        'label' => 'Материал',
+        'method' => 'getNameWithDimension',
+        'query' => Doctrine_Query::create()
+          ->from('Material m')
+          ->leftJoin('m.Dimension')
+          ->addOrderBy('m.name')
+      ), ['class' => 'chzn-select input-block-level']))
       ->setNameFormat('filter[%s]')
     ;
     $this->form->addCSRFProtection('123456789');
     $this->form->getValidatorSchema()
-      ->offsetSet('from', new sfValidatorDate())
+      ->offsetSet('from', new sfValidatorDate(array(
+        'required' => false,
+      )))
       ->offsetSet('to', new sfValidatorDate(array(
         'required' => false,
       )))
+      ->offsetSet('material_id', new sfValidatorDoctrineChoice(array('model' => 'Material', 'multiple' => true, 'required' => false)))
     ;
 
     $this->period = array(
       'from' => date('Y') . '-01-01',
       'to' => date('Y-m-d'),
     );
+    $this->materials = [];
 
     if ($request->isMethod('post')) {
       $this->form->bind($request->getParameter('filter'));
@@ -476,22 +536,43 @@ class reportActions extends sfActions
         if ($this->form->getValue('to')) {
           $this->period['to'] = $this->form->getValue('to');
         }
+
+        if ($this->form->getValue('material_id')) {
+          $this->materials = $this->form->getValue('material_id');
+        }
       }
     }
 
-    $this->report = Doctrine_Core::getTable('Order')->createQuery('a')
+    $this->report = Doctrine_Query::create()
+      ->from('Material m')
       ->select('
-        sum(a.cost) cost,
-        sum(a.installation_cost) installation_cost,
-        sum(a.design_cost) design_cost,
-        sum(a.contractors_cost) contractors_cost,
-        sum(a.recoil) recoil,
-        sum(a.delivery_cost) delivery_cost,
-        count(*) count
+        m.name, d.name
+
+        , sum(u.amount) utilized_count
+        , sum(rua.amount * ua.price) utilized_sum
+
+        , sum(a.amount) arrived_count
+        , sum(a.amount * a.price) arrived_sum
+
+        , (sum(a.amount) - sum(u.amount)) remained_count
+        , (sum(a.amount * a.price) - sum(rua.amount * ua.price)) remained_sum
       ')
-      ->andWhere('a.finished_at >= ? and a.finished_at <= ?', array($this->period['from'], $this->period['to']))
+      ->leftJoin('m.Dimension d')
+      ->leftJoin('m.Utilizations u')
+      ->leftJoin('u.RefUtilizationArrival rua')
+      ->leftJoin('rua.Arrival ua')
+      ->leftJoin('m.Arrivals a')
+      ->orderBy('m.name')
+      ->groupBy('m.id')
+      ->having('utilized_count > 0 or arrived_count > 0 or remained_count > 0')
+      ->addWhere('(u.created_at >= ? and u.created_at <= ?) or (a.arrived_at >= ? and a.arrived_at <= ?)', [
+        $this->period['from'],
+        $this->period['to'],
+        $this->period['from'],
+        $this->period['to'],
+      ])
+      ->andWhereIn('m.id', $this->materials)
       ->execute()
-      ->getFirst()
     ;
   }
 

@@ -33,7 +33,24 @@ class ArrivalForm extends BaseArrivalForm
       ])
     ;
 
-    $this->getWidgetSchema()->offsetGet('material_id')->setAttribute('class', 'chzn-select')->setOption('add_empty', true)->setOption('method', 'getNameWithDimension');
-    $this->getWidgetSchema()->offsetGet('supplier_id')->setAttribute('class', 'chzn-select')->setOption('add_empty', true);
+    $this->getWidgetSchema()
+      ->offsetGet('material_id')
+        ->setAttribute('class', 'chzn-select')
+        ->setOption('add_empty', true)
+        ->setOption('method', 'getNameWithDimension')
+        ->setOption('query', Doctrine_Query::create()
+          ->from('Material m')
+          ->leftJoin('m.Dimension')
+          ->addOrderBy('m.name')
+        )
+        ->getParent()
+      ->offsetGet('supplier_id')
+        ->setAttribute('class', 'chzn-select')
+        ->setOption('add_empty', true)
+        ->setOption('query', Doctrine_Query::create()
+          ->from('Supplier s')
+          ->addOrderBy('s.name')
+        )
+    ;
   }
 }

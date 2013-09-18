@@ -50,7 +50,7 @@
         по всем менеджерам
       <?php endif ?>
 
-      в статусе «<?php echo $states[$state] ?>»
+      в статусе «<?php $stateRaw = (array)$sf_data->getRaw('state'); echo count($state) > 1 ? 'Архив + Дебиторка' : $states[array_pop($stateRaw)] ?>»
     </div>
     <table class="table table-striped table-condensed">
       <colgroup>
