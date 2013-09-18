@@ -47,7 +47,7 @@
           <td><?php $sumOrders += $row->getOrders(); echo $row->getOrders() ?></td>
           <td><?php $sumCost += $row->getCost(); echo $row->getCost() ?></td>
           <td><?php $sumPayed += $row->getPayedSum(); echo $row->getPayedSum() ?></td>
-          <td><?php $sumDebt += ($row->getCost() - $row->getPayed()); echo ($row->getCost() - $row->getPayed()) ?></td>
+          <td><?php $sumDebt += ($row->getCost() - $row->getPayedSum()); echo ($row->getCost() - $row->getPayedSum()) ?></td>
         </tr>
       <?php endforeach ?></tbody>
     </table>
