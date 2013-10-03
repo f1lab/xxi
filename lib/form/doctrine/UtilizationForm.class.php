@@ -24,6 +24,10 @@ class UtilizationForm extends BaseUtilizationForm
         'model' => $this->getRelatedModelName('Material'),
         'method' => 'getNameWithDimension',
         'add_empty' => true,
+        'query' => Doctrine_Query::create()
+          ->from('Material m')
+          ->leftJoin('m.Dimension')
+          ->addOrderBy('m.name')
       ), array(
         'class' => 'chzn-select',
       )))
