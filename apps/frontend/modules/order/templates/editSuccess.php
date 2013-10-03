@@ -230,26 +230,6 @@
     </fieldset>
 
     <fieldset>
-      <legend>Бухгалтерия</legend>
-      <div class="control-group<?php if ($form['bill_given']->hasError()): ?> error<?php endif ?>">
-        <div class="controls">
-          <label class="checkbox">
-            <?php echo $form['bill_given']->render() ?> <?php echo $form['bill_given']->renderLabelName() ?>
-          </label>
-          <?php if ($form['bill_given']->hasError()): ?><div class="help-inline"><?php echo $form['bill_given']->getError() ?></div><?php endif ?>
-        </div>
-      </div>
-      <div class="control-group<?php if ($form['docs_given']->hasError()): ?> error<?php endif ?>">
-        <div class="controls">
-          <label class="checkbox">
-          <?php echo $form['docs_given']->render() ?> <?php echo $form['docs_given']->renderLabelName() ?>
-          </label>
-          <?php if ($form['docs_given']->hasError()): ?><div class="help-inline"><?php echo $form['docs_given']->getError() ?></div><?php endif ?>
-        </div>
-      </div>
-    </fieldset>
-
-    <fieldset>
       <legend>Статусы</legend>
       <?php echo $form['state']->renderRowUsing('bootstrap')?>
     </fieldset>

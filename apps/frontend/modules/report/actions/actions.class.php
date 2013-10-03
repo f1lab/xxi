@@ -61,7 +61,7 @@ class reportActions extends sfActions
 
     $this->period = array(
       'from' => date('Y') . '-01-01',
-      'to' => date('Y-m-d'),
+      'to' => date('Y-m-d', strtotime('+1 day')),
     );
     $this->manager = false;
     $this->state = 'archived';
@@ -75,7 +75,7 @@ class reportActions extends sfActions
         }
 
         if ($this->form->getValue('to')) {
-          $this->period['to'] = $this->form->getValue('to');
+          $this->period['to'] = date('Y-m-d H:i:s', strtotime('+1 day', strtotime($this->form->getValue('to'))));
         }
 
         if ($this->form->getValue('manager')) {
@@ -451,8 +451,8 @@ class reportActions extends sfActions
     ;
 
     $this->period = array(
-      'from' => date('Y') . '-01-01',
-      'to' => date('Y-m-d'),
+      'from' => '2009-01-01',
+      'to' => date('Y-m-d', strtotime('+1 day')),
     );
 
     if ($request->isMethod('post')) {
@@ -464,7 +464,7 @@ class reportActions extends sfActions
         }
 
         if ($this->form->getValue('to')) {
-          $this->period['to'] = $this->form->getValue('to');
+          $this->period['to'] = date('Y-m-d H:i:s', strtotime('+1 day', strtotime($this->form->getValue('to'))));
         }
 
         if ($this->form->getValue('client')) {
