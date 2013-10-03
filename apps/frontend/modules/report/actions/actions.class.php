@@ -545,26 +545,11 @@ class reportActions extends sfActions
 
     $this->report = Doctrine_Query::create()
       ->from('Material m')
-      ->select('
-        m.name, d.name
-
-        , sum(u.amount) utilized_count
-        , sum(rua.amount * ua.price) utilized_sum
-
-        , sum(a.amount) arrived_count
-        , sum(a.amount * a.price) arrived_sum
-
-        , (sum(a.amount) - sum(u.amount)) remained_count
-        , (sum(a.amount * a.price) - sum(rua.amount * ua.price)) remained_sum
-      ')
+      ->select('m.name, d.name')
       ->leftJoin('m.Dimension d')
       ->leftJoin('m.Utilizations u')
-      ->leftJoin('u.RefUtilizationArrival rua')
-      ->leftJoin('rua.Arrival ua')
       ->leftJoin('m.Arrivals a')
       ->orderBy('m.name')
-      ->groupBy('m.id')
-      ->having('utilized_count > 0 or arrived_count > 0 or remained_count > 0')
       ->addWhere('(u.created_at >= ? and u.created_at <= ?) or (a.arrived_at >= ? and a.arrived_at <= ?)', [
         $this->period['from'],
         $this->period['to'],

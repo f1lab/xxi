@@ -64,14 +64,14 @@
         <tr>
           <td><a href="<?php echo url_for('material/show?id=' . $material->getId()) ?>"><?php echo $material->getNameWithDimension() ?></a></td>
 
-          <td><?php $utilized += $material->getUtilizedCount(); echo $material->getUtilizedCount() ?></td>
-          <td><?php $utilizedSum += $material->getUtilizedSum(); echo format_currency($material->getUtilizedSum()) ?></td>
+          <td><?php $utilized += $material->getUtilizationsAmount($period['from'], $period['to']); echo $material->getUtilizationsAmount($period['from'], $period['to']) ?></td>
+          <td><?php $utilizedSum += $material->getUtilizationsSum($period['from'], $period['to']); echo format_currency($material->getUtilizationsSum($period['from'], $period['to'])) ?></td>
 
-          <td><?php $arrived += $material->getArrivedCount(); echo $material->getArrivedCount() ?></td>
-          <td><?php $arrivedSum += $material->getArrivedSum(); echo format_currency($material->getArrivedSum()) ?></td>
+          <td><?php $arrived += $material->getArrivalsAmount($period['from'], $period['to']); echo $material->getArrivalsAmount($period['from'], $period['to']) ?></td>
+          <td><?php $arrivedSum += $material->getArrivalsSum($period['from'], $period['to']); echo format_currency($material->getArrivalsSum($period['from'], $period['to'])) ?></td>
 
-          <td><?php $remained += $material->getRemainedCount(); echo $material->getRemainedCount() ?></td>
-          <td><?php $remainedSum += $material->getRemainedSum(); echo format_currency($material->getRemainedSum()) ?></td>
+          <td><?php $remained += $material->getRemainedAmount($period['from'], $period['to']); echo $material->getRemainedAmount($period['from'], $period['to']) ?></td>
+          <td><?php $remainedSum += $material->getRemainedSum($period['from'], $period['to']); echo format_currency($material->getRemainedSum($period['from'], $period['to'])) ?></td>
         </tr>
       <?php endforeach ?>
         <tr>
