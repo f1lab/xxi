@@ -60,49 +60,6 @@ Material:
       foreign: id
       foreignAlias: Materials
 
- # Поставщик материала
-Supplier:
-  actAs:
-    SoftDelete: ~
-  columns:
-    name:
-      type: string(255)
-      notnull: true
-    full_name:
-      type: string(255)
-    contact:
-      type: string(255)
-      notnull: true
-    phone:
-      type: string(128)
-      notnull: true
-    email:
-      type: string(64)
-    address_jure:
-      type: string(255)
-    inn:
-      type: string(32)
-    kpp:
-      type: string(32)
-    rs:
-      type: string(32)
-    bank:
-      type: string(255)
-    bik:
-      type: string(32)
-    ks:
-      type: string(32)
-    ogrn:
-      type: string(32)
-    okpo:
-      type: string(32)
-    discount:
-      type: string(4)
-    buhgalter:
-      type: string(128)
-    buhgalter_phone:
-      type: string(32)
-
 # Расход материала
 Utilization:
   actAs:

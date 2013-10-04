@@ -52,6 +52,8 @@ client-del:
   param: { module: client, action: del }
   requirements: { id: \d+ }
 
+
+
 suppliers:
   url:   /suppliers
   param: { module: supplier, action: index }
@@ -81,9 +83,46 @@ supplier-update:
   requirements: { id: \d+ }
 
 supplier-del:
-  url:   /clients/:id/del
-  param: { suppliers: supplier, action: del }
+  url:   /suppliers/:id/del
+  param: { module: supplier, action: del }
   requirements: { id: \d+ }
+
+
+
+contractors:
+  url:   /contractors
+  param: { module: contractor, action: index }
+
+contractor:
+  url:   /contractors/:id
+  param: { module: contractor, action: show }
+  requirements:
+    id: \d+
+
+contractor-new:
+  url:   /contractors/new
+  param: { module: contractor, action: new }
+
+contractor-create:
+  url:   /contractors/create
+  param: { module: contractor, action: create }
+
+contractor-edit:
+  url:   /contractors/:id/edit
+  param: { module: contractor, action: edit }
+  requirements: { id: \d+ }
+
+contractor-update:
+  url:   /contractors/:id/update
+  param: { module: contractor, action: update }
+  requirements: { id: \d+ }
+
+contractor-del:
+  url:   /contractors/:id/del
+  param: { module: supplier, action: del }
+  requirements: { id: \d+ }
+
+
 
 orders:
   url:   /orders/:my/:state
