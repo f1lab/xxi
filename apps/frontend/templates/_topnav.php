@@ -64,12 +64,10 @@
 
 <ul class="nav">
 <?php foreach ($navLists as $navListName => $navList): ?>
-  <?php if (
-    count($navList) === 3
-    and isset($navList['credentials']) and isset($navList['isActive']) and isset($navList['href'])
-    and $navList['credentials']
-  ): ?>
-    <li class="<?php if ($navList['isActive']) echo 'active' ?>"><a href="<?php echo $navList['href'] ?>"><?php echo $navListName ?></a></li>
+  <?php if (count($navList) === 3 and isset($navList['credentials']) and isset($navList['isActive']) and isset($navList['href'])): ?>
+    <?php if ($navList['credentials']): ?>
+      <li class="<?php if ($navList['isActive']) echo 'active' ?>"><a href="<?php echo $navList['href'] ?>"><?php echo $navListName ?></a></li>
+    <?php endif ?>
 
   <?php else: ?>
     <?php if (in_array(true, array_map(function($nav) { // has user any list's credential?
