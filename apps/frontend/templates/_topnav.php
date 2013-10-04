@@ -35,6 +35,11 @@ $routes = [
     'isActive' => $sf_context->getModuleName() == 'contractor',
     'href' => url_for('@contractors'),
   ],
+  'Номенклатура' => [
+    'credentials' => $sf_user->hasCredential('can_edit_nomenclature'),
+    'isActive' => $sf_context->getModuleName() == 'nomenclature',
+    'href' => url_for('nomenclature/index'),
+  ],
 ]
 ?>
 

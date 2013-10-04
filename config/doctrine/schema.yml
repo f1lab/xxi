@@ -139,3 +139,14 @@ Pay:
       local: order_id
       foreign: id
       foreignAlias: Pays
+
+#
+Nomenclature:
+  actAs:
+    Signable: ~
+    Timestampable: ~
+    SoftDelete: ~
+  columns:
+    name:
+      type: string(255)
+      notnull: true
