@@ -1,0 +1,30 @@
+# Участок
+Area:
+  actAs:
+    Timestampable: ~
+    Signable: ~
+    SoftDelete: ~
+  columns:
+    name:
+      type: string(255)
+      notnull: true
+  relations:
+    Works:
+      class: Work
+      type: many
+      local: id
+      foreign: area_id
+
+# Работа
+Work:
+  actAs:
+    Timestampable: ~
+    Signable: ~
+    SoftDelete: ~
+  columns:
+    area_id:
+      type: integer
+      notnull: true
+    name:
+      type: string(255)
+      notnull: true

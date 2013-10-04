@@ -150,3 +150,19 @@ Nomenclature:
     name:
       type: string(255)
       notnull: true
+
+# Папка заказов
+# OrderGroup:
+  # actAs:
+    # Timestampable: ~
+    # Signable: ~
+    # SoftDelete: ~
+  # columns:
+    # client_id:
+      # type: integer
+      # notnull: true
+  # relations:
+    # Orders:
+      # class: Order
+      # foreign: group_id
+      # foreignAlias: Group
