@@ -52,8 +52,6 @@
       <legend>Основная информация</legend>
       <?php echo $form['client_id']->renderRowUsing('bootstrap')?>
       <?php echo $form['description']->renderRowUsing('bootstrap')?>
-      <?php echo $form['additional']->renderRowUsing('bootstrap')?>
-      <?php echo $form['approved_at']->renderRowUsing('bootstrap')?>
       <?php echo $form['files']->renderRowUsing('bootstrap')?>
     </fieldset>
 
@@ -144,11 +142,6 @@
   <!--Buhgalter-->
   <?php if ($sf_user->hasGroup('buhgalter')): ?>
     <fieldset>
-      <legend>Основная информация</legend>
-      <?php echo $form['additional']->renderRowUsing('bootstrap')?>
-    </fieldset>
-
-    <fieldset>
       <legend>Стоимости</legend>
       <?php echo $form['cost']->renderRowUsing('bootstrap')?>
     </fieldset>
@@ -204,8 +197,6 @@
       <legend>Основная информация</legend>
       <?php echo $form['client_id']->renderRowUsing('bootstrap')?>
       <?php echo $form['description']->renderRowUsing('bootstrap')?>
-      <?php echo $form['additional']->renderRowUsing('bootstrap')?>
-      <?php echo $form['approved_at']->renderRowUsing('bootstrap')?>
       <?php echo $form['files']->renderRowUsing('bootstrap')?>
     </fieldset>
 

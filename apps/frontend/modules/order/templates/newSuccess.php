@@ -28,18 +28,16 @@
     <legend>Основная информация</legend>
     <?php echo $form['client_id']->renderRowUsing('bootstrap')?>
     <?php echo $form['description']->renderRowUsing('bootstrap')?>
-    <?php echo $form['additional']->renderRowUsing('bootstrap')?>
-    <?php echo $form['approved_at']->renderRowUsing('bootstrap')?>
     <?php echo $form['files']->renderRowUsing('bootstrap')?>
   </fieldset>
 
   <fieldset>
-    <legend>Сроки исполнения</legend> 
+    <legend>Сроки исполнения</legend>
     <?php echo $form['due_date']->renderRowUsing('bootstrap')?>
   </fieldset>
 
   <fieldset>
-    <legend>Стоимости</legend> 
+    <legend>Стоимости</legend>
     <?php echo $form['installation_cost']->renderRowUsing('bootstrap')?>
       <?php echo $form['design_cost']->renderRowUsing('bootstrap')?>
       <?php echo $form['contractors_cost']->renderRowUsing('bootstrap')?>
@@ -48,13 +46,13 @@
   </fieldset>
 
   <fieldset>
-    <legend>Оплата</legend> 
+    <legend>Оплата</legend>
     <?php echo $form['pay_method']->renderRowUsing('bootstrap')?>
       <?php echo $form['recoil']->renderRowUsing('bootstrap')?>
-  </fieldset>  
+  </fieldset>
 
   <fieldset>
-    <legend>Статусы</legend> 
+    <legend>Статусы</legend>
     <?php echo $form['state']->renderRowUsing('bootstrap')?>
   </fieldset>
 
