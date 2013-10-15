@@ -88,7 +88,18 @@ class reportActions extends sfActions
       }
     }
 
-    $query = Doctrine_Query::create()
+    $ids = Doctrine_Query::create()
+      ->from('Order o')
+      ->select('o.id')
+      ->andWhereIn('o.state', $this->state)
+      ->andWhere('o.submited_at >= ? and o.submited_at <= ?', array($this->period['from'], $this->period['to']))
+    ;
+    if ($this->manager) {
+      $ids->andWhere('o.created_by = ?', $this->manager);
+    }
+    $ids = $ids->execute([], Doctrine_Core::HYDRATE_SINGLE_SCALAR);
+
+    $this->report = Doctrine_Query::create()
       ->select('
         count(*) count,
         sum(a.installation_cost) installation_cost,
@@ -96,22 +107,19 @@ class reportActions extends sfActions
         sum(a.contractors_cost) contractors_cost,
         sum(a.delivery_cost) delivery_cost,
         sum(a.cost) cost,
-        sum(a.recoil) recoil,
-        sum(p.amount) payed_sum
+        sum(a.recoil) recoil
       ')
       ->from('Order a')
-      ->leftJoin('a.Pays p')
-      ->andWhereIn('a.state', $this->state)
-      ->andWhere('a.submited_at >= ? and a.submited_at <= ?', array($this->period['from'], $this->period['to']))
-    ;
-
-    if ($this->manager) {
-      $query->andWhere('a.created_by = ?', $this->manager);
-    }
-
-    $this->report = $query
+      ->andWhereIn('a.id', $ids)
       ->execute()
       ->getFirst()
+    ;
+
+    $this->payed = Doctrine_Query::create()
+      ->from('Pay p')
+      ->select('sum(p.amount)')
+      ->andWhereIn('p.order_id', $ids)
+      ->execute([], Doctrine_Core::HYDRATE_SINGLE_SCALAR)
     ;
   }
 
