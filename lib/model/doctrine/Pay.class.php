@@ -12,7 +12,7 @@
  */
 class Pay extends BasePay
 {
-  public function preInsert($event)
+  public function postInsert($event)
   {
     $pay = $event->getInvoker();
     $order = $pay->getOrder();
