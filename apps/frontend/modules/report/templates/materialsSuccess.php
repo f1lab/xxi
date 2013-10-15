@@ -48,44 +48,22 @@
         <tr>
           <th>Материал</th>
 
-          <th>Затрачено</th>
-          <th>Затрачено на сумму</th>
-
+          <th>Остаток на начало периода</th>
           <th>Поступило</th>
-          <th>Поступило на сумму</th>
-
-          <th>Остаток</th>
-          <th>Остаток на сумму</th>
+          <th>Затрачено</th>
+          <th>Остаток на конец периода</th>
         </tr>
       </thead>
-      <tbody><?php
-      $utilized = $utilizedSum = $arrived = $arrivedSum = $remained = $remainedSum = 0;
-      foreach ($report as $material): ?>
+      <tbody><?php foreach ($report as $material): ?>
         <tr>
           <td><a href="<?php echo url_for('material/show?id=' . $material->getId()) ?>"><?php echo $material->getNameWithDimension() ?></a></td>
 
-          <td><?php $utilized += $material->getUtilizationsAmount($period['from'], $period['to']); echo $material->getUtilizationsAmount($period['from'], $period['to']) ?></td>
-          <td><?php $utilizedSum += $material->getUtilizationsSum($period['from'], $period['to']); echo format_currency($material->getUtilizationsSum($period['from'], $period['to'])) ?></td>
-
-          <td><?php $arrived += $material->getArrivalsAmount($period['from'], $period['to']); echo $material->getArrivalsAmount($period['from'], $period['to']) ?></td>
-          <td><?php $arrivedSum += $material->getArrivalsSum($period['from'], $period['to']); echo format_currency($material->getArrivalsSum($period['from'], $period['to'])) ?></td>
-
-          <td><?php $remained += $material->getRemainedAmount($period['from'], $period['to']); echo $material->getRemainedAmount($period['from'], $period['to']) ?></td>
-          <td><?php $remainedSum += $material->getRemainedSum($period['from'], $period['to']); echo format_currency($material->getRemainedSum($period['from'], $period['to'])) ?></td>
+          <td><?php echo $material->getRemainedAmount('2000-01-01', $period['from']) ?> ед. / <?php echo $material->getRemainedSum('2000-01-01', $period['from']) ?> руб.</td>
+          <td><?php echo $material->getArrivalsAmount($period['from'], $period['to']) ?> ед. / <?php echo format_currency($material->getArrivalsSum($period['from'], $period['to'])) ?> руб.</td>
+          <td><?php echo $material->getUtilizationsAmount($period['from'], $period['to']) ?> ед. / <?php echo format_currency($material->getUtilizationsSum($period['from'], $period['to'])) ?> руб.</td>
+          <td><?php echo $material->getRemainedAmount('2000-01-01', date('Y-m-d', strtotime('+1 day', strtotime($period['to'])))) ?> ед. / <?php echo $material->getRemainedSum('2000-01-01', date('Y-m-d', strtotime('+1 day', strtotime($period['to'])))) ?> руб.</td>
         </tr>
       <?php endforeach ?>
-        <tr>
-          <td><strong>Итого</strong></td>
-
-          <td><strong><?php echo format_number($utilized) ?></strong></td>
-          <td><strong><?php echo format_currency($utilizedSum) ?></strong></td>
-
-          <td><strong><?php echo format_number($arrived) ?></strong></td>
-          <td><strong><?php echo format_currency($arrivedSum) ?></strong></td>
-
-          <td><strong><?php echo format_number($remained) ?></strong></td>
-          <td><strong><?php echo format_currency($remainedSum) ?></strong></td>
-        </tr>
       </tbody>
     </table>
   </div>

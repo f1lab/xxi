@@ -12,10 +12,10 @@
  */
 class Material extends BaseMaterial
 {
-  protected $arrivalsAmount = null
-    , $arrivalsSum = null
-    , $utilizationsAmount = null
-    , $utilizationsSum = null
+  protected $arrivalsAmount = []
+    , $arrivalsSum = []
+    , $utilizationsAmount = []
+    , $utilizationsSum = []
   ;
 
   public function getNameWithDimension()
@@ -27,7 +27,9 @@ class Material extends BaseMaterial
 
   public function getArrivalsAmount($from=false, $to=false)
   {
-    if (null === $this->arrivalsAmount) {
+    $key = $from . '-' . $to;
+
+    if (!array_key_exists($key, $this->arrivalsAmount)) {
       $query = Doctrine_Query::create()
         ->from('Arrival a')
         ->select('sum(a.amount)')
@@ -41,15 +43,17 @@ class Material extends BaseMaterial
         ]);
       }
 
-      $this->arrivalsAmount = (double)$query->execute([], Doctrine_Core::HYDRATE_SINGLE_SCALAR);
+      $this->arrivalsAmount[$key] = (double)$query->execute([], Doctrine_Core::HYDRATE_SINGLE_SCALAR);
     }
 
-    return $this->arrivalsAmount;
+    return $this->arrivalsAmount[$key];
   }
 
   public function getArrivalsSum($from=false, $to=false)
   {
-    if (null === $this->arrivalsSum) {
+    $key = $from . '-' . $to;
+
+    if (!array_key_exists($key, $this->arrivalsSum)) {
       $query = Doctrine_Query::create()
         ->from('Arrival a')
         ->select('sum(a.amount * a.price) arrived_sum')
@@ -63,17 +67,19 @@ class Material extends BaseMaterial
         ]);
       }
 
-      $this->arrivalsSum = (double)$query->execute([], Doctrine_Core::HYDRATE_SINGLE_SCALAR);
+      $this->arrivalsSum[$key] = (double)$query->execute([], Doctrine_Core::HYDRATE_SINGLE_SCALAR);
     }
 
-    return $this->arrivalsSum;
+    return $this->arrivalsSum[$key];
   }
 
 
 
   public function getUtilizationsAmount($from=false, $to=false)
   {
-    if (null === $this->utilizationsAmount) {
+    $key = $from . '-' . $to;
+
+    if (!array_key_exists($key, $this->utilizationsAmount)) {
       $query = Doctrine_Query::create()
         ->from('Utilization u')
         ->select('sum(u.amount)')
@@ -87,15 +93,17 @@ class Material extends BaseMaterial
         ]);
       }
 
-      $this->utilizationsAmount = (double)$query->execute([], Doctrine_Core::HYDRATE_SINGLE_SCALAR);
+      $this->utilizationsAmount[$key] = (double)$query->execute([], Doctrine_Core::HYDRATE_SINGLE_SCALAR);
     }
 
-    return $this->utilizationsAmount;
+    return $this->utilizationsAmount[$key];
   }
 
   public function getUtilizationsSum($from=false, $to=false)
   {
-    if (null === $this->utilizationsSum) {
+    $key = $from . '-' . $to;
+
+    if (!array_key_exists($key, $this->utilizationsSum)) {
       $query = Doctrine_Query::create()
         ->from('Utilization u')
         ->leftJoin('u.RefUtilizationArrival rua')
@@ -111,10 +119,10 @@ class Material extends BaseMaterial
         ]);
       }
 
-      $this->utilizationsSum = (double)$query->execute([], Doctrine_Core::HYDRATE_SINGLE_SCALAR);
+      $this->utilizationsSum[$key] = (double)$query->execute([], Doctrine_Core::HYDRATE_SINGLE_SCALAR);
     }
 
-    return $this->utilizationsSum;
+    return $this->utilizationsSum[$key];
   }
 
 
