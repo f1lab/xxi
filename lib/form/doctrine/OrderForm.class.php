@@ -85,8 +85,25 @@ class OrderForm extends BaseOrderForm
       // 'customEmbeddedFormLabelMethod' => 'getLabelTitle'
     ));
 
+    $worksRelation = array('RefOrderWork' => array(
+      'considerNewFormEmptyFields'    => array('work_id'),
+      'noNewForm'                     => false,
+      'newFormClassArgs'              => array(array('sf_user' => $this->getOption('sf_user'))),
+      'displayEmptyRelations'         => true,
+      'formClassArgs'                 => array(array('ah_add_delete_checkbox' => true)),
+      'newFormAfterExistingRelations' => true,
+      'formFormatter'                 => null,
+      'multipleNewForms'              => true,
+      'newFormsInitialCount'          => 1,
+      'newFormsContainerForm'         => null, // pass BaseForm object here or we will create ahNewRelationsContainerForm
+      'newRelationButtonLabel'        => '+',
+      'newRelationAddByCloning'       => false,
+      'newRelationUseJSFramework'     => 'jQuery',
+    ));
+
     $user = sfContext::getInstance()->getUser();
     $this->embedRelations(array_merge(
+      $user->hasCredential('can_set_order_works') ? $worksRelation : [],
       $user->hasCredential('can_spend_materials') ? $utilizationsRelation : [],
       $user->hasGroup('master') ? [] : $invoicesRelation,
       $user->hasCredential('director') || $user->hasCredential('buhgalter') ? $paysRelation : []

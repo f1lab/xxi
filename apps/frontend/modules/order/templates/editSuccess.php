@@ -46,6 +46,21 @@
     </fieldset>
   <?php endif ?>
 
+  <?php if ($sf_user->hasCredential('can_set_order_works')): ?>
+    <fieldset>
+      <legend>Работы</legend>
+      <?php include_partial('global/relation', [
+        'form' => $form,
+        'relationName' => 'RefOrderWork',
+        'columns' => [
+          'work_id' => 'Участок / Работа',
+          'comment' => 'Комментарий',
+        ],
+        'noRelationsMessage' => 'Нет работ',
+      ]) ?>
+    </fieldset>
+  <?php endif ?>
+
   <!--Director-->
   <?php if ($sf_user->hasGroup('director')): ?>
     <fieldset>
