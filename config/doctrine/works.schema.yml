@@ -8,12 +8,39 @@ Area:
     name:
       type: string(255)
       notnull: true
+    slug:
+      type: string(255)
+      default: ""
+      notnull: true
   relations:
     Works:
       class: Work
       type: many
       local: id
       foreign: area_id
+    Masters:
+      class: sfGuardUser
+      refClass: RefAreaUser
+      local: area_id
+      foreign: user_id
+      foreignAlias: Areas
+
+RefAreaUser:
+  columns:
+    area_id:
+      type: integer
+      primary: true
+    user_id:
+      type: integer
+      primary: true
+  relations:
+    Area:
+      local: area_id
+      foreign: id
+    User:
+      class: sfGuardUser
+      local: user_id
+      foreign: id
 
 # Работа
 Work:

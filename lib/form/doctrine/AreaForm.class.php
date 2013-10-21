@@ -21,8 +21,18 @@ class AreaForm extends BaseAreaForm
     );
 
     $this->getWidgetSchema()
+      ->offsetSet('masters_list', new sfWidgetFormDoctrineChoice([
+        'multiple' => true,
+        'model' => 'sfGuardUser',
+        'query' => Doctrine_Query::create()
+          ->from('sfGuardUser u')
+          ->leftJoin('u.Groups g')
+          ->addWhere('g.name = ?', 'master')
+          ->addOrderBy('u.first_name, u.last_name')
+      ]))
       ->setLabels([
         'name' => 'Наименование',
+        'slug' => 'Транслит наименования',
       ])
     ;
   }
