@@ -35,5 +35,9 @@ class AreaForm extends BaseAreaForm
         'slug' => 'Транслит наименования',
       ])
     ;
+
+    if (!sfContext::getInstance()->getUser()->hasCredential('can_edit_styles_of_areas')) {
+      unset ($this['style']);
+    }
   }
 }

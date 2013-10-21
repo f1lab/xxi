@@ -13,12 +13,14 @@
     <tr>
       <th>Id</th>
       <th>Name</th>
+      <th>Slug</th>
     </tr>
   </thead>
   <tbody><?php foreach ($areas as $area): ?>
     <tr>
       <td><a href="<?php echo url_for('area/edit?id='.$area->getId()) ?>"><?php echo $area->getId() ?></a></td>
       <td><?php echo $area->getName() ?></td>
+      <td><?php echo $area->getSlug() ?></td>
     </tr>
   <?php endforeach; ?></tbody>
 </table>

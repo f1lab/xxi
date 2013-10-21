@@ -12,6 +12,8 @@ Area:
       type: string(255)
       default: ""
       notnull: true
+    style:
+      type: clob
   relations:
     Works:
       class: Work

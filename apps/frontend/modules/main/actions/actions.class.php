@@ -15,4 +15,26 @@ class mainActions extends sfActions
     $this->groups = $this->getUser()->getGroups();
     count($this->groups) and $this->redirect('@orders');
   }
+
+  public function executeAreaStyles(sfWebRequest $request)
+  {
+    $areas = Doctrine_Query::create()
+      ->from('Area a')
+      ->select('a.slug, a.style')
+      ->addOrderBy('a.slug')
+      ->execute([], Doctrine_Core::HYDRATE_SCALAR)
+    ;
+
+    $this->getResponse()->setHttpHeader('Content-Type', 'text/css');
+
+    print (join("\n\n", array_map(function($area) {
+      return <<<CSS
+        .event-of-area-{$area['a_slug']} {
+          {$area['a_style']}
+        }
+CSS;
+    }, $areas)));
+
+    return sfView::NONE;
+  }
 }

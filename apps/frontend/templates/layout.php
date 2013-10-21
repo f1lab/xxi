@@ -7,6 +7,7 @@
   <?php include_title() ?>
   <link rel="shortcut icon" href="/favicon.ico" />
   <?php include_stylesheets() ?>
+  <link rel="stylesheet" href="<?php echo url_for('main/areaStyles') ?>" />
   <?php include_javascripts() ?>
   <style type="text/css">
     body {
