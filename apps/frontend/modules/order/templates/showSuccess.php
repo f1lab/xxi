@@ -31,6 +31,7 @@
   <ul class="nav nav-tabs">
     <li class="active"><a href="#tab-description" data-toggle="tab">Описание заказа</a></li>
     <li><a href="#tab-utilization" data-toggle="tab">Расход материалов</a></li>
+    <li><a href="#tab-works" data-toggle="tab">Работы</a></li>
   </ul>
   <div class="tab-content">
     <div class="tab-pane active" id="tab-description">
@@ -38,6 +39,9 @@
     </div>
     <div class="tab-pane" id="tab-utilization">
       <?php include_partial('order-utilization-tab', ['order' => $order]) ?>
+    </div>
+    <div class="tab-pane" id="tab-works">
+      <?php include_partial('order-works-tab', ['order' => $order]) ?>
     </div>
   </div>
 </div>

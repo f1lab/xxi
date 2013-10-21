@@ -28,13 +28,6 @@ Work:
     name:
       type: string(255)
       notnull: true
-  relations:
-    Orders:
-      class: Order
-      refClass: RefOrderWork
-      local: work_id
-      foreign: order_id
-      foreignAlias: Works
 
 # Работы заказа
 RefOrderWork:
@@ -50,6 +43,14 @@ RefOrderWork:
       notnull: true
     comment:
       type: string(255)
+    is_completed:
+      type: boolean
+      default: false
+      notnull: true
+    planned_start:
+      type: timestamp
+    planned_finish:
+      type: timestamp
   relations:
     Order:
       local: order_id
