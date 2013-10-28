@@ -20,6 +20,7 @@ default:
     - timepicker.css
     #- bootstrap-responsive
     - chosen
+    - fullcalendar.css
     - main
 
   javascripts:
@@ -32,6 +33,8 @@ default:
     - bootstrap-datetimepicker.ru.js
     - bootstrap-timepicker.js
     - chosen.jquery.min.js
+    - fullcalendar.min.js
+    - jquery-ui.custom.min.js
     - main
 
   has_layout:     true
