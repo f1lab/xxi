@@ -4,15 +4,15 @@
 
 <div class="row-fluid">
   <div class="span3">
-    <div class="well well-small">
+    <?php if (!$sf_user->hasGroup('master')): ?><div class="well well-small">
       <h4>Фильтр</h4>
 
       <form id="works-filter">
         <?php echo $filter->renderUsing('bootstrap') ?>
       </form>
-    </div>
+    </div><?php endif ?>
 
-    <div id='new-events' class="well well-small"><?php if ($sf_user->hasCredential('сan_edit_planning')): ?>
+    <?php if ($sf_user->hasCredential('сan_edit_planning')): ?><div id='new-events' class="well well-small">
       <h4>Нераспределённые работы</h4>
 
       <ul class="unstyled"><?php foreach ($refs as $ref): ?>
@@ -22,7 +22,7 @@
           </span>
         </li>
       <?php endforeach ?></ul>
-    <?php endif ?></div>
+    </div><?php endif ?>
   </div>
 
   <div id='calendar' class="span9"></div>
@@ -34,6 +34,9 @@
 
 <script>
 $(function() {
+  var isMaster = <?php echo $sf_user->hasGroup('master') ? 'true' : 'false' ?>
+    , isSuper = <?php echo $sf_user->hasCredential('can_finish_any_work_ref') ? 'true' : 'false' ?>
+
   var clickHandler = function(event, e) {
     e.preventDefault();
 
@@ -41,9 +44,15 @@ $(function() {
       .find('.modal-body')
         .html('<p>Загружаю…</p>')
         .end()
+      .find('.modal-footer')
+        .removeClass(isMaster||isSuper ? 'hide' : '')
+        .find('a')
+          .attr('href', '<?php echo url_for('plan/finishRef?id=') ?>' + event.id)
+          .end()
+        .end()
       .modal()
 
-    $.get('<?php echo url_for('work/modal?id=') ?>' + event.id)
+    $.get('<?php echo url_for('plan/modal?id=') ?>' + event.id)
       .done(function(data) {
         modalNode
           .find('.modal-body')
@@ -130,7 +139,9 @@ $(function() {
       url: '<?php echo url_for('plan/eventsource') ?>'
       , data: function() {
         return {
-          'filter': $('#works-filter').serialize()
+          'filter': isMaster
+            ? 'works-filter-master%5B%5D=<?php echo $sf_user->getGuardUser()->getId() ?>'
+            : $('#works-filter').serialize()
         }
       }
     }]
@@ -176,4 +187,7 @@ $(function() {
     <h3>Подробнее!</h3>
   </div>
   <div class="modal-body"></div>
+  <div class="modal-footer hide">
+    <a href="#" class="btn btn-success">Я всё сделал!</a>
+  </div>
 </div>

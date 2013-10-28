@@ -7,4 +7,7 @@
 <div class="well">Описание заказа: <?php echo $ref->getOrder()->getDescription() ?: '—' ?></div>
 
 <h5>Работа «<?php echo $ref->getWork()->getName() ?>» на участке «<?php echo $ref->getWork()->getArea()->getName() ?>»</h5>
-<div class="well">Комментарий к работе: <?php echo $ref->getComment() ?: '—' ?></div>
+<div class="well">
+  Мастер: <?php echo $ref->getMaster() ?><br />
+  Комментарий к работе: <?php echo $ref->getComment() ?: '—' ?>
+</div>

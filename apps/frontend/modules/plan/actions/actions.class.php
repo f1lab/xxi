@@ -97,4 +97,35 @@ class planActions extends sfActions
 
     return sfView::NONE;
   }
+
+  public function executeModal($request)
+  {
+    $this->ref = Doctrine_Query::create()
+      ->from('RefOrderWork ref')
+      ->leftJoin('ref.Order o')
+      ->leftJoin('ref.Work w')
+      ->leftJoin('w.Area a')
+      ->addWhere('ref.id = ?', $request->getParameter('id'))
+      ->limit(1)
+      ->fetchOne()
+    ;
+
+    $this->forward404Unless($this->ref);
+
+    return $this->renderPartial('modal', ['ref' => $this->ref]);
+  }
+
+  public function executeFinishRef($request)
+  {
+    $ref = Doctrine_Core::getTable('RefOrderWork')->find($request->getParameter('id'));
+    if ($ref and !$ref->isNew()) {
+      $ref
+        ->setIsCompleted(true)
+        ->setFinishedAt(date('Y-m-d H:i:s'))
+        ->save()
+      ;
+    }
+
+    $this->redirect('plan/index');
+  }
 }

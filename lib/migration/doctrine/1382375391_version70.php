@@ -15,6 +15,9 @@ class Version70 extends Doctrine_Migration_Base
 
         /* new permission for editing plan */
         $permission->setName('сan_edit_planning')->save();
+
+        /* hell yeah */
+        $permission->setName('can_finish_any_work_ref')->save();
     }
 
     public function down()
