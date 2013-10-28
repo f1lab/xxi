@@ -59,6 +59,12 @@
       'isActive' => $sf_context->getModuleName() == 'report',
       'href' => url_for('report/index'),
     ],
+
+    'Планирование' => [
+      'credentials' => $sf_user->hasCredential('сan_see_planning,'),
+      'isActive' => $sf_context->getModuleName() == 'plan',
+      'href' => url_for('plan/index'),
+    ],
   ];
 ?>
 

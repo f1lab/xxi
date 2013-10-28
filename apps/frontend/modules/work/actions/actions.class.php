@@ -70,4 +70,21 @@ class workActions extends sfActions
       $this->redirect('work/edit?id='.$work->getId());
     }
   }
+
+  public function executeModal($request)
+  {
+    $this->ref = Doctrine_Query::create()
+      ->from('RefOrderWork ref')
+      ->leftJoin('ref.Order o')
+      ->leftJoin('ref.Work w')
+      ->leftJoin('w.Area a')
+      ->addWhere('ref.id = ?', $request->getParameter('id'))
+      ->limit(1)
+      ->fetchOne()
+    ;
+
+    $this->forward404Unless($this->ref);
+
+    return $this->renderPartial('modal', ['ref' => $this->ref]);
+  }
 }

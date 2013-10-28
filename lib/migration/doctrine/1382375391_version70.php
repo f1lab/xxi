@@ -12,6 +12,9 @@ class Version70 extends Doctrine_Migration_Base
         /* new permission for styling areas */
         $permission = new sfGuardPermission();
         $permission->setName('can_edit_styles_of_areas')->save();
+
+        /* new permission for editing plan */
+        $permission->setName('сan_edit_planning')->save();
     }
 
     public function down()

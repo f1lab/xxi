@@ -15,7 +15,7 @@ class RefOrderWork extends BaseRefOrderWork
   public function getPlannedAt()
   {
     return $this->getPlannedStart() || $this->getPlannedFinish()
-      ? date('d.m.Y H:i', $this->getPlannedStart(), strtotime($this->getPlannedStart())) . '—' . date('d.m.Y H:i', $this->getPlannedFinish(), strtotime($this->getPlannedFinish()))
+      ? date('d.m.Y H:i', strtotime($this->getPlannedStart())) . '—' . date('d.m.Y H:i', strtotime($this->getPlannedFinish()))
       : 'не запланировано'
     ;
   }

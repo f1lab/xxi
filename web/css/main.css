@@ -111,3 +111,7 @@ legend + .control-group {
 fieldset {
   margin-bottom: 1.2em;
 }
+
+.well:empty {
+  display: none;
+}
