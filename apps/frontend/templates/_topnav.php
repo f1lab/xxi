@@ -1,21 +1,19 @@
 <?php
   $navLists = [
     'Заказы' => [
-      'Клиенты' => [
-        'credentials' => true,
-        'isActive' => $sf_context->getModuleName() == 'client',
-        'href' => url_for('@clients'),
-      ],
-      'Заказы' => [
-        'credentials' => true,
-        'isActive' => $sf_context->getModuleName() == 'order',
-        'href' => url_for('@orders'),
-      ],
-      'Подрядчики' => [
-        'credentials' => $sf_user->hasCredential('can_edit_contractors'),
-        'isActive' => $sf_context->getModuleName() == 'contractor',
-        'href' => url_for('@contractors'),
-      ],
+      'credentials' => !$sf_user->hasGroup('master'),
+      'isActive' => $sf_context->getModuleName() == 'order',
+      'href' => url_for('@orders'),
+    ],
+    'Клиенты' => [
+      'credentials' => !$sf_user->hasGroup('master'),
+      'isActive' => $sf_context->getModuleName() == 'client',
+      'href' => url_for('@clients'),
+    ],
+    'Подрядчики' => [
+      'credentials' => $sf_user->hasCredential('can_edit_contractors'),
+      'isActive' => $sf_context->getModuleName() == 'contractor',
+      'href' => url_for('@contractors'),
     ],
 
     'Материалы' => [
@@ -61,7 +59,7 @@
     ],
 
     'Планирование' => [
-      'credentials' => $sf_user->hasCredential('сan_see_planning,'),
+      'credentials' => $sf_user->hasCredential('сan_see_planning,') || $sf_user->hasGroup('master') || $sf_user->hasGroup('worker'),
       'isActive' => $sf_context->getModuleName() == 'plan',
       'href' => url_for('plan/index'),
     ],

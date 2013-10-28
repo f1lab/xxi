@@ -86,7 +86,7 @@ class orderActions extends sfActions
       'docsGiven' => 'Документы выданы',
     );
 
-    if ($this->getUser()->hasGroup('worker') or $this->getUser()->hasGroup('monitor')) {
+    if ($this->getUser()->hasGroup('worker') or $this->getUser()->hasGroup('monitor') or $this->getUser()->hasGroup('master')) {
       // bidlo-magic: we need just part of fields, so bidlocode now
       $workerFields = array_fill_keys(array(
         'creator',
