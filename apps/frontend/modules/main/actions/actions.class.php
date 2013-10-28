@@ -12,8 +12,13 @@ class mainActions extends sfActions
 {
   public function executeIndex(sfWebRequest $request)
   {
-    $this->groups = $this->getUser()->getGroups();
-    count($this->groups) and $this->redirect('@orders');
+    if ($this->getUser()->hasGroup('master')) {
+      $to = 'plan/index';
+    } else {
+      $to = 'order/index';
+    }
+
+    $this->redirect($to);
   }
 
   public function executeAreaStyles(sfWebRequest $request)
