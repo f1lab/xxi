@@ -21,20 +21,55 @@ class planActions extends sfActions
       ->addOrderBy('row.created_at')
       ->execute()
     ;
+
+    $this->filter = new sfForm();
+    $this->filter->getWidgetSchema()
+      ->offsetSet('area', new sfWidgetFormDoctrineChoice([
+        'model' => 'Area',
+        'multiple' => true,
+      ], ['class' => 'chzn-select']))
+
+      ->offsetSet('master', new sfWidgetFormDoctrineChoice([
+        'model' => 'sfGuardUser',
+        'multiple' => true,
+        'query' => Doctrine_Query::create()
+          ->from('sfGuardUser u')
+          ->leftJoin('u.Groups g')
+          ->addWhere('g.name = ?', 'master')
+          ->orderBy('u.last_name, u.first_name')
+      ], ['class' => 'chzn-select']))
+
+      ->setLabels([
+        'area' => 'Участок',
+        'master' => 'Мастер',
+      ])
+      ->setNameFormat('works-filter-%s')
+    ;
+
+    unset ($this->filter['_csrf_token']);
   }
 
-  public function executeEventsourceWorker($request)
+  public function executeEventsource($request)
   {
-    $refs = Doctrine_Query::create()
+    $query = Doctrine_Query::create()
       ->from('RefOrderWork row')
       ->leftJoin('row.Order o')
       ->leftJoin('row.Work w')
       ->leftJoin('w.Area a')
       ->addWhere('row.is_completed = ? and (row.planned_start is not null and row.planned_finish is not null)', false)
       ->addOrderBy('row.created_at')
-      ->execute([], Doctrine_Core::HYDRATE_ARRAY)
     ;
 
+    parse_str($request->getParameter('filter'), $filter);
+    if (isset($filter['works-filter-area'])) {
+      $query->andWhereIn('row.work_id', $filter['works-filter-area']);
+    }
+
+    if (isset($filter['works-filter-master'])) {
+      $query->andWhereIn('row.master_id', $filter['works-filter-master']);
+    }
+
+    $refs = $query->execute([], Doctrine_Core::HYDRATE_ARRAY);
     die(json_encode(array_map(function($ref) {
       return [
         'id' => $ref['id'],

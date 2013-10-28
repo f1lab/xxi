@@ -21,16 +21,25 @@ class RefOrderWorkForm extends BaseRefOrderWorkForm
 
     $this->getWidgetSchema()
       ->offsetSet('order_id', new sfWidgetFormInputHidden())
+
+      ->offsetSet('area_id', new sfWidgetFormDoctrineChoice([
+        'model' => $this->getRelatedModelName('Area'),
+        'add_empty' => true,
+      ]))
+
       ->offsetSet('work_id', new sfWidgetFormDoctrineChoice([
         'model' => $this->getRelatedModelName('Work'),
         'add_empty' => true,
-        'method' => 'getNameWithArea',
+      ]))
+
+      ->offsetSet('master_id', new sfWidgetFormDoctrineChoice([
+        'model' => $this->getRelatedModelName('Master'),
+        'add_empty' => true,
         'query' => Doctrine_Query::create()
-          ->from('Work w')
-          ->leftJoin('w.Area a')
-          ->addOrderBy('a.name, w.name')
-      ], [
-        'class' => 'chzn-select',
+          ->from('sfGuardUser u')
+          ->leftJoin('u.Groups g')
+          ->addWhere('g.name = ?', 'master')
+          ->orderBy('u.last_name, u.first_name')
       ]))
     ;
   }

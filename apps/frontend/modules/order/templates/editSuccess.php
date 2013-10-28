@@ -53,7 +53,9 @@
         'form' => $form,
         'relationName' => 'RefOrderWork',
         'columns' => [
-          'work_id' => 'Участок / Работа',
+          'area_id' => 'Участок',
+          'work_id' => 'Работа',
+          'master_id' => 'Мастер',
           'comment' => 'Комментарий',
         ],
         'noRelationsMessage' => 'Нет работ',

@@ -4,6 +4,14 @@
 
 <div class="row-fluid">
   <div class="span3">
+    <div class="well well-small">
+      <h4>Фильтр</h4>
+
+      <form id="works-filter">
+        <?php echo $filter->renderUsing('bootstrap') ?>
+      </form>
+    </div>
+
     <div id='new-events' class="well well-small"><?php if ($sf_user->hasCredential('сan_edit_planning')): ?>
       <h4>Нераспределённые работы</h4>
 
@@ -65,6 +73,10 @@ $(function() {
     })
   }
 
+  , filterChangeHandler = function() {
+    $('#calendar').fullCalendar('refetchEvents');
+  }
+
   $('#new-events .fc-event').each(function() {
     var eventObject = {
       id: $(this).data('id')
@@ -85,6 +97,7 @@ $(function() {
   $(document).on('click', '#new-events .fc-event', function(e) {
     clickHandler.call(this, $(this).data('eventObject'), e);
   });
+  $('#works-filter-area, #works-filter-master').change(filterChangeHandler);
 
   $('#calendar').fullCalendar({
     editable: <?php echo $sf_user->hasCredential('сan_edit_planning') ? 'true' : 'false' ?>
@@ -114,14 +127,19 @@ $(function() {
     , eventClick: clickHandler
 
     , eventSources: [{
-      url: '<?php echo url_for('plan/eventsourceWorker') ?>'
+      url: '<?php echo url_for('plan/eventsource') ?>'
+      , data: function() {
+        return {
+          'filter': $('#works-filter').serialize()
+        }
+      }
     }]
 
     , firstDay: 1
-    , minTime: 8
-    , maxTime: 22
+    /* , minTime: 8
+    , maxTime: 22 */
     , header: {
-      left: ''
+      left: 'agendaWeek month'
       , center: 'title'
     }
     , defaultView: 'agendaWeek'

@@ -67,7 +67,13 @@ RefOrderWork:
     order_id:
       type: integer
       notnull: true
+    area_id:
+      type: integer
+      notnull: true
     work_id:
+      type: integer
+      notnull: true
+    master_id:
       type: integer
       notnull: true
     comment:
@@ -80,10 +86,19 @@ RefOrderWork:
       type: timestamp
     planned_finish:
       type: timestamp
+    finished_at:
+      type: timestamp
   relations:
     Order:
       local: order_id
       foreign: id
+    Area:
+      local: area_id
+      foreign: id
     Work:
       local: work_id
+      foreign: id
+    Master:
+      local: master_id
+      class: sfGuardUser
       foreign: id

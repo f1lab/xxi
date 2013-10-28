@@ -3,6 +3,7 @@
     <thead>
       <tr>
         <th class="span3">Участок / работа</th>
+        <th>Мастер</th>
         <th>Комментарий</th>
         <th>Запланировано</th>
         <th>Готовность</th>
@@ -12,9 +13,15 @@
       <?php foreach ($refs as $ref): ?>
         <tr>
           <td><?php echo $ref->getWork()->getNameWithArea() ?></td>
+          <td><?php echo $ref->getMaster() ?></td>
           <td><?php echo $ref->getComment() ?></td>
           <td><?php echo $ref->getPlannedAt() ?></td>
-          <td><span class="icon icon-<?php echo $ref->getIsCompleted() ? 'ok' : 'remove' ?>"></span></td>
+          <td>
+            <span class="icon icon-<?php echo $ref->getIsCompleted() ? 'ok' : 'remove' ?>"></span>
+            <?php if ($ref->getIsCompleted()): ?>
+              отмечено <?php echo $ref->getFinishedAt() ?>
+            <?php endif ?>
+          </td>
         </tr>
       <?php endforeach ?>
     </tbody>
