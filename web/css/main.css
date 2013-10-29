@@ -122,3 +122,7 @@ fieldset {
   .emptable:empty+div {
     display: block;
   }
+
+.event-completed-yes {
+  background-color: #ccc !important;
+}

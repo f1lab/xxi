@@ -56,7 +56,8 @@ class planActions extends sfActions
       ->leftJoin('row.Order o')
       ->leftJoin('row.Work w')
       ->leftJoin('w.Area a')
-      ->addWhere('row.is_completed = ? and (row.planned_start is not null and row.planned_finish is not null)', false)
+      ->addWhere('row.planned_start is not null and row.planned_finish is not null')
+      ->addWhere('o.state = ?', 'working')
       ->addOrderBy('row.created_at')
     ;
 
@@ -73,11 +74,16 @@ class planActions extends sfActions
     die(json_encode(array_map(function($ref) {
       return [
         'id' => $ref['id'],
-        'title' => $ref['Work']['Area']['name'] . ' / ' . $ref['Work']['name'],
+        'title' => $ref['Order']['id'] . ': ' . $ref['Work']['Area']['name'] . ' / ' . $ref['Work']['name'],
         'start' => $ref['planned_start'],
         'end' => $ref['planned_finish'],
-        'className' => 'event-of-area-' . $ref['Work']['Area']['slug'],
+        'className' => join(' ', [
+          'event-of-area-' . $ref['Work']['Area']['slug']
+          , 'event-completed-' . ($ref['is_completed'] ? 'yes' : 'not')
+        ]),
         'allDay' => false,
+        'editable' => !$ref['is_completed'],
+        'isCompleted' => $ref['is_completed'],
       ];
     }, (array)$refs), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
   }
@@ -118,7 +124,7 @@ class planActions extends sfActions
   public function executeFinishRef($request)
   {
     $ref = Doctrine_Core::getTable('RefOrderWork')->find($request->getParameter('id'));
-    if ($ref and !$ref->isNew()) {
+    if ($ref and !$ref->isNew() and !$ref->getIsCompleted()) {
       $ref
         ->setIsCompleted(true)
         ->setFinishedAt(date('Y-m-d H:i:s'))

@@ -18,7 +18,7 @@
       <ul class="unstyled emptable"><?php foreach ($refs as $ref): ?>
         <li class="fc-event fc-event-draggable fc-event-start fc-event-end fc-event-vert event-of-area-<?php echo $ref->getWork()->getArea()->getSlug() ?>" data-id="<?php echo $ref->getId() ?>" data-area-slug="<?php echo $ref->getWork()->getArea()->getSlug() ?>">
           <span class="name">
-            <?php echo $ref->getWork()->getNameWithArea() ?>
+            <?php echo $ref->getOrder()->getId() ?>: <?php echo $ref->getWork()->getNameWithArea() ?>
           </span>
         </li>
       <?php endforeach ?></ul>
@@ -41,6 +41,10 @@ $(function() {
 
   var clickHandler = function(event, e) {
     e.preventDefault();
+
+    if (event.isCompleted) {
+      return false;
+    }
 
     var modalNode = $('#event-details')
       .find('.modal-body')
