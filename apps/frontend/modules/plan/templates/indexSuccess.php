@@ -194,6 +194,6 @@ $(function() {
   </div>
   <div class="modal-body"></div>
   <div class="modal-footer hide">
-    <a href="#" class="btn btn-success">Я всё сделал!</a>
+    <a href="#" class="btn btn-success">Работа выполнена</a>
   </div>
 </div>

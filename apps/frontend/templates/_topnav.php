@@ -35,7 +35,7 @@
     ],
 
     'Справочники' => [
-      'Номенклатуры' => [
+      'Номенклатура' => [
         'credentials' => $sf_user->hasCredential('can_edit_nomenclature'),
         'isActive' => $sf_context->getModuleName() == 'nomenclature',
         'href' => url_for('nomenclature/index'),

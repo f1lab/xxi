@@ -1,5 +1,5 @@
 <h1 class="page-header">
-  Номенклатуры
+  Номенклатура
 </h1>
 
 <div class="btn-toolbar">
