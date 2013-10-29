@@ -15,13 +15,15 @@
     <?php if ($sf_user->hasCredential('сan_edit_planning')): ?><div id='new-events' class="well well-small">
       <h4>Нераспределённые работы</h4>
 
-      <ul class="unstyled"><?php foreach ($refs as $ref): ?>
+      <ul class="unstyled emptable"><?php foreach ($refs as $ref): ?>
         <li class="fc-event fc-event-draggable fc-event-start fc-event-end fc-event-vert event-of-area-<?php echo $ref->getWork()->getArea()->getSlug() ?>" data-id="<?php echo $ref->getId() ?>" data-area-slug="<?php echo $ref->getWork()->getArea()->getSlug() ?>">
           <span class="name">
             <?php echo $ref->getWork()->getNameWithArea() ?>
           </span>
         </li>
       <?php endforeach ?></ul>
+
+      <div class="alert alert-info">Нет работ.</div>
     </div><?php endif ?>
   </div>
 

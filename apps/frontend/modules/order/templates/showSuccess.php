@@ -12,7 +12,7 @@
       ?>">← версия <?php echo $version-1 ?></a>
   </li>
   <li class="active">
-    версия <?php echo $version ?> от <?php echo $order->getUpdatedAt() ?>
+    версия <?php echo $version ?> от <?php echo $order->getUpdator()->getUsername() ?> от <?php echo $order->getUpdatedAt() ?>
   </li>
   <li<?php if ($order->getAuditLog()->getMaxVersion($sf_data->getRaw('order')) == $version):
     $cantclick2 = true;

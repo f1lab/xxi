@@ -115,3 +115,10 @@ fieldset {
 .well:empty {
   display: none;
 }
+
+.emptable+div {
+  display: none;
+}
+  .emptable:empty+div {
+    display: block;
+  }
