@@ -13,10 +13,14 @@ class RefOrderWorkForm extends BaseRefOrderWorkForm
   public function configure()
   {
     unset (
-      $this['created_at'],
-      $this['created_by'],
-      $this['updated_at'],
-      $this['updated_by']
+      $this['created_at']
+      , $this['created_by']
+      , $this['updated_at']
+      , $this['is_completed']
+      , $this['planned_start']
+      , $this['planned_finish']
+      , $this['finished_at']
+      , $this['updated_by']
     );
 
     $this->getWidgetSchema()
