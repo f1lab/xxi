@@ -6,39 +6,28 @@ $(function() {
           .click(function() {
             document.location.href = $(this).find('a').eq(0).attr('href');
           })
-        ;
       })
-  ;
 
-  $('[rel="popover"]')
-    .popover({
-      'trigger': 'hover'
-    })
-  ;
+  $('[rel="popover"]').popover({
+    'trigger': 'hover'
+  })
 
-  $('table')
-    .tablesorter({dateFormat: 'uk'})
-  ;
+  $('table').tablesorter({dateFormat: 'uk'})
 
   $('.makePizdatoWithDiscount')
     .find('option')
       .each(function(a, b) {
-        var
-          $this = $(this),
-          temp = $this.text().split('|')
-        ;
+        var $this = $(this)
+          , temp = $this.text().split('|')
 
         $(this)
           .text(temp[0])
           .data('discount', temp[1])
-        ;
       })
       .end()
     .on('change', function() {
-      var
-        $this = $(this),
-        $element = $this.find('option[value="' + $this.val() + '"]')
-      ;
+      var $this = $(this)
+        , $element = $this.find('option[value="' + $this.val() + '"]')
 
       $this
         .parent()
@@ -46,21 +35,14 @@ $(function() {
             .remove()
             .end()
           .append('<span id="discount" style="padding-left: 10px">Скидка: ' + $element.data('discount') + '%</span>')
-      ;
     })
-  ;
 
-  $(".chzn-select")
-    .chosen()
-  ;
+  $(".chzn-select").chosen()
 
   $('.toggler')
     .click(function() {
-      $(this)
-        .toggleClass('active')
-      ;
+      $(this).toggleClass('active')
     })
-  ;
 
   $('.datetimepickable').datetimepicker({
     'language': 'ru',
@@ -76,12 +58,10 @@ $(function() {
               .removeClass('chzn-done')
               .next()
                 .remove()
-        ;
       })
       .on('afteradd.ah', function() {
         $('.chzn-select').chosen();
       })
-  ;
 
   $('.add-remove-datetimepicker-for-relations')
     .find('tr')
@@ -89,14 +69,28 @@ $(function() {
         $(this)
           .find('.datetimepickable')
             .datetimepicker('remove')
-        ;
       })
       .on('afteradd.ah', function() {
         $('.datetimepickable').datetimepicker({
           'language': 'ru'
         });
       })
-  ;
+
+  $(document).on('change', 'select.area-selector', function() {
+    var that = $(this)
+      , works = that.parents('tr').find('.work-selector')
+      , masters = that.parents('tr').find('.master-selector')
+
+    $.getJSON('/frontend_dev.php/main/getWorksAndMastersForArea', {id: that.val()}, function(data) {
+      works
+        .html(data.works)
+        .trigger('liszt:updated')
+
+      masters
+        .html(data.masters)
+        .trigger('liszt:updated')
+    });
+  });
 });
 
 function resetNearestSelect(that) {
@@ -108,7 +102,6 @@ function resetNearestSelect(that) {
             .removeAttr('selected')
             .end()
           .trigger('liszt:updated')
-  ;
 
   return false;
 }

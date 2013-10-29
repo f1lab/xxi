@@ -29,12 +29,15 @@ class RefOrderWorkForm extends BaseRefOrderWorkForm
       ->offsetSet('area_id', new sfWidgetFormDoctrineChoice([
         'model' => $this->getRelatedModelName('Area'),
         'add_empty' => true,
-      ]))
+        'query' => Doctrine_Query::create()
+          ->from('Area a')
+          ->orderBy('a.name')
+      ], ['class' => 'chzn-select area-selector']))
 
       ->offsetSet('work_id', new sfWidgetFormDoctrineChoice([
         'model' => $this->getRelatedModelName('Work'),
         'add_empty' => true,
-      ]))
+      ], ['class' => 'chzn-select work-selector']))
 
       ->offsetSet('master_id', new sfWidgetFormDoctrineChoice([
         'model' => $this->getRelatedModelName('Master'),
@@ -44,7 +47,7 @@ class RefOrderWorkForm extends BaseRefOrderWorkForm
           ->leftJoin('u.Groups g')
           ->addWhere('g.name = ?', 'master')
           ->orderBy('u.last_name, u.first_name')
-      ]))
+      ], ['class' => 'chzn-select master-selector']))
     ;
   }
 }
