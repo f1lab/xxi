@@ -18,6 +18,7 @@ class planActions extends sfActions
       ->leftJoin('row.Work w')
       ->leftJoin('w.Area a')
       ->addWhere('row.is_completed = ? and (row.planned_start is null and row.planned_finish is null)', false)
+      ->addWhere('o.state = ?', 'working')
       ->addOrderBy('row.created_at')
       ->execute()
     ;
@@ -82,8 +83,9 @@ class planActions extends sfActions
           , 'event-completed-' . ($ref['is_completed'] ? 'yes' : 'not')
         ]),
         'allDay' => false,
-        'editable' => !$ref['is_completed'],
+        'editable' => !$ref['is_completed'] or $this->getUser()->hasCredential('сan_edit_planning-finished'),
         'isCompleted' => $ref['is_completed'],
+        'orderId' => $ref['Order']['id'],
       ];
     }, (array)$refs), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
   }

@@ -24,26 +24,38 @@
     </fieldset>
   <?php endif ?>
 
-  <?php if (!$sf_user->hasGroup('master')): ?>
-    <fieldset>
-      <legend>Позиции заказа</legend>
-      <?php include_partial('global/relation', [
-        'form' => $form,
-        'relationName' => 'Invoices',
-        'columns' => [
-          'description' => 'Описание заказа',
-          'number' => 'Кол-во',
-          'price' => 'Цена',
-          'sum' => 'Сумма',
-        ],
-        'noRelationsMessage' => 'Нет описания',
-      ]) ?>
-    </fieldset>
+  <?php if (!$sf_user->hasGroup('worker')): ?>
+    <?php if (!$sf_user->hasGroup('master')): ?>
+      <fieldset>
+        <legend>Позиции заказа</legend>
+        <?php include_partial('global/relation', [
+          'form' => $form,
+          'relationName' => 'Invoices',
+          'columns' => [
+            'description' => 'Описание заказа',
+            'number' => 'Кол-во',
+            'price' => 'Цена',
+            'sum' => 'Сумма',
+          ],
+          'noRelationsMessage' => 'Нет описания',
+        ]) ?>
+      </fieldset>
+    <?php else: ?>
+      <fieldset>
+      <legend>Статусы</legend>
+        <?php echo $form['state']->renderRowUsing('bootstrap')?>
+      </fieldset>
+    <?php endif ?>
   <?php else: ?>
-    <fieldset>
-    <legend>Статусы</legend>
-      <?php echo $form['state']->renderRowUsing('bootstrap')?>
-    </fieldset>
+    <div class="well">
+      <h4>Подробное описание заказа</h4>
+      <pre><?php echo $form->getObject()->getDescription() ?></pre>
+
+      <h4>Позиции заказа</h4>
+      <ul><?php foreach ($form->getObject()->getInvoices() as $invoice): ?>
+        <li><?php echo $invoice->getDescription() ?> × <?php echo $invoice->getNumber() ?></li>
+      <?php endforeach ?></ul>
+    </div>
   <?php endif ?>
 
   <?php if ($sf_user->hasCredential('can_set_order_works')): ?>

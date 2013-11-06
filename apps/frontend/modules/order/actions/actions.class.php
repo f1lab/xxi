@@ -19,7 +19,24 @@ class orderActions extends sfActions
       'Order',
       100
     );
-    $this->pager->setQuery($this->filter->getFilterQuery($request, $this->getUser()));
+
+    $filterQuery = $this->filter->getFilterQuery($request, $this->getUser());
+    if (true == ($worksFilter = $request->getParameter('filter-works'))) {
+      if ($worksFilter === 'without') {
+        $filterQuery
+          ->leftJoin('a.RefOrderWork rof')
+          ->addWhere('rof.id is null')
+        ;
+      } elseif ($worksFilter === 'completed') {
+        $filterQuery
+          ->leftJoin('a.RefOrderWork rof1')
+          ->addWhere('a.id NOT IN (SELECT a1.id from Order a1 LEFT JOIN a1.RefOrderWork rof2 WHERE rof2.is_completed = false)')
+          ->addWhere('rof1.id IS NOT NULL')
+        ;
+      }
+    }
+    $this->pager->setQuery($filterQuery);
+
     $this->pager->setPage($request->getParameter('page', 1));
     $this->pager->init();
 

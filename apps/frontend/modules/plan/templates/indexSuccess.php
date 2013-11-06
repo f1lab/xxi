@@ -43,6 +43,9 @@ $(function() {
     e.preventDefault();
 
     if (event.isCompleted) {
+      if (!isMaster) {
+        document.location.replace('<?php echo url_for('order/show?id=') ?>' + event.orderId);
+      }
       return false;
     }
 

@@ -9,5 +9,7 @@
 <h5>Работа «<?php echo $ref->getWork()->getName() ?>» на участке «<?php echo $ref->getWork()->getArea()->getName() ?>»</h5>
 <div class="well">
   Мастер: <?php echo $ref->getMaster() ?><br />
-  Комментарий к работе: <?php echo $ref->getComment() ?: '—' ?>
+  Комментарий к работе: <?php echo $ref->getComment() ?: '—' ?><br /><br />
+
+  Файлы: <?php echo $ref->getOrder()->getFiles() ?: '—' ?>
 </div>
