@@ -240,6 +240,8 @@ class orderActions extends sfActions
       ;
 
     } elseif ($this->getUser()->hasGroup('master')) {
+      $this->forward404(); // master can't edit Orders
+
       $this->form->useFields(array(
         'id',
         'Utilizations',

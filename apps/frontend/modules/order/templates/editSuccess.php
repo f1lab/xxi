@@ -9,7 +9,7 @@
   <?php echo $form->renderGlobalErrors() ?>
   <?php echo $form->renderHiddenFields()?>
 
-  <?php if ($sf_user->hasCredential('can_spend_materials')): ?>
+  <?php if ($sf_user->hasCredential('can_spend_materials-deprecated')): ?>
     <fieldset>
       <legend>Расход материалов</legend>
       <?php include_partial('global/relation', [

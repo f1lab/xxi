@@ -104,7 +104,7 @@ class OrderForm extends BaseOrderForm
     $user = sfContext::getInstance()->getUser();
     $this->embedRelations(array_merge(
       $user->hasCredential('can_set_order_works') ? $worksRelation : [],
-      $user->hasCredential('can_spend_materials') ? $utilizationsRelation : [],
+      $user->hasCredential('can_spend_materials-deprecated') ? $utilizationsRelation : [],
       $user->hasGroup('master') ? [] : $invoicesRelation,
       $user->hasCredential('director') || $user->hasCredential('buhgalter') ? $paysRelation : []
     ));

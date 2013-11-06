@@ -16,6 +16,7 @@ class UtilizationForm extends BaseUtilizationForm
       $this['created_at'],
       $this['updated_at'],
       $this['created_by'],
+      $this['work_id'],
       $this['updated_by']
     );
 
@@ -46,7 +47,7 @@ class UtilizationValidator extends sfValidatorBase {
   }
 
   public function doClean($values) {
-    if ($values['amount'] > Doctrine_Core::getTable('Material')->find($values['material_id'])->getRemainedAmount()) {
+    if (!$values['amount'] or $values['amount'] > Doctrine_Core::getTable('Material')->find($values['material_id'])->getRemainedAmount()) {
       $error = new sfValidatorError($this, 'not_enough_material', ['value' => $values]);
       throw new sfValidatorErrorSchema($this, array('amount' => $error));
     }

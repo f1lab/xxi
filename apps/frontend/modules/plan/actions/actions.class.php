@@ -121,6 +121,58 @@ class planActions extends sfActions
     return $this->renderPartial('modal', ['ref' => $this->ref]);
   }
 
+  public function executePreFinishRef($request)
+  {
+    $utilizationsRelation = array('Utilizations' => array(
+      'considerNewFormEmptyFields'    => array('material_id', 'amount'),
+      'noNewForm'                     => false,
+      // 'noNewForm'                     => true,
+      'newFormLabel'                  => 'Новый выпрос',
+      'newFormClass'                  => 'UtilizationForm',
+      'newFormClassArgs'              => array(array('sf_user' => $this->getUser())),
+      'displayEmptyRelations'         => true,
+      'formClass'                     => 'UtilizationForm',
+      'formClassArgs'                 => array(array('ah_add_delete_checkbox' => true)),
+      'newFormAfterExistingRelations' => true,
+      'formFormatter'                 => null,
+      'multipleNewForms'              => true,
+      'newFormsInitialCount'          => 1,
+      'newFormsContainerForm'         => null, // pass BaseForm object here or we will create ahNewRelationsContainerForm
+      'newRelationButtonLabel'        => '+',
+      'newRelationAddByCloning'       => true,
+      'newRelationUseJSFramework'     => 'jQuery',
+      // 'customEmbeddedFormLabelMethod' => 'getLabelTitle'
+    ));
+
+    $ref = Doctrine_Core::getTable('RefOrderWork')->find($request->getParameter('id'));
+    $order = $ref->getOrder();
+
+    $this->form = new OrderForm($order);
+    $this->form->embedRelations($utilizationsRelation);
+    $this->form->useFields([
+      'id',
+      'new_Utilizations',
+    ]);
+
+    if ($request->isMethod('post') and ($this->form->bind($request->getParameter($this->form->getName()))||1) and $this->form->isValid()) {
+      $utilizations = $request->getParameter($this->form->getName())['new_Utilizations'];
+      $utilizationsToSave = new Doctrine_Collection('Utilization');
+      foreach ($utilizations as $utilization) {
+        if ($utilization['material_id'] and $utilization['amount']) {
+          $newUtilization = Utilization::createFromArray(array_merge($utilization, [
+            'order_id' => $order->getId(),
+            'work_id' => $ref->getId(),
+          ]));
+
+          $utilizationsToSave->add($newUtilization);
+        }
+      }
+
+      $utilizationsToSave->save();
+      $this->forward('plan', 'finishRef');
+    }
+  }
+
   public function executeFinishRef($request)
   {
     $ref = Doctrine_Core::getTable('RefOrderWork')->find($request->getParameter('id'));

@@ -53,7 +53,7 @@ $(function() {
       .find('.modal-footer')
         .removeClass(isMaster||isSuper ? 'hide' : '')
         .find('a')
-          .attr('href', '<?php echo url_for('plan/finishRef?id=') ?>' + event.id)
+          .attr('href', '<?php echo url_for('plan/preFinishRef?id=') ?>' + event.id)
           .end()
         .end()
       .modal()

@@ -69,6 +69,9 @@ Utilization:
     order_id:
       type: integer
       notnull: true
+    work_id:
+      type: integer
+      notnull: true
     material_id:
       type: integer
       notnull: true
@@ -79,6 +82,11 @@ Utilization:
   relations:
     Order:
       local: order_id
+      foreign: id
+      foreignAlias: Utilizations
+    Work:
+      class: RefOrderWork
+      local: work_id
       foreign: id
       foreignAlias: Utilizations
     Material:
