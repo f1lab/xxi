@@ -93,28 +93,33 @@ class materialActions extends sfActions
         $dimensions = [];
         $materials = new Doctrine_Collection('Material');
 
-        $import = array_map(function($line) use(&$dimensions, &$materials) {
+        $import = array_unique(explode("\n", $submited['materials']));
+        array_walk($import, function($line) use(&$dimensions, &$materials) {
           $parted = explode(",", $line);
           $dimension = array_pop($parted);
 
-          if (!array_key_exists($dimension, $dimensions)) {
-            if (true == ($newDimension = Doctrine_Core::getTable('Dimenion')->findOneByName($dimension))) {
+          if (true == (Doctrine_Core::getTable('Material')->findOneByName(join(",", $parted)))) {
+            //
+          } else {
+            if (!array_key_exists($dimension, $dimensions)) {
+              if (true == ($newDimension = Doctrine_Core::getTable('Dimension')->findOneByName($dimension))) {
+                //
+              } else {
+                $newDimension = Dimension::createFromArray([
+                  "name" => $dimension,
+                ]);
+                $newDimension->save();
+              }
 
-            } else {
-              $newDimension = Dimension::createFromArray([
-                "name" => $dimension,
-              ]);
-              $newDimension->save();
+              $dimensions[$dimension] = $newDimension->getId();
             }
 
-            $dimensions[$dimension] = $newDimension->getId();
+            $materials->add(Material::createFromArray([
+              "name" => join(",", $parted),
+              "dimension_id" => $dimensions[$dimension],
+            ]));
           }
-
-          $materials->add(Material::createFromArray([
-            "name" => join(",", $parted),
-            "dimension_id" => $dimensions[$dimension],
-          ]));
-        }, array_unique(explode("\n", $submited['materials'])));
+        });
 
         $materials->save();
 
@@ -122,6 +127,8 @@ class materialActions extends sfActions
           'type' => 'success',
           'message' => 'Данные загружены',
         ]);
+
+        $this->redirect('material/index');
       }
     }
   }

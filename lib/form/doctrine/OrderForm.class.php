@@ -125,9 +125,6 @@ class OrderForm extends BaseOrderForm
       ->offsetSet('state', new sfWidgetFormChoice(array(
         'choices' => OrderTable::$states,
       )))
-      ->offsetSet('area', new sfWidgetFormChoice(array(
-        'choices' => OrderTable::$area,
-      )))
       ->offsetSet('due_date', new sfWidgetFormBootstrapDateTime())
       ->offsetSet('approved_at', new sfWidgetFormBootstrapDate())
       ->offsetSet('expected_at', new sfWidgetFormBootstrapDateTime())
@@ -135,11 +132,9 @@ class OrderForm extends BaseOrderForm
       ->offsetSet('finished_at', new sfWidgetFormBootstrapDate())
       ->offsetSet('submited_at', new sfWidgetFormBootstrapDate())
       ->offsetSet('execution_time', new sfWidgetFormInputHidden())
-      ->offsetSet('area', new sfWidgetFormInputHidden())
       ->offsetSet('pay_method', new sfWidgetFormChoice(array(
         'choices' => OrderTable::$payMethods
       )))
-      //->offsetSet('payed_at', new sfWidgetFormBootstrapDate())
     ;
 
     $this->getWidgetSchema()->setLabels(array(
