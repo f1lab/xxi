@@ -19,6 +19,7 @@ class OrderForm extends BaseOrderForm
       $this['updated_by'],
       $this['deleted_at'],
       $this['payed_at'],
+      $this['area'],
       $this['version']
     );
 
@@ -134,6 +135,7 @@ class OrderForm extends BaseOrderForm
       ->offsetSet('finished_at', new sfWidgetFormBootstrapDate())
       ->offsetSet('submited_at', new sfWidgetFormBootstrapDate())
       ->offsetSet('execution_time', new sfWidgetFormInputHidden())
+      ->offsetSet('area', new sfWidgetFormInputHidden())
       ->offsetSet('pay_method', new sfWidgetFormChoice(array(
         'choices' => OrderTable::$payMethods
       )))

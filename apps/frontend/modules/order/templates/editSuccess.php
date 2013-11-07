@@ -122,7 +122,6 @@
     <fieldset>
       <legend>Выполнение заказа</legend>
       <?php echo $form['started_at']->renderRowUsing('bootstrap')?>
-      <?php echo $form['area']->renderRowUsing('bootstrap')?>
       <?php echo $form['finished_at']->renderRowUsing('bootstrap')?>
       <?php echo $form['submited_at']->renderRowUsing('bootstrap')?>
     </fieldset>
@@ -163,7 +162,6 @@
       <legend>Выполнение заказа</legend>
       <?php echo $form['started_at']->renderRowUsing('bootstrap')?>
       <?php echo $form['expected_at']->renderRowUsing('bootstrap')?>
-      <?php echo $form['area']->renderRowUsing('bootstrap')?>
       <?php echo $form['state']->renderRowUsing('bootstrap')?>
     </fieldset>
   <?php endif?>

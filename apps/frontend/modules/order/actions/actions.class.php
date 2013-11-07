@@ -97,7 +97,7 @@ class orderActions extends sfActions
       'finishedAt' => 'Дата выполнения',
       'submitedAt' => 'Дата сдачи заказа',
       'stateTranslated' => 'Статус',
-      'areaTranslated' => 'Участок',
+      //'areaTranslated' => 'Участок',
       'billMade' => 'Счёт сформирован ',
       'billGiven' => 'Счёт получен заказчиком',
       'docsGiven' => 'Документы выданы',
@@ -115,7 +115,7 @@ class orderActions extends sfActions
         'startedAt',
         'finishedAt',
         'stateTranslated',
-        'areaTranslated',
+        //'areaTranslated',
         'submitedAt'
       ), ''); // => array('creator' => '', 'description' => '', etc…)
       $this->fields = array_intersect_key($this->fields, $workerFields); // => array('creator' => 'Клиент', etc…)

@@ -81,4 +81,48 @@ class materialActions extends sfActions
       $this->redirect($request->hasParameter('client') ? '@supplier?id=' . $request->getParameter('client') : 'material/edit?id='.$material->getId());
     }
   }
+
+  public function executeImport($request)
+  {
+    $this->form = new MaterialImportForm();
+
+    if ($request->isMethod('post')) {
+      $this->form->bind($request->getParameter($this->form->getName()), $request->getFiles($this->form->getName()));
+      if ($this->form->isValid()) {
+        $submited = $this->form->getValues();
+        $dimensions = [];
+        $materials = new Doctrine_Collection('Material');
+
+        $import = array_map(function($line) use(&$dimensions, &$materials) {
+          $parted = explode(",", $line);
+          $dimension = array_pop($parted);
+
+          if (!array_key_exists($dimension, $dimensions)) {
+            if (true == ($newDimension = Doctrine_Core::getTable('Dimenion')->findOneByName($dimension))) {
+
+            } else {
+              $newDimension = Dimension::createFromArray([
+                "name" => $dimension,
+              ]);
+              $newDimension->save();
+            }
+
+            $dimensions[$dimension] = $newDimension->getId();
+          }
+
+          $materials->add(Material::createFromArray([
+            "name" => join(",", $parted),
+            "dimension_id" => $dimensions[$dimension],
+          ]));
+        }, array_unique(explode("\n", $submited['materials'])));
+
+        $materials->save();
+
+        $this->getUser()->setFlash('flash', [
+          'type' => 'success',
+          'message' => 'Данные загружены',
+        ]);
+      }
+    }
+  }
 }
