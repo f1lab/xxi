@@ -106,7 +106,7 @@ class OrderForm extends BaseOrderForm
     $this->embedRelations(array_merge(
       $user->hasCredential('can_set_order_works') ? $worksRelation : [],
       $user->hasCredential('can_spend_materials-deprecated') ? $utilizationsRelation : [],
-      $user->hasGroup('master') ? [] : $invoicesRelation,
+      $user->hasGroup('master') || $user->hasGroup('worker') ? [] : $invoicesRelation,
       $user->hasCredential('director') || $user->hasCredential('buhgalter') ? $paysRelation : []
     ));
 
