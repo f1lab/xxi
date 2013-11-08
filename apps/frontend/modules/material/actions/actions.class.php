@@ -84,7 +84,10 @@ class materialActions extends sfActions
 
   public function executeImport($request)
   {
-    $this->form = new MaterialImportForm();
+    $this->form = new ImportForm();
+    $this->form->setLabels([
+      'input' => 'Номенклатура',
+    ]);
 
     if ($request->isMethod('post')) {
       $this->form->bind($request->getParameter($this->form->getName()), $request->getFiles($this->form->getName()));
@@ -93,7 +96,7 @@ class materialActions extends sfActions
         $dimensions = [];
         $materials = new Doctrine_Collection('Material');
 
-        $import = array_unique(explode("\n", $submited['materials']));
+        $import = array_unique(explode("\n", $submited['input']));
         array_walk($import, function($line) use(&$dimensions, &$materials) {
           $parted = explode(",", $line);
           $dimension = array_pop($parted);

@@ -1,20 +1,20 @@
 <?php
 
-class MaterialImportForm extends BaseForm {
+class ImportForm extends BaseForm {
   public function configure() {
     $this->getWidgetSchema()
       ->setNameFormat('import[%s]')
-      ->offsetSet('materials', new sfWidgetFormTextarea([], [
+      ->offsetSet('input', new sfWidgetFormTextarea([], [
         'rows' => 20,
         'class' => "input-block-level"
       ]))
       ->setLabels(array(
-        'materials' => 'Номеклатура',
+        'input' => 'Импортируемое',
       ))
     ;
 
     $this->getValidatorSchema()
-      ->offsetSet('materials', new sfValidatorString())
+      ->offsetSet('input', new sfValidatorString())
     ;
   }
 }

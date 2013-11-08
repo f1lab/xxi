@@ -85,4 +85,58 @@ class arrivalActions extends sfActions
       $this->redirect('arrival/edit?id='.$arrival->getId());
     }
   }
+
+  public function executeImport($request)
+  {
+    $this->form = new ImportForm();
+    $this->form->getWidgetSchema()
+      ->offsetSet('supplier_id', new sfWidgetFormDoctrineChoice(['model' => 'Supplier', 'add_empty' => false], ['class' => 'chzn-select']))
+      ->offsetSet('amount', new sfWidgetFormInputText())
+      ->setLabels([
+        'input' => 'Поступления',
+        'supplier_id' => 'Поставщик',
+        'amount' => 'Количество',
+      ])
+    ;
+    $this->form->getValidatorSchema()
+      ->offsetSet('supplier_id', new sfValidatorPass())
+      ->offsetSet('amount', new sfValidatorPass())
+    ;
+
+    if ($request->isMethod('post')) {
+      $this->form->bind($request->getParameter($this->form->getName()), $request->getFiles($this->form->getName()));
+      if ($this->form->isValid()) {
+        $submited = $this->form->getValues();
+        $arrivals = new Doctrine_Collection('Arrival');
+        $bill = 1;
+
+        $import = array_unique(explode("\n", $submited['input']));
+
+        array_walk($import, function($line) use(&$bill, &$arrivals, $submited) {
+          $parts = explode("\t", $line);
+          $parted = explode(",", $parts[0]);
+          /* $dimension = */ array_pop($parted);
+
+          if (true == ($material = Doctrine_Core::getTable('Material')->findOneByName(join(",", $parted)))) {
+            $arrivals->add(Arrival::createFromArray([
+              "arrived_at" => date("Y-m-d H:i:s"),
+              "bill" => $bill++,
+              "supplier_id" => $submited["supplier_id"],
+              "material_id" => $material->getId(),
+              "amount" => $submited["amount"],
+              "price" => array_pop($parts),
+            ]));
+          }
+        });
+        $arrivals->save();
+
+        $this->getUser()->setFlash('flash', [
+          'type' => 'success',
+          'message' => 'Данные загружены',
+        ]);
+
+        //$this->redirect('arrival/index');
+      }
+    }
+  }
 }

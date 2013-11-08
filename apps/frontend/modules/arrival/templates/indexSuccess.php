@@ -6,6 +6,9 @@
   <div class="btn-group">
     <a href="<?php echo url_for('arrival/new') ?>" class="btn btn-primary">Добавить</a>
   </div>
+  <div class="btn-group">
+    <a href="<?php echo url_for('arrival/import') ?>" class="btn">Импорт</a>
+  </div>
 </div>
 
 <table class="table table-condensed table-bordered table-hover rows-clickable">
