@@ -81,6 +81,7 @@
       <legend>Основная информация</legend>
       <?php echo $form['client_id']->renderRowUsing('bootstrap')?>
       <?php echo $form['description']->renderRowUsing('bootstrap')?>
+      <?php echo $form['approved_at']->renderRowUsing('bootstrap')?>
       <?php echo $form['files']->renderRowUsing('bootstrap')?>
     </fieldset>
 
@@ -224,6 +225,7 @@
       <legend>Основная информация</legend>
       <?php echo $form['client_id']->renderRowUsing('bootstrap')?>
       <?php echo $form['description']->renderRowUsing('bootstrap')?>
+      <?php echo $form['approved_at']->renderRowUsing('bootstrap')?>
       <?php echo $form['files']->renderRowUsing('bootstrap')?>
     </fieldset>
 

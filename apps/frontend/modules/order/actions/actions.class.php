@@ -82,6 +82,7 @@ class orderActions extends sfActions
       'creator' => 'Менеджер',
       'description' => 'Описание заказа',
       'dueDate' => 'Срок исполнения',
+      'approvedAt' => 'Дата согласования с заказчиком',
       'files' => 'Файлы и комментарии к ним',
       'installationCost' => 'Стоимость монтажа',
       'designCost' => 'Стоимость дизайна (препресс)',
