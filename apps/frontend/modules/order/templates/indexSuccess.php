@@ -10,9 +10,14 @@
     <select name="" id="" style="float:left;margin-bottom:0;width:110px" class="span2 chzn-select" data-placeholder="Перейти к заказу" onchange="document.location.href = '<?php echo url_for('@orders') ?>/' + $(this).val()">
       <option value=""></option>
     <?php
-      $q = Doctrine_Core::getTable('Order')->createQuery('a')->select('a.id')->orderBy('id')->execute(array(), Doctrine_Core::HYDRATE_ARRAY);
-      foreach ($q as $order): ?>
-      <option value="<?php echo $order['id'] ?>"><?php echo $order['id'] ?></option>
+      $orders = Doctrine_Query::create()
+        ->from("Order o")
+        ->andWhereIn("o.state", OrderTable::getSetableStates())
+        ->addOrderBy("o.id")
+        ->execute([], Doctrine_Core::HYDRATE_SINGLE_SCALAR)
+      ;
+      foreach ($orders as $id): ?>
+      <option value="<?php echo $id ?>"><?php echo $id ?></option>
     <?php endforeach ?></select>
   </div><?php endif ?>
 

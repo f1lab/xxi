@@ -62,6 +62,12 @@
     </div>
   <?php endif ?>
 
+  <?php if ($sf_user->hasCredential("can-delete_orders")): ?>
+    <div class="btn-group">
+      <a href="<?php echo url_for("order/delete?id=" . $order->getId()) ?>" class="btn btn-warning confirm">Удалить</a>
+    </div>
+  <?php endif ?>
+
   <?php if ($sf_user->hasCredential('can_print_orders')): ?>
     <div class="btn-group">
       <a href="<?php echo url_for('@order-print?id=' . $order->getId()) ?>" class="btn">Распечатать бланк заказа</a>

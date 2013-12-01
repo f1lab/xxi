@@ -126,12 +126,6 @@ class orderActions extends sfActions
   public function executeNew(sfWebRequest $request)
   {
     $this->form = new OrderForm();
-    $this->form->getWidgetSchema()
-      ->offsetSet('state', new sfWidgetFormChoice(array(
-        'choices' => OrderTable::$statesForManager,
-        'label' => 'Статус',
-      )))
-    ;
 
     unset (
       $this->form['payed'],
@@ -154,11 +148,6 @@ class orderActions extends sfActions
   public function executeCreate(sfWebRequest $request)
   {
     $this->form = new OrderForm();
-    $this->form->getWidgetSchema()
-      ->offsetSet('state', new sfWidgetFormChoice(array(
-        'choices' => OrderTable::$statesForManager,
-      )))
-    ;
 
     unset (
       $this->form['payed'],
@@ -182,6 +171,16 @@ class orderActions extends sfActions
     $this->order = Doctrine_Core::getTable('Order')
       ->find($request->getParameter('id'))
     ;
+
+    if ($this->order->getState() === "deleted" and !$this->getUser()->hasCredential("can-delete-orders")) {
+      $this->getUser()->setFlash("message", [
+        "error",
+        "Внимание!",
+        "Вы не можете редактировать удалённые заказы.",
+      ]);
+      $this->redirect("order/show?id=" . $this->order->getId());
+    }
+
     $this->form = new OrderForm($this->order);
 
     //FIXME: it's fucking mess below
@@ -211,10 +210,6 @@ class orderActions extends sfActions
           'docs_given',
           'waybill',
         ))
-        ->offsetSet('state', new sfWidgetFormChoice(array(
-          'choices' => OrderTable::$statesForWorker,
-          'label' => 'Статус',
-        )))
       ;
 
     } elseif ($this->getUser()->hasGroup('buhgalter')) {
@@ -251,10 +246,6 @@ class orderActions extends sfActions
         ->offsetUnset(array(
           'expected_at',
         ))
-        ->offsetSet('state', new sfWidgetFormChoice(array(
-          'choices' => OrderTable::$statesForManager,
-          'label' => 'Статус',
-        )))
       ;
 
     } elseif ($this->getUser()->hasGroup('master')) {
@@ -266,10 +257,6 @@ class orderActions extends sfActions
         'new_Utilizations',
         'state',
       ));
-      $this->form->getWidgetSchema()->offsetSet('state', new sfWidgetFormChoice(array(
-        'choices' => OrderTable::$statesForMaster,
-        'label' => 'Статус',
-      )));
 
     } else { // manager
       $this->form->getWidgetSchema()
@@ -285,19 +272,6 @@ class orderActions extends sfActions
           'bill_given',
           'docs_given',
         ))
-        ->offsetSet('state', new sfWidgetFormChoice(array(
-          'choices' => OrderTable::$statesForManager,
-          'label' => 'Статус',
-        )))
-      ;
-    }
-
-    if ($this->getUser()->hasCredential('can_set_all_states')) {
-      $this->form->getWidgetSchema()
-        ->offsetSet('state', new sfWidgetFormChoice(array(
-          'choices' => OrderTable::$states,
-          'label' => 'Статус',
-        )))
       ;
     }
   }
@@ -561,5 +535,17 @@ class orderActions extends sfActions
   public function executeInvoice(sfWebRequest $request)
   {
     $this->form = new InvoiceForm();
+  }
+
+  public function executeDelete($request)
+  {
+    $order = Doctrine_Core::getTable("Order")->find($request->getParameter("id"));
+    $this->forward404Unless($order);
+
+    if ($this->getUser()->hasCredential("can-delete-orders")) {
+      $order->setState("deleted")->save();
+    }
+
+    $this->redirect("order/show?id=" . $order->getId());
   }
 }

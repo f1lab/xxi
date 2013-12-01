@@ -76,21 +76,27 @@ $(function() {
         });
       })
 
-  $(document).on('change', 'select.area-selector', function() {
-    var that = $(this)
-      , works = that.parents('tr').find('.work-selector')
-      , masters = that.parents('tr').find('.master-selector')
+  $(document)
+    .on('change', 'select.area-selector', function() {
+      var that = $(this)
+        , works = that.parents('tr').find('.work-selector')
+        , masters = that.parents('tr').find('.master-selector')
 
-    $.getJSON('/frontend_dev.php/main/getWorksAndMastersForArea', {id: that.val()}, function(data) {
-      works
-        .html(data.works)
-        .trigger('liszt:updated')
+      $.getJSON('/frontend_dev.php/main/getWorksAndMastersForArea', {id: that.val()}, function(data) {
+        works
+          .html(data.works)
+          .trigger('liszt:updated')
 
-      masters
-        .html(data.masters)
-        .trigger('liszt:updated')
-    });
-  });
+        masters
+          .html(data.masters)
+          .trigger('liszt:updated')
+      });
+    })
+
+    .on("click", ".confirm", function() {
+      return confirm("Вы уверены?");
+    })
+  ;
 });
 
 function resetNearestSelect(that) {

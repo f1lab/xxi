@@ -123,7 +123,7 @@ class OrderForm extends BaseOrderForm
         'class' => 'chzn-select makePizdatoWithDiscount',
       )))
       ->offsetSet('state', new sfWidgetFormChoice(array(
-        'choices' => OrderTable::$states,
+        'choices' => OrderTable::getSetableStatesWithNames(),
       )))
       ->offsetSet('due_date', new sfWidgetFormBootstrapDateTime())
       ->offsetSet('approved_at', new sfWidgetFormBootstrapDate())
