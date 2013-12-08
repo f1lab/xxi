@@ -36,7 +36,10 @@
     <?php endforeach ?>
     </div>
   <?php else: ?>
-    <?php if ($sf_user->hasGroup('worker') or $sf_user->hasCredential('orders-filter-works-without', 'order-filter-works-completed')): ?>
+    <?php if (
+      $sf_user->hasGroup("worker") || $sf_user->hasGroup("design-worker")
+      or $sf_user->hasCredential(["orders-filter-works-without", "order-filter-works-completed"])
+    ): ?>
       <div class="btn-group pull-right">
         <a href="<?php echo url_for('orders/index?filter-works=without') ?>" class="btn <?php
           echo $sf_request->getParameter('filter-works') === 'without' ? 'active' : '' ?>">С незаполненым списком работ</a>

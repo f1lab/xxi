@@ -23,6 +23,8 @@ class RefOrderWorkForm extends BaseRefOrderWorkForm
       , $this['updated_by']
     );
 
+    $user = sfContext::getInstance()->getUser();
+
     $this->getWidgetSchema()
       ->offsetSet('order_id', new sfWidgetFormInputHidden())
 
@@ -32,6 +34,12 @@ class RefOrderWorkForm extends BaseRefOrderWorkForm
         'query' => Doctrine_Query::create()
           ->from('Area a')
           ->orderBy('a.name')
+          ->leftJoin("a.Workers ww")
+          ->leftJoin("ww.Groups g")
+          ->andWhereIn("g.name", array_merge(
+            $user->hasCredential("worker") ? ["worker"] : []
+            , $user->hasCredential("design-worker") ? ["design-worker"] : []
+          ) ?: [])
       ], ['class' => 'chzn-select area-selector']))
 
       ->offsetSet('work_id', new sfWidgetFormDoctrineChoice([
@@ -45,7 +53,10 @@ class RefOrderWorkForm extends BaseRefOrderWorkForm
         'query' => Doctrine_Query::create()
           ->from('sfGuardUser u')
           ->leftJoin('u.Groups g')
-          ->addWhere('g.name = ?', 'master')
+          ->andWhereIn("g.name", array_merge(
+            $user->hasCredential("worker") ? ["master"] : []
+            , $user->hasCredential("design-worker") ? ["design-master"] : []
+          ) ?: [])
           ->orderBy('u.last_name, u.first_name')
       ], ['class' => 'chzn-select master-selector']))
     ;

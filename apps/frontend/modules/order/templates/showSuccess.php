@@ -55,6 +55,7 @@
       or $sf_user->hasCredential('can_edit_all_orders')
       or $sf_user->hasGroup('worker')
       or $sf_user->hasGroup('buhgalter')
+      or $sf_user->hasGroup("design-worker")
     ):
   ?>
     <div class="btn-group">

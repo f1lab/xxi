@@ -49,8 +49,14 @@ CSS;
       ->from('Area a')
       ->leftJoin('a.Works w')
       ->leftJoin('a.Masters m')
+      ->leftJoin("a.Workers ww")
+      ->leftJoin("ww.Groups g")
       ->select('a.name, w.name, m.first_name, m.last_name, m.username')
       ->addWhere('a.id = ?', $request->getParameter('id'))
+      ->andWhereIn("g.name", array_merge(
+        $this->getUser()->hasCredential("worker") ? ["worker"] : []
+        , $this->getUser()->hasCredential("design-worker") ? ["design-worker"] : []
+      ) ?: [])
       ->limit(1)
       ->execute([], Doctrine_Core::HYDRATE_ARRAY)
     ;

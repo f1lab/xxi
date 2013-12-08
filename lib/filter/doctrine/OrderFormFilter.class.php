@@ -130,11 +130,16 @@ class OrderFormFilter extends BaseOrderFormFilter
         'work',
         'working',
         'done',
-        'prepress',
       ));
     } elseif ($user->hasGroup('master')) {
       $this->setDefault('state', array(
         'working',
+      ));
+    } elseif ($user->hasGroup("design-worker")) {
+      $this->setDefault("state", array(
+        "prepress",
+        "prepress-working",
+        "prepress-done",
       ));
     }
 
