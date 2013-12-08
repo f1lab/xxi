@@ -1,0 +1,8 @@
+new:
+  credentials: [[can_create_users]]
+
+edit:
+  credentials: [[can_edit_users]]
+
+delete:
+  credentials: [[can_delete_users]]

@@ -3,9 +3,9 @@
 /**
  * users actions.
  *
- * @package    xxi
+ * @package    pm
  * @subpackage users
- * @author     Saritckyi Roman
+ * @author     slowpokes
  * @version    SVN: $Id: actions.class.php 23810 2009-11-12 11:07:44Z Kris.Wallsmith $
  */
 class usersActions extends sfActions
@@ -14,6 +14,7 @@ class usersActions extends sfActions
   {
     $this->sf_guard_users = Doctrine_Core::getTable('sfGuardUser')
       ->createQuery('a')
+      ->addOrderBy('a.last_name asc, a.first_name asc, a.username asc')
       ->execute();
   }
 
@@ -26,7 +27,7 @@ class usersActions extends sfActions
   {
     $this->forward404Unless($request->isMethod(sfRequest::POST));
 
-    $this->form = new sfGuardUserForm();
+    $this->form = new sfGuardUserAdminForm();
 
     $this->processForm($request, $this->form);
 
@@ -35,8 +36,7 @@ class usersActions extends sfActions
 
   public function executeEdit(sfWebRequest $request)
   {
-    
-    $this->forward404Unless($sf_guard_user = Doctrine_Core::getTable('sfGuardUser')->find(array($request->getParameter('id'))), sprintf('Object sf_guard_user does not exist (%s).', $request->getParameter('sf_guard_user')));
+    $this->forward404Unless($sf_guard_user = Doctrine_Core::getTable('sfGuardUser')->find(array($request->getParameter('id'))), sprintf('Object sf_guard_user does not exist (%s).', $request->getParameter('id')));
     $this->form = new sfGuardUserAdminForm($sf_guard_user);
   }
 
@@ -45,7 +45,9 @@ class usersActions extends sfActions
     $this->forward404Unless($request->isMethod(sfRequest::POST) || $request->isMethod(sfRequest::PUT));
     $this->forward404Unless($sf_guard_user = Doctrine_Core::getTable('sfGuardUser')->find(array($request->getParameter('id'))), sprintf('Object sf_guard_user does not exist (%s).', $request->getParameter('id')));
     $this->form = new sfGuardUserAdminForm($sf_guard_user);
+
     $this->processForm($request, $this->form);
+
     $this->setTemplate('edit');
   }
 
@@ -65,44 +67,8 @@ class usersActions extends sfActions
     if ($form->isValid())
     {
       $sf_guard_user = $form->save();
-      $this->getUser()->setFlash('message', array('success', 'Отлично!', 'Изменения сохранены'));
-      $this->redirect('users/edit?id='.$sf_guard_user->getId());
-      
-    }
-  }
-  public function executeSettings(sfWebRequest $request)
-  {
-    $form = new sfGuardUserAdminForm(sfContext::getInstance()->getUser()->getGuardUser());
-    unset($form['is_active']);
-    unset($form['is_super_admin']);
-    unset($form['groups_list']);
-    unset($form['permissions_list']);
-    unset($form['password']);
-    unset($form['username']);
-    unset($form['password_again']);
-    $this->form = $form;
-    if($request->isMethod('put'))
-    {
-      $this->form->bind(
-        $request->getParameter($this->form->getName()),
-        $request->getFiles($this->form->getName())
-      );
 
-      if ($this->form->isValid())
-      {
-        $object = $this->form->save();
-        $flash = array('success','','настройки сохранены');
-        if ($flash and is_array($flash)) {
-          $this->getUser()->setFlash('message', $flash);
-        }
-      }
-      else {
-        $flash = array('error','','настройки не сохранены');
-        if ($flash and is_array($flash)) {
-          $this->getUser()->setFlash('message', $flash);
-        }
-      }
+      $this->redirect('users/edit?id='.$sf_guard_user->getId());
     }
-    
   }
 }

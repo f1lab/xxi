@@ -44,3 +44,5 @@ all:
 
     default_culture:        ru
     culture:                ru
+
+    standard_helpers:       [Partial, Cache, Text, I18N]
