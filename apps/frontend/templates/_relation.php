@@ -1,3 +1,4 @@
+<?php if (isset($form[$relationName]) or isset($form['new_' . $relationName])): ?>
 <table class="table-condensed add-remove-chzn-for-relations add-remove-datetimepicker-for-relations">
   <tbody>
     <?php if (isset($form[$relationName])): ?>
@@ -62,3 +63,4 @@
     <?php endif ?>
   </tbody>
 </table>
+<?php endif ?>

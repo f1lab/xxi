@@ -35,6 +35,7 @@ default:
     - chosen.jquery.min.js
     - fullcalendar.min.js
     - jquery-ui.custom.min.js
+    - "/ahDoctrineEasyEmbeddedRelationsPlugin/js/ahDoctrineEasyEmbeddedRelationsPlugin.jQuery.js"
     - main
 
   has_layout:     true

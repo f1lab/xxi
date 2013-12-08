@@ -23,27 +23,6 @@ class OrderForm extends BaseOrderForm
       $this['version']
     );
 
-    $utilizationsRelation = array('Utilizations' => array(
-      'considerNewFormEmptyFields'    => array('material_id', 'amount'),
-      'noNewForm'                     => false,
-      // 'noNewForm'                     => true,
-      'newFormLabel'                  => 'Новый выпрос',
-      'newFormClass'                  => 'UtilizationForm',
-      'newFormClassArgs'              => array(array('sf_user' => $this->getOption('sf_user'))),
-      'displayEmptyRelations'         => true,
-      'formClass'                     => 'UtilizationForm',
-      'formClassArgs'                 => array(array('ah_add_delete_checkbox' => true)),
-      'newFormAfterExistingRelations' => true,
-      'formFormatter'                 => null,
-      'multipleNewForms'              => true,
-      'newFormsInitialCount'          => 1,
-      'newFormsContainerForm'         => null, // pass BaseForm object here or we will create ahNewRelationsContainerForm
-      'newRelationButtonLabel'        => '+',
-      'newRelationAddByCloning'       => true,
-      'newRelationUseJSFramework'     => 'jQuery',
-      // 'customEmbeddedFormLabelMethod' => 'getLabelTitle'
-    ));
-
     $invoicesRelation = array('Invoices' => array(
       'considerNewFormEmptyFields'    => array('description', 'number', 'price', 'sum'),
       'noNewForm'                     => false,
@@ -105,7 +84,6 @@ class OrderForm extends BaseOrderForm
     $user = sfContext::getInstance()->getUser();
     $this->embedRelations(array_merge(
       $user->hasCredential('can_set_order_works') ? $worksRelation : [],
-      $user->hasCredential('can_spend_materials-deprecated') ? $utilizationsRelation : [],
       $user->hasGroup('master') || $user->hasGroup('worker') ? [] : $invoicesRelation,
       $user->hasCredential('director') || $user->hasCredential('buhgalter') ? $paysRelation : []
     ));
@@ -176,5 +154,44 @@ class OrderForm extends BaseOrderForm
       ->offsetSet('description', new sfValidatorString(array('required' => false), array('required' => 'Поле не должно быть пустым.')))
       ->offsetSet('expected_at', new sfValidatorBootstrapDateTime(array('required' => false)))
     ;
+
+    $editableFields = array_keys(array_filter([
+      "client_id" => $user->hasGroup("director") or $user->hasGroup("manager"),
+      "description" => $user->hasGroup("director") or $user->hasGroup("manager"),
+      "due_date" => $user->hasGroup("director") or $user->hasGroup("manager"),
+      "approved_at" => $user->hasGroup("director") or $user->hasGroup("manager"),
+      "files" => $user->hasGroup("director") or $user->hasGroup("manager"),
+
+      "installation_cost" => $user->hasGroup("director") or $user->hasGroup("manager"),
+      "design_cost" => $user->hasGroup("director") or $user->hasGroup("manager"),
+      "contractors_cost" => $user->hasGroup("director") or $user->hasGroup("manager"),
+      "delivery_cost" => $user->hasGroup("director") or $user->hasGroup("manager"),
+      "cost" => $user->hasGroup("director") or $user->hasGroup("manager") or $user->hasGroup("buhgalter"),
+      "pay_method" => $user->hasGroup("director") or $user->hasGroup("manager") or $user->hasGroup("buhgalter"),
+      "recoil" => $user->hasGroup("director") or $user->hasGroup("manager"),
+
+      "expected_at" => $user->hasGroup("worker"),
+      "started_at" => $user->hasGroup("director") or $user->hasGroup("worker"),
+      "finished_at" => $user->hasGroup("director"),
+      "submited_at" => $user->hasGroup("director"),
+
+      "bill_made" => $user->hasGroup("director") or $user->hasGroup("buhgalter"),
+      "bill_given" => $user->hasGroup("director") or $user->hasGroup("buhgalter"),
+      "docs_given" => $user->hasGroup("director") or $user->hasGroup("buhgalter"),
+      "waybill_number" => $user->hasGroup("director") or $user->hasGroup("buhgalter"),
+
+      "new_RefOrderWork" => $user->hasCredential("can_set_order_works"),
+      "RefOrderWork" => $user->hasCredential("can_set_order_works"),
+
+      "new_Invoices" => !$user->hasGroup("worker") and !$user->hasGroup("design-worker") and !$user->hasGroup("master"),
+      "Invoices" => !$user->hasGroup("worker") and !$user->hasGroup("design-worker") and !$user->hasGroup("master"),
+
+      "new_Pays" => $user->hasGroup("director") or $user->hasGroup("manager") or $user->hasGroup("buhgalter"),
+      "Pays" => $user->hasGroup("director") or $user->hasGroup("manager") or $user->hasGroup("buhgalter"),
+
+      "state" => $user->hasGroup("director") or $user->hasGroup("worker") or $user->hasGroup("manager"),
+    ])); // empty callback for array_filter removes false values
+
+    $this->useFields($editableFields);
   }
 }

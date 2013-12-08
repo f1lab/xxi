@@ -59,7 +59,12 @@
     ],
 
     'Планирование' => [
-      'credentials' => $sf_user->hasCredential('сan_see_planning,') || $sf_user->hasGroup('master') || $sf_user->hasGroup('worker'),
+      'credentials' => (
+        $sf_user->hasCredential("сan_see_planning") or $sf_user->hasCredential("сan_edit_planning")
+        or $sf_user->hasGroup("master")
+        or $sf_user->hasGroup("worker")
+        or $sf_user->hasGroup("design-worker")
+      ),
       'isActive' => $sf_context->getModuleName() == 'plan',
       'href' => url_for('plan/index'),
     ],
