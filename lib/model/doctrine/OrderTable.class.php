@@ -9,13 +9,20 @@ class OrderTable extends Doctrine_Table
 {
   public static $states = array(
     "calculating" => "На просчёте",
-    "prepress" => "Дизайн (препресс)",
+
+    "prepress" => "Необходим дизайн",
+    "prepress-working" => "Дизайн в работе",
+    "prepress-done" => "Дизайн готов",
+
     "work" => "В цех",
     "working" => "В работе",
     "done" => "Всё готово",
+
     "submited" => "Сдан",
+
     "archived" => "В архиве",
     "debt" => "Дебиторка",
+
     "deleted" => "Удалён",
   );
 
@@ -23,40 +30,56 @@ class OrderTable extends Doctrine_Table
   {
     $user = sfContext::getInstance()->getUser();
 
-    $statesForManager = array(
+    $statesForManager = [
       "calculating",
-      "work",
       "prepress",
-    );
-    $statesForWorker = array(
+      "work",
+    ];
+
+    $statesForDesignWorker = [
+      "prepress",
+      "prepress-working",
+      "prepress-done",
+    ];
+    $statesForDesignMaster = [
+      "prepress-working",
+      "prepress-done",
+    ];
+
+    $statesForWorker = [
       "calculating",
       "work",
       "working",
       "done",
       "submited",
       "prepress",
-    );
-    $statesForMaster = array(
+    ];
+    $statesForMaster = [
       "working",
       "done",
-    );
-    $statesForMonitor = array(
+    ];
+
+    $statesForBuhgalter = [
+      "archived",
+      "debt",
+    ];
+
+    $statesForMonitor = [
       "work",
       "working",
       "done",
-    );
-    $statesForBuhgalter = array(
-      "archived",
-      "debt",
-    );
+    ];
 
     return array_unique(array_merge(
       []
       , $user->hasCredential("manager") ? $statesForManager : []
+
       , $user->hasCredential("worker") ? $statesForWorker : []
       , $user->hasCredential("master") ? $statesForMaster : []
-      , $user->hasCredential("monitor") ? $statesForMonitor : []
+
       , $user->hasCredential("buhgalter") ? $statesForBuhgalter : []
+
+      , $user->hasCredential("monitor") ? $statesForMonitor : []
       , $user->hasCredential("can-delete-orders") ? ["deleted"] : []
     ));
   }

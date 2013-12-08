@@ -42,14 +42,19 @@ Order:
       type: enum
       notnull: true
       values:
-        - calculating
-        - work
-        - working
-        - done
+        - calculating # На просчёте
+
+        - prepress # Необходим дизайн
+        - prepress-working # Дизайн в работе
+        - prepress-done # Дизайн готов
+
+        - work # В цех
+        - working # В работе
+        - done # Всё готово
+
         - submited
         - archived
         - debt
-        - prepress
         - deleted
     area:
       type: enum
