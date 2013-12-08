@@ -30,6 +30,15 @@ class AreaForm extends BaseAreaForm
           ->addWhere('g.name = ?', 'master')
           ->addOrderBy('u.first_name, u.last_name')
       ]))
+      ->offsetSet('workers_list', new sfWidgetFormDoctrineChoice([
+        'multiple' => true,
+        'model' => 'sfGuardUser',
+        'query' => Doctrine_Query::create()
+          ->from('sfGuardUser u')
+          ->leftJoin('u.Groups g')
+          ->addWhere('g.name = ?', 'worker')
+          ->addOrderBy('u.first_name, u.last_name')
+      ]))
       ->setLabels([
         'name' => 'Наименование',
         'slug' => 'Транслит наименования',

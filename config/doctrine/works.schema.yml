@@ -26,8 +26,31 @@ Area:
       local: area_id
       foreign: user_id
       foreignAlias: Areas
+    Workers:
+      class: sfGuardUser
+      refClass: RefAreaWorker
+      local: area_id
+      foreign: user_id
+      foreignAlias: Areas
 
 RefAreaUser:
+  columns:
+    area_id:
+      type: integer
+      primary: true
+    user_id:
+      type: integer
+      primary: true
+  relations:
+    Area:
+      local: area_id
+      foreign: id
+    User:
+      class: sfGuardUser
+      local: user_id
+      foreign: id
+
+RefAreaWorker:
   columns:
     area_id:
       type: integer
