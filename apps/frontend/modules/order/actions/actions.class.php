@@ -104,9 +104,9 @@ class orderActions extends sfActions
       'docsGiven' => 'Документы выданы',
     );
 
+    $selectedFields = [];
     if ($this->getUser()->hasGroup('worker') or $this->getUser()->hasGroup('monitor') or $this->getUser()->hasGroup('master')) {
-      // bidlo-magic: we need just part of fields, so bidlocode now
-      $workerFields = array_fill_keys(array(
+      $selectedFields = [
         'creator',
         'description',
         'dueDate',
@@ -117,9 +117,24 @@ class orderActions extends sfActions
         'finishedAt',
         'stateTranslated',
         //'areaTranslated',
-        'submitedAt'
-      ), ''); // => array('creator' => '', 'description' => '', etc…)
-      $this->fields = array_intersect_key($this->fields, $workerFields); // => array('creator' => 'Клиент', etc…)
+        'submitedAt',
+      ];
+    } elseif ($this->getUser()->hasGroup('design-worker') or $this->getUser()->hasGroup('design-master')) {
+      $selectedFields = [
+        'clientFullestName',
+        'creator',
+        'description',
+        'dueDate',
+        'approvedAt',
+        'files',
+        'designCost',
+      ];
+    }
+
+    if (count($selectedFields)) {
+      // bidlo-magic: we need just part of fields, so bidlocode now
+      $selectedFields = array_fill_keys($selectedFields, ''); // => array('creator' => '', 'description' => '', etc…)
+      $this->fields = array_intersect_key($this->fields, $selectedFields); // => array('creator' => 'Клиент', etc…)
     }
   }
 

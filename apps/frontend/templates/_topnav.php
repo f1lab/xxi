@@ -1,12 +1,12 @@
 <?php
   $navLists = [
     'Заказы' => [
-      'credentials' => !$sf_user->hasGroup('master'),
+      'credentials' => !$sf_user->hasGroup('master') and !$sf_user->hasGroup('design-master'),
       'isActive' => $sf_context->getModuleName() == 'order',
       'href' => url_for('@orders'),
     ],
     'Клиенты' => [
-      'credentials' => !$sf_user->hasGroup('master'),
+      'credentials' => !$sf_user->hasGroup('master') and !$sf_user->hasGroup('design-master'),
       'isActive' => $sf_context->getModuleName() == 'client',
       'href' => url_for('@clients'),
     ],
@@ -64,6 +64,7 @@
         or $sf_user->hasGroup("master")
         or $sf_user->hasGroup("worker")
         or $sf_user->hasGroup("design-worker")
+        or $sf_user->hasGroup("design-master")
       ),
       'isActive' => $sf_context->getModuleName() == 'plan',
       'href' => url_for('plan/index'),

@@ -159,7 +159,7 @@ HTML;
     </fieldset>
   <?php endif ?>
 
-  <?php if ($sf_user->hasGroup("director") or $sf_user->hasGroup("worker") or $sf_user->hasGroup("manager")): ?>
+  <?php if ($sf_user->hasGroup("director") or $sf_user->hasGroup("worker") or $sf_user->hasGroup("manager") or $sf_user->hasGroup("design-worker")): ?>
     <fieldset>
       <legend>Статус</legend>
       <?php echo $form["state"]->renderRowUsing("bootstrap")?>

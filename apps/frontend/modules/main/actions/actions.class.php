@@ -12,7 +12,7 @@ class mainActions extends sfActions
 {
   public function executeIndex(sfWebRequest $request)
   {
-    if ($this->getUser()->hasGroup('master')) {
+    if ($this->getUser()->hasGroup('master') or $this->getUser()->hasGroup('design-master')) {
       $to = 'plan/index';
     } else {
       $to = 'order/index';

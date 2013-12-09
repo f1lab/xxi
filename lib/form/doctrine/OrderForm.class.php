@@ -84,7 +84,7 @@ class OrderForm extends BaseOrderForm
     $user = sfContext::getInstance()->getUser();
     $this->embedRelations(array_merge(
       $user->hasCredential('can_set_order_works') ? $worksRelation : [],
-      $user->hasGroup('master') || $user->hasGroup('worker') ? [] : $invoicesRelation,
+      $user->hasGroup('master') || $user->hasGroup('worker') || $user->hasGroup('design-master') || $user->hasGroup('design-worker') ? [] : $invoicesRelation,
       $user->hasCredential('director') || $user->hasCredential('buhgalter') ? $paysRelation : []
     ));
 
@@ -160,7 +160,7 @@ class OrderForm extends BaseOrderForm
       "description" => $user->hasGroup("director") or $user->hasGroup("manager"),
       "due_date" => $user->hasGroup("director") or $user->hasGroup("manager"),
       "approved_at" => $user->hasGroup("director") or $user->hasGroup("manager"),
-      "files" => $user->hasGroup("director") or $user->hasGroup("manager"),
+      "files" => $user->hasGroup("director") or $user->hasGroup("manager") or $user->hasGroup("design-master"),
 
       "installation_cost" => $user->hasGroup("director") or $user->hasGroup("manager"),
       "design_cost" => $user->hasGroup("director") or $user->hasGroup("manager"),
@@ -183,13 +183,13 @@ class OrderForm extends BaseOrderForm
       "new_RefOrderWork" => $user->hasCredential("can_set_order_works"),
       "RefOrderWork" => $user->hasCredential("can_set_order_works"),
 
-      "new_Invoices" => !$user->hasGroup("worker") and !$user->hasGroup("design-worker") and !$user->hasGroup("master"),
-      "Invoices" => !$user->hasGroup("worker") and !$user->hasGroup("design-worker") and !$user->hasGroup("master"),
+      "new_Invoices" => !$user->hasGroup("worker") and !$user->hasGroup("design-worker") and !$user->hasGroup("master") and !$user->hasGroup("design-master"),
+      "Invoices" => !$user->hasGroup("worker") and !$user->hasGroup("design-worker") and !$user->hasGroup("master") and !$user->hasGroup("design-master"),
 
-      "new_Pays" => $user->hasGroup("director") or $user->hasGroup("manager") or $user->hasGroup("buhgalter"),
-      "Pays" => $user->hasGroup("director") or $user->hasGroup("manager") or $user->hasGroup("buhgalter"),
+      "new_Pays" => $user->hasGroup("director") or $user->hasGroup("buhgalter"),
+      "Pays" => $user->hasGroup("director") or $user->hasGroup("buhgalter"),
 
-      "state" => $user->hasGroup("director") or $user->hasGroup("worker") or $user->hasGroup("manager"),
+      "state" => $user->hasGroup("director") or $user->hasGroup("worker") or $user->hasGroup("manager") or $user->hasGroup("design-worker"),
     ])); // empty callback for array_filter removes false values
 
     $this->useFields($editableFields);

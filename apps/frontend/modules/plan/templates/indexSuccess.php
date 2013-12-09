@@ -4,15 +4,15 @@
 
 <div class="row-fluid">
   <div class="span3">
-    <?php if (!$sf_user->hasGroup('master')): ?><div class="well well-small">
+    <?php if (!$sf_user->hasGroup("master")): ?><div class="well well-small">
       <h4>Фильтр</h4>
 
       <form id="works-filter">
-        <?php echo $filter->renderUsing('bootstrap') ?>
+        <?php echo $filter->renderUsing("bootstrap") ?>
       </form>
     </div><?php endif ?>
 
-    <?php if ($sf_user->hasCredential('сan_edit_planning')): ?><div id='new-events' class="well well-small">
+    <?php if ($sf_user->hasCredential("сan_edit_planning")): ?><div id="new-events" class="well well-small">
       <h4>Нераспределённые работы</h4>
 
       <ul class="unstyled emptable"><?php foreach ($refs as $ref): ?>
@@ -27,7 +27,7 @@
     </div><?php endif ?>
   </div>
 
-  <div id='calendar' class="span9"></div>
+  <div id="calendar" class="span9"></div>
 </div>
 
 <p><br /></p>
@@ -36,40 +36,41 @@
 
 <script>
 $(function() {
-  var isMaster = <?php echo $sf_user->hasGroup('master') ? 'true' : 'false' ?>
-    , isSuper = <?php echo $sf_user->hasCredential('can_finish_any_work_ref') ? 'true' : 'false' ?>
+  var isMaster = <?php echo $sf_user->hasGroup("master") ? "true" : "false" ?>
+    , isDesigner = <?php echo $sf_user->hasGroup("design-master") ? "true" : "false" ?>
+    , isSuper = <?php echo $sf_user->hasCredential("can_finish_any_work_ref") ? "true" : "false" ?>
 
   var clickHandler = function(event, e) {
     e.preventDefault();
 
     if (event.isCompleted) {
-      if (!isMaster) {
-        document.location.replace('<?php echo url_for('order/show?id=') ?>' + event.orderId);
+      if (!isMaster && !isDesigner) {
+        document.location.replace("<?php echo url_for("order/show?id=") ?>" + event.orderId);
       }
       return false;
     }
 
-    var modalNode = $('#event-details')
-      .find('.modal-body')
-        .html('<p>Загружаю…</p>')
+    var modalNode = $("#event-details")
+      .find(".modal-body")
+        .html("<p>Загружаю…</p>")
         .end()
-      .find('.modal-footer')
-        .removeClass(isMaster||isSuper ? 'hide' : '')
-        .find('a')
-          .attr('href', '<?php echo url_for('plan/preFinishRef?id=') ?>' + event.id)
+      .find(".modal-footer")
+        .removeClass(isMaster || isDesigner || isSuper ? "hide" : "")
+        .find("a")
+          .attr("href", "<?php echo url_for("plan/preFinishRef?id=") ?>" + event.id)
           .end()
         .end()
       .modal()
 
-    $.get('<?php echo url_for('plan/modal?id=') ?>' + event.id)
+    $.get("<?php echo url_for("plan/modal?id=") ?>" + event.id)
       .done(function(data) {
         modalNode
-          .find('.modal-body')
+          .find(".modal-body")
             .html(data)
       })
       .fail(function() {
         modalNode
-          .find('.modal-body')
+          .find(".modal-body")
             .html('<div class="alert alert-error">Ошибка получения данных :(</div>')
       })
 
@@ -77,34 +78,34 @@ $(function() {
   }
 
   , changeHandler = function(event) {
-    $.post('<?php echo url_for('plan/planEvent') ?>', {
+    $.post("<?php echo url_for("plan/planEvent") ?>", {
       event: $.extend({}, event, {
         start: (new Date(event.start)).getTime()/1000
         , end: (new Date(event.end)).getTime()/1000
       })
     })
     .fail(function() {
-      alert('Ошибка установления даты для работы :(');
+      alert("Ошибка установления даты для работы :(");
     })
     .always(function() {
-      $('#calendar').fullCalendar('refetchEvents');
+      $("#calendar").fullCalendar("refetchEvents");
     })
   }
 
   , filterChangeHandler = function() {
-    $('#calendar').fullCalendar('refetchEvents');
+    $("#calendar").fullCalendar("refetchEvents");
   }
 
-  $('#new-events .fc-event').each(function() {
+  $("#new-events .fc-event").each(function() {
     var eventObject = {
-      id: $(this).data('id')
-      , title: $.trim($(this).find('.name').text())
-      , className: 'event-of-area-' + $(this).data('area-slug')
+      id: $(this).data("id")
+      , title: $.trim($(this).find(".name").text())
+      , className: "event-of-area-" + $(this).data("area-slug")
       , allDay: false
     };
 
     $(this)
-      .data('eventObject', eventObject)
+      .data("eventObject", eventObject)
       .draggable({
         zIndex: 999,
         revert: true,
@@ -112,29 +113,29 @@ $(function() {
       })
   });
 
-  $(document).on('click', '#new-events .fc-event', function(e) {
-    clickHandler.call(this, $(this).data('eventObject'), e);
+  $(document).on("click", "#new-events .fc-event", function(e) {
+    clickHandler.call(this, $(this).data("eventObject"), e);
   });
-  $('#works-filter-area, #works-filter-master').change(filterChangeHandler);
+  $("#works-filter-area, #works-filter-master").change(filterChangeHandler);
 
-  $('#calendar').fullCalendar({
-    editable: <?php echo $sf_user->hasCredential('сan_edit_planning') ? 'true' : 'false' ?>
+  $("#calendar").fullCalendar({
+    editable: <?php echo $sf_user->hasCredential("сan_edit_planning") ? "true" : "false" ?>
     , droppable: true
 
     , drop: function(date) {
-      var eventObject = $.extend($(this).data('eventObject'), {start: date})
-      $('#calendar').fullCalendar('renderEvent', eventObject);
+      var eventObject = $.extend($(this).data("eventObject"), {start: date})
+      $("#calendar").fullCalendar("renderEvent", eventObject);
 
-      $.post('<?php echo url_for('plan/planEvent') ?>', {
+      $.post("<?php echo url_for("plan/planEvent") ?>", {
         event: $.extend({}, eventObject, {
           start: (new Date(eventObject.start)).getTime()/1000
         })
       })
       .fail(function() {
-        alert('Ошибка установления даты для работы :(');
+        alert("Ошибка установления даты для работы :(");
       })
       .always(function() {
-        $('#calendar').fullCalendar('refetchEvents');
+        $("#calendar").fullCalendar("refetchEvents");
       })
 
       $(this).remove();
@@ -145,12 +146,12 @@ $(function() {
     , eventClick: clickHandler
 
     , eventSources: [{
-      url: '<?php echo url_for('plan/eventsource') ?>'
+      url: "<?php echo url_for("plan/eventsource") ?>"
       , data: function() {
         return {
-          'filter': isMaster
-            ? 'works-filter-master%5B%5D=<?php echo $sf_user->getGuardUser()->getId() ?>'
-            : $('#works-filter').serialize()
+          "filter": isMaster || isDesigner
+            ? "works-filter-master%5B%5D=<?php echo $sf_user->getGuardUser()->getId() ?>"
+            : $("#works-filter").serialize()
         }
       }
     }]
@@ -159,15 +160,15 @@ $(function() {
     /* , minTime: 8
     , maxTime: 22 */
     , header: {
-      left: 'agendaWeek month'
-      , center: 'title'
+      left: "agendaWeek month"
+      , center: "title"
     }
-    , defaultView: 'agendaWeek'
-    , timeFormat: 'H:mm'
-    , axisFormat: 'H:mm'
+    , defaultView: "agendaWeek"
+    , timeFormat: "H:mm"
+    , axisFormat: "H:mm"
     , allDaySlot: false
-    , monthNames: ['Январь','Февраль','Март','Апрель','Май','οюнь','οюль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь']
-    , monthNamesShort: ['Янв.','Фев.','Март','Апр.','Май','οюнь','οюль','Авг.','Сент.','Окт.','Ноя.','Дек.']
+    , monthNames: ["Январь","Февраль","Март","Апрель","Май","οюнь","οюль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"]
+    , monthNamesShort: ["Янв.","Фев.","Март","Апр.","Май","οюнь","οюль","Авг.","Сент.","Окт.","Ноя.","Дек."]
     , dayNames: ["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"]
     , dayNamesShort: ["ВС","ПН","ВТ","СР","ЧТ","ПТ","СБ"]
     , buttonText: {
@@ -180,6 +181,8 @@ $(function() {
       , week: "Неделя"
       , day: "День"
     }
+
+    , aspectRatio: .5
   });
 });
 </script>

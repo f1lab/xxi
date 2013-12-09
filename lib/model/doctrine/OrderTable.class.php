@@ -77,6 +77,9 @@ class OrderTable extends Doctrine_Table
       , $user->hasCredential("worker") ? $statesForWorker : []
       , $user->hasCredential("master") ? $statesForMaster : []
 
+      , $user->hasCredential("design-worker") ? $statesForDesignWorker : []
+      , $user->hasCredential("design-master") ? $statesForDesignMaster : []
+
       , $user->hasCredential("buhgalter") ? $statesForBuhgalter : []
 
       , $user->hasCredential("monitor") ? $statesForMonitor : []
