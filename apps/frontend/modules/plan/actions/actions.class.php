@@ -42,8 +42,8 @@ class planActions extends sfActions
           ->leftJoin("a.Workers ww")
           ->leftJoin("ww.Groups g")
           ->andWhereIn("g.name", array_merge(
-            $this->getUser()->hasCredential("worker") ? ["worker"] : []
-            , $this->getUser()->hasCredential("design-worker") ? ["design-worker"] : []
+            $this->getUser()->hasCredential("worker") || $this->getUser()->hasCredential("master") ? ["worker"] : []
+            , $this->getUser()->hasCredential("design-worker") || $this->getUser()->hasCredential("design-master") ? ["design-worker"] : []
           ) ?: [])
           ->addOrderBy("a.name")
       ], ["class" => "chzn-select"]))
@@ -55,8 +55,8 @@ class planActions extends sfActions
           ->from("sfGuardUser u")
           ->leftJoin("u.Groups g")
           ->andWhereIn("g.name", array_merge(
-            $this->getUser()->hasCredential("worker") ? ["master"] : []
-            , $this->getUser()->hasCredential("design-worker") ? ["design-master"] : []
+            $this->getUser()->hasCredential("worker") || $this->getUser()->hasCredential("master") ? ["worker"] : []
+            , $this->getUser()->hasCredential("design-worker") || $this->getUser()->hasCredential("design-master") ? ["design-worker"] : []
           ) ?: [])
           ->orderBy("u.last_name, u.first_name")
       ], ["class" => "chzn-select"]))
@@ -86,8 +86,11 @@ class planActions extends sfActions
         "prepress-working",
       ])
       ->andWhereIn("g.name", array_merge(
-        $this->getUser()->hasCredential("worker") ? ["worker"] : []
-        , $this->getUser()->hasCredential("design-worker") ? ["design-worker"] : []
+        $this->getUser()->hasCredential("worker") || $this->getUser()->hasCredential("master") ? ["worker"] : []
+        , $this->getUser()->hasCredential("design-worker") || $this->getUser()->hasCredential("design-master") ? ["design-worker"] : []
+      ) ?: [])
+      ->andWhereIn("row.master_id", array_merge(
+        $this->getUser()->hasGroup("master") || $this->getUser()->hasGroup("design-master") ? [$this->getUser()->getGuardUser()->getId()] : []
       ) ?: [])
       ->addOrderBy("row.created_at")
     ;

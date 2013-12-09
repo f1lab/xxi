@@ -10,9 +10,9 @@ class OrderTable extends Doctrine_Table
   public static $states = array(
     "calculating" => "На просчёте",
 
-    "prepress" => "Необходим дизайн",
-    "prepress-working" => "Дизайн в работе",
-    "prepress-done" => "Дизайн готов",
+    "prepress" => "Необходим дизайн (препресс)",
+    "prepress-working" => "Дизайн (препресс) в работе",
+    "prepress-done" => "Дизайн (препресс) готов",
 
     "work" => "В цех",
     "working" => "В работе",

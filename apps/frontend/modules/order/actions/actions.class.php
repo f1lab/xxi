@@ -141,19 +141,23 @@ class orderActions extends sfActions
   public function executeNew(sfWebRequest $request)
   {
     $this->form = new OrderForm();
-
-    unset (
-      $this->form['payed'],
-      $this->form['started_at'],
-      $this->form['finished_at'],
-      $this->form['submited_at'],
-      $this->form['payed_at'],
-      $this->form['expected_at'],
-      $this->form['area'],
-      $this->form['bill_made'],
-      $this->form['bill_given'],
-      $this->form['docs_given']
-    );
+    $this->form->useFields([
+      "new_Invoices",
+      "Invoices",
+      "client_id",
+      "description",
+      "approved_at",
+      "files",
+      "due_date",
+      "installation_cost",
+      "design_cost",
+      "contractors_cost",
+      "delivery_cost",
+      "cost",
+      "pay_method",
+      "recoil",
+      "state",
+    ]);
 
     if ($request->getParameter('client')) {
       $this->form->setDefault('client_id', $request->getParameter('client'));
@@ -164,18 +168,23 @@ class orderActions extends sfActions
   {
     $this->form = new OrderForm();
 
-    unset (
-      $this->form['payed'],
-      $this->form['started_at'],
-      $this->form['finished_at'],
-      $this->form['submited_at'],
-      $this->form['payed_at'],
-      $this->form['expected_at'],
-      $this->form['area'],
-      $this->form['bill_made'],
-      $this->form['bill_given'],
-      $this->form['docs_given']
-    );
+    $this->form->useFields([
+      "new_Invoices",
+      "Invoices",
+      "client_id",
+      "description",
+      "approved_at",
+      "files",
+      "due_date",
+      "installation_cost",
+      "design_cost",
+      "contractors_cost",
+      "delivery_cost",
+      "cost",
+      "pay_method",
+      "recoil",
+      "state",
+    ]);
 
     $this->processForm($request, $this->form, array('success', 'Отлично!', 'Заказ добавлен.'), '@orders');
     $this->setTemplate('new');

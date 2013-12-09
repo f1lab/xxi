@@ -83,9 +83,9 @@ class OrderForm extends BaseOrderForm
 
     $user = sfContext::getInstance()->getUser();
     $this->embedRelations(array_merge(
-      $user->hasCredential('can_set_order_works') ? $worksRelation : [],
+      $user->hasCredential('can_set_order_works') && !$this->getObject()->isNew() ? $worksRelation : [],
       $user->hasGroup('master') || $user->hasGroup('worker') || $user->hasGroup('design-master') || $user->hasGroup('design-worker') ? [] : $invoicesRelation,
-      $user->hasCredential('director') || $user->hasCredential('buhgalter') ? $paysRelation : []
+      (!$this->getObject()->isNew() and $user->hasGroup('director') || $user->hasGroup('buhgalter')) ? $paysRelation : []
     ));
 
     $this->getWidgetSchema()
@@ -180,14 +180,14 @@ class OrderForm extends BaseOrderForm
       "docs_given" => $user->hasGroup("director") or $user->hasGroup("buhgalter"),
       "waybill_number" => $user->hasGroup("director") or $user->hasGroup("buhgalter"),
 
-      "new_RefOrderWork" => $user->hasCredential("can_set_order_works"),
-      "RefOrderWork" => $user->hasCredential("can_set_order_works"),
+      "new_RefOrderWork" => !$this->getObject()->isNew() and $user->hasCredential("can_set_order_works"),
+      "RefOrderWork" => !$this->getObject()->isNew() and $user->hasCredential("can_set_order_works"),
 
       "new_Invoices" => !$user->hasGroup("worker") and !$user->hasGroup("design-worker") and !$user->hasGroup("master") and !$user->hasGroup("design-master"),
       "Invoices" => !$user->hasGroup("worker") and !$user->hasGroup("design-worker") and !$user->hasGroup("master") and !$user->hasGroup("design-master"),
 
-      "new_Pays" => $user->hasGroup("director") or $user->hasGroup("buhgalter"),
-      "Pays" => $user->hasGroup("director") or $user->hasGroup("buhgalter"),
+      "new_Pays" => !$this->getObject()->isNew() and $user->hasGroup("director") || $user->hasGroup("buhgalter"),
+      "Pays" => !$this->getObject()->isNew() and $user->hasGroup("director") || $user->hasGroup("buhgalter"),
 
       "state" => $user->hasGroup("director") or $user->hasGroup("worker") or $user->hasGroup("manager") or $user->hasGroup("design-worker"),
     ])); // empty callback for array_filter removes false values
