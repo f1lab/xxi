@@ -47,12 +47,10 @@ class OrderTable extends Doctrine_Table
     ];
 
     $statesForWorker = [
-      "calculating",
       "work",
       "working",
       "done",
       "submited",
-      "prepress",
     ];
     $statesForMaster = [
       "working",

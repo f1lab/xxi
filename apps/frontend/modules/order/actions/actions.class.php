@@ -192,8 +192,28 @@ class orderActions extends sfActions
 
   public function executeEdit(sfWebRequest $request)
   {
-    $this->order = Doctrine_Core::getTable('Order')
-      ->find($request->getParameter('id'))
+    $mineAreas = Doctrine_Query::create()
+      ->from("Area a")
+      ->select("a.id")
+      ->leftJoin("a.Workers u")
+      ->addWhere("u.id = ?", $this->getUser()->getGuardUser()->getId())
+      ->execute([], Doctrine_Core::HYDRATE_SINGLE_SCALAR)
+    ;
+
+    $mineWorkRefs = Doctrine_Query::create()
+      ->from("RefOrderWork row")
+      ->addWhere("row.order_id = ?", $request->getParameter('id'))
+      ->andWhereIn("row.area_id", $mineAreas ?: [])
+      ->execute([], Doctrine_Core::HYDRATE_SINGLE_SCALAR)
+    ;
+
+    $this->order = Doctrine_Query::create()
+      ->from("Order o")
+      ->leftJoin("o.RefOrderWork row")
+      ->leftJoin("o.Invoices i")
+      ->addWhere("o.id = ?", $request->getParameter('id'))
+      ->andWhereIn("row.id", $mineWorkRefs ?: [])
+      ->fetchOne()
     ;
 
     if ($this->order->getState() === "deleted" and !$this->getUser()->hasCredential("can-delete-orders")) {

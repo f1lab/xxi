@@ -108,6 +108,8 @@ class OrderFormFilter extends BaseOrderFormFilter
         'done',
         'submited',
         'prepress',
+        'prepress-working',
+        'prepress-done',
       ),
       'area' => array(),
       'created_at_from' => array('day' => '01', 'month' => '01', 'year' => date('Y')),
