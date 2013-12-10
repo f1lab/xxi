@@ -192,29 +192,36 @@ class orderActions extends sfActions
 
   public function executeEdit(sfWebRequest $request)
   {
-    $mineAreas = Doctrine_Query::create()
-      ->from("Area a")
-      ->select("a.id")
-      ->leftJoin("a.Workers u")
-      ->addWhere("u.id = ?", $this->getUser()->getGuardUser()->getId())
-      ->execute([], Doctrine_Core::HYDRATE_SINGLE_SCALAR)
-    ;
-
-    $mineWorkRefs = Doctrine_Query::create()
-      ->from("RefOrderWork row")
-      ->addWhere("row.order_id = ?", $request->getParameter('id'))
-      ->andWhereIn("row.area_id", $mineAreas ?: [])
-      ->execute([], Doctrine_Core::HYDRATE_SINGLE_SCALAR)
-    ;
-
-    $this->order = Doctrine_Query::create()
+    $orderQuery = Doctrine_Query::create()
       ->from("Order o")
-      ->leftJoin("o.RefOrderWork row")
       ->leftJoin("o.Invoices i")
       ->addWhere("o.id = ?", $request->getParameter('id'))
-      ->andWhereIn("row.id", $mineWorkRefs ?: [])
-      ->fetchOne()
     ;
+
+    if ($this->getUser()->hasGroup("worker") or $this->getUser()->hasGroup("design-worker")) {
+      $mineAreas = Doctrine_Query::create()
+        ->from("Area a")
+        ->select("a.id")
+        ->leftJoin("a.Workers u")
+        ->addWhere("u.id = ?", $this->getUser()->getGuardUser()->getId())
+        ->execute([], Doctrine_Core::HYDRATE_SINGLE_SCALAR)
+      ;
+
+      $mineWorkRefs = Doctrine_Query::create()
+        ->from("RefOrderWork row")
+        ->addWhere("row.order_id = ?", $request->getParameter('id'))
+        ->andWhereIn("row.area_id", $mineAreas ?: [-1])
+        ->execute([], Doctrine_Core::HYDRATE_SINGLE_SCALAR)
+      ;
+
+      if (count($mineWorkRefs)) {
+        $orderQuery->leftJoin("o.RefOrderWork row")->andWhereIn("row.id", $mineWorkRefs);
+      } else {
+        $orderQuery->leftJoin("o.RefOrderWork row WITH row.id is null");
+      }
+    }
+
+    $this->order = $orderQuery->fetchOne();
 
     if ($this->order->getState() === "deleted" and !$this->getUser()->hasCredential("can-delete-orders")) {
       $this->getUser()->setFlash("message", [
