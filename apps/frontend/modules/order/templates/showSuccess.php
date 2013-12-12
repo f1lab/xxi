@@ -71,7 +71,13 @@
 
   <?php if ($sf_user->hasCredential('can_print_orders')): ?>
     <div class="btn-group">
-      <a href="<?php echo url_for('@order-print?id=' . $order->getId()) ?>" class="btn">Распечатать бланк заказа</a>
+      <a href="<?php echo url_for('@order-print?id=' . $order->getId()) ?>" class="btn">Распечатать бланк заказа (цех)</a>
+    </div>
+  <?php endif ?>
+
+  <?php if ($sf_user->hasCredential(["can-print-design-orders", "design-worker"], false)): //false is for OR switch ?>
+    <div class="btn-group">
+      <a href="<?php echo url_for('@order-print-design?id=' . $order->getId()) ?>" class="btn">Распечатать бланк заказа (дизайн/препресс)</a>
     </div>
   <?php endif ?>
 

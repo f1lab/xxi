@@ -260,36 +260,86 @@ class orderActions extends sfActions
     $order = Doctrine_Core::getTable('Order')
       ->find($request->getParameter('id'))
     ;
-
     $this->forward404Unless($order);
 
-    header("Content-Type: application/msword");
-    header("Content-Disposition: attachment; filename=Бланк заказа на №" . $order->getId() . ".doc");
-    header("Pragma: no-cache");
-    header("Expires: 0");
+    $this->printTemplate("order", [
+      "from" => [
+        "{manager}",
+        "{printed_at}",
+        "{order_id}",
+        "{files}",
+        "{description}",
+        "{due_date}",
+        "{execution_time}",
+        "{started_at}",
+      ],
 
-    $out = str_replace(
-      array(
-        '{manager}',
-        '{printed_at}',
-        '{order_id}',
-        '{files}',
-        '{description}',
-        '{due_date}',
-        '{execution_time}',
-        '{started_at}',
-      ),
-      array(
+      "to" => [
         $order->getCreator(),
         date('d.m.Y'),
         $order->getId(),
         $order->getFiles(),
         $order->getDescription(),
-        $order->getDueDate() ? date('d.m.Y', strtotime($order->getDueDate())) : '',
+        $order->getDueDate() ? date("d.m.Y H:i", strtotime($order->getDueDate())) : '',
         $order->getExecutionTime(),
-        $order->getStartedAt() ? date('d.m.Y', strtotime($order->getStartedAt())) : ''
-      ),
-      file_get_contents(sfConfig::get('sf_upload_dir') . '/' . 'order.xml')
+        $order->getStartedAt() ? date("d.m.Y H:i", strtotime($order->getStartedAt())) : ''
+      ],
+    ], "Бланк заказа на №" . $order->getId());
+  }
+
+  public function executePrintDesign(sfWebRequest $request)
+  {
+    $order = Doctrine_Query::create()
+      ->from("Order o")
+      ->leftJoin("o.RefOrderWork row")
+      ->leftJoin("row.Master m")
+      ->leftJoin("row.Area a")
+      ->leftJoin("a.Workers ww")
+      ->leftJoin("ww.Groups g")
+      ->addWhere("o.id = ?", $request->getParameter('id'))
+      ->addWhere("row.planned_start is not null and row.planned_finish is not null")
+      ->andWhereIn("g.name", ["design-worker"])
+      ->limit(1)
+      ->fetchOne()
+    ;
+    $this->forward404Unless($order and count($order["RefOrderWork"]) and true == ($ref = $order->getRefOrderWork()->getFirst()));
+
+    $this->printTemplate("order-template", [
+      "from" => [
+        "{order-id}",
+        "{who-title}",
+        "{who-real}",
+        "{started-at}",
+        "{files}",
+        "{description}",
+        "{due-date}",
+      ],
+
+      "to" => [
+        $order->getId(),
+        "Дизайнер",
+        $ref->getMaster(),
+        date("d.m.Y H:i", strtotime($ref->getPlannedStart())),
+        $order->getFiles(),
+        $order->getDescription(),
+        date("d.m.Y H:i", strtotime($ref->getPlannedFinish())),
+      ],
+    ], "Бланк заказа дизайн (препресс) №" . $order->getId());
+  }
+
+  protected function printTemplate($templateName, $replacePairs, $attachmentFilename)
+  {
+    $template = sfConfig::get("sf_upload_dir") . "/" . $templateName . ".xml";
+
+    header("Content-Type: application/msword");
+    header("Content-Disposition: attachment; filename=" . $attachmentFilename . ".doc");
+    header("Pragma: no-cache");
+    header("Expires: 0");
+
+    $out = str_replace(
+      $replacePairs["from"],
+      $replacePairs["to"],
+      file_get_contents($template)
     );
 
     die($out);

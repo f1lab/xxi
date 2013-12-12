@@ -159,6 +159,11 @@ order-print:
   param: { module: order, action: print }
   requirements: { id: \d+ }
 
+order-print-design:
+  url:   /orders/:id/print-design
+  param: { module: order, action: printDesign }
+  requirements: { id: \d+ }
+
 order-printaccount:
   url:   /orders/:id/print-account
   param: { module: order, action: printAccount }
