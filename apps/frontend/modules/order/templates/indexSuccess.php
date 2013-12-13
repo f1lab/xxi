@@ -12,7 +12,6 @@
     <?php
       $orders = Doctrine_Query::create()
         ->from("Order o")
-        ->andWhereIn("o.state", OrderTable::getSetableStates())
         ->addOrderBy("o.id")
         ->execute([], Doctrine_Core::HYDRATE_SINGLE_SCALAR)
       ;
