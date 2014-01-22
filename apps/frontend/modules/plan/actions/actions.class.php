@@ -55,8 +55,8 @@ class planActions extends sfActions
           ->from("sfGuardUser u")
           ->leftJoin("u.Groups g")
           ->andWhereIn("g.name", array_merge(
-            $this->getUser()->hasCredential("worker") || $this->getUser()->hasCredential("master") ? ["worker"] : []
-            , $this->getUser()->hasCredential("design-worker") || $this->getUser()->hasCredential("design-master") ? ["design-worker"] : []
+            $this->getUser()->hasCredential("worker") || $this->getUser()->hasCredential("master") ? ["master"] : []
+            , $this->getUser()->hasCredential("design-worker") || $this->getUser()->hasCredential("design-master") ? ["design-master"] : []
           ) ?: [])
           ->orderBy("u.last_name, u.first_name")
       ], ["class" => "chzn-select"]))
