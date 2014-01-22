@@ -10,6 +10,8 @@
  */
 class OrderFormFilter extends BaseOrderFormFilter
 {
+  static public $attributesWithTimestamps = ["created", "approved", "submited", "finished", "payed"];
+
   public function configure()
   {
     $fileds = array_keys($this->getFields());
@@ -60,6 +62,8 @@ class OrderFormFilter extends BaseOrderFormFilter
       ->offsetSet('created_at_to', new sfWidgetFormBootstrapDate())
       ->offsetSet('approved_at_from', new sfWidgetFormBootstrapDate())
       ->offsetSet('approved_at_to', new sfWidgetFormBootstrapDate())
+      ->offsetSet('finished_at_from', new sfWidgetFormBootstrapDate())
+      ->offsetSet('finished_at_to', new sfWidgetFormBootstrapDate())
       ->offsetSet('submited_at_from', new sfWidgetFormBootstrapDate())
       ->offsetSet('submited_at_to', new sfWidgetFormBootstrapDate())
       ->offsetSet('payed_at_from', new sfWidgetFormBootstrapDate())
@@ -69,6 +73,7 @@ class OrderFormFilter extends BaseOrderFormFilter
         'created_by' => 'Менеджер',
         'created_at_from' => 'Дата создания',
         'approved_at_from' => 'Дата согласования',
+        'finished_at_from' => 'Дата выполнения',
         'submited_at_from' => 'Дата сдачи',
         'payed_at_from' => 'Дата полной оплаты',
         'state' => 'Статус',
@@ -92,6 +97,8 @@ class OrderFormFilter extends BaseOrderFormFilter
       ->offsetSet('created_at_to', new sfValidatorPass())
       ->offsetSet('approved_at_from', new sfValidatorPass())
       ->offsetSet('approved_at_to', new sfValidatorPass())
+      ->offsetSet('finished_at_from', new sfValidatorPass())
+      ->offsetSet('finished_at_to', new sfValidatorPass())
       ->offsetSet('submited_at_from', new sfValidatorPass())
       ->offsetSet('submited_at_to', new sfValidatorPass())
       ->offsetSet('payed_at_from', new sfValidatorPass())
@@ -118,6 +125,8 @@ class OrderFormFilter extends BaseOrderFormFilter
       'approved_at_to' => array('day' => '', 'month' => '', 'year' => ''),
       'submited_at_from' => array('day' => '', 'month' => '', 'year' => ''),
       'submited_at_to' => array('day' => '', 'month' => '', 'year' => ''),
+      'finished_at_from' => array('day' => '', 'month' => '', 'year' => ''),
+      'finished_at_to' => array('day' => '', 'month' => '', 'year' => ''),
       'payed_at_from' => array('day' => '', 'month' => '', 'year' => ''),
       'payed_at_to' => array('day' => '', 'month' => '', 'year' => ''),
     ));
@@ -164,93 +173,29 @@ class OrderFormFilter extends BaseOrderFormFilter
         $query->andWhereIn('created_by', $values['created_by']);
       }
 
-      if (
-        $values['created_at_from']['day']
-        and $values['created_at_from']['month']
-        and $values['created_at_from']['year']
-      ) {
-        $query->andWhere('created_at >= ?', date(
-          'Y-m-d 00:00:00',
-          mktime(0, 0, 0, $values['created_at_from']['month'], $values['created_at_from']['day'], $values['created_at_from']['year']))
-        );
-      }
+      array_walk(self::$attributesWithTimestamps, function($attribute, $key) use ($values, &$query) {
+        if (
+          $values[$attribute . "_at_from"]["day"]
+          and $values[$attribute . "_at_from"]["month"]
+          and $values[$attribute . "_at_from"]["year"]
+        ) {
+          $query->andWhere($attribute . "_at >= ?", date(
+            "Y-m-d 00:00:00",
+            mktime(0, 0, 0, $values[$attribute . "_at_from"]["month"], $values[$attribute . "_at_from"]["day"], $values[$attribute . "_at_from"]["year"])
+          ));
+        }
 
-      if (
-        $values['created_at_to']['day']
-        and $values['created_at_to']['month']
-        and $values['created_at_to']['year']
-      ) {
-        $query->andWhere('created_at <= ?', date(
-          'Y-m-d 23:59:59',
-          mktime(0, 0, 0, $values['created_at_to']['month'], $values['created_at_to']['day'], $values['created_at_to']['year']))
-        );
-      }
-
-      if (
-        $values['approved_at_from']['day']
-        and $values['approved_at_from']['month']
-        and $values['approved_at_from']['year']
-      ) {
-        $query->andWhere('approved_at >= ?', date(
-          'Y-m-d 00:00:00',
-          mktime(0, 0, 0, $values['approved_at_from']['month'], $values['approved_at_from']['day'], $values['approved_at_from']['year']))
-        );
-      }
-
-      if (
-        $values['approved_at_to']['day']
-        and $values['approved_at_to']['month']
-        and $values['approved_at_to']['year']
-      ) {
-        $query->andWhere('approved_at <= ?', date(
-          'Y-m-d 23:59:59',
-          mktime(0, 0, 0, $values['approved_at_to']['month'], $values['approved_at_to']['day'], $values['approved_at_to']['year']))
-        );
-      }
-
-      if (
-        $values['submited_at_from']['day']
-        and $values['submited_at_from']['month']
-        and $values['submited_at_from']['year']
-      ) {
-        $query->andWhere('submited_at >= ?', date(
-          'Y-m-d 00:00:00',
-          mktime(0, 0, 0, $values['submited_at_from']['month'], $values['submited_at_from']['day'], $values['submited_at_from']['year']))
-        );
-      }
-
-      if (
-        $values['submited_at_to']['day']
-        and $values['submited_at_to']['month']
-        and $values['submited_at_to']['year']
-      ) {
-        $query->andWhere('submited_at <= ?', date(
-          'Y-m-d 23:59:59',
-          mktime(0, 0, 0, $values['submited_at_to']['month'], $values['submited_at_to']['day'], $values['submited_at_to']['year']))
-        );
-      }
-
-      if (
-        $values['payed_at_from']['day']
-        and $values['payed_at_from']['month']
-        and $values['payed_at_from']['year']
-      ) {
-        $query->andWhere('payed_at >= ?', date(
-          'Y-m-d 00:00:00',
-          mktime(0, 0, 0, $values['payed_at_from']['month'], $values['payed_at_from']['day'], $values['payed_at_from']['year']))
-        );
-      }
-
-      if (
-        $values['payed_at_to']['day']
-        and $values['payed_at_to']['month']
-        and $values['payed_at_to']['year']
-      ) {
-        $query->andWhere('payed_at <= ?', date(
-          'Y-m-d 23:59:59',
-          mktime(0, 0, 0, $values['payed_at_to']['month'], $values['payed_at_to']['day'], $values['payed_at_to']['year']))
-        );
-      }
+        if (
+          $values[$attribute . "_at_to"]["day"]
+          and $values[$attribute . "_at_to"]["month"]
+          and $values[$attribute . "_at_to"]["year"]
+        ) {
+          $query->andWhere($attribute . "_at <= ?", date(
+            "Y-m-d 23:59:59",
+            mktime(0, 0, 0, $values[$attribute . "_at_to"]["month"], $values[$attribute . "_at_to"]["day"], $values[$attribute . "_at_to"]["year"])
+          ));
+        }
+      });
 
       if (count($values['state']) and $values['state'][0]) {
         $query->andWhereIn('state', $values['state']);

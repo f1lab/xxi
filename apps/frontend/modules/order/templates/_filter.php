@@ -16,41 +16,16 @@
     </div>
   </div>
 
-  <div class="control-group<?php if ($form['created_at_from']->hasError()): ?> error<?php endif ?>">
-    <?php echo $form['created_at_from']->renderLabel(null, array('class' => 'control-label')) ?>
+<?php foreach (OrderFormFilter::$attributesWithTimestamps as $attribute): ?>
+  <div class="control-group<?php if ($form[$attribute . "_at_from"]->hasError()): ?> error<?php endif ?>">
+    <?php echo $form[$attribute . "_at_from"]->renderLabel(null, array('class' => 'control-label')) ?>
     <div class="controls form-horizontal">
-      <?php echo $form['created_at_from']->render(array('placeholder' => 'from')) ?>
-      <?php echo $form['created_at_to']->render(array('placeholder' => 'to')) ?>
-      <?php if ($form['created_at_from']->hasError()): ?><div class="help-inline"><?php echo $form['created_at_from']->getError() ?></div><?php endif ?>
+      <?php echo $form[$attribute . "_at_from"]->render(array('placeholder' => 'from')) ?>
+      <?php echo $form[$attribute . "_at_to"]->render(array('placeholder' => 'to')) ?>
+      <?php if ($form[$attribute . "_at_from"]->hasError()): ?><div class="help-inline"><?php echo $form[$attribute . "_at_from"]->getError() ?></div><?php endif ?>
     </div>
   </div>
-
-  <div class="control-group<?php if ($form['approved_at_from']->hasError()): ?> error<?php endif ?>">
-    <?php echo $form['approved_at_from']->renderLabel(null, array('class' => 'control-label')) ?>
-    <div class="controls form-horizontal">
-      <?php echo $form['approved_at_from']->render(array('placeholder' => 'from')) ?>
-      <?php echo $form['approved_at_to']->render(array('placeholder' => 'to')) ?>
-      <?php if ($form['approved_at_from']->hasError()): ?><div class="help-inline"><?php echo $form['approved_at_from']->getError() ?></div><?php endif ?>
-    </div>
-  </div>
-
-  <div class="control-group<?php if ($form['submited_at_from']->hasError()): ?> error<?php endif ?>">
-    <?php echo $form['submited_at_from']->renderLabel(null, array('class' => 'control-label')) ?>
-    <div class="controls form-horizontal">
-      <?php echo $form['submited_at_from']->render(array('placeholder' => 'from')) ?>
-      <?php echo $form['submited_at_to']->render(array('placeholder' => 'to')) ?>
-      <?php if ($form['submited_at_from']->hasError()): ?><div class="help-inline"><?php echo $form['submited_at_from']->getError() ?></div><?php endif ?>
-    </div>
-  </div>
-
-  <div class="control-group<?php if ($form['payed_at_from']->hasError()): ?> error<?php endif ?>">
-    <?php echo $form['payed_at_from']->renderLabel(null, array('class' => 'control-label')) ?>
-    <div class="controls form-horizontal">
-      <?php echo $form['payed_at_from']->render(array('placeholder' => 'from')) ?>
-      <?php echo $form['payed_at_to']->render(array('placeholder' => 'to')) ?>
-      <?php if ($form['payed_at_from']->hasError()): ?><div class="help-inline"><?php echo $form['payed_at_from']->getError() ?></div><?php endif ?>
-    </div>
-  </div>
+<?php endforeach ?>
 
   <div class="control-group<?php if ($form['state']->hasError()): ?> error<?php endif ?>">
     <?php echo $form['state']->renderLabel(null, array('class' => 'control-label')) ?>
