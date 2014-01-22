@@ -6,19 +6,9 @@
     <a href="<?php echo url_for('@order-new') ?>" class="btn btn-primary">Добавить заказ</a>
   </div><?php endif ?>
 
-  <?php if ($sf_user->hasCredential('can_use_search_in_orders')): ?><div class="btn-group">
-    <select name="" id="" style="float:left;margin-bottom:0;width:110px" class="span2 chzn-select" data-placeholder="Перейти к заказу" onchange="document.location.href = '<?php echo url_for('@orders') ?>/' + $(this).val()">
-      <option value=""></option>
-    <?php
-      $orders = Doctrine_Query::create()
-        ->from("Order o")
-        ->addOrderBy("o.id")
-        ->execute([], Doctrine_Core::HYDRATE_SINGLE_SCALAR)
-      ;
-      foreach ($orders as $id): ?>
-      <option value="<?php echo $id ?>"><?php echo $id ?></option>
-    <?php endforeach ?></select>
-  </div><?php endif ?>
+  <?php if ($sf_user->hasCredential('can_use_search_in_orders')): ?><div class="btn-group"><form action="#" id="orders-quick-search" data-action="<?php echo url_for('@orders') ?>/">
+    <input type="text" value="" tabindex="1" placeholder="Номер заказа" class="span2"/>
+  </form></div><?php endif ?>
 
 <?php
   if ($sf_user->hasGroup('monitor')):

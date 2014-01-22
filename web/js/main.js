@@ -96,6 +96,18 @@ $(function() {
     .on("click", ".confirm", function() {
       return confirm("Вы уверены?");
     })
+
+    .on("submit", "#orders-quick-search", function(e) {
+      e.preventDefault();
+
+      var id = +$(this).find("input").val()
+        , url = $(this).data("action")
+      ;
+
+      if (id > 0) {
+        document.location.href = url + id;
+      }
+    })
   ;
 });
 
