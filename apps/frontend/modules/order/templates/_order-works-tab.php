@@ -7,6 +7,10 @@
         <th>Комментарий</th>
         <th>Запланировано</th>
         <th>Готовность</th>
+
+        <?php if ($sf_user->hasCredential(["can_print_orders", "can-print-design-orders", "design-worker"], false)): //false is for OR switch ?>
+          <th>Действия</th>
+        <?php endif ?>
       </tr>
     </thead>
     <tbody>
@@ -20,6 +24,12 @@
             <span class="icon icon-<?php echo $ref->getIsCompleted() ? 'ok' : 'remove' ?>"></span>
             <?php if ($ref->getIsCompleted()): ?>
               отмечено <?php echo $ref->getFinishedAt() ?>
+            <?php endif ?>
+          </td>
+
+          <td>
+            <?php if ($sf_user->hasCredential(["can_print_orders", "can-print-design-orders", "design-worker"], false)): //false is for OR switch ?>
+              <a href="<?php echo url_for("@order-print?order_id=" . $order->getId() . "&id=" . $ref->getId()) ?>" class="btn">Распечатать бланк заказа</a>
             <?php endif ?>
           </td>
         </tr>

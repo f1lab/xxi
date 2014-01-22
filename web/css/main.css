@@ -126,3 +126,10 @@ fieldset {
 .event-completed-yes {
   background-color: #ccc !important;
 }
+
+#orders-quick-search {
+  margin: 0;
+}
+  #orders-quick-search input {
+    margin: 0;
+  }

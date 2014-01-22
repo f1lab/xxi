@@ -182,7 +182,7 @@ $(function() {
       , day: "День"
     }
 
-    , aspectRatio: .5
+    , aspectRatio: 1.1
   });
 });
 </script>
