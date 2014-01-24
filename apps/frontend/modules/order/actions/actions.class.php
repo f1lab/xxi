@@ -257,16 +257,52 @@ class orderActions extends sfActions
 
   public function executePrint(sfWebRequest $request)
   {
-    $ref = Doctrine_Query::create()
-      ->from("RefOrderWork row")
-      ->leftJoin("row.Order o")
-      ->addWhere("row.id = ?", $request->getParameter('id'))
+    $order = Doctrine_Core::getTable('Order')
+      ->find($request->getParameter('id'))
+    ;
+    $this->forward404Unless($order);
+
+    $this->printTemplate("order", [
+      "from" => [
+        "{manager}",
+        "{printed_at}",
+        "{order_id}",
+        "{files}",
+        "{description}",
+        "{due_date}",
+        "{execution_time}",
+        "{started_at}",
+      ],
+
+      "to" => [
+        $order->getCreator(),
+        date('d.m.Y'),
+        $order->getId(),
+        $order->getFiles(),
+        $order->getDescription(),
+        $order->getDueDate() ? date("d.m.Y H:i", strtotime($order->getDueDate())) : '',
+        $order->getExecutionTime(),
+        $order->getStartedAt() ? date("d.m.Y H:i", strtotime($order->getStartedAt())) : ''
+      ],
+    ], "Бланк заказа на №" . $order->getId());
+  }
+
+  public function executePrintDesign(sfWebRequest $request)
+  {
+    $order = Doctrine_Query::create()
+      ->from("Order o")
+      ->leftJoin("o.RefOrderWork row")
+      ->leftJoin("row.Master m")
+      ->leftJoin("row.Area a")
+      ->leftJoin("a.Workers ww")
+      ->leftJoin("ww.Groups g")
+      ->addWhere("o.id = ?", $request->getParameter('id'))
+      ->addWhere("row.planned_start is not null and row.planned_finish is not null")
+      ->andWhereIn("g.name", ["design-worker"])
       ->limit(1)
       ->fetchOne()
     ;
-
-    $this->forward404Unless($ref and true == ($order = $ref->getOrder()));
-    $id = sprintf("%d-%d", $order->getId(), $ref->getId());
+    $this->forward404Unless($order and count($order["RefOrderWork"]) and true == ($ref = $order->getRefOrderWork()->getFirst()));
 
     $this->printTemplate("order-template", [
       "from" => [
@@ -277,20 +313,18 @@ class orderActions extends sfActions
         "{files}",
         "{description}",
         "{due-date}",
-        "{comment}",
       ],
 
       "to" => [
-        $id,
-        "Менеджер",
-        $order->getCreator(),
-        $ref->getPlannedStart() ? date("d.m.Y H:i", strtotime($ref->getPlannedStart())) : "—",
-        $order->getFiles() ?: "—",
-        $order->getDescription() ?: "—",
-        $ref->getPlannedFinish() ? date("d.m.Y H:i", strtotime($ref->getPlannedFinish())) : "—",
-        $ref->getComment() ?: "—",
+        $order->getId(),
+        "Дизайнер",
+        $ref->getMaster(),
+        date("d.m.Y H:i", strtotime($ref->getPlannedStart())),
+        $order->getFiles(),
+        $order->getDescription(),
+        date("d.m.Y H:i", strtotime($ref->getPlannedFinish())),
       ],
-    ], "Бланк заказа №" . $id);
+    ], "Бланк заказа дизайн (препресс) №" . $order->getId());
   }
 
   protected function printTemplate($templateName, $replacePairs, $attachmentFilename)

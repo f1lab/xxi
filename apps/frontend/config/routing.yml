@@ -155,8 +155,14 @@ order-update:
   requirements: { id: \d+ }
 
 order-print:
-  url:   /orders/:order_id/print/:id
+  url:   /orders/:id/print
   param: { module: order, action: print }
+  requirements: { id: \d+ }
+
+order-print-design:
+  url:   /orders/:id/print-design
+  param: { module: order, action: printDesign }
+  requirements: { id: \d+ }
 
 order-printaccount:
   url:   /orders/:id/print-account
