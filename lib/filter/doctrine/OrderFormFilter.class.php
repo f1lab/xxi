@@ -42,7 +42,7 @@ class OrderFormFilter extends BaseOrderFormFilter
         'data-placeholder' => 'Выберите…',
       )))
        ->offsetSet('state', new sfWidgetFormChoice(array(
-        'choices' => OrderTable::getSetableStatesWithNames(),
+        'choices' => OrderTable::$states,
         'multiple' => true,
       ), array(
         'class' => 'chzn-select',

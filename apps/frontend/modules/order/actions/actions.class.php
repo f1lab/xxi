@@ -241,9 +241,36 @@ class orderActions extends sfActions
 
   public function executeUpdate(sfWebRequest $request)
   {
-    $this->order = Doctrine_Core::getTable('Order')
-      ->find($request->getParameter('id'))
+    $orderQuery = Doctrine_Query::create()
+      ->from("Order o")
+      ->leftJoin("o.Invoices i")
+      ->addWhere("o.id = ?", $request->getParameter('id'))
     ;
+
+    if ($this->getUser()->hasGroup("worker") or $this->getUser()->hasGroup("design-worker")) {
+      $mineAreas = Doctrine_Query::create()
+        ->from("Area a")
+        ->select("a.id")
+        ->leftJoin("a.Workers u")
+        ->addWhere("u.id = ?", $this->getUser()->getGuardUser()->getId())
+        ->execute([], Doctrine_Core::HYDRATE_SINGLE_SCALAR)
+      ;
+
+      $mineWorkRefs = Doctrine_Query::create()
+        ->from("RefOrderWork row")
+        ->addWhere("row.order_id = ?", $request->getParameter('id'))
+        ->andWhereIn("row.area_id", $mineAreas ?: [-1])
+        ->execute([], Doctrine_Core::HYDRATE_SINGLE_SCALAR)
+      ;
+
+      if (count($mineWorkRefs)) {
+        $orderQuery->leftJoin("o.RefOrderWork row")->andWhereIn("row.id", $mineWorkRefs);
+      } else {
+        $orderQuery->leftJoin("o.RefOrderWork row WITH row.id is null");
+      }
+    }
+
+    $this->order = $orderQuery->fetchOne();
     $this->form = new OrderForm($this->order);
 
     $this->processForm(
