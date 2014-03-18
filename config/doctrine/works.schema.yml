@@ -14,6 +14,9 @@ Area:
       notnull: true
     style:
       type: clob
+    rate:
+      type: decimal
+      scale: 2
   relations:
     Works:
       class: Work

@@ -50,6 +50,7 @@ class AreaForm extends BaseAreaForm
         "slug" => "Транслит наименования",
         "masters_list" => "Работники участка",
         "workers_list" => "Руководители участка",
+        "rate" => "Ставка",
       ])
     ;
 
