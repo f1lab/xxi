@@ -133,3 +133,9 @@ fieldset {
   #orders-quick-search input {
     margin: 0;
   }
+
+#add-new-client-from-order-form {
+  position: relative;
+  top: -8px;
+  left: 5px;
+}

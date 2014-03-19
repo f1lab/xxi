@@ -76,4 +76,41 @@ class clientActions extends sfActions
       }
     }
   }
+
+  public function executeAdd($request)
+  {
+    $form = new ClientForm();
+    $form->disableCSRFprotection();
+    unset($form["_csrf_token"]);
+
+    $form->bind([
+      "name" => $request->getParameter("name"),
+      "contact" => $request->getParameter("contact"),
+      "phone" => $request->getParameter("phone"),
+    ]);
+
+    try {
+      $form->save();
+      $this->getResponse()->setStatusCode(200);
+    } catch (\Exception $e) {
+      $this->getResponse()->setStatusCode(400);
+    }
+
+    $this->getResponse()->setHeaderOnly(true);
+    return sfView::NONE;
+  }
+
+  public function executeDump($request)
+  {
+    $clients = Doctrine_Query::create()
+      ->from("Client c")
+      ->select("c.id, c.name")
+      ->addOrderBy("c.name asc")
+      ->execute([], Doctrine_Core::HYDRATE_SCALAR)
+    ;
+
+    die (json_encode(array_map(function($client) {
+      return [$client["c_id"], $client["c_name"]];
+    }, $clients), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+  }
 }

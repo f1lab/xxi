@@ -26,7 +26,16 @@
 
   <fieldset>
     <legend>Основная информация</legend>
-    <?php echo $form['client_id']->renderRowUsing('bootstrap')?>
+
+    <div class="control-group">
+      <?php echo $form["client_id"]->renderLabel() ?>
+      <div class="controls">
+        <?php echo $form["client_id"]->render() ?>
+
+        <a class="btn" href="#add-new-client" id="add-new-client-from-order-form">Добавить нового клиента</a>
+      </div>
+    </div>
+
     <?php echo $form['description']->renderRowUsing('bootstrap')?>
     <?php echo $form['approved_at']->renderRowUsing('bootstrap')?>
     <?php echo $form['files']->renderRowUsing('bootstrap')?>

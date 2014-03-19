@@ -35,6 +35,8 @@ default:
     - chosen.jquery.min.js
     - fullcalendar.min.js
     - jquery-ui.custom.min.js
+    - bootbox
+    - jquery.serializeObject.js
     - "/ahDoctrineEasyEmbeddedRelationsPlugin/js/ahDoctrineEasyEmbeddedRelationsPlugin.jQuery.js"
     - main
 

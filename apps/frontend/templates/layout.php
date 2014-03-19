@@ -9,14 +9,21 @@
   <?php include_stylesheets() ?>
   <link rel="stylesheet" href="<?php echo url_for('main/areaStyles') ?>" />
   <?php include_javascripts() ?>
+  <script src="/js/notifications.js"></script>
   <style type="text/css">
     body {
       margin: 0 2em;
     }
   </style>
+
+  <script>
+    var App = {
+      "add-new-client": "<?php echo url_for("client/add") ?>"
+      , "dump-all-clients": "<?php echo url_for("client/dump") ?>"
+    };
+  </script>
 </head>
 <body>
-<script src="/js/notifications.js"></script>
   <div class="navbar">
     <div class="navbar-inner">
       <div class="container">
@@ -59,5 +66,39 @@
 
     <?php echo $sf_content ?>
   </div>
+
+  <script type="text/html" id="template-add-new-client">
+    <form action="#" method="post">
+      <div class="alert alert-error fill-form hide">
+        Заполните все поля формы.
+      </div>
+
+      <div class="alert alert-error try-again hide">
+        Ошибка сохранения.
+      </div>
+
+      <div class="control-group">
+        <label class="control-label" for="client_name">Наименование организации</label>
+        <div class="controls">
+          <input placeholder="Ф1 Лаб" type="text" name="name" id="client_name" class="input-block-level">
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label class="control-label" for="client_contact">Контактное лицо</label>
+        <div class="controls">
+          <input type="text" name="contact" id="client_contact" class="input-block-level">
+        </div>
+      </div>
+
+
+      <div class="control-group">
+        <label class="control-label" for="client_phone">Телефон</label>
+        <div class="controls">
+          <input type="text" name="phone" id="client_phone" class="input-block-level">
+        </div>
+      </div>
+    </form>
+  </script>
 </body>
 </html>
