@@ -20,5 +20,15 @@ class WarehouseForm extends BaseWarehouseForm
       , $this["deleted_at"]
       , $this["version"]
     );
+
+    $this->getWidgetSchema()
+      ->offsetGet("users_list")
+        ->setAttribute("class", "chzn-select")
+        ->getParent()
+      ->setLabels([
+        "name" => "Наименование",
+        "users_list" => "Ответственные",
+      ])
+    ;
   }
 }
