@@ -1,0 +1,33 @@
+Warehouse:
+  actAs:
+    Timestampable: ~
+    Signable: ~
+    SoftDelete: ~
+  columns:
+    name:
+      type: string(255)
+      notnull: true
+  relations:
+    Users:
+      class: sfGuardUser
+      refClass: RefWarehouseUser
+      local: warehouse_id
+      foreign: user_id
+      foreignAlias: Warehouses
+
+RefWarehouseUser:
+  columns:
+    warehouse_id:
+      type: integer
+      primary: true
+    user_id:
+      type: integer
+      primary: true
+  relations:
+    Warehouse:
+      local: warehouse_id
+      foreign: id
+    User:
+      class: sfGuardUser
+      local: user_id
+      foreign: id
