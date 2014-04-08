@@ -63,15 +63,22 @@ MaterialMovement: # Движения материалов
     to_id:
       type: integer
 
-    arrival_id:
-      type: integer
     transfer_id:
+      type: integer
+    arrival_id:
       type: integer
     utilization_id:
       type: integer
     writeoff_id:
       type: integer
   relations:
+    Transfer:
+      class: MaterialMovementTransfer
+      local: transfer_id
+      foreign: id
+      type: one
+      foreignType: one
+      foreignAlias: Movement
     Materials:
       class: MaterialMovementMaterials
       foreignAlias: Movement
@@ -104,3 +111,12 @@ MaterialMovementMaterials: # Список материалов движения 
       local: material_id
       foreign: id
       type: one
+
+MaterialMovementTransfer: # Перемещение материалов склад → склад
+  actAs:
+    Timestampable: ~
+    Signable: ~
+    SoftDelete: ~
+  columns:
+    name:
+      type: clob
