@@ -12,7 +12,7 @@ class ArrivalForm extends BaseArrivalForm
 {
   public function configure()
   {
-     unset (
+    unset (
       $this['spent'],
       $this['deleted_at'],
       $this['created_at'],

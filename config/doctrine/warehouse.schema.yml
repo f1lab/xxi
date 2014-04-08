@@ -1,4 +1,4 @@
-Warehouse:
+Warehouse: # Склад
   actAs:
     Timestampable: ~
     Signable: ~
@@ -14,8 +14,20 @@ Warehouse:
       local: warehouse_id
       foreign: user_id
       foreignAlias: Warehouses
+    Inputs:
+      class: MaterialMovement
+      local: id
+      foreign: to_id
+      foreignAlias: From
+      type: many
+    Outputs:
+      class: MaterialMovement
+      local: id
+      foreign: from_id
+      foreignAlias: To
+      type: many
 
-RefWarehouseUser:
+RefWarehouseUser: # Ответственные за склад
   columns:
     warehouse_id:
       type: integer
@@ -31,3 +43,64 @@ RefWarehouseUser:
       class: sfGuardUser
       local: user_id
       foreign: id
+
+MaterialMovement: # Движения материалов
+  actAs:
+    Timestampable: ~
+    Signable: ~
+    SoftDelete: ~
+  columns:
+    type:
+      type: enum
+      values:
+        - arrival      # приход
+        - transfer     # перемещение
+        - utilization  # расход
+        - writeoff     # списание
+      notnull: true
+    from_id:
+      type: integer
+    to_id:
+      type: integer
+
+    arrival_id:
+      type: integer
+    transfer_id:
+      type: integer
+    utilization_id:
+      type: integer
+    writeoff_id:
+      type: integer
+  relations:
+    Materials:
+      class: MaterialMovementMaterials
+      foreignAlias: Movement
+      local: id
+      foreign: movement_id
+      type: many
+
+MaterialMovementMaterials: # Список материалов движения материалов
+  actAs:
+    Timestampable: ~
+    Signable: ~
+    SoftDelete: ~
+  columns:
+    movement_id:
+      type: integer
+      notnull: true
+    material_id:
+      type: integer
+      notnull: true
+    amount:
+      type: decimal
+      scale: 4
+      notnull: true
+    price:
+      type: decimal
+      scale: 2
+      notnull: true
+  relations:
+    Material:
+      local: material_id
+      foreign: id
+      type: one
