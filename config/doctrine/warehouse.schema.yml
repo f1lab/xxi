@@ -93,6 +93,13 @@ MaterialMovement: # Движения материалов
       type: one
       foreignType: one
       foreignAlias: Movement
+    Arrival:
+      class: MaterialMovementArrival
+      local: arrival_id
+      foreign: id
+      type: one
+      foreignType: one
+      foreignAlias: Movement
     Materials:
       class: MaterialMovementMaterials
       foreignAlias: Movement
@@ -126,7 +133,7 @@ MaterialMovementMaterials: # Список материалов движения 
       foreign: id
       type: one
 
-MaterialMovementTransfer: # Перемещение материалов склад → склад
+MaterialMovementTransfer: # Перемещение материалов [склад → склад]
   actAs:
     Timestampable: ~
     Signable: ~
@@ -135,7 +142,7 @@ MaterialMovementTransfer: # Перемещение материалов скла
     name:
       type: clob
 
-MaterialMovementWriteoff: # Перемещение материалов склад → списано
+MaterialMovementWriteoff: # Перемещение материалов [склад → списано]
   actAs:
     Timestampable: ~
     Signable: ~
@@ -144,7 +151,7 @@ MaterialMovementWriteoff: # Перемещение материалов скла
     name:
       type: clob
 
-MaterialMovementUtilization: # Перемещение материалов склад → использовано в продукции
+MaterialMovementUtilization: # Перемещение материалов ]склад → использовано в продукции]
   actAs:
     Timestampable: ~
     Signable: ~
@@ -167,3 +174,24 @@ MaterialMovementUtilization: # Перемещение материалов ск�
       foreign: id
       type: one
       foreignType: many
+
+MaterialMovementArrival: # Перемещение материалов [поставщик → склад]
+  actAs:
+    Timestampable: ~
+    Signable: ~
+    SoftDelete: ~
+  columns:
+    arrived_at: # дата накладной
+      type: timestamp
+      notnull: true
+    bill: # накладная
+      type: string(255)
+      notnull: true
+    supplier_id:
+      type: integer
+      notnull: true
+  relations:
+    Supplier:
+      local: supplier_id
+      foreign: id
+      foreignAlias: Arrivals
