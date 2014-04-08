@@ -86,6 +86,13 @@ MaterialMovement: # Движения материалов
       type: one
       foreignType: one
       foreignAlias: Movement
+    Utilization:
+      class: MaterialMovementUtilization
+      local: utilization_id
+      foreign: id
+      type: one
+      foreignType: one
+      foreignAlias: Movement
     Materials:
       class: MaterialMovementMaterials
       foreignAlias: Movement
@@ -136,3 +143,27 @@ MaterialMovementWriteoff: # Перемещение материалов скла
   columns:
     name:
       type: clob
+
+MaterialMovementUtilization: # Перемещение материалов склад → использовано в продукции
+  actAs:
+    Timestampable: ~
+    Signable: ~
+    SoftDelete: ~
+  columns:
+    order_id:
+      type: integer
+      notnull: true
+    work_id:
+      type: integer
+      notnull: true
+  relations:
+    Order:
+      local: order_id
+      foreign: id
+      type: one
+      foreignType: many
+    Work:
+      local: work_id
+      foreign: id
+      type: one
+      foreignType: many
