@@ -79,6 +79,13 @@ MaterialMovement: # Движения материалов
       type: one
       foreignType: one
       foreignAlias: Movement
+    Writeoff:
+      class: MaterialMovementWriteoff
+      local: writeoff_id
+      foreign: id
+      type: one
+      foreignType: one
+      foreignAlias: Movement
     Materials:
       class: MaterialMovementMaterials
       foreignAlias: Movement
@@ -113,6 +120,15 @@ MaterialMovementMaterials: # Список материалов движения 
       type: one
 
 MaterialMovementTransfer: # Перемещение материалов склад → склад
+  actAs:
+    Timestampable: ~
+    Signable: ~
+    SoftDelete: ~
+  columns:
+    name:
+      type: clob
+
+MaterialMovementWriteoff: # Перемещение материалов склад → списано
   actAs:
     Timestampable: ~
     Signable: ~
