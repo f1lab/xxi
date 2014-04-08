@@ -14,7 +14,7 @@
 
   <div class="form-actions">
     <button type="submit" class="btn btn-primary">Сохранить</button>
-    <a href="<?php echo url_for('warehouse/index') ?>" class="btn">Назад к списку</a>
+    <a href="<?php echo url_for('warehouse/index?id=' . $form->getObject()->getId()) ?>" class="btn">Назад к списку</a>
 
     <?php if (!$form->getObject()->isNew()): ?>
       <?php echo link_to('Удалить', 'warehouse/delete?id='.$form->getObject()->getId(), array(

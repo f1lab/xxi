@@ -1,24 +1,60 @@
 <h1 class="page-header">
   Склады
+  <?php if ($sf_user->hasCredential("can edit warehouses")): ?>
+    <small>
+      <a href="<?php echo url_for('warehouse/new') ?>" class="btn btn-primary">Добавить склад</a>
+    </small>
+  <?php endif ?>
 </h1>
 
-<div class="btn-toolbar">
-  <div class="btn-group">
-    <a href="<?php echo url_for('warehouse/new') ?>" class="btn btn-primary">Добавить</a>
-  </div>
-</div>
+<form action="?filter" method="get" class="well well-small submit-on-select-change">
+  <span>Фильтр по наименованию:</span>
+  <?php echo $filter["id"] ?>
+</form>
 
-<table class="table table-condensed table-bordered table-hover">
-  <thead>
-    <tr>
-      <th>Id</th>
-      <th>Наименование</th>
-    </tr>
-  </thead>
-  <tbody><?php foreach ($warehouses as $warehouse): ?>
-    <tr>
-      <td><a href="<?php echo url_for('warehouse/edit?id='.$warehouse->getId()) ?>"><?php echo $warehouse->getId() ?></a></td>
-      <td><?php echo $warehouse->getName() ?></td>
-    </tr>
-  <?php endforeach; ?></tbody>
-</table>
+<h2>Остатки</h2>
+
+<?php if ($warehouses and count($warehouses)): ?>
+  <?php foreach ($warehouses as $warehouse): ?>
+    <h3>
+      <?php echo $warehouse ?>
+      <?php if ($sf_user->hasCredential("can edit warehouses")): ?>
+        <small>
+          <a href="<?php echo url_for('warehouse/edit?id='.$warehouse->getId()) ?>">Редактировать</a>
+        </small>
+      <?php endif ?>
+    </h3>
+    <?php
+      $balance = $warehouse->getBalance();
+      if (count($balance)):
+    ?>
+      <table class="table table-hover table-bordered">
+        <thead>
+          <tr>
+            <th>Материал</th>
+            <th>Остаток</th>
+            <?php if ($sf_user->hasCredential("can view material costs")): ?>
+              <th>Цена => остаток</th>
+            <?php endif ?>
+          </tr>
+        </thead>
+        <tbody><?php foreach ($balance as $material): ?>
+          <tr>
+            <td><?php echo $material["name"]; ?></td>
+            <td><?php echo $material["amount"]; ?></td>
+            <?php if ($sf_user->hasCredential("can view material costs")): ?>
+              <td><pre><?php echo str_replace(["Array\n(\n", "    ", ")\n"], "", print_r($material["amounts"]->getRawValue(), 1)); ?></pre></td>
+            <?php endif ?>
+          </tr>
+        <?php endforeach ?></tbody>
+      </table>
+    <?php else: ?>
+      <div class="alert alert-info">Нет материалов</div>
+    <?php endif ?>
+
+
+  <?php endforeach ?>
+
+<?php else: ?>
+  <div class="alert alert-info">Нет складов</div>
+<?php endif ?>

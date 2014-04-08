@@ -10,13 +10,39 @@
  */
 class warehouseActions extends sfActions
 {
+  public function preExecute()
+  {
+    $this->id = $this->getRequest()->getParameter("id");
+  }
+
+  public function postExecute()
+  {
+    if (!$this->id and isset($this->form)) {
+      $this->id = $this->form->getObject()->getId();
+    }
+  }
+
   public function executeIndex(sfWebRequest $request)
   {
-    $this->warehouses = Doctrine_Query::create()
-      ->from("Warehouse w")
-      ->addOrderBy("w.name")
+    $this->warehouses = WarehouseTable::getOwnWarehousesQuery()
+      ->andWhereIn("w.id", $this->id ? [$this->id] : [])
       ->execute()
     ;
+
+    $this->filter = new sfForm();
+    $this->filter->getWidgetSchema()
+      ->offsetSet("id", new sfWidgetFormDoctrineChoice([
+        "model" => "Warehouse",
+        "add_empty" => true,
+        "query" => WarehouseTable::getOwnWarehousesQuery(),
+      ], [
+        "class" => "chzn-select",
+        "data-placeholder" => "Выберите склад",
+      ]))
+    ;
+    $this->filter->setDefaults([
+      "id" => $this->id,
+    ]);
   }
 
   public function executeNew(sfWebRequest $request)

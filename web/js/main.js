@@ -1,4 +1,11 @@
 $(function() {
+  $(".submit-on-select-change")
+    .find("select").eq(0)
+    .change(function() {
+      $(this).parents("form").submit();
+    })
+  ;
+
   $('.rows-clickable tbody')
     .find('tr')
       .each(function() {
@@ -37,7 +44,9 @@ $(function() {
           .append('<span id="discount" style="padding-left: 10px">Скидка: ' + ($element.data('discount')||0) + '%</span>')
     })
 
-  $(".chzn-select").chosen()
+  $(".chzn-select").chosen({
+    allow_single_deselect: true
+  })
 
   $('.toggler')
     .click(function() {

@@ -32,12 +32,6 @@
         "isActive" => $sf_context->getModuleName() == "arrival",
         "href" => url_for("arrival/index"),
       ],
-
-      "Склады" => [
-        "credentials" => $sf_user->hasCredential("can edit warehouses"),
-        "isActive" => $sf_context->getModuleName() == "warehouse",
-        "href" => url_for("warehouse/index"),
-      ],
     ],
 
     "Справочники" => [
@@ -74,6 +68,12 @@
       ),
       "isActive" => $sf_context->getModuleName() == "plan",
       "href" => url_for("plan/index"),
+    ],
+
+    "Мои склады" => [
+      "credentials" => count($sf_user->getGuardUser()->getWarehouses()),
+      "isActive" => $sf_context->getModuleName() == "warehouse",
+      "href" => url_for("warehouse/index"),
     ],
   ];
 ?>

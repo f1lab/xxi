@@ -19,5 +19,13 @@ class MaterialMovementForm extends BaseMaterialMovementForm
       , $this['created_by']
       , $this['updated_by']
     );
+
+    $this->embedRelations([
+      "Materials" => [
+        "considerNewFormEmptyFields" => ["amount", "price"],
+        "multipleNewForms" => true,
+        "newFormsInitialCount" => 1,
+      ],
+    ]);
   }
 }
