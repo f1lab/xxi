@@ -50,6 +50,8 @@ class Warehouse extends BaseWarehouse
       }
     }
 
-    return $balance;
+    return array_filter($balance, function($material) {
+      return $material["amount"] > 0;
+    });
   }
 }

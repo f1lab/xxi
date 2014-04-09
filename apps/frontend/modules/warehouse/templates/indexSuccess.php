@@ -17,11 +17,14 @@
 <?php if ($warehouses and count($warehouses)): ?>
   <?php foreach ($warehouses as $warehouse): ?>
     <h3>
-      <?php echo $warehouse ?>
       <?php if ($sf_user->hasCredential("can edit warehouses")): ?>
-        <small>
-          <a href="<?php echo url_for('warehouse/edit?id='.$warehouse->getId()) ?>">Редактировать</a>
-        </small>
+        <a href="<?php echo url_for('warehouse/edit?id='.$warehouse->getId()) ?>"><?php echo $warehouse ?></a>
+      <?php else: ?>
+        <?php echo $warehouse ?>
+      <?php endif ?>
+      <?php if ($sf_user->hasCredential("can transfer material")): ?>
+        <a href="<?php echo url_for("MaterialMovement/newTransfer?from=" . $warehouse->getId()); ?>" class="btn btn-small">Переместить материалы</a>
+        <a href="<?php echo url_for("MaterialMovement/newWriteoff?from=" . $warehouse->getId()); ?>" class="btn btn-small">Списать материалы</a>
       <?php endif ?>
     </h3>
     <?php

@@ -19,5 +19,9 @@ class MaterialMovementTransferForm extends BaseMaterialMovementTransferForm
       , $this['created_by']
       , $this['updated_by']
     );
+
+    $this->getWidgetSchema()->setLabels([
+      "name" => " ",
+    ]);
   }
 }
