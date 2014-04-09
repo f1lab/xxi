@@ -23,8 +23,9 @@
         <?php echo $warehouse ?>
       <?php endif ?>
       <?php if ($sf_user->hasCredential("can transfer material")): ?>
-        <a href="<?php echo url_for("MaterialMovement/newTransfer?from=" . $warehouse->getId()); ?>" class="btn btn-small">Переместить материалы</a>
-        <a href="<?php echo url_for("MaterialMovement/newWriteoff?from=" . $warehouse->getId()); ?>" class="btn btn-small">Списать материалы</a>
+        <a href="<?php echo url_for("MaterialMovement/new?type=transfer&from=" . $warehouse->getId()); ?>" class="btn btn-small">Переместить материалы</a>
+        <a href="<?php echo url_for("MaterialMovement/new?type=writeoff&from=" . $warehouse->getId()); ?>" class="btn btn-small">Списать материалы</a>
+        <a href="<?php echo url_for("MaterialMovement/index?id=" . $warehouse->getId()); ?>" class="btn btn-small">Посмотреть историю</a>
       <?php endif ?>
     </h3>
     <?php

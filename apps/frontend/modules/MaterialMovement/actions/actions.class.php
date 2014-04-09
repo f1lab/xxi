@@ -12,18 +12,82 @@ class MaterialMovementActions extends sfActions
 {
   public function executeIndex(sfWebRequest $request)
   {
-    $this->material_movements = Doctrine_Query::create()
-      ->from('MaterialMovement m')
-      ->execute()
+    $query = Doctrine_Query::create()
+      ->from('MaterialMovement move')
+      ->leftJoin("move.Materials list")
+      ->leftJoin("list.Material m")
+      ->leftJoin("m.Dimension d")
+      ->leftJoin("move.Creator")
+      ->leftJoin("move.From")
+      ->leftJoin("move.To")
+      ->addOrderBy("move.created_at")
+    ;
+
+    if ($request->getParameter("id")) {
+      $this->id = $request->getParameter("id");
+      $query
+        ->addWhere("move.from_id = ? or move.to_id = ?", [$this->id, $this->id])
+      ;
+    }
+
+    $this->material_movements = $query->execute();
+
+    $this->filter = new sfForm();
+    $this->filter->getWidgetSchema()
+      ->offsetSet("id", new sfWidgetFormDoctrineChoice([
+        "model" => "Warehouse",
+        "add_empty" => true,
+        "query" => WarehouseTable::getOwnWarehousesQuery(),
+      ], [
+        "class" => "chzn-select",
+        "data-placeholder" => "Выберите склад",
+      ]))
+    ;
+    $this->filter->setDefaults([
+      "id" => $this->id,
+    ]);
+  }
+
+  public function preExecute()
+  {
+    $request = $this->getRequest();
+
+    if ($request->getParameter("action") !== "index") {
+      $this->warehouse = Doctrine_Core::getTable("Warehouse")->find($request->getParameter("from"));
+      $this->forward404Unless($this->warehouse);
+      $this->balance = $this->warehouse->getBalance();
+    }
+  }
+
+  public function executeNew(sfWebRequest $request)
+  {
+    $this->form = new sfForm();
+    $this->form->getWidgetSchema()
+      ->offsetSet("to", new sfWidgetFormDoctrineChoice([
+        "model" => "Warehouse",
+        "add_empty" => false,
+        "query" => Doctrine_Query::create()
+          ->from("Warehouse w")
+          ->addWhere("w.id != ?", $request->getParameter("from"))
+          ->addOrderby("w.name"),
+      ]))
+      ->offsetSet("from", new sfWidgetFormInputHidden())
+    ;
+
+    $this->form->embedForm("Transfer", new MaterialMovementTransferForm());
+    $this->form->getWidgetSchema()
+      ->setLabels([
+        "to" => "Склад-получатель",
+        "Transfer" => "Комментарий к перемещению",
+      ])
+      ->setDefaults([
+        "from" => $request->getParameter("from"),
+      ])
     ;
   }
 
-  public function executeNewTransfer(sfWebRequest $request)
+  public function executeCreate(sfWebRequest $request)
   {
-    $this->warehouse = Doctrine_Core::getTable("Warehouse")->find($request->getParameter("from"));
-    $this->forward404Unless($this->warehouse);
-    $this->balance = $this->warehouse->getBalance();
-
     if ($request->isMethod("post")) {
       $transfer = MaterialMovementTransfer::createFromArray($request->getParameter("Transfer"));
       $transfer->save();
@@ -66,85 +130,8 @@ class MaterialMovementActions extends sfActions
         }
       }
       $list->save();
-
-      $this->redirect("warehouse/index");
-    } else {
-      $this->form = new sfForm();
-      $this->form->getWidgetSchema()
-        ->offsetSet("to", new sfWidgetFormDoctrineChoice([
-          "model" => "Warehouse",
-          "add_empty" => false,
-          "query" => Doctrine_Query::create()
-            ->from("Warehouse w")
-            ->addWhere("w.id != ?", $request->getParameter("from"))
-            ->addOrderby("w.name"),
-        ]))
-        ->offsetSet("from", new sfWidgetFormInputHidden())
-      ;
-
-      $this->form->embedForm("Transfer", new MaterialMovementTransferForm());
-      $this->form->getWidgetSchema()
-        ->setLabels([
-          "to" => "Склад-получатель",
-          "Transfer" => "Комментарий к перемещению",
-        ])
-        ->setDefaults([
-          "from" => $request->getParameter("from"),
-        ])
-      ;
     }
-  }
 
-  public function executeNew(sfWebRequest $request)
-  {
-    $this->form = new MaterialMovementForm();
-  }
-
-  public function executeCreate(sfWebRequest $request)
-  {
-    $this->forward404Unless($request->isMethod(sfRequest::POST));
-
-    $this->form = new MaterialMovementForm();
-
-    $this->processForm($request, $this->form);
-
-    $this->setTemplate('new');
-  }
-
-  public function executeEdit(sfWebRequest $request)
-  {
-    $this->forward404Unless($material_movement = Doctrine_Core::getTable('MaterialMovement')->find(array($request->getParameter('id'))), sprintf('Object material_movement does not exist (%s).', $request->getParameter('id')));
-    $this->form = new MaterialMovementForm($material_movement);
-  }
-
-  public function executeUpdate(sfWebRequest $request)
-  {
-    $this->forward404Unless($request->isMethod(sfRequest::POST) || $request->isMethod(sfRequest::PUT));
-    $this->forward404Unless($material_movement = Doctrine_Core::getTable('MaterialMovement')->find(array($request->getParameter('id'))), sprintf('Object material_movement does not exist (%s).', $request->getParameter('id')));
-    $this->form = new MaterialMovementForm($material_movement);
-
-    $this->processForm($request, $this->form);
-
-    $this->setTemplate('edit');
-  }
-
-  public function executeDelete(sfWebRequest $request)
-  {
-    $request->checkCSRFProtection();
-
-    $this->forward404Unless($material_movement = Doctrine_Core::getTable('MaterialMovement')->find(array($request->getParameter('id'))), sprintf('Object material_movement does not exist (%s).', $request->getParameter('id')));
-    $material_movement->delete();
-
-    $this->redirect('MaterialMovement/index');
-  }
-
-  protected function processForm(sfWebRequest $request, sfForm $form)
-  {
-    $form->bind($request->getParameter($form->getName()), $request->getFiles($form->getName()));
-    if ($form->isValid()) {
-      $material_movement = $form->save();
-
-      $this->redirect('MaterialMovement/edit?id='.$material_movement->getId());
-    }
+    $this->redirect("warehouse/index");
   }
 }

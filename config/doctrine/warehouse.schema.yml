@@ -18,13 +18,13 @@ Warehouse: # Склад
       class: MaterialMovement
       local: id
       foreign: to_id
-      foreignAlias: From
+      foreignAlias: To
       type: many
     Outputs:
       class: MaterialMovement
       local: id
       foreign: from_id
-      foreignAlias: To
+      foreignAlias: From
       type: many
 
 RefWarehouseUser: # Ответственные за склад
