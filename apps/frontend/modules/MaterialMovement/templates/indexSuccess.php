@@ -13,29 +13,27 @@
   <?php endif ?>
 </form>
 
-<div class="btn-toolbar">
-  <div class="btn-group">
-    <a href="<?php echo url_for('MaterialMovement/new') ?>" class="btn btn-primary">New</a>
-  </div>
-</div>
-
 <table class="table table-condensed table-bordered table-hover">
   <thead>
     <tr>
-      <th>Id</th>
-      <th>Type</th>
-      <th>From</th>
-      <th>To</th>
-      <th>Transfer</th>
-      <th>Created at</th>
-      <th>Created by</th>
+      <th>#</th>
+      <th>Тип операции</th>
+      <th>Из</th>
+      <th>В</th>
+      <th>Движение (количество стоимость материал)</th>
+      <th>Создал</th>
+      <th>Время создания</th>
     </tr>
   </thead>
   <tbody><?php foreach ($material_movements as $material_movement): ?>
     <tr>
       <td><a href="<?php echo url_for('MaterialMovement/edit?id='.$material_movement->getId()) ?>"><?php echo $material_movement->getId() ?></a></td>
-      <td><?php echo $material_movement->getType() ?></td>
-      <td><?php echo $material_movement->getFrom() ?></td>
+      <td><?php echo $material_movement->getTypeTranslated() ?></td>
+      <td><?php
+        echo ($material_movement->getType() == "arrival"
+          ? $material_movement->getArrival()->getSupplier()
+          : $material_movement->getFrom())
+      ?></td>
       <td><?php echo $material_movement->getTo() ?></td>
       <td><ul><?php foreach ($material_movement->getMaterials()->getRawValue() as $material): ?>
         <li><?php echo $material->getAmount(); ?>
