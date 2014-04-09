@@ -1,4 +1,6 @@
-<form action="?submit" method="post">
+<h2><?php echo $movementTypeTitle ?></h2>
+
+<form action="<?php echo url_for("MaterialMovement/create"); ?>" method="post">
   <?php echo $form->renderUsing("bootstrap"); ?>
 
   <fieldset>
@@ -17,7 +19,8 @@
   </fieldset>
 
   <div class="form-actions">
-    <button type="submit" class="btn btn-primary">Переместить</button>
+    <button type="submit" class="btn btn-primary"><?php echo $movementTypeButton ?></button>
+    <a href="<?php echo url_for("warehouse/index?id=" . $sf_request->getParameter("from")) ?>" class="btn">Назад к складу</a>
   </div>
 </form>
 

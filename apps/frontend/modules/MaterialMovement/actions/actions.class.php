@@ -71,17 +71,55 @@ class MaterialMovementActions extends sfActions
           ->addWhere("w.id != ?", $request->getParameter("from"))
           ->addOrderby("w.name"),
       ]))
-      ->offsetSet("from", new sfWidgetFormInputHidden())
+      ->offsetSet("from", new sfWidgetFormDoctrineChoice([
+        "model" => "Warehouse",
+        "add_empty" => false,
+        "query" => Doctrine_Query::create()
+          ->from("Warehouse w")
+          ->addWhere("w.id != ?", $request->getParameter("to"))
+          ->addOrderby("w.name"),
+      ]))
+      ->offsetSet("type", new sfWidgetFormInputHidden())
     ;
 
-    $this->form->embedForm("Transfer", new MaterialMovementTransferForm());
+    switch ($request->getParameter("type")) {
+      case "transfer":
+        $this->form->getWidgetSchema()
+          ->offsetSet("from", new sfWidgetFormInputHidden())
+        ;
+
+        $this->form->embedForm("Transfer", new MaterialMovementTransferForm());
+        $this->movementTypeTitle = "Перемещение материалов";
+        $this->movementTypeButton = "Переместить";
+        break;
+
+      case "writeoff":
+        $this->form->getWidgetSchema()
+          ->offsetSet("from", new sfWidgetFormInputHidden())
+          ->offsetSet("to", new sfWidgetFormInputHidden())
+        ;
+
+        $this->form->embedForm("Writeoff", new MaterialMovementTransferForm());
+        $this->movementTypeTitle = "Списание материалов";
+        $this->movementTypeButton = "Списать";
+        break;
+
+      default:
+        throw new InvalidArgumentException(sprintf("Unknown type of materials movement (%s)", $request->getParameter("type")));
+        break;
+    }
+
     $this->form->getWidgetSchema()
       ->setLabels([
         "to" => "Склад-получатель",
+        "from" => "Склад-отправитель",
         "Transfer" => "Комментарий к перемещению",
+        "Writeoff" => "Комментарий к списанию",
       ])
       ->setDefaults([
         "from" => $request->getParameter("from"),
+        "to" => $request->getParameter("to"),
+        "type" => $request->getParameter("type"),
       ])
     ;
   }
@@ -89,15 +127,37 @@ class MaterialMovementActions extends sfActions
   public function executeCreate(sfWebRequest $request)
   {
     if ($request->isMethod("post")) {
-      $transfer = MaterialMovementTransfer::createFromArray($request->getParameter("Transfer"));
-      $transfer->save();
+      switch ($request->getParameter("type")) {
+        case "transfer":
+          $transfer = MaterialMovementTransfer::createFromArray($request->getParameter("Transfer"));
+          $transfer->save();
 
-      $movement = MaterialMovement::createFromArray([
-        "from_id" => $request->getParameter("from"),
-        "to_id" => $request->getParameter("to"),
-        "type" => "transfer",
-        "transfer_id" => $transfer->getId(),
-      ]);
+          $materialMovementPatch = [
+            "from_id" => $request->getParameter("from"),
+            "type" => "transfer",
+            "transfer_id" => $transfer->getId(),
+          ];
+          break;
+
+        case "writeoff":
+          $writeoff = MaterialMovementWriteoff::createFromArray($request->getParameter("Writeoff"));
+          $writeoff->save();
+
+          $materialMovementPatch = [
+            "from_id" => $request->getParameter("from"),
+            "type" => "writeoff",
+            "writeoff_id" => $writeoff->getId(),
+          ];
+          break;
+
+        default:
+          throw new InvalidArgumentException(sprintf("Unknown type of materials movement (%s)", $request->getParameter("type")));
+          break;
+      }
+
+      $movement = MaterialMovement::createFromArray(array_merge([
+        // "to_id" => $request->getParameter("to"),
+      ], $materialMovementPatch));
       $movement->save();
 
       $list = new Doctrine_Collection("MaterialMovementMaterials");
