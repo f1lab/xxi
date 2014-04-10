@@ -53,8 +53,10 @@ class MaterialMovementActions extends sfActions
     $request = $this->getRequest();
 
     if ($request->getParameter("action") !== "index") {
-      $this->warehouse = Doctrine_Core::getTable("Warehouse")->find($request->getParameter("from"));
+      $this->warehouse = Doctrine_Core::getTable("Warehouse")->find($request->getParameter("from") ?: $request->getParameter("to"));
       $this->forward404Unless($this->warehouse);
+
+      $this->type = $request->getParameter("type");
       $this->balance = $this->warehouse->getBalance();
     }
   }
@@ -82,7 +84,7 @@ class MaterialMovementActions extends sfActions
       ->offsetSet("type", new sfWidgetFormInputHidden())
     ;
 
-    switch ($request->getParameter("type")) {
+    switch ($this->type) {
       case "transfer":
         $this->form->getWidgetSchema()
           ->offsetSet("from", new sfWidgetFormInputHidden())
@@ -104,8 +106,50 @@ class MaterialMovementActions extends sfActions
         $this->movementTypeButton = "Списать";
         break;
 
+      case "arrival":
+        $this->form->getWidgetSchema()
+          ->offsetSet("from", new sfWidgetFormInputHidden())
+          ->offsetSet("to", new sfWidgetFormInputHidden())
+        ;
+
+        $this->form->embedForm("Arrival", new MaterialMovementArrivalForm());
+        $this->movementTypeTitle = "Приход материалов";
+        $this->movementTypeButton = "Принять";
+
+        $this->materialForm = new sfForm();
+        $this->materialForm->getWidgetSchema()
+          ->offsetSet("material_id", new sfWidgetFormDoctrineChoice([
+            "model" => "Material",
+            "query" => Doctrine_Query::create()
+              ->from("Material m")
+              ->leftJoin("m.Dimension d")
+              ->addOrderby("m.name"),
+            "method" => "getNameWithDimension",
+            "add_empty" => true,
+          ], [
+            "class" => "chzn-select",
+            "data-placeholder" => "Материал",
+          ]))
+          ->offsetSet("amount", new sfWidgetFormInputText([], [
+              "type" => "number",
+              "min" => 0,
+              "step" => 0.0001,
+              "placeholder" => "Количество",
+              "class" => "span2",
+          ]))
+          ->offsetSet("price", new sfWidgetFormInputText([], [
+              "type" => "number",
+              "min" => 0,
+              "step" => 0.01,
+              "placeholder" => "Цена",
+              "class" => "span2",
+          ]))
+          ->setNameFormat("Materials[0][%s]")
+        ;
+        break;
+
       default:
-        throw new InvalidArgumentException(sprintf("Unknown type of materials movement (%s)", $request->getParameter("type")));
+        throw new InvalidArgumentException(sprintf("Unknown type of materials movement (%s)", $this->type));
         break;
     }
 
@@ -115,11 +159,12 @@ class MaterialMovementActions extends sfActions
         "from" => "Склад-отправитель",
         "Transfer" => "Комментарий к перемещению",
         "Writeoff" => "Комментарий к списанию",
+        "Arrival" => " ",
       ])
       ->setDefaults([
         "from" => $request->getParameter("from"),
         "to" => $request->getParameter("to"),
-        "type" => $request->getParameter("type"),
+        "type" => $this->type,
       ])
     ;
   }
@@ -127,7 +172,7 @@ class MaterialMovementActions extends sfActions
   public function executeCreate(sfWebRequest $request)
   {
     if ($request->isMethod("post")) {
-      switch ($request->getParameter("type")) {
+      switch ($this->type) {
         case "transfer":
           $transfer = MaterialMovementTransfer::createFromArray($request->getParameter("Transfer"));
           $transfer->save();
@@ -150,45 +195,74 @@ class MaterialMovementActions extends sfActions
           ];
           break;
 
+        case "arrival":
+          $arrival = MaterialMovementArrival::createFromArray($request->getParameter("Arrival"));
+          $arrival->save();
+
+          $materialMovementPatch = [
+            "to_id" => $request->getParameter("to"),
+            "type" => "arrival",
+            "arrival_id" => $arrival->getId(),
+          ];
+          break;
+
         default:
-          throw new InvalidArgumentException(sprintf("Unknown type of materials movement (%s)", $request->getParameter("type")));
+          throw new InvalidArgumentException(sprintf("Unknown type of materials movement (%s)", $this->type));
           break;
       }
 
       $movement = MaterialMovement::createFromArray(array_merge([
-        // "to_id" => $request->getParameter("to"),
       ], $materialMovementPatch));
       $movement->save();
 
       $list = new Doctrine_Collection("MaterialMovementMaterials");
-      foreach ($request->getParameter("materials") as $id => $amount) {
-        if ($amount > 0) {
-          $material = &$this->balance[$id];
-          while ($amount) {
-            arsort($material["amounts"]);
-            array_filter($material["amounts"]);
 
-            list($price, $availableToMove) = [array_keys($material["amounts"])[0], current($material["amounts"])];
+      if ($this->type === "arrival") {
+        foreach ($request->getParameter("Materials") as $material) {
+          list ($amount, $price, $material_id) = [$material["amount"], $material["price"], $material["material_id"]];
 
-            $moved = $availableToMove >= $amount
-              ? $amount
-              : $availableToMove
-            ;
-
+          if ($amount > 0 and $price > 0 and $material_id) {
             $materialsMovement = MaterialMovementMaterials::createFromArray([
               "movement_id" => $movement->getId(),
-              "material_id" => $id,
-              "amount" => $moved,
+              "material_id" => $material_id,
+              "amount" => $amount,
               "price" => $price,
             ]);
             $list->add($materialsMovement);
+          }
+        }
 
-            $amount -= $moved;
-            $material["amount"] -= $moved;
-            $material["amounts"][$price] -= $moved;
+      } else {
+        foreach ($request->getParameter("materials") as $id => $amount) {
+          if ($amount > 0) {
+            $material = &$this->balance[$id];
+            while ($amount) {
+              arsort($material["amounts"]);
+              array_filter($material["amounts"]);
+
+              list($price, $availableToMove) = [array_keys($material["amounts"])[0], current($material["amounts"])];
+
+              $moved = $availableToMove >= $amount
+                ? $amount
+                : $availableToMove
+              ;
+
+              $materialsMovement = MaterialMovementMaterials::createFromArray([
+                "movement_id" => $movement->getId(),
+                "material_id" => $id,
+                "amount" => $moved,
+                "price" => $price,
+              ]);
+              $list->add($materialsMovement);
+
+              $amount -= $moved;
+              $material["amount"] -= $moved;
+              $material["amounts"][$price] -= $moved;
+            }
           }
         }
       }
+
       $list->save();
     }
 

@@ -21,13 +21,13 @@
       <th>Из</th>
       <th>В</th>
       <th>Движение (количество стоимость материал)</th>
-      <th>Создал</th>
       <th>Время создания</th>
+      <th>Создал</th>
     </tr>
   </thead>
   <tbody><?php foreach ($material_movements as $material_movement): ?>
     <tr>
-      <td><a href="<?php echo url_for('MaterialMovement/edit?id='.$material_movement->getId()) ?>"><?php echo $material_movement->getId() ?></a></td>
+      <td><?php echo $material_movement->getId() ?></td>
       <td><?php echo $material_movement->getTypeTranslated() ?></td>
       <td><?php
         echo ($material_movement->getType() == "arrival"
