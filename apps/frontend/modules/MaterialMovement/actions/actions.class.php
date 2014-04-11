@@ -179,6 +179,7 @@ class MaterialMovementActions extends sfActions
 
           $materialMovementPatch = [
             "from_id" => $request->getParameter("from"),
+            "to_id" => $request->getParameter("to"),
             "type" => "transfer",
             "transfer_id" => $transfer->getId(),
           ];

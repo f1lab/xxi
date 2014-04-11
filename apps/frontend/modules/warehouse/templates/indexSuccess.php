@@ -22,10 +22,20 @@
       <?php else: ?>
         <?php echo $warehouse ?>
       <?php endif ?>
-      <?php if ($sf_user->hasCredential("can transfer material")): ?>
+
+      <?php if ($sf_user->hasCredential("can arrive materials")): ?>
         <a href="<?php echo url_for("MaterialMovement/new?type=arrival&to=" . $warehouse->getId()); ?>" class="btn btn-small">Принять материалы</a>
+      <?php endif ?>
+
+      <?php if ($sf_user->hasCredential("can transfer materials")): ?>
         <a href="<?php echo url_for("MaterialMovement/new?type=transfer&from=" . $warehouse->getId()); ?>" class="btn btn-small">Переместить материалы</a>
+      <?php endif ?>
+
+      <?php if ($sf_user->hasCredential("can writeoff materials")): ?>
         <a href="<?php echo url_for("MaterialMovement/new?type=writeoff&from=" . $warehouse->getId()); ?>" class="btn btn-small">Списать материалы</a>
+      <?php endif ?>
+
+      <?php if ($sf_user->hasCredential("can view warehouse history")): ?>
         <a href="<?php echo url_for("MaterialMovement/index?id=" . $warehouse->getId()); ?>" class="btn btn-small">Посмотреть историю</a>
       <?php endif ?>
     </h3>
