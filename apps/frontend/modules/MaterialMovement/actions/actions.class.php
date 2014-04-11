@@ -65,20 +65,19 @@ class MaterialMovementActions extends sfActions
   {
     $this->form = new sfForm();
     $this->form->getWidgetSchema()
+      ->offsetSet("from", new sfWidgetFormDoctrineChoice([
+        "model" => "Warehouse",
+        "add_empty" => false,
+        "query" => WarehouseTable::getOwnWarehousesQuery()
+          ->andWhereNotIn("w.id", (array)$request->getParameter("to"))
+        ,
+      ]))
       ->offsetSet("to", new sfWidgetFormDoctrineChoice([
         "model" => "Warehouse",
         "add_empty" => false,
         "query" => Doctrine_Query::create()
           ->from("Warehouse w")
-          ->addWhere("w.id != ?", $request->getParameter("from"))
-          ->addOrderby("w.name"),
-      ]))
-      ->offsetSet("from", new sfWidgetFormDoctrineChoice([
-        "model" => "Warehouse",
-        "add_empty" => false,
-        "query" => Doctrine_Query::create()
-          ->from("Warehouse w")
-          ->addWhere("w.id != ?", $request->getParameter("to"))
+          ->andWhereNotIn("w.id", (array)$request->getParameter("from"))
           ->addOrderby("w.name"),
       ]))
       ->offsetSet("type", new sfWidgetFormInputHidden())
@@ -86,10 +85,6 @@ class MaterialMovementActions extends sfActions
 
     switch ($this->type) {
       case "transfer":
-        $this->form->getWidgetSchema()
-          ->offsetSet("from", new sfWidgetFormInputHidden())
-        ;
-
         $this->form->embedForm("Transfer", new MaterialMovementTransferForm());
         $this->movementTypeTitle = "Перемещение материалов";
         $this->movementTypeButton = "Переместить";
@@ -97,7 +92,6 @@ class MaterialMovementActions extends sfActions
 
       case "writeoff":
         $this->form->getWidgetSchema()
-          ->offsetSet("from", new sfWidgetFormInputHidden())
           ->offsetSet("to", new sfWidgetFormInputHidden())
         ;
 
@@ -148,6 +142,37 @@ class MaterialMovementActions extends sfActions
         ;
         break;
 
+      case "utilization":
+        $ref = Doctrine_Core::getTable("RefOrderWork")->find($request->getParameter("id"));
+        $this->forward404Unless($ref and $ref->getOrder());
+
+        $utilizatioForm = new MaterialMovementUtilizationForm();
+        $utilizatioForm->setDefaults([
+          "work_id" => $ref->getId(),
+          "order_id" => $ref->getOrder()->getId(),
+        ]);
+
+        $this->form->embedForm("Utilization", $utilizatioForm);
+
+        if ($this->getUser()->hasCredential("design-master")) {
+          $this->form->getWidgetSchema()->offsetSet("files", new sfWidgetFormTextarea([], ["class" => "input-block-level"]));
+
+          if (!$this->getUser()->isSuperAdmin()) {
+            $this->form->getWidgetSchema()
+              ->offsetSet("from", new sfWidgetFormInputHidden())
+            ;
+          }
+        }
+
+        $this->form->getWidgetSchema()
+          ->offsetSet("to", new sfWidgetFormInputHidden())
+          ->moveField("from", sfWidgetFormSchema::LAST)
+        ;
+
+        $this->movementTypeTitle = "Завершение работы";
+        $this->movementTypeButton = "Завершить";
+        break;
+
       default:
         throw new InvalidArgumentException(sprintf("Unknown type of materials movement (%s)", $this->type));
         break;
@@ -160,11 +185,14 @@ class MaterialMovementActions extends sfActions
         "Transfer" => "Комментарий к перемещению",
         "Writeoff" => "Комментарий к списанию",
         "Arrival" => " ",
+        "Utilization" => " ",
+        "files" => "Файлы",
       ])
       ->setDefaults([
         "from" => $request->getParameter("from"),
         "to" => $request->getParameter("to"),
         "type" => $this->type,
+        "files" => isset($ref) and $ref ? $ref->getOrder()->getFiles() : "",
       ])
     ;
   }
@@ -204,6 +232,35 @@ class MaterialMovementActions extends sfActions
             "to_id" => $request->getParameter("to"),
             "type" => "arrival",
             "arrival_id" => $arrival->getId(),
+          ];
+          break;
+
+        case "utilization":
+          if ($this->getUser()->hasCredential("design-master")) {
+            Doctrine_Core::getTable("Order")->find($request->getParameter("Utilization")["order_id"])
+              ->setFiles($request->getParameter("files"))
+              ->save()
+            ;
+          }
+
+          $ref = Doctrine_Core::getTable("RefOrderWork")
+            ->find($request->getParameter("Utilization")["work_id"])
+            ->setIsCompleted(true)
+            ->setFinishedAt(date("Y-m-d H:i:s"))
+            ->save()
+          ;
+
+          if ($this->getUser()->hasCredential("master")) {
+            $utilization = MaterialMovementUtilization::createFromArray($request->getParameter("Utilization"));
+            $utilization->save();
+          } else {
+            $this->redirect("plan/index");
+          }
+
+          $materialMovementPatch = [
+            "from_id" => $request->getParameter("from"),
+            "type" => "utilization",
+            "utilization_id" => $utilization->getId(),
           ];
           break;
 

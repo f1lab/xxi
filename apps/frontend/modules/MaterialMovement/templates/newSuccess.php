@@ -3,36 +3,45 @@
 <form action="<?php echo url_for("MaterialMovement/create"); ?>" method="post">
   <?php echo $form->renderUsing("bootstrap"); ?>
 
-  <fieldset>
-    <legend>Список материалов</legend>
-    <?php if ($type === "arrival"): ?>
-      <div class="copy-me">
-        <div class="align-chosen-to-top">
-          <?php echo $materialForm["amount"]; ?>
-          <?php echo $materialForm["price"]; ?>
-          <?php echo $materialForm["material_id"]; ?>
-        </div>
-      </div>
-      <button type="button" class="btn copier">+</button>
-
-    <?php else: ?>
-      <?php foreach ($balance->getRawValue() as $material): ?>
-        <div class="control-group">
-          <label for="materials[<?php echo $material["id"]; ?>]" class="control-label"><?php echo $material["name"]; ?></label>
-          <div class="controls">
-            <div class="input-append copy-number-inputs-max-to-value">
-              <input type="number" value="0" min="0" max="<?php echo $material["amount"]; ?>" step="0.0001" class="span2" name="materials[<?php echo $material["id"]; ?>]" id="materials[<?php echo $material["id"]; ?>]">
-              <button class="btn" type="button">Выбрать всё (<?php echo $material["amount"]; ?>)</button>
-            </div>
+  <?php if ($type !== "utilization" or $sf_user->hasCredential("master")): ?>
+    <fieldset>
+      <legend>Список материалов</legend>
+      <?php if ($type === "arrival"): ?>
+        <div class="copy-me">
+          <div class="align-chosen-to-top">
+            <?php echo $materialForm["amount"]; ?>
+            <?php echo $materialForm["price"]; ?>
+            <?php echo $materialForm["material_id"]; ?>
           </div>
         </div>
-      <?php endforeach ?>
-    <?php endif ?>
-  </fieldset>
+        <button type="button" class="btn copier">+</button>
+
+      <?php else: ?>
+        <?php foreach ($balance->getRawValue() as $material): ?>
+          <div class="control-group">
+            <label for="materials[<?php echo $material["id"]; ?>]" class="control-label"><?php echo $material["name"]; ?></label>
+            <div class="controls">
+              <div class="input-append copy-number-inputs-max-to-value">
+                <input type="number" value="0" min="0" max="<?php echo $material["amount"]; ?>" step="0.0001" class="span2" name="materials[<?php echo $material["id"]; ?>]" id="materials[<?php echo $material["id"]; ?>]">
+                <button class="btn" type="button">Выбрать всё (<?php echo $material["amount"]; ?>)</button>
+              </div>
+            </div>
+          </div>
+        <?php endforeach ?>
+      <?php endif ?>
+    </fieldset>
+  <?php endif ?>
 
   <div class="form-actions">
     <button type="submit" class="btn btn-primary"><?php echo $movementTypeButton ?></button>
-    <a href="<?php echo url_for("warehouse/index?id=" . $sf_request->getParameter("from")) ?>" class="btn">Назад к складу</a>
+    <a href="<?php echo url_for($type === "utilization" ? "plan/index" : "warehouse/index?id=" . $sf_request->getParameter("from")) ?>" class="btn">
+      Назад к
+      <?php if ($type === "utilization"): ?>
+        плану
+      <?php else: ?>
+        складу
+      <?php endif ?>
+    </a>
   </div>
 </form>
 
@@ -87,5 +96,13 @@
           .chosen({allow_single_deselect: true})
         ;
     });
+
+    $("#from").change(function() {
+        document.location.replace("<?php
+          $parameters = sfContext::getInstance()->getRequest()->getParameterHolder()->getAll();
+          unset($parameters["from"]);
+          echo url_for2("", array_merge($parameters, ["from" => ""]));
+        ?>" + $(this).val());
+      });
   });
 </script>

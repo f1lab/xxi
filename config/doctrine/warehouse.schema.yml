@@ -170,6 +170,7 @@ MaterialMovementUtilization: # Перемещение материалов ]ск
       type: one
       foreignType: many
     Work:
+      class: RefOrderWork
       local: work_id
       foreign: id
       type: one
