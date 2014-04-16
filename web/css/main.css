@@ -139,3 +139,11 @@ fieldset {
   top: -8px;
   left: 5px;
 }
+
+form.well .control-group:last-child {
+  margin-bottom: 0;
+}
+form.well .form-actions {
+  margin-bottom: 0;
+  padding-bottom: .6em;
+}
