@@ -83,30 +83,30 @@ abstract class ahBaseFormDoctrine extends sfFormDoctrine
           $this->embedForm($containerName, $newForm);
         }
       }
-      
+
       $formClass = (null === $relationSettings['formClass']) ? $relation->getClass().'Form' : $relationSettings['formClass'];
       $formArgs = (null === $relationSettings['formClassArgs']) ? array() : $relationSettings['formClassArgs'];
       if ((isset($formArgs[0]) && !array_key_exists('ah_add_delete_checkbox', $formArgs[0])) || !isset($formArgs[0]))
       {
         $formArgs[0]['ah_add_delete_checkbox'] = true;
       }
-      
+
       if ($relation->isOneToOne())
       {
         $form = new $formClass($this->getObject()->$relationName, $formArgs[0]);
         $this->embedForm($relationName, $form);
-        
+
         //maybe we need this: if (!$this->getObject()->relatedExists($relationName))
         unset($this[$relation->getLocalColumnName()]);
       }
       else
       {
         $subForm = new sfForm();
-        
+
         foreach ($this->getObject()->$relationName as $index => $childObject)
         {
           $form = new $formClass($childObject, $formArgs[0]);
-          
+
           $subForm->embedForm($index, $form);
           // check if existing embedded relations should have a different label
           if (null === $relationSettings['customEmbeddedFormLabelMethod'] || !method_exists($childObject, $relationSettings['customEmbeddedFormLabelMethod']))
@@ -118,13 +118,13 @@ abstract class ahBaseFormDoctrine extends sfFormDoctrine
             $subForm->getWidgetSchema()->setLabel($index, $childObject->$relationSettings['customEmbeddedFormLabelMethod']());
           }
         }
-        
+
         $this->embedForm($relationName, $subForm);
       }
 
       if ($relationSettings['formFormatter']) // switch formatter
       {
-        
+
         $widget = $this[$relationName]->getWidget()->getWidget();
         $widget->setFormFormatterName($relationSettings['formFormatter']);
         // not only we have to change formatter name
@@ -202,7 +202,7 @@ abstract class ahBaseFormDoctrine extends sfFormDoctrine
           {
             foreach ($values[$containerName] as $index => $subFormValues)
             {
-              if ($this->isNewFormEmpty($subFormValues, $keys))
+              if ($this->isNewFormEmpty((array)$subFormValues, $keys))
               {
                 unset($values[$containerName][$index], $this->embeddedForms[$containerName][$index]);
                 unset($this->validatorSchema[$containerName][$index]);
@@ -264,7 +264,7 @@ abstract class ahBaseFormDoctrine extends sfFormDoctrine
         }
       }
     }
-    
+
     parent::doBind($values);
   }
 
@@ -306,10 +306,10 @@ abstract class ahBaseFormDoctrine extends sfFormDoctrine
     }
 
     parent::doUpdateObject($values);
-    
+
     // set foreign key here
   }
-  
+
   public function getScheduledForDeletion()
   {
     return $this->scheduledForDeletion;
@@ -344,12 +344,12 @@ abstract class ahBaseFormDoctrine extends sfFormDoctrine
          * so there isn't anything weird happening
          */
         $relationName = $this->getRelationByEmbeddedFormClass($form);
-        
+
         if ($relationName && isset($this->scheduledForDeletion[$relationName]) && array_key_exists($form->getObject()->getId(), array_flip($this->scheduledForDeletion[$relationName])))
         {
           continue;
         }
-        
+
         $form->getObject()->save($con);
         $form->saveEmbeddedForms($con);
       }
@@ -378,7 +378,7 @@ abstract class ahBaseFormDoctrine extends sfFormDoctrine
 
     return false;
   }
-  
+
   /**
      * Get the used relation alias when given an object
      *
@@ -508,9 +508,9 @@ abstract class ahBaseFormDoctrine extends sfFormDoctrine
     if (null === $subForm)
     {
       $subForm = new ahNewRelationsContainerForm(null, array(
-        'containerName' => $containerName, 
-        'addByCloning' => $relationSettings['newRelationAddByCloning'], 
-        'useJSFramework' => $relationSettings['newRelationUseJSFramework'], 
+        'containerName' => $containerName,
+        'addByCloning' => $relationSettings['newRelationAddByCloning'],
+        'useJSFramework' => $relationSettings['newRelationUseJSFramework'],
         'newRelationButtonLabel' => $relationSettings['newRelationButtonLabel']
       ));
     }
