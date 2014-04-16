@@ -158,83 +158,11 @@ class planActions extends sfActions
 
   public function executePreFinishRef($request)
   {
-    $ref = Doctrine_Core::getTable("RefOrderWork")->find($request->getParameter("id"));
-    $order = $ref->getOrder();
-    $this->form = new OrderForm($order);
-
-    $fields = ["id"];
-
-    if ($this->getUser()->hasCredential("master")) {
-      $utilizationsRelation = array("Utilizations" => array(
-        "considerNewFormEmptyFields"    => array("material_id", "amount"),
-        "noNewForm"                     => false,
-        // "noNewForm"                     => true,
-        "newFormLabel"                  => "Новый выпрос",
-        "newFormClass"                  => "UtilizationForm",
-        "newFormClassArgs"              => array(array("sf_user" => $this->getUser())),
-        "displayEmptyRelations"         => true,
-        "formClass"                     => "UtilizationForm",
-        "formClassArgs"                 => array(array("ah_add_delete_checkbox" => true)),
-        "newFormAfterExistingRelations" => true,
-        "formFormatter"                 => null,
-        "multipleNewForms"              => true,
-        "newFormsInitialCount"          => 1,
-        "newFormsContainerForm"         => null, // pass BaseForm object here or we will create ahNewRelationsContainerForm
-        "newRelationButtonLabel"        => "+",
-        "newRelationAddByCloning"       => true,
-        "newRelationUseJSFramework"     => "jQuery",
-        // "customEmbeddedFormLabelMethod" => "getLabelTitle"
-      ));
-
-      $this->form->embedRelations($utilizationsRelation);
-      $fields[] = "new_Utilizations";
+    $request->setParameter("type", "utilization");
+    if (!$request->hasParameter("from")) {
+      $request->setParameter("from", $this->getUser()->getGuardUser()->getWarehouses()->getFirst() ? $this->getUser()->getGuardUser()->getWarehouses()->getFirst()->getId() : false);
     }
 
-    if ($this->getUser()->hasCredential("design-master")) {
-      $fields[] = "files";
-    }
-
-    $this->form->useFields($fields);
-
-    if ($request->isMethod("post") and ($this->form->bind($request->getParameter($this->form->getName()))||1) and $this->form->isValid()) {
-      if ($this->getUser()->hasCredential("master")) {
-        $utilizations = $request->getParameter($this->form->getName())["new_Utilizations"];
-        $utilizationsToSave = new Doctrine_Collection("Utilization");
-        foreach ($utilizations as $utilization) {
-          if ($utilization["material_id"] and $utilization["amount"]) {
-            $newUtilization = Utilization::createFromArray(array_merge($utilization, [
-              "order_id" => $order->getId(),
-              "work_id" => $ref->getId(),
-            ]));
-
-            $utilizationsToSave->add($newUtilization);
-          }
-        }
-        $utilizationsToSave->save();
-      }
-
-      if ($this->getUser()->hasCredential("design-master")) {
-        $order
-          ->setFiles($request->getParameter($this->form->getName())["files"])
-          ->save()
-        ;
-      }
-
-      $this->forward("plan", "finishRef");
-    }
-  }
-
-  public function executeFinishRef($request)
-  {
-    $ref = Doctrine_Core::getTable("RefOrderWork")->find($request->getParameter("id"));
-    if ($ref and !$ref->isNew() and !$ref->getIsCompleted()) {
-      $ref
-        ->setIsCompleted(true)
-        ->setFinishedAt(date("Y-m-d H:i:s"))
-        ->save()
-      ;
-    }
-
-    $this->redirect("plan/index");
+    $this->forward("MaterialMovement", "new");
   }
 }
