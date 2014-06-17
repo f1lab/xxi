@@ -3,6 +3,7 @@
     'report-costs' => 'Просмотр стоимостей',
     'report-costs-active' => 'Просмотр текущих стоимостей',
     'report-managers' => 'Зарплата',
+    'report-designers' => 'Дизайнеры',
     // 'report-workers' => 'Фонд ЗП цеха',
     'report-clients' => 'Клиенты',
     'report-materials' => 'Материалы',

@@ -37,7 +37,7 @@ class Order extends BaseOrder
 
       "prepress" => "alert-error",
       "prepress-working" => "alert",
-      "prepress-done" => "alert-success",
+      "prepress-done" => "alert-info",
 
       "work" => "alert-error",
       "working" => "alert",

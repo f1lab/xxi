@@ -128,3 +128,4 @@ RefOrderWork:
       local: master_id
       class: sfGuardUser
       foreign: id
+      foreignAlias: Works
