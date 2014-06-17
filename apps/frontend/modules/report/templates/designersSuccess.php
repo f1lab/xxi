@@ -90,7 +90,7 @@
                   <tbody><?php foreach ($manager->getWorks() as $work): ?>
                     <tr>
                       <td><?php echo $work->getOrder()->getId() ?></td>
-                      <td><?php echo $work->getPlannedAt() ?></td>
+                      <td><?php echo $work->getPlannedStart() ? date("d.m.Y H:i", strtotime($work->getPlannedStart())) : "" ?></td>
                       <td><?php echo $work->getFinishedAt() ?></td>
                       <td><?php echo $work->getOrder()->getDesignCost() ?></td>
                     </tr>
