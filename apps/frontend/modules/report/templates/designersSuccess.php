@@ -29,7 +29,6 @@
       <small>за период <?php echo date('d.m.Y', strtotime($period['from'])) . '—' . date('d.m.Y', strtotime($period['to'])) ?></small>
     </h2>
 
-    <h3>Отчёт</h3>
     <table class="table table-striped table-condensed">
       <colgroup>
         <col class="span4" />
@@ -98,7 +97,7 @@
                   <?php endforeach ?></tbody>
                 </table>
 
-                <strong>Итого, за такой-то период выполнено <?php echo format_number($count); ?>
+                <strong>Итого, выполнено <?php echo format_number($count); ?>
                   работ по дизайну общей стоимостью <?php echo format_currency($sum); ?> руб.</strong>
               </div>
               <div class="modal-footer">
@@ -115,6 +114,8 @@
         </tr>
       </tbody>
     </table>
+
+    <div class="alert alert-info">Клик по дизайнеру — показать подробный отчёт</div>
   </div>
 </div>
 
