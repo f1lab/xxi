@@ -89,7 +89,9 @@
                   </thead>
                   <tbody><?php foreach ($manager->getWorks() as $work): ?>
                     <tr>
-                      <td><?php echo $work->getOrder()->getId() ?></td>
+                      <td><a href="<?php echo url_for("order/show?id=" . $work->getOrder()->getId()) ?>" target="_blank">
+                        <?php echo $work->getOrder()->getId() ?>
+                      </a></td>
                       <td><?php echo $work->getPlannedStart() ? date("d.m.Y H:i", strtotime($work->getPlannedStart())) : "" ?></td>
                       <td><?php echo $work->getFinishedAt() ?></td>
                       <td><?php echo $work->getOrder()->getDesignCost() ?></td>
@@ -137,6 +139,11 @@
 
     h3 {
       text-align: center;
+    }
+
+    a {
+      td:none;
+      color: inherit;
     }
   }
 </style>
