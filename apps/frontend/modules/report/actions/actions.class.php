@@ -640,4 +640,69 @@ class reportActions extends sfActions
 
     exit();
   }
+
+  public function executeDesigners(sfWebRequest $request)
+  {
+    $this->form = new sfForm();
+    $this->form->getWidgetSchema()
+      ->offsetSet('from', new sfWidgetFormBootstrapDate(array(
+        'label' => 'Период',
+      )))
+      ->offsetSet('to', new sfWidgetFormBootstrapDate(array(
+        //
+      )))
+      ->offsetSet('manager', new sfWidgetFormDoctrineChoice(array(
+        'model' => 'sfGuardUser',
+        'table_method' => 'getManagers',
+        'add_empty' => 'Все',
+        'label' => 'Менеджер',
+      )))
+      ->setNameFormat('filter[%s]')
+    ;
+    $this->form->addCSRFProtection('123456789');
+    $this->form->getValidatorSchema()
+      ->offsetSet('from', new sfValidatorDate())
+      ->offsetSet('to', new sfValidatorDate(array(
+        'required' => false,
+      )))
+      ->offsetSet('manager', new sfValidatorDoctrineChoice(array(
+        'model' => 'sfGuardUser',
+        'required' => false,
+      )))
+    ;
+
+    $this->period = array(
+      'from' => date('Y') . '-01-01',
+      'to' => date('Y-m-d 23:59:59'),
+    );
+    $this->manager = false;
+
+    if ($request->isMethod('post')) {
+      $this->form->bind($request->getParameter('filter'));
+
+      if ($this->form->isValid()) {
+        if ($this->form->getValue('from')) {
+          $this->period['from'] = $this->form->getValue('from');
+        }
+
+        if ($this->form->getValue('manager')) {
+          $this->manager = $this->form->getValue('manager');
+        }
+
+        if ($this->form->getValue('to')) {
+          $this->period['to'] = date('Y-m-d 23:59:59', strtotime($this->form->getValue('to')));
+        }
+      }
+    }
+
+    $this->report = Doctrine_Query::create()
+      ->from('sfGuardUser u')
+      ->leftJoin("u.Groups g")
+      ->leftJoin("u.Works w with (w.finished_at >= ? and w.finished_at <= ?)", array($this->period['from'], $this->period['to']))
+      ->leftJoin("w.Order o")
+      ->andWhereIn("g.name", ["design-worker", "design-master"])
+      ->addWhere("w.is_completed = ?", true)
+      ->execute()
+    ;
+  }
 }

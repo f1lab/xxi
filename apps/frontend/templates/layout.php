@@ -24,6 +24,7 @@
   </script>
 </head>
 <body>
+  <div class="print hide"></div>
   <div class="navbar">
     <div class="navbar-inner">
       <div class="container">
