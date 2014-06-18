@@ -41,13 +41,22 @@
       </thead>
       <tbody><?php
       $sumOrders = $sumPayed = $sumCost = $sumDebt = 0;
-      foreach ($report as $row): ?>
+      foreach ($report as $row):
+        $ordersCost = 0;
+        $payedSum = 0;
+        foreach ($row->getOrders() as $order) {
+          $ordersCost += $order->getCost();
+          foreach ($order->getPays() as $pay) {
+            $payedSum += $pay->getAmount();
+          }
+        }
+      ?>
         <tr>
-          <td><a href="<?php echo url_for('@client?id=' . $row->getClient()->getId() . '&state=debt') ?>"><?php echo $row->getClient()->getName() ?></a></td>
-          <td><?php $sumOrders += $row->getOrders(); echo $row->getOrders() ?></td>
-          <td><?php $sumCost += $row->getCost(); echo $row->getCost() ?></td>
-          <td><?php $sumPayed += $row->getPayedSum(); echo $row->getPayedSum() ?></td>
-          <td><?php $sumDebt += ($row->getCost() - $row->getPayedSum()); echo ($row->getCost() - $row->getPayedSum()) ?></td>
+          <td><a href="<?php echo url_for('@client?id=' . $row->getId() . '&state=debt') ?>"><?php echo $row->getName() ?></a></td>
+          <td><?php $sumOrders += $row->getOrders()->count(); echo $row->getOrders()->count() ?></td>
+          <td><?php $sumCost += $ordersCost; echo $ordersCost ?></td>
+          <td><?php $sumPayed += $payedSum; echo $payedSum ?></td>
+          <td><?php $sumDebt += ($ordersCost - $payedSum); echo ($ordersCost - $payedSum) ?></td>
         </tr>
       <?php endforeach ?></tbody>
     </table>

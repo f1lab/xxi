@@ -482,14 +482,12 @@ class reportActions extends sfActions
     }
 
     $this->report = Doctrine_Query::create()
-      ->select('a.client_id, count(*) as orders, sum(a.cost) cost, sum(p.amount) payed_sum, b.*')
-      ->from('Order a')
-      ->leftJoin('a.Client b')
-      ->leftJoin('a.Pays p')
-      ->andWhere('a.state = ?', 'debt')
-      ->andWhere('a.submited_at >= ? and a.submited_at <= ?', array($this->period['from'], $this->period['to']))
-      ->groupBy('a.client_id')
-      ->orderBy('b.name')
+      ->from("Client c")
+      ->innerJoin('c.Orders o')
+      ->leftJoin('o.Pays p')
+      ->andWhere('o.state = ?', 'debt')
+      ->andWhere('o.submited_at >= ? and o.submited_at <= ?', array($this->period['from'], $this->period['to']))
+      ->orderBy('c.name')
       ->execute()
     ;
   }
