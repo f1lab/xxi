@@ -53,11 +53,13 @@ class MaterialMovementActions extends sfActions
     $request = $this->getRequest();
 
     if ($request->getParameter("action") !== "index") {
-      $this->warehouse = Doctrine_Core::getTable("Warehouse")->find($request->getParameter("from") ?: $request->getParameter("to"));
-      $this->forward404Unless($this->warehouse);
+      if ((int)$request->getParameter("from") !== -1) {
+        $this->warehouse = Doctrine_Core::getTable("Warehouse")->find($request->getParameter("from") ?: $request->getParameter("to"));
+        $this->forward404Unless($this->warehouse);
+        $this->balance = $this->warehouse->getBalance();
+      }
 
       $this->type = $request->getParameter("type");
-      $this->balance = $this->warehouse->getBalance();
     }
   }
 
@@ -324,6 +326,6 @@ class MaterialMovementActions extends sfActions
       $list->save();
     }
 
-    $this->redirect("warehouse/index");
+    $this->redirect($this->type === "utilization" ? "plan/index" : "warehouse/index");
   }
 }

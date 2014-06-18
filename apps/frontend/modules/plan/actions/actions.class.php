@@ -160,7 +160,8 @@ class planActions extends sfActions
   {
     $request->setParameter("type", "utilization");
     if (!$request->hasParameter("from")) {
-      $request->setParameter("from", $this->getUser()->getGuardUser()->getWarehouses()->getFirst() ? $this->getUser()->getGuardUser()->getWarehouses()->getFirst()->getId() : false);
+      $warehouse = $this->getUser()->getGuardUser()->getWarehouses()->getFirst();
+      $request->setParameter("from", $warehouse ? $warehouse->getId() : -1);
     }
 
     $this->forward("MaterialMovement", "new");
