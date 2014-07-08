@@ -108,16 +108,7 @@ class OrderFormFilter extends BaseOrderFormFilter
     $this->setDefaults(array(
       'client_id' => array(),
       'created_by' => array(),
-      'state' => array(
-        'calculating',
-        'work',
-        'working',
-        'done',
-        'submited',
-        'prepress',
-        'prepress-working',
-        'prepress-done',
-      ),
+      'state' => array(),
       'area' => array(),
       'created_at_from' => array('day' => '01', 'month' => '01', 'year' => date('Y')),
       'created_at_to' => array('day' => '', 'month' => '', 'year' => ''),
@@ -157,6 +148,17 @@ class OrderFormFilter extends BaseOrderFormFilter
     if ($user->hasCredential('manager')) {
       $this->setDefault('created_by', array(
         $user->getGuardUser()->getId(),
+      ));
+
+      $this->setDefault('state', array(
+        'calculating',
+        'work',
+        'working',
+        'done',
+        'submited',
+        'prepress',
+        'prepress-working',
+        'prepress-done',
       ));
     }
 

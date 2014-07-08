@@ -84,7 +84,7 @@ class OrderForm extends BaseOrderForm
     $user = sfContext::getInstance()->getUser();
     $this->embedRelations(array_merge(
       $user->hasCredential('can_set_order_works') && !$this->getObject()->isNew() ? $worksRelation : [],
-      $user->hasGroup('master') || $user->hasGroup('worker') || $user->hasGroup('design-master') || $user->hasGroup('design-worker') ? [] : $invoicesRelation,
+      $user->hasCredential("manager") || !($user->hasGroup('master') || $user->hasGroup('worker') || $user->hasGroup('design-master') || $user->hasGroup('design-worker')) ? $invoicesRelation : [],
       (!$this->getObject()->isNew() and $user->hasGroup('director') || $user->hasGroup('buhgalter')) ? $paysRelation : []
     ));
 
@@ -183,8 +183,8 @@ class OrderForm extends BaseOrderForm
       "new_RefOrderWork" => !$this->getObject()->isNew() and $user->hasCredential("can_set_order_works"),
       "RefOrderWork" => !$this->getObject()->isNew() and $user->hasCredential("can_set_order_works"),
 
-      "new_Invoices" => !$user->hasGroup("worker") and !$user->hasGroup("design-worker") and !$user->hasGroup("master") and !$user->hasGroup("design-master"),
-      "Invoices" => !$user->hasGroup("worker") and !$user->hasGroup("design-worker") and !$user->hasGroup("master") and !$user->hasGroup("design-master"),
+      "new_Invoices" => $user->hasCredential("manager") or (!$user->hasGroup("worker") and !$user->hasGroup("design-worker") and !$user->hasGroup("master") and !$user->hasGroup("design-master")),
+      "Invoices" => $user->hasCredential("manager") or (!$user->hasGroup("worker") and !$user->hasGroup("design-worker") and !$user->hasGroup("master") and !$user->hasGroup("design-master")),
 
       "new_Pays" => !$this->getObject()->isNew() and $user->hasGroup("director") || $user->hasGroup("buhgalter"),
       "Pays" => !$this->getObject()->isNew() and $user->hasGroup("director") || $user->hasGroup("buhgalter"),

@@ -97,7 +97,7 @@ class planActions extends sfActions
 
     parse_str($request->getParameter("filter"), $filter);
     if (isset($filter["works-filter-area"])) {
-      $query->andWhereIn("row.work_id", $filter["works-filter-area"]);
+      $query->andWhereIn("row.area_id", $filter["works-filter-area"]);
     }
 
     if (isset($filter["works-filter-master"])) {
