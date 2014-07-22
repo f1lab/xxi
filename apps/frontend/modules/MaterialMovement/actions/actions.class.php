@@ -109,7 +109,7 @@ class MaterialMovementActions extends sfActions
         ;
 
         $this->form->embedForm("Arrival", new MaterialMovementArrivalForm());
-        $this->movementTypeTitle = "Приход материалов";
+        $this->movementTypeTitle = "Приход материалов в «" . $this->warehouse . "»";
         $this->movementTypeButton = "Принять";
 
         $this->materialForm = new sfForm();
