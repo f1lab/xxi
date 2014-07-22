@@ -1,4 +1,4 @@
-<?php if (true == ($utilizations = $order->getUtilizations()) and count($utilizations)): $totalPrice = 0; ?>
+<?php if (count($utilizations)): $totalPrice = 0; ?>
   <table class="table table-condensed table-bordered table-hover">
     <thead>
       <tr>
@@ -10,21 +10,21 @@
       </tr>
     </thead>
     <tbody>
-      <?php foreach ($utilizations as $utilization): ?>
+      <?php foreach ($utilizations as $movement): ?>
         <tr>
           <td>
-            <a href="<?php echo $sf_user->hasCredential('can_edit_materials') ? url_for('material/edit?id=' . $utilization->getMaterial()->getId()) : '#' ?>">
-              <?php echo $utilization->getMaterial()->getNameWithDimension() ?>
+            <a href="<?php echo $sf_user->hasCredential('can_edit_materials') ? url_for('material/edit?id=' . $movement->getMaterial()->getId()) : '#' ?>">
+              <?php echo $movement->getMaterial()->getNameWithDimension() ?>
             </a>
-          </th>
-          <td><?php echo $utilization->getAmount() ?></td>
-          <td><?php echo date('d.m.Y H:i', strtotime($utilization->getCreatedAt())) ?></td>
-          <td><?php echo $utilization->getCreator() ?></td>
+          </td>
+          <td><?php echo $movement->getAmount() ?></td>
+          <td><?php echo date('d.m.Y H:i', strtotime($movement->getCreatedAt())) ?></td>
+          <td><?php echo $movement->getCreator() ?></td>
           <td>
-            <abbr title="<?php echo $utilization->getAmount() . '×' . $utilization->getPriceForOne() ?>">
+            <abbr title="<?php echo $movement->getAmount() . '×' . $movement->getPrice() ?>">
               <?php
-                $totalPrice += $utilization->getPrice();
-                echo sprintf('%.2f', $utilization->getPrice())
+                $totalPrice += $movement->getAmount() * $movement->getPrice();
+                echo sprintf('%.4f', $movement->getAmount() * $movement->getPrice())
               ?>
             </abbr>
           </td>
@@ -32,7 +32,7 @@
       <?php endforeach ?>
       <tr>
         <th colspan="4" scope="row">Итого</th>
-        <td><?php echo sprintf('%.2f', $totalPrice) ?></td>
+        <td><?php echo sprintf('%.4f', $totalPrice) ?></td>
       </tr>
     </tbody>
   </table>

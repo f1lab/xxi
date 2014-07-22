@@ -4,7 +4,7 @@
   $version = $order['version'];
   $cantclick1 = $cantclick2 = false;
 ?>
-  <li<?php if ($version-1 < 1):
+  <li <?php if ($version-1 < 1):
     $cantclick1 = true;
     echo ' class="disabled"';
   endif ?>>
@@ -14,7 +14,7 @@
   <li class="active">
     версия <?php echo $version ?> от <?php echo $order->getUpdator()->getUsername() ?> от <?php echo $order->getUpdatedAt() ?>
   </li>
-  <li<?php if ($order->getAuditLog()->getMaxVersion($sf_data->getRaw('order')) == $version):
+  <li <?php if ($order->getAuditLog()->getMaxVersion($sf_data->getRaw('order')) == $version):
     $cantclick2 = true;
     echo ' class="disabled"';
   endif ?>>
@@ -38,7 +38,7 @@
       <?php include_partial('order-description-tab', ['order' => $order, 'fields' => $fields]) ?>
     </div>
     <div class="tab-pane" id="tab-utilization">
-      <?php include_partial('order-utilization-tab', ['order' => $order]) ?>
+      <?php include_partial('order-utilization-tab', ['order' => $order, 'utilizations' => $utilizations]) ?>
     </div>
     <div class="tab-pane" id="tab-works">
       <?php include_partial('order-works-tab', ['order' => $order]) ?>
