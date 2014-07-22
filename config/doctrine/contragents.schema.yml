@@ -1,6 +1,10 @@
 Client:
   actAs: [Signable, SoftDelete]
   columns:
+    is_blacklisted:
+      type: boolean
+      default: false
+      notnull: true
     name:
       type: string(255)
       notnull: true
