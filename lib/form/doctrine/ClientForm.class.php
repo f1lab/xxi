@@ -21,6 +21,7 @@ class ClientForm extends BaseClientForm
       // )))
       ->setLabels(array(
         'is_blacklisted' => 'В чёрном списке?',
+        'credit_line' => 'Кредитная линия',
         'name' => 'Наименование организации',
         'contact' => 'Контактное лицо',
         'phone' => 'Телефон',

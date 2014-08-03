@@ -33,8 +33,11 @@ class clientActions extends sfActions
   public function executeShow(sfWebRequest $request)
   {
     $this->_state = $request->getParameter('state');
-    $this->client = Doctrine_Core::getTable('Client')->createQuery('a')
-      ->where('a.id = ?', $request->getParameter('id'))
+    $this->client = Doctrine_Query::create()
+      ->from('Client c')
+      ->leftJoin('c.Orders o')
+      ->leftJoin('o.Creator')
+      ->where('c.id = ?', $request->getParameter('id'))
       ->fetchOne()
     ;
     $this->forward404Unless($this->client);
