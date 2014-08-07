@@ -5,7 +5,10 @@
 
   <?php if ($type !== "utilization" or $sf_user->hasCredential("master")): ?>
     <fieldset>
-      <legend>Список материалов</legend>
+      <legend>
+        Список материалов
+        <?php if ($type === "arrival"): ?><button class="btn btn-default" id="add-new-material-from-arrival-form">Добавить материал</button><?php endif ?>
+      </legend>
       <?php if ($type === "arrival"): ?>
         <div class="copy-me">
           <div class="align-chosen-to-top">

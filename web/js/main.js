@@ -178,7 +178,78 @@ $(function() {
           label: "Отменить"
           , "class": "btn"
         }], {
-          header: "Добавить групповой диалог"
+          header: "Добавить клиента"
+        })
+      ;
+
+      modal
+        .on("shown", function(e) {
+          form.find("input:first").focus();
+        })
+        .on("hidden", function(e) {
+          form.find(":focus").blur();
+        })
+      ;
+    })
+
+    .on("click", "#add-new-material-from-arrival-form", function(e) {
+      e.preventDefault();
+
+      var button = $(this)
+        , select = $('.copy-me .chzn-select').last()
+        , form = $($("#template-add-new-material").html())
+        , modal = bootbox.dialog(form, [{
+          label: "Добавить"
+          , "class": "btn-primary"
+          , callback: function() {
+            var submited = form.serializeObject()
+            ;
+
+            if (submited.name && submited.dimension_id) {
+              form.find(".fill-form").addClass("hide");
+
+              $.post(App["add-new-material"], submited)
+                .done(function() {
+                  form.find(".try-again").addClass("hide");
+
+                  $.getJSON(App["dump-all-materials"], function(materials) {
+
+                    var option = $("<option></option>")
+                      , selected = select.val()
+                    ;
+                    select.empty();
+
+                    $.each(materials, function() {
+                      var newOption = option.clone()
+                        , text = this.pop()
+                        , value = this.pop()
+                      ;
+                      select.append(newOption.text(text).val(value));
+                    });
+                    select.val(selected);
+
+                    select.trigger("liszt:updated").trigger("open");
+                  });
+
+                  modal.modal("hide");
+                })
+                .fail(function() {
+                  form.find(".try-again").removeClass("hide");
+                })
+              ;
+
+              return false;
+            } else {
+              form.find(".fill-form").removeClass("hide");
+              form.find(".try-again").addClass("hide");
+              return false;
+            }
+          }
+        }, {
+          label: "Отменить"
+          , "class": "btn"
+        }], {
+          header: "Добавить материал"
         })
       ;
 

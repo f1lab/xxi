@@ -85,9 +85,6 @@ class materialActions extends sfActions
   public function executeImport($request)
   {
     $this->form = new ImportForm();
-    $this->form->setLabels([
-      'input' => 'Номенклатура',
-    ]);
 
     if ($request->isMethod('post')) {
       $this->form->bind($request->getParameter($this->form->getName()), $request->getFiles($this->form->getName()));
@@ -134,5 +131,42 @@ class materialActions extends sfActions
         $this->redirect('material/index');
       }
     }
+  }
+
+  public function executeAdd($request)
+  {
+    $form = new MaterialForm();
+    $form->disableCSRFprotection();
+    unset($form["_csrf_token"]);
+
+    $form->bind([
+      "name" => $request->getParameter("name"),
+      "dimension_id" => $request->getParameter("dimension_id"),
+    ]);
+
+    try {
+      $form->save();
+      $this->getResponse()->setStatusCode(200);
+    } catch (\Exception $e) {
+      $this->getResponse()->setStatusCode(400);
+    }
+
+    $this->getResponse()->setHeaderOnly(true);
+    return sfView::NONE;
+  }
+
+  public function executeDump($request)
+  {
+    $materials = Doctrine_Query::create()
+      ->from("Material m")
+      ->leftJoin('m.Dimension d')
+      ->select("m.id, m.name")
+      ->addOrderBy("m.name asc")
+      ->execute([])
+    ;
+
+    die (json_encode(array_map(function($material) {
+      return [$material->getId(), $material->getNameWithDimension()];
+    }, $materials->getData()), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
   }
 }
