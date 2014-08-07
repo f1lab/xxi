@@ -1,3 +1,30 @@
+<h4>План</h4>
+<?php if (count($order->getUtilizationPlans())): ?>
+  <table class="table table-condensed table-bordered table-hover">
+    <thead>
+      <tr>
+        <th class="span3">Материал</th>
+        <th class="span2">Количество</th>
+      </tr>
+    </thead>
+    <tbody>
+      <?php foreach ($order->getUtilizationPlans() as $utilizationPlan): ?>
+        <tr>
+          <td>
+            <a href="<?php echo $sf_user->hasCredential('can_edit_materials') ? url_for('material/edit?id=' . $utilizationPlan->getMaterial()->getId()) : '#' ?>">
+              <?php echo $utilizationPlan->getMaterial()->getNameWithDimension() ?>
+            </a>
+          </td>
+          <td><?php echo $utilizationPlan->getAmount() ?></td>
+        </tr>
+      <?php endforeach ?>
+    </tbody>
+  </table>
+<?php else: ?>
+  <div class="alert alert-info">Нет расходов</div>
+<?php endif ?>
+
+<h4>Факт</h4>
 <?php if (count($utilizations)): $totalPrice = 0; ?>
   <table class="table table-condensed table-bordered table-hover">
     <thead>

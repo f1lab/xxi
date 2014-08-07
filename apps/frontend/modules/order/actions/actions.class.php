@@ -55,8 +55,20 @@ class orderActions extends sfActions
 
   public function executeShow(sfWebRequest $request)
   {
-    $this->order = Doctrine_Core::getTable('Order')->createQuery('a, a.Client')
-      ->where('a.id = ?', $request->getParameter('id'))
+    $this->order = Doctrine_Query::create()
+      ->from('Order o')
+      ->leftJoin('o.Client c')
+      ->leftJoin('o.Comments oc')
+      ->leftJoin('oc.Creator')
+      ->leftJoin('o.Creator')
+      ->leftJoin('o.UtilizationPlans up')
+      ->leftJoin('up.Material m')
+      ->leftJoin('m.Dimension')
+      ->leftJoin('o.RefOrderWork row')
+      ->leftJoin('row.Work w')
+      ->leftJoin('w.Area')
+      ->leftJoin('row.Master')
+      ->where('o.id = ?', $request->getParameter('id'))
       ->fetchOne()
     ;
 

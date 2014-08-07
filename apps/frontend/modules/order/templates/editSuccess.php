@@ -79,6 +79,19 @@ HTML;
         "noRelationsMessage" => "Нет работ",
       ]) ?>
     </fieldset>
+
+    <fieldset>
+      <legend>Планируемые затраты материала</legend>
+      <?php include_partial("global/relation", [
+        "form" => $form,
+        "relationName" => "UtilizationPlans",
+        "columns" => [
+          "material_id" => "Материал",
+          "amount" => "Количество",
+        ],
+        "noRelationsMessage" => "Нет запланированных затрат",
+      ]) ?>
+    </fieldset>
   <?php endif ?>
 
   <?php if ($sf_user->hasGroup("director") or $sf_user->hasGroup("manager")): ?>
@@ -128,7 +141,7 @@ HTML;
     "expected_at" => $sf_user->hasGroup("worker"),
   ], $form) ?>
 
-  <?php if ($sf_user->hasGroup("director") or $sf_user->hasGroup("buhgalter")): ?>
+  <?php if ($sf_user->hasCredential("director") or $sf_user->hasGroup("buhgalter")): ?>
     <fieldset>
       <legend>Бухгалтерия</legend>
       <div class="control-group<?php if ($form["bill_made"]->hasError()): ?> error<?php endif ?>">
