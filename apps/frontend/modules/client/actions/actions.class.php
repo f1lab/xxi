@@ -116,4 +116,22 @@ class clientActions extends sfActions
       return [$client["c_id"], $client["c_name"]];
     }, $clients), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
   }
+
+  public function executeGetCreditInfo($request)
+  {
+    $client = Doctrine_Query::create()
+      ->from('Client c')
+      ->addWhere('c.id = ?', $request->getParameter('id', -1))
+      ->fetchOne()
+    ;
+
+    $this->forward404Unless($client);
+
+    die (json_encode([
+      'credit-line' => +$client->getCreditLine()
+      , 'is-blacklisted' => $client->getIsBlacklisted()
+      , 'orders-count' => Doctrine_Query::create()->from('Order o')->addWhere('o.client_id = ?', $client->getId())->count()
+      , 'debt' => $client->getDebtSum()
+    ], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+  }
 }

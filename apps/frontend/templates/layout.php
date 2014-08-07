@@ -23,6 +23,8 @@
 
       , 'add-new-material': '<?php echo url_for('material/add') ?>'
       , 'dump-all-materials': '<?php echo url_for('material/dump') ?>'
+
+      , 'get-client-credit-info': '<?php echo url_for('client/getCreditInfo') ?>'
     };
   </script>
 </head>

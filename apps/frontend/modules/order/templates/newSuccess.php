@@ -5,6 +5,13 @@
 <?php use_stylesheets_for_form($form) ?>
 <?php use_javascripts_for_form($form) ?>
 
+<div class="alerts">
+  <div class="alert alert-block alert-danger hide first-order">Внимание, это первый заказ клиента. Заказ принимается только при полной предоплате.</div>
+  <div class="alert alert-block alert-danger hide credit-bad">Внимание, кредитная линия клиента (<span></span> руб.) превышена (дебет <span></span> руб.). Заказ принимается только при полной или частичной предоплате.</div>
+  <div class="alert alert-block alert-success hide credit-ok">Кредитная линия (<span></span> руб.) не превышена.</div>
+  <div class="alert alert-block alert-invert hide blacklisted">Внимание, клиент в черном списке. Заказ принимается только после согласования с руководством.</div>
+</div>
+
 <form action="<?php echo url_for('@order-create') ?>" method="post">
   <?php echo $form->renderGlobalErrors() ?>
   <?php echo $form->renderHiddenFields()?>

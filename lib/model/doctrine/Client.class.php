@@ -79,6 +79,10 @@ class Client extends BaseClient
   public function getDebtSum()
   {
     $debtOrdersIds = $this->getOrderIdsOfStates(['debt']);
+    if ($debtOrdersIds === []) {
+      return 0;
+    }
+
     $debt = Doctrine_Query::create()
       ->select('sum(o.cost)')
       ->from('Order o')

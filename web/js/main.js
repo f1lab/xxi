@@ -118,6 +118,45 @@ $(function() {
       }
     })
 
+    .on('change', '.makePizdatoWithDiscount', function(e) {
+      $.getJSON(App['get-client-credit-info'], {
+        id: $(this).val()
+      }, function(creditInfo) {
+        console.log(creditInfo);
+        $('.alerts .alert').addClass('hide');
+
+        if (creditInfo['orders-count'] < 1) {
+          $('.alert.first-order').removeClass('hide');
+        }
+
+        if (creditInfo['is-blacklisted']) {
+          $('.alert.blacklisted').removeClass('hide');
+        }
+
+        if (creditInfo['credit-line']) {
+          if (creditInfo['credit-line'] < creditInfo['debt']) {
+            $('.alert.credit-bad')
+              .removeClass('hide')
+              .find('span')
+                .eq(0)
+                  .text(creditInfo['credit-line'])
+                  .end()
+                .eq(1)
+                  .text(creditInfo['debt'])
+                  .end()
+            ;
+          } else {
+            $('.alert.credit-ok')
+              .removeClass('hide')
+              .find('span')
+                .text(creditInfo['credit-line'])
+                .end()
+            ;
+          }
+        }
+      });
+    })
+
     .on("click", "#add-new-client-from-order-form", function(e) {
       e.preventDefault();
 
