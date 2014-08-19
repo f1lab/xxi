@@ -34,6 +34,7 @@
         <th>Когда расходован</th>
         <th>Кем расходован</th>
         <th>Стоимость</th>
+        <th>Причина</th>
       </tr>
     </thead>
     <tbody>
@@ -55,11 +56,12 @@
               ?>
             </abbr>
           </td>
+          <td><?php echo $movement->getDescription(); ?></td>
         </tr>
       <?php endforeach ?>
       <tr>
         <th colspan="4" scope="row">Итого</th>
-        <td><?php echo sprintf('%.4f', $totalPrice) ?></td>
+        <td colspan="2"><?php echo sprintf('%.4f', $totalPrice) ?></td>
       </tr>
     </tbody>
   </table>

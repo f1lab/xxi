@@ -127,6 +127,8 @@ MaterialMovementMaterials: # Список материалов движения 
       type: decimal
       scale: 2
       notnull: true
+    description:
+      type: clob
   relations:
     Material:
       local: material_id

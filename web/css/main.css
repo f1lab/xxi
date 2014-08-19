@@ -152,3 +152,7 @@ form.well .form-actions {
   background-color: #363636;
   color: #fff;
 }
+
+.alert:empty {
+  display: none;
+}

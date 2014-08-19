@@ -168,14 +168,23 @@ var bootbox = window.bootbox || (function(document, $) {
             labelCancel = _translate('CANCEL'),
             labelOk     = _translate('CONFIRM'),
             cb          = null,
-            defaultVal  = "";
+            defaultVal  = ""
+            alert       = ''
+            placeholder = ''
+        ;
 
         switch (arguments.length) {
             case 1:
                 str = arguments[0];
                 break;
             case 2:
-                str = arguments[0];
+                if (typeof arguments[0] === 'object') {
+                    str = arguments[0]['title'];
+                    alert = arguments[0]['alert'];
+                    placeholder = arguments[0]['placeholder'];
+                } else {
+                    str = arguments[0];
+                }
                 if (typeof arguments[1] == 'function') {
                     cb = arguments[1];
                 } else {
@@ -211,8 +220,8 @@ var bootbox = window.bootbox || (function(document, $) {
         var header = str;
 
         // let's keep a reference to the form object for later
-        var form = $("<form></form>");
-        form.append("<input class='input-block-level' autocomplete=off type=text value='" + defaultVal + "' />");
+        var form = $("<div class=\"alert alert-info\">" + alert + "</div><form></form>");
+        form.filter('form').append("<input class='input-block-level' autocomplete=off type=text value='" + defaultVal + "' placeholder='" + placeholder + "' />");
 
         var cancelCallback = function() {
             if (typeof cb === 'function') {
