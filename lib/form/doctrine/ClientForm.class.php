@@ -20,6 +20,8 @@ class ClientForm extends BaseClientForm
         // 'choices' => ClientTable::$ownership,
       // )))
       ->setLabels(array(
+        'is_blacklisted' => 'В чёрном списке?',
+        'credit_line' => 'Кредитная линия',
         'name' => 'Наименование организации',
         'contact' => 'Контактное лицо',
         'phone' => 'Телефон',

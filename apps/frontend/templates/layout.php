@@ -20,6 +20,11 @@
     var App = {
       "add-new-client": "<?php echo url_for("client/add") ?>"
       , "dump-all-clients": "<?php echo url_for("client/dump") ?>"
+
+      , 'add-new-material': '<?php echo url_for('material/add') ?>'
+      , 'dump-all-materials': '<?php echo url_for('material/dump') ?>'
+
+      , 'get-client-credit-info': '<?php echo url_for('client/getCreditInfo') ?>'
     };
   </script>
 </head>
@@ -97,6 +102,35 @@
         <label class="control-label" for="client_phone">Телефон</label>
         <div class="controls">
           <input type="text" name="phone" id="client_phone" class="input-block-level">
+        </div>
+      </div>
+    </form>
+  </script>
+
+  <script type="text/html" id="template-add-new-material">
+    <form action="#" method="post">
+      <div class="alert alert-error fill-form hide">
+        Заполните все поля формы.
+      </div>
+
+      <div class="alert alert-error try-again hide">
+        Ошибка сохранения.
+      </div>
+
+      <div class="control-group">
+        <label class="control-label" for="name">Наименование</label>
+        <div class="controls">
+          <input placeholder="" type="text" name="name" id="name" class="input-block-level">
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label class="control-label" for="dimension_id">Единица измерения</label>
+        <div class="controls">
+          <?php $dimensions = Doctrine_Query::create()->from('Dimension d')->addOrderBy('d.name')->execute(); ?>
+          <select name="dimension_id" id="dimension_id" class="input-block-level"><?php foreach ($dimensions as $dimension): ?>
+            <option value="<?php echo $dimension->getId() ?>"><?php echo $dimension ?></option>
+          <?php endforeach ?></select>
         </div>
       </div>
     </form>

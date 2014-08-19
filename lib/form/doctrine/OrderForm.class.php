@@ -81,11 +81,28 @@ class OrderForm extends BaseOrderForm
       'newRelationUseJSFramework'     => 'jQuery',
     ));
 
+    $utilizationPlansRelation = array('UtilizationPlans' => array(
+      'considerNewFormEmptyFields'    => array('material_id', 'amount'),
+      'noNewForm'                     => false,
+      'newFormClassArgs'              => array(array('sf_user' => $this->getOption('sf_user'))),
+      'displayEmptyRelations'         => true,
+      'formClassArgs'                 => array(array('ah_add_delete_checkbox' => true)),
+      'newFormAfterExistingRelations' => true,
+      'formFormatter'                 => null,
+      'multipleNewForms'              => true,
+      'newFormsInitialCount'          => 1,
+      'newFormsContainerForm'         => null, // pass BaseForm object here or we will create ahNewRelationsContainerForm
+      'newRelationButtonLabel'        => '+',
+      'newRelationAddByCloning'       => false,
+      'newRelationUseJSFramework'     => 'jQuery',
+    ));
+
     $user = sfContext::getInstance()->getUser();
     $this->embedRelations(array_merge(
       $user->hasCredential('can_set_order_works') && !$this->getObject()->isNew() ? $worksRelation : [],
+      $user->hasCredential('can_set_order_works') && !$this->getObject()->isNew() ? $utilizationPlansRelation : [],
       $user->hasCredential("manager") || !($user->hasGroup('master') || $user->hasGroup('worker') || $user->hasGroup('design-master') || $user->hasGroup('design-worker')) ? $invoicesRelation : [],
-      (!$this->getObject()->isNew() and $user->hasGroup('director') || $user->hasGroup('buhgalter')) ? $paysRelation : []
+      (!$this->getObject()->isNew() and $user->hasCredential('director') || $user->hasGroup('buhgalter')) ? $paysRelation : []
     ));
 
     $this->getWidgetSchema()
@@ -175,19 +192,22 @@ class OrderForm extends BaseOrderForm
       "finished_at" => $user->hasGroup("director"),
       "submited_at" => $user->hasGroup("director"),
 
-      "bill_made" => $user->hasGroup("director") or $user->hasGroup("buhgalter"),
-      "bill_given" => $user->hasGroup("director") or $user->hasGroup("buhgalter"),
-      "docs_given" => $user->hasGroup("director") or $user->hasGroup("buhgalter"),
-      "waybill_number" => $user->hasGroup("director") or $user->hasGroup("buhgalter"),
+      "bill_made" => $user->hasCredential("director") or $user->hasGroup("buhgalter"),
+      "bill_given" => $user->hasCredential("director") or $user->hasGroup("buhgalter"),
+      "docs_given" => $user->hasCredential("director") or $user->hasGroup("buhgalter"),
+      "waybill_number" => $user->hasCredential("director") or $user->hasGroup("buhgalter"),
 
       "new_RefOrderWork" => !$this->getObject()->isNew() and $user->hasCredential("can_set_order_works"),
       "RefOrderWork" => !$this->getObject()->isNew() and $user->hasCredential("can_set_order_works"),
 
+      "new_UtilizationPlans" => !$this->getObject()->isNew() and $user->hasCredential("can_set_order_works"),
+      "UtilizationPlans" => !$this->getObject()->isNew() and $user->hasCredential("can_set_order_works"),
+
       "new_Invoices" => $user->hasCredential("manager") or (!$user->hasGroup("worker") and !$user->hasGroup("design-worker") and !$user->hasGroup("master") and !$user->hasGroup("design-master")),
       "Invoices" => $user->hasCredential("manager") or (!$user->hasGroup("worker") and !$user->hasGroup("design-worker") and !$user->hasGroup("master") and !$user->hasGroup("design-master")),
 
-      "new_Pays" => !$this->getObject()->isNew() and $user->hasGroup("director") || $user->hasGroup("buhgalter"),
-      "Pays" => !$this->getObject()->isNew() and $user->hasGroup("director") || $user->hasGroup("buhgalter"),
+      "new_Pays" => !$this->getObject()->isNew() and $user->hasCredential("director") || $user->hasGroup("buhgalter"),
+      "Pays" => !$this->getObject()->isNew() and $user->hasCredential("director") || $user->hasGroup("buhgalter"),
 
       "state" => $user->hasGroup("director") or $user->hasGroup("worker") or $user->hasGroup("manager") or $user->hasGroup("design-worker"),
     ])); // empty callback for array_filter removes false values

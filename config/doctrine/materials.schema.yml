@@ -113,3 +113,33 @@ RefUtilizationArrival:
     Arrival:
       local: arrival_id
       foreign: id
+
+# Планируемый расход материала
+UtilizationPlan:
+  actAs:
+    Timestampable: ~
+    Signable: ~
+    SoftDelete: ~
+  columns:
+    order_id:
+      type: integer
+      notnull: true
+    material_id:
+      type: integer
+      notnull: true
+    amount:
+      type: decimal
+      scale: 4
+      notnull: true
+  relations:
+    Order:
+      local: order_id
+      foreign: id
+      foreignAlias: UtilizationPlans
+      type: one
+      foreignType: many
+    Material:
+      local: material_id
+      foreign: id
+      type: one
+      foreignType: many

@@ -109,7 +109,7 @@ class MaterialMovementActions extends sfActions
         ;
 
         $this->form->embedForm("Arrival", new MaterialMovementArrivalForm());
-        $this->movementTypeTitle = "Приход материалов";
+        $this->movementTypeTitle = "Приход материалов в «" . $this->warehouse . "»";
         $this->movementTypeButton = "Принять";
 
         $this->materialForm = new sfForm();
@@ -173,6 +173,17 @@ class MaterialMovementActions extends sfActions
 
         $this->movementTypeTitle = "Завершение работы";
         $this->movementTypeButton = "Завершить";
+
+        $materialsPlan = [];
+        $utilizationPlans = $ref->getOrder()->getUtilizationPlans();
+        foreach ($utilizationPlans as $utilizationPlan) {
+          if (!isset($materialsPlan[ $utilizationPlan['material_id'] ])) {
+            $materialsPlan[ $utilizationPlan['material_id'] ] = 0;
+          }
+
+          $materialsPlan[ $utilizationPlan['material_id'] ] += $utilizationPlan['amount'];
+        }
+        $this->materialsPlan = json_encode($materialsPlan, JSON_PRETTY_PRINT);
         break;
 
       default:
@@ -312,6 +323,7 @@ class MaterialMovementActions extends sfActions
                 "material_id" => $id,
                 "amount" => $moved,
                 "price" => $price,
+                'description' => $request->getParameter('materials_descriptions')[$id],
               ]);
               $list->add($materialsMovement);
 

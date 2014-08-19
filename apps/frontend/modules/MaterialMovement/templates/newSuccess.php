@@ -5,7 +5,10 @@
 
   <?php if ($type !== "utilization" or $sf_user->hasCredential("master")): ?>
     <fieldset>
-      <legend>Список материалов</legend>
+      <legend>
+        Список материалов
+        <?php if ($type === "arrival"): ?><button class="btn btn-default" id="add-new-material-from-arrival-form">Добавить материал</button><?php endif ?>
+      </legend>
       <?php if ($type === "arrival"): ?>
         <div class="copy-me">
           <div class="align-chosen-to-top">
@@ -25,6 +28,7 @@
                 <input type="number" value="0" min="0" max="<?php echo $material["amount"]; ?>" step="0.0001" class="span2" name="materials[<?php echo $material["id"]; ?>]" id="materials[<?php echo $material["id"]; ?>]">
                 <button class="btn" type="button">Выбрать всё (<?php echo $material["amount"]; ?>)</button>
               </div>
+              <input type="hidden" name="materials_descriptions[<?php echo $material["id"]; ?>]" id="materials_descriptions[<?php echo $material["id"]; ?>]">
             </div>
           </div>
         <?php endforeach ?>
@@ -98,11 +102,77 @@
     });
 
     $("#from").change(function() {
-        document.location.replace("<?php
-          $parameters = sfContext::getInstance()->getRequest()->getParameterHolder()->getAll();
-          unset($parameters["from"]);
-          echo url_for2("", array_merge($parameters, ["from" => ""]));
-        ?>" + $(this).val());
+      document.location.replace("<?php
+        $parameters = sfContext::getInstance()->getRequest()->getParameterHolder()->getAll();
+        unset($parameters["from"]);
+        echo url_for2("", array_merge($parameters, ["from" => ""]));
+      ?>" + $(this).val());
+    });
+
+    <?php if ($type === 'utilization'): ?>
+      var materialsPlan = <?php echo $sf_data->getRaw('materialsPlan'); ?>
+        , form = $('form')
+      ;
+
+      form.submit(function(e) {
+        e.preventDefault();
+
+        var utilization = {};
+        $.each(form.serializeObject(), function(input, amount) {
+          var matches = input.match(/materials\[(\d+)\]/);
+
+          if (!matches) {
+            return;
+          }
+
+          var materialId = matches.pop();
+          if (!(materialId in utilization)) {
+            utilization[materialId] = 0;
+          }
+          utilization[materialId] += +amount;
+        });
+
+        var modals = [];
+        $.each(utilization, function(materialId, amount) {
+          var push = {
+            id: materialId
+            , label: $('label[for="materials[' + materialId + ']"]').text()
+          };
+
+          if (materialId in materialsPlan) {
+            push.type = 'overhead';
+            materialsPlan[materialId] < amount && modals.push(push);
+          } else {
+            push.type = 'not in list';
+            amount > 0 && modals.push(push);
+          }
+        });
+
+        var titles = {
+          overhead: 'Вы израсходовали больше материала, чем было запланировано'
+          , 'not in list': 'Вы израсходовали не тот материал, расход которого был запланирован'
+        };
+
+        var showNextModal = function() {
+          if (modals.length > 0) {
+            var modal = modals.pop();
+            bootbox.prompt({
+              title: titles[modal.type]
+              , alert: modal.label
+              , placeholder: 'Укажите причину'
+            }, function(description) {
+              if (description && description.trim()) {
+                $('#materials_descriptions\\['+ modal.id + '\\]').val(description);
+                showNextModal();
+              }
+            });
+          } else {
+            form[0].submit();
+          }
+        };
+
+        showNextModal();
       });
+    <?php endif ?>
   });
 </script>

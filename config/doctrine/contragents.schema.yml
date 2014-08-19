@@ -1,11 +1,17 @@
 Client:
   actAs: [Signable, SoftDelete]
   columns:
+    is_blacklisted:
+      type: boolean
+      default: false
+      notnull: true
     name:
       type: string(255)
       notnull: true
     full_name:
       type: string(255)
+    credit_line:
+      type: integer
     ownership:
       type: enum
       values:
@@ -42,7 +48,9 @@ Client:
     okpo:
       type: string(32)
     discount:
-      type: string(4)
+      type: integer(2)
+      notnull: true
+      default: 0
     buhgalter:
       type: string(128)
     buhgalter_phone:

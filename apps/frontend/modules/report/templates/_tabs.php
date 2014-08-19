@@ -1,7 +1,7 @@
 <?php
   $routes = array(
     'report-costs' => 'Просмотр стоимостей',
-    'report-costs-active' => 'Просмотр текущих стоимостей',
+    // 'report-costs-active' => 'Просмотр текущих стоимостей',
     'report-managers' => 'Зарплата',
     'report-designers' => 'Дизайнеры',
     // 'report-workers' => 'Фонд ЗП цеха',

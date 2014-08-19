@@ -147,3 +147,12 @@ form.well .form-actions {
   margin-bottom: 0;
   padding-bottom: .6em;
 }
+
+.text-inverse {
+  background-color: #363636;
+  color: #fff;
+}
+
+.alert:empty {
+  display: none;
+}

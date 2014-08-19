@@ -33,8 +33,11 @@ class clientActions extends sfActions
   public function executeShow(sfWebRequest $request)
   {
     $this->_state = $request->getParameter('state');
-    $this->client = Doctrine_Core::getTable('Client')->createQuery('a')
-      ->where('a.id = ?', $request->getParameter('id'))
+    $this->client = Doctrine_Query::create()
+      ->from('Client c')
+      ->leftJoin('c.Orders o')
+      ->leftJoin('o.Creator')
+      ->where('c.id = ?', $request->getParameter('id'))
       ->fetchOne()
     ;
     $this->forward404Unless($this->client);
@@ -112,5 +115,23 @@ class clientActions extends sfActions
     die (json_encode(array_map(function($client) {
       return [$client["c_id"], $client["c_name"]];
     }, $clients), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+  }
+
+  public function executeGetCreditInfo($request)
+  {
+    $client = Doctrine_Query::create()
+      ->from('Client c')
+      ->addWhere('c.id = ?', $request->getParameter('id', -1))
+      ->fetchOne()
+    ;
+
+    $this->forward404Unless($client);
+
+    die (json_encode([
+      'credit-line' => +$client->getCreditLine()
+      , 'is-blacklisted' => $client->getIsBlacklisted()
+      , 'orders-count' => Doctrine_Query::create()->from('Order o')->addWhere('o.client_id = ?', $client->getId())->count()
+      , 'debt' => $client->getDebtSum()
+    ], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
   }
 }

@@ -17,11 +17,7 @@ class reportActions extends sfActions
 
   public function executeCosts(sfWebRequest $request)
   {
-    $this->states = array(
-      'archived' => 'Архив',
-      'debt' => 'Дебиторка',
-      'combo' => 'Архив + Дебиторка',
-    );
+    $this->states = OrderTable::$states;
 
     $this->form = new sfForm();
     $this->form->getWidgetSchema()
@@ -40,7 +36,8 @@ class reportActions extends sfActions
       ->offsetSet('state', new sfWidgetFormChoice(array(
         'choices' => $this->states,
         'label' => 'Статус',
-      )))
+        'multiple' => true,
+      ), ['class' => 'chzn-select']))
       ->setNameFormat('filter[%s]')
     ;
     $this->form->addCSRFProtection('123456789');
@@ -55,7 +52,8 @@ class reportActions extends sfActions
       )))
       ->offsetSet('state', new sfValidatorChoice(array(
         'choices' => array_keys($this->states),
-        'required' => true,
+        'required' => false,
+        'multiple' => true,
       )))
     ;
 
@@ -64,7 +62,9 @@ class reportActions extends sfActions
       'to' => date('Y-m-d', strtotime('+1 day')),
     );
     $this->manager = false;
-    $this->state = 'archived';
+    $this->state = ['archived'];
+
+    $this->form->setDefault('state', $this->state);
 
     if ($request->isMethod('post')) {
       $this->form->bind($request->getParameter('filter'));
@@ -83,7 +83,7 @@ class reportActions extends sfActions
         }
 
         if ($this->form->getValue('state')) {
-          $this->state = $this->form->getValue('state') === 'combo' ? ['archived', 'debt'] : (array)$this->form->getValue('state');
+          $this->state = (array)$this->form->getValue('state');
         }
       }
     }

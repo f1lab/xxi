@@ -62,4 +62,57 @@ class Client extends BaseClient
   {
     return $this->getName() . '|' . (int)$this->getDiscount();
   }
+
+  public function getActiveOrdersSum()
+  {
+    $activeOrdersIds = $this->getOrderIdsOfStates(['submitted', 'archived', 'deleted', 'debt'], true);
+    $active = Doctrine_Query::create()
+      ->select('sum(o.cost)')
+      ->from('Order o')
+      ->andWhereIn('o.id', $activeOrdersIds)
+      ->execute([], Doctrine_Core::HYDRATE_SINGLE_SCALAR)
+    ;
+
+    return $active;
+  }
+
+  public function getDebtSum()
+  {
+    $debtOrdersIds = $this->getOrderIdsOfStates(['debt']);
+    if ($debtOrdersIds === []) {
+      return 0;
+    }
+
+    $debt = Doctrine_Query::create()
+      ->select('sum(o.cost)')
+      ->from('Order o')
+      ->andWhereIn('o.id', $debtOrdersIds)
+      ->execute([], Doctrine_Core::HYDRATE_SINGLE_SCALAR)
+    ;
+    $payed = Doctrine_Query::create()
+      ->select('sum(p.amount)')
+      ->from('Pay p')
+      ->andWhereIn('p.order_id', $debtOrdersIds)
+      ->execute([], Doctrine_Core::HYDRATE_SINGLE_SCALAR)
+    ;
+
+    return $debt - $payed;
+  }
+
+  public function getOrderIdsOfStates(array $states, $notThisStates = false)
+  {
+    $query =  Doctrine_Query::create()
+      ->select('o.id')
+      ->from('Order o')
+      ->addWhere('o.client_id = ?', $this->getId())
+    ;
+
+    if ($notThisStates) {
+      $query->andWhereNotIn('o.state', $states);
+    } else {
+      $query->andWhereIn('o.state', $states);
+    }
+
+    return $query->execute([], Doctrine_Core::HYDRATE_SINGLE_SCALAR);
+  }
 }

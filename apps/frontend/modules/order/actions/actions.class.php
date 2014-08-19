@@ -55,8 +55,20 @@ class orderActions extends sfActions
 
   public function executeShow(sfWebRequest $request)
   {
-    $this->order = Doctrine_Core::getTable('Order')->createQuery('a, a.Client')
-      ->where('a.id = ?', $request->getParameter('id'))
+    $this->order = Doctrine_Query::create()
+      ->from('Order o')
+      ->leftJoin('o.Client c')
+      ->leftJoin('o.Comments oc')
+      ->leftJoin('oc.Creator')
+      ->leftJoin('o.Creator')
+      ->leftJoin('o.UtilizationPlans up')
+      ->leftJoin('up.Material m')
+      ->leftJoin('m.Dimension')
+      ->leftJoin('o.RefOrderWork row')
+      ->leftJoin('row.Work w')
+      ->leftJoin('w.Area')
+      ->leftJoin('row.Master')
+      ->where('o.id = ?', $request->getParameter('id'))
       ->fetchOne()
     ;
 
@@ -136,6 +148,22 @@ class orderActions extends sfActions
       $selectedFields = array_fill_keys($selectedFields, ''); // => array('creator' => '', 'description' => '', etc…)
       $this->fields = array_intersect_key($this->fields, $selectedFields); // => array('creator' => 'Клиент', etc…)
     }
+
+    $this->utilizationMovements = Doctrine_Query::create()
+      ->select('mm.id')
+      ->from('MaterialMovement mm')
+      ->innerJoin('mm.Utilization u')
+      ->addWhere('u.order_id = ?', $this->order->getId())
+      ->execute([], Doctrine_Core::HYDRATE_SINGLE_SCALAR)
+    ;
+
+    $this->utilizations = Doctrine_Query::create()
+      ->from('MaterialMovementMaterials mm')
+      ->leftJoin('mm.Material m')
+      ->andWhereIn('mm.movement_id', $this->utilizationMovements ?: [-1])
+      ->execute()
+    ;
+
   }
 
   public function executeNew(sfWebRequest $request)
