@@ -22,7 +22,9 @@ class WorkForm extends BaseWorkForm
 
     $this->getWidgetSchema()
       ->setLabels([
+        'area_id' => 'Участок',
         'name' => 'Наименование',
+        'rate' => 'Ставка',
       ])
     ;
   }

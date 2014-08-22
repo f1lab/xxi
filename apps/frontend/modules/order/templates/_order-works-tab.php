@@ -4,6 +4,7 @@
       <tr>
         <th class="span3">Участок / работа</th>
         <th>Мастер</th>
+        <th>Трудозатраты</th>
         <th>Комментарий</th>
         <th>Запланировано</th>
         <th>Готовность</th>
@@ -14,6 +15,7 @@
         <tr class="<?php echo $ref->getIsCompleted() ? 'success' : 'error' ?>">
           <td><?php echo $ref->getWork()->getNameWithArea() ?></td>
           <td><?php echo $ref->getMaster() ?></td>
+          <td><?php echo $ref->getLabor() ?></td>
           <td><?php echo $ref->getComment() ?></td>
           <td><?php echo $ref->getPlannedAt() ?></td>
           <td>

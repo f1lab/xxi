@@ -83,6 +83,11 @@ Work:
     name:
       type: string(255)
       notnull: true
+    rate:
+      type: decimal
+      scale: 1
+      notnull: true
+      default: 0
 
 # Работы заказа
 RefOrderWork:
@@ -102,6 +107,11 @@ RefOrderWork:
     master_id:
       type: integer
       notnull: true
+    labor:
+      type: decimal
+      scale: 1
+      notnull: true
+      default: 0
     comment:
       type: string(255)
     is_completed:

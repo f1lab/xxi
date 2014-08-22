@@ -13,11 +13,11 @@
   <?php endif ?>
 
   <div class="form-actions">
-    <button type="submit" class="btn btn-primary">Save</button>
-    <a href="<?php echo url_for('work/index') ?>" class="btn">Back to list</a>
+    <button type="submit" class="btn btn-primary">Сохранить</button>
+    <a href="<?php echo url_for('work/index') ?>" class="btn">Назад к списку</a>
 
     <?php if (!$form->getObject()->isNew()): ?>
-      <?php echo link_to('Delete', 'work/delete?id='.$form->getObject()->getId(), array(
+      <?php echo link_to('Удалить', 'work/delete?id='.$form->getObject()->getId(), array(
         'method' => 'delete',
         'confirm' => 'Are you sure?',
         'class' => 'btn btn-warning pull-right',

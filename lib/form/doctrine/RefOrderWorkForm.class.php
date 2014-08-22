@@ -59,6 +59,13 @@ class RefOrderWorkForm extends BaseRefOrderWorkForm
           ) ?: [])
           ->orderBy('u.last_name, u.first_name')
       ], ['class' => 'chzn-select master-selector']))
+
+      ->offsetGet('labor')
+        ->setAttribute('class', 'span1')
+        ->setAttribute('type', 'number')
+        ->setAttribute('min', 0)
+        ->setAttribute('step', 0.1)
+        ->getParent()
     ;
   }
 }

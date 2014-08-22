@@ -74,6 +74,7 @@ HTML;
           "area_id" => "Участок",
           "work_id" => "Работа",
           "master_id" => "Мастер",
+          "labor" => "Трудозатраты",
           "comment" => "Комментарий",
         ],
         "noRelationsMessage" => "Нет работ",
