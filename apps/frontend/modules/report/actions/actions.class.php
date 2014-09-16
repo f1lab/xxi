@@ -98,6 +98,7 @@ class reportActions extends sfActions
       $ids->andWhere('o.created_by = ?', $this->manager);
     }
     $ids = $ids->execute([], Doctrine_Core::HYDRATE_SINGLE_SCALAR);
+    $ids = count($ids) ? $ids : [-1];
 
     $this->report = Doctrine_Query::create()
       ->select('
