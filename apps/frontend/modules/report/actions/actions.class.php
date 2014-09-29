@@ -42,7 +42,9 @@ class reportActions extends sfActions
     ;
     $this->form->addCSRFProtection('123456789');
     $this->form->getValidatorSchema()
-      ->offsetSet('from', new sfValidatorDate())
+      ->offsetSet('from', new sfValidatorDate(array(
+        'required' => false,
+      )))
       ->offsetSet('to', new sfValidatorDate(array(
         'required' => false,
       )))
@@ -92,8 +94,12 @@ class reportActions extends sfActions
       ->from('Order o')
       ->select('o.id')
       ->andWhereIn('o.state', $this->state)
-      ->andWhere('o.submited_at >= ? and o.submited_at <= ?', array($this->period['from'], $this->period['to']))
     ;
+
+    if (in_array('archived', $this->state) or in_array('debt', $this->state) or in_array('submited', $this->state)) {
+      $ids->andWhere('o.submited_at >= ? and o.submited_at <= ?', array($this->period['from'], $this->period['to']));
+    }
+
     if ($this->manager) {
       $ids->andWhere('o.created_by = ?', $this->manager);
     }

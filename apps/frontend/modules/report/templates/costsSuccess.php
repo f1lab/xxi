@@ -17,7 +17,10 @@
           <?php echo $form['from']->render(array('placeholder' => 'from')) ?>
 
           <?php echo $form['to']->render(array('placeholder' => 'to')) ?>
-          <?php if ($form['from']->hasError()): ?><div class="help-inline"><?php echo $form['from']->getError() ?></div><?php endif ?>
+          <div class="help-inline">
+            Учитывается только для статусов «Сдан», «В архиве» и «Дебиторка».
+            <?php if ($form['from']->hasError()): ?><?php echo $form['from']->getError() ?><?php endif ?>
+          </div>
         </div>
       </div>
 
