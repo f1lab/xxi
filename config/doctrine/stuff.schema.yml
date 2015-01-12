@@ -7,6 +7,10 @@ CompanySettings:
       notnull: true
     full_name:
       type: string(255)
+    uses_vat:
+      type: boolean
+      notnull: true
+      default: false
     phone:
       type: string(128)
       notnull: true

@@ -9,6 +9,10 @@
       <td><?php echo $company_settings->getFullName() ?></td>
     </tr>
     <tr>
+      <th>Облагается НДС:</th>
+      <td><?php echo $company_settings->getUsesVat() ? 'Да' : 'Нет' ?></td>
+    </tr>
+    <tr>
       <th>Телефон:</th>
       <td><?php echo $company_settings->getPhone() ?></td>
     </tr>
