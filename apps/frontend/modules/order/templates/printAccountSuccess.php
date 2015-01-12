@@ -130,6 +130,8 @@ function morph($n, $f1, $f2, $f5) {
 
 <div class=WordSection1>
 
+<h1 style="text-align: center; font-size: 2.6em; margin-bottom: .2em; line-height: 1em">ВНИМАНИЕ! НОВЫЕ РЕКВИЗИТЫ!</h1>
+
 <table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0 width=703
  style='width:527.0pt;margin-left:4.65pt;border-collapse:collapse;mso-yfti-tbllook:
  1184;mso-padding-alt:0cm 5.4pt 0cm 5.4pt'>
@@ -465,8 +467,8 @@ function morph($n, $f1, $f2, $f5) {
   <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
   normal'><b><span style='font-size:14.0pt;font-family:"Arial","sans-serif";
   mso-fareast-font-family:"Times New Roman";mso-fareast-language:RU'>Счет на
-  оплату № <?php echo $order->getId();?> от 
-  <?php 
+  оплату № <?php echo $order->getId();?> от
+  <?php
     $monthes = array(
     1 => 'Января', 2 => 'Февраля', 3 => 'Марта', 4 => 'Апреля',
     5 => 'Мая', 6 => 'Июня', 7 => 'Июля', 8 => 'Августа',
@@ -479,7 +481,7 @@ function morph($n, $f1, $f2, $f5) {
       echo(date("d")." ".$monthes[date('n')] . date(' Y'));
   }
   ?> г.<o:p></o:p></span></b></p>
-  
+
   </td>
   <td width=36 nowrap valign=bottom style='width:27.0pt;padding:0cm 5.4pt 0cm 5.4pt;
   height:11.25pt'></td>
@@ -680,15 +682,15 @@ function morph($n, $f1, $f2, $f5) {
   <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
   normal'><b><span style='font-size:9.0pt;font-family:"Arial","sans-serif";
   mso-fareast-font-family:"Times New Roman";mso-fareast-language:RU'>
-  <?php echo $order->getClient()->getFullName();?>, 
-  ИНН <?php echo $order->getClient()->getInn();?>, 
-  <?php 
+  <?php echo $order->getClient()->getFullName();?>,
+  ИНН <?php echo $order->getClient()->getInn();?>,
+  <?php
       if ($order->getClient()->getKpp() != ""){
         echo "КПП ".$order->getClient()->getKpp().",";
       }
   ?>
-  <?php echo $order->getClient()->getAddressJure();?> 
-  <?php 
+  <?php echo $order->getClient()->getAddressJure();?>
+  <?php
       if ($order->getClient()->getPhone() != ""){
         echo ",тел.: ".$order->getClient()->getPhone();
       }
@@ -828,7 +830,7 @@ function morph($n, $f1, $f2, $f5) {
   mso-fareast-language:RU'>Сумма<o:p></o:p></span></b></p>
   </td>
  </tr>
- <?php 
+ <?php
   $counter = 1;
   $sum = 0;
  ?>
@@ -1263,14 +1265,22 @@ function morph($n, $f1, $f2, $f5) {
   <p class=MsoNormal align=right style='margin-bottom:0cm;margin-bottom:.0001pt;
   text-align:right;line-height:normal'><b><span style='font-size:9.0pt;
   font-family:"Arial","sans-serif";mso-fareast-font-family:"Times New Roman";
-  mso-fareast-language:RU'>В том числе НДС:<o:p></o:p></span></b></p>
+  mso-fareast-language:RU'><?php if ($company->getUsesVat()): ?>
+    В том числе НДС:
+  <?php else: ?>
+    Без налога (НДС)
+  <?php endif ?><o:p></o:p></span></b></p>
   </td>
   <td width=71 nowrap colspan=5 valign=top style='width:53.0pt;padding:0cm 5.4pt 0cm 5.4pt;
   height:12.0pt'>
   <p class=MsoNormal align=right style='margin-bottom:0cm;margin-bottom:.0001pt;
   text-align:right;line-height:normal'><b><span style='font-size:9.0pt;
   font-family:"Arial","sans-serif";mso-fareast-font-family:"Times New Roman";
-  mso-fareast-language:RU'><?php echo round(($sum * 18 / 118),2)?><o:p></o:p></span></b></p>
+  mso-fareast-language:RU'><?php if ($company->getUsesVat()): ?>
+    <?php echo round(($sum * 18 / 118),2) ?>
+  <?php else: ?>
+    —
+  <?php endif ?><o:p></o:p></span></b></p>
   </td>
  </tr>
  <tr style='mso-yfti-irow:25;height:12.0pt'>
@@ -1861,20 +1871,30 @@ function morph($n, $f1, $f2, $f5) {
 <p class=MsoNormal><o:p>&nbsp;</o:p></p>
 
 </div>
+
 <div class="title-size">Параметры печати</div>
 <div class="print-options">
-<h4 id="t_tn" class="h" style="display: block;">Счет на оплату</h4><ul id="c_tn" class="doc h" style="display: block;"><li><input class="hide-doc" type="checkbox" id="tn-929" checked="">№ <a href="" title=""><?php echo $order->getId()?></a><span>от 
-  <?php 
-        if ($order->getSubmitedAt()!=''){
-          echo date("d.m.Y",strtotime($order->getSubmitedAt()));
-        }
-        else {
-          echo date("d.m.Y");
-        }
-  ?>
-  </span></li></ul>
+  <h4 id="t_tn" class="h" style="display: block;">Счет на оплату</h4>
+  <ul id="c_tn" class="doc h" style="display: block;">
+    <li>
+      <input class="hide-doc" type="checkbox" id="tn-929" checked="">
+      № <a href="" title=""><?php echo $order->getId()?></a>
+      <span>от
+        <?php
+              if ($order->getSubmitedAt()!=''){
+                echo date("d.m.Y",strtotime($order->getSubmitedAt()));
+              }
+              else {
+                echo date("d.m.Y");
+              }
+        ?>
+      </span>
+    </li>
+  </ul>
 
-<h4><a href="" onclick="window.print();return false">Распечатать</a></h4>
+  <h4><a href="" onclick="window.print();return false">Распечатать</a></h4>
+</div>
+
 </body>
 
 </html>
