@@ -10,36 +10,21 @@
       "isActive" => $sf_context->getModuleName() == "client",
       "href" => url_for("@clients"),
     ],
-    "Подрядчики" => [
-      "credentials" => $sf_user->hasCredential("can_edit_contractors"),
-      "isActive" => $sf_context->getModuleName() == "contractor",
-      "href" => url_for("@contractors"),
-    ],
 
-    "Материалы" => [
-      "Поставщики" => [
-        "credentials" => $sf_user->hasCredential("can_edit_suppliers"),
-        "isActive" => $sf_context->getModuleName() == "supplier",
-        "href" => url_for("@suppliers"),
-      ],
-      "Материалы" => [
-        "credentials" => $sf_user->hasCredential("can_edit_materials"),
-        "isActive" => $sf_context->getModuleName() == "material",
-        "href" => url_for("material/index"),
-      ],
-      "Поступления материалов" => [
-        "credentials" => $sf_user->hasCredential("can_edit_arrivals"),
-        "isActive" => $sf_context->getModuleName() == "arrival",
-        "href" => url_for("arrival/index"),
-      ],
-    ],
+    // "Материалы" => [
+      // "Поступления материалов" => [
+      //   "credentials" => $sf_user->hasCredential("can_edit_arrivals"),
+      //   "isActive" => $sf_context->getModuleName() == "arrival",
+      //   "href" => url_for("arrival/index"),
+      // ],
+    // ],
 
     "Справочники" => [
-      "Номенклатура" => [
-        "credentials" => $sf_user->hasCredential("can_edit_nomenclature"),
-        "isActive" => $sf_context->getModuleName() == "nomenclature",
-        "href" => url_for("nomenclature/index"),
-      ],
+      // "Номенклатура" => [
+      //   "credentials" => $sf_user->hasCredential("can_edit_nomenclature"),
+      //   "isActive" => $sf_context->getModuleName() == "nomenclature",
+      //   "href" => url_for("nomenclature/index"),
+      // ],
       "Участок" => [
         "credentials" => $sf_user->hasCredential("can_edit_area"),
         "isActive" => $sf_context->getModuleName() == "area",
@@ -50,6 +35,26 @@
         "isActive" => $sf_context->getModuleName() == "work",
         "href" => url_for("work/index"),
       ],
+      "Поставщики материалов" => [
+        "credentials" => $sf_user->hasCredential("can_edit_suppliers"),
+        "isActive" => $sf_context->getModuleName() == "supplier",
+        "href" => url_for("@suppliers"),
+      ],
+      "Номенклатура материалов" => [
+        "credentials" => $sf_user->hasCredential("can_edit_materials"),
+        "isActive" => $sf_context->getModuleName() == "material",
+        "href" => url_for("material/index"),
+      ],
+      "Подрядчики" => [
+        "credentials" => $sf_user->hasCredential("can_edit_contractors"),
+        "isActive" => $sf_context->getModuleName() == "contractor",
+        "href" => url_for("@contractors"),
+      ],
+      "Склады" => [
+      "credentials" => $sf_user->hasCredential("can edit warehouses"),
+      "isActive" => $sf_context->getModuleName() == "warehouse",
+      "href" => url_for("warehouse/index"),
+    ],
     ],
 
     "Отчётность" => [
@@ -68,12 +73,6 @@
       ),
       "isActive" => $sf_context->getModuleName() == "plan",
       "href" => url_for("plan/index"),
-    ],
-
-    "Мои склады" => [
-      "credentials" => !$sf_user->isAnonymous() and count($sf_user->getGuardUser()->getWarehouses()) and !$sf_user->hasGroup('master'),
-      "isActive" => $sf_context->getModuleName() == "warehouse",
-      "href" => url_for("warehouse/index"),
     ],
   ];
 ?>
