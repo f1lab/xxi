@@ -81,7 +81,7 @@ HTML;
       ]) ?>
     </fieldset>
 
-    <fieldset>
+    <fieldset class="hide">
       <legend>Планируемые затраты материала</legend>
       <?php include_partial("global/relation", [
         "form" => $form,
