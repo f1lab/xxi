@@ -34,6 +34,7 @@ class Client extends BaseClient
           ->andWhereNotIn('a.state', array(
             'archived',
             'debt',
+            'deleted',
           ))
         ;
       break;
@@ -73,7 +74,7 @@ class Client extends BaseClient
       ->execute([], Doctrine_Core::HYDRATE_SINGLE_SCALAR)
     ;
 
-    return $active;
+    return (int)$active;
   }
 
   public function getDebtSum()
@@ -96,7 +97,7 @@ class Client extends BaseClient
       ->execute([], Doctrine_Core::HYDRATE_SINGLE_SCALAR)
     ;
 
-    return $debt - $payed;
+    return (int)($debt - $payed);
   }
 
   public function getOrderIdsOfStates(array $states, $notThisStates = false)
@@ -113,6 +114,8 @@ class Client extends BaseClient
       $query->andWhereIn('o.state', $states);
     }
 
-    return $query->execute([], Doctrine_Core::HYDRATE_SINGLE_SCALAR);
+    $result = $query->execute([], Doctrine_Core::HYDRATE_SINGLE_SCALAR);
+
+    return $result === [] ? [-1] : $result;
   }
 }
