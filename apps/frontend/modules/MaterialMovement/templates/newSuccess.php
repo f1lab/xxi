@@ -20,7 +20,7 @@
         <button type="button" class="btn copier">+</button>
 
       <?php else: ?>
-        <?php foreach ($balance->getRawValue() as $material): ?>
+        <?php if (isset($balance)) foreach ($balance->getRawValue() as $material): ?>
           <div class="control-group">
             <label for="materials[<?php echo $material["id"]; ?>]" class="control-label"><?php echo $material["name"]; ?></label>
             <div class="controls">

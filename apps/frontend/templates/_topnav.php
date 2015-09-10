@@ -71,7 +71,7 @@
     ],
 
     "Мои склады" => [
-      "credentials" => !$sf_user->isAnonymous() and count($sf_user->getGuardUser()->getWarehouses()),
+      "credentials" => !$sf_user->isAnonymous() and count($sf_user->getGuardUser()->getWarehouses()) and !$sf_user->hasGroup('master'),
       "isActive" => $sf_context->getModuleName() == "warehouse",
       "href" => url_for("warehouse/index"),
     ],
