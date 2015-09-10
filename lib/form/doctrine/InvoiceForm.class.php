@@ -17,7 +17,7 @@ class InvoiceForm extends BaseInvoiceForm
       ->offsetSet('description', new sfWidgetFormInputText(array(),array('style' => 'width:500px;')))
       ->offsetSet('number', new sfWidgetFormInputText(array(),array('style' => 'width:40px;')))
       ->offsetSet('price', new sfWidgetFormInputText(array(),array('style' => 'width:60px;')))
-      ->offsetSet('sum', new sfWidgetFormInputText(array(),array('style' => 'width:60px;', 'disabled' => true)));
+      ->offsetSet('sum', new sfWidgetFormInputText(array(),array('style' => 'width:60px;', 'disabled' => true, 'title' => 'Вычисляется автоматически при сохранении')));
 
     $this->getWidgetSchema()->setLabels(array(
       'description' => 'Описание заказа',
