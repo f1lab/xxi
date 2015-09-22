@@ -17,11 +17,31 @@ Order:
     due_date: timestamp
     approved_at: timestamp
     files: clob
-    installation_cost: integer
-    design_cost: integer
-    contractors_cost: integer
-    delivery_cost: integer
-    cost: integer
+    installation_cost:
+      type: decimal
+      notnull: true
+      default: 0
+      scale: 2
+    design_cost:
+      type: decimal
+      notnull: true
+      default: 0
+      scale: 2
+    contractors_cost:
+      type: decimal
+      notnull: true
+      default: 0
+      scale: 2
+    delivery_cost:
+      type: decimal
+      notnull: true
+      default: 0
+      scale: 2
+    cost:
+      type: decimal
+      notnull: true
+      default: 0
+      scale: 2
     pay_method:
       type: enum
       values:
@@ -30,8 +50,16 @@ Order:
         - non-cash
         - barter
         - settlement
-    recoil: integer
-    payed: integer
+    recoil:
+      type: decimal
+      notnull: true
+      default: 0
+      scale: 2
+    payed:
+      type: decimal
+      notnull: true
+      default: 0
+      scale: 2
     payed_at: timestamp
     expected_at: timestamp
     started_at: timestamp
@@ -109,14 +137,11 @@ Invoice:
       type: string(255)
       notnull: true
     number:
-      type: float
-      notnull: true
+      type: decimal
     price:
-      type: float
-      notnull: true
+      type: decimal
     sum:
-      type: float
-      notnull: true
+      type: decimal
   relations:
     Order:
       local: order_id
@@ -138,37 +163,8 @@ Pay:
       notnull: true
     amount: # сколько заплатили
       type: decimal
-      notnull: true
-      scale: 2
   relations:
     Order:
       local: order_id
       foreign: id
       foreignAlias: Pays
-
-#
-Nomenclature:
-  actAs:
-    Signable: ~
-    Timestampable: ~
-    SoftDelete: ~
-  columns:
-    name:
-      type: string(255)
-      notnull: true
-
-# Папка заказов
-# OrderGroup:
-  # actAs:
-    # Timestampable: ~
-    # Signable: ~
-    # SoftDelete: ~
-  # columns:
-    # client_id:
-      # type: integer
-      # notnull: true
-  # relations:
-    # Orders:
-      # class: Order
-      # foreign: group_id
-      # foreignAlias: Group

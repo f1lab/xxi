@@ -90,3 +90,14 @@ sfGuardUser:
       local: id
       foreign: user_id
       foreignAlias: Reader
+
+#
+Nomenclature:
+  actAs:
+    Signable: ~
+    Timestampable: ~
+    SoftDelete: ~
+  columns:
+    name:
+      type: string(255)
+      notnull: true

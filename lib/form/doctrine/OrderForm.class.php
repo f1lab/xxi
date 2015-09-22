@@ -142,6 +142,7 @@ class OrderForm extends BaseOrderForm
       'installation_cost' => 'Монтаж',
       'design_cost' => 'Дизайн (препресс)',
       'contractors_cost' => 'Стоимость работ подрядчиков',
+      'delivery_cost' => 'Доставка',
       'cost' => 'Общая стоимость работ',
       'started_at' => 'Дата поступления в работу',
       'finished_at' => 'Дата выполнения',
@@ -150,7 +151,6 @@ class OrderForm extends BaseOrderForm
       'pay_method' => 'Способ оплаты',
       'recoil' => 'Гарантийная сумма',
       'payed' => 'Внесённые средства',
-      'delivery_cost' => 'Доставка',
       'payed_at' => 'Дата полной оплаты',
       'state' => 'Статус',
       'expected_at' => 'Планируемая дата выполнения',
@@ -165,6 +165,37 @@ class OrderForm extends BaseOrderForm
     $this->getWidgetSchema()->offsetGet('description')->setAttribute('class', 'input-block-level');
     $this->getWidgetSchema()->offsetGet('additional')->setAttribute('class', 'input-block-level');
     $this->getWidgetSchema()->offsetGet('files')->setAttribute('class', 'input-block-level');
+
+    $this->getWidgetSchema()->offsetGet('cost')
+      ->setAttribute('class', 'span1')
+      ->setAttribute('type', 'number')
+      ->setAttribute('min', 0.00)
+      ->setAttribute('step', 0.01)
+    ;
+    $this->getWidgetSchema()->offsetGet('design_cost')
+      ->setAttribute('class', 'span1')
+      ->setAttribute('type', 'number')
+      ->setAttribute('min', 0.00)
+      ->setAttribute('step', 0.01)
+    ;
+    $this->getWidgetSchema()->offsetGet('contractors_cost')
+      ->setAttribute('class', 'span1')
+      ->setAttribute('type', 'number')
+      ->setAttribute('min', 0.00)
+      ->setAttribute('step', 0.01)
+    ;
+    $this->getWidgetSchema()->offsetGet('installation_cost')
+      ->setAttribute('class', 'span1')
+      ->setAttribute('type', 'number')
+      ->setAttribute('min', 0.00)
+      ->setAttribute('step', 0.01)
+    ;
+    $this->getWidgetSchema()->offsetGet('delivery_cost')
+      ->setAttribute('class', 'span1')
+      ->setAttribute('type', 'number')
+      ->setAttribute('min', 0.00)
+      ->setAttribute('step', 0.01)
+    ;
 
     $this
       ->getValidatorSchema()
