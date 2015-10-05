@@ -68,6 +68,19 @@
     </div>
   </div>
 
+  <?php if (
+      $sf_user->hasGroup("worker") || $sf_user->hasGroup("design-worker")
+      or $sf_user->hasCredential(["orders-filter-works-without", "order-filter-works-completed"])
+    ): ?>
+    <div class="control-group<?php if ($form['works_list']->hasError()): ?> error<?php endif ?>">
+      <?php echo $form['works_list']->renderLabel(null, array('class' => 'control-label')) ?>
+      <div class="controls">
+        <?php echo $form['works_list']->render() ?>
+        <?php if ($form['works_list']->hasError()): ?><div class="help-inline"><?php echo $form['works_list']->getError() ?></div><?php endif ?>
+      </div>
+    </div>
+  <?php endif ?>
+
   <?php $form->renderHiddenFields() ?>
   <button type="submit" class="btn btn-primary">Отфильтровать</button>
   <a href="<?php echo url_for('@orders') ?>" class="btn">Отменить</a>

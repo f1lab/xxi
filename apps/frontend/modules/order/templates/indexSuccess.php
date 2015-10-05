@@ -25,18 +25,6 @@
     <?php endforeach ?>
     </div>
   <?php else: ?>
-    <?php if (
-      $sf_user->hasGroup("worker") || $sf_user->hasGroup("design-worker")
-      or $sf_user->hasCredential(["orders-filter-works-without", "order-filter-works-completed"])
-    ): ?>
-      <div class="btn-group pull-right">
-        <a href="<?php echo url_for('orders/index?filter-works=without') ?>" class="btn <?php
-          echo $sf_request->getParameter('filter-works') === 'without' ? 'active' : '' ?>">С незаполненым списком работ</a>
-        <a href="<?php echo url_for('orders/index?filter-works=completed') ?>" class="btn <?php
-          echo $sf_request->getParameter('filter-works') === 'completed' ? 'active' : '' ?>">С выполнеными списком работ</a>
-      </div>
-    <?php endif ?>
-
     <div class="btn-group pull-right">
       <a class="btn toggler collapsed" data-toggle="collapse" href="#filterator">
         <i class="icon icon-list"></i> Фильтровать…
