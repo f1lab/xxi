@@ -74,6 +74,24 @@
       "isActive" => $sf_context->getModuleName() == "plan",
       "href" => url_for("plan/index"),
     ],
+
+    "Пользователи" => [
+      "Права" => [
+        "credentials" => $sf_user->isSuperadmin() || $sf_user->hasGroup('director'),
+        "isActive" => $sf_context->getModuleName() == "permissions",
+        "href" => url_for("permissions/index"),
+      ],
+      "Группы" => [
+        "credentials" => $sf_user->isSuperadmin() || $sf_user->hasGroup('director'),
+        "isActive" => $sf_context->getModuleName() == "groups",
+        "href" => url_for("groups/index"),
+      ],
+      "Пользователи" => [
+        "credentials" => $sf_user->isSuperadmin() || $sf_user->hasGroup('director'),
+        "isActive" => $sf_context->getModuleName() == "users",
+        "href" => url_for("users/index"),
+      ],
+    ],
   ];
 ?>
 
