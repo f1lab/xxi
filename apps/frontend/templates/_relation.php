@@ -4,7 +4,11 @@
     <?php if (!isset($onlyNew) and isset($form[$relationName])): ?>
       <tr>
         <?php foreach ($columns as $column => $label): ?>
-          <th><?php echo $label ?></th>
+          <th><?php if ($label instanceof sfOutputEscaperArrayDecorator): ?>
+            <abbr title="<?php echo $label['title'] ?>"><?php echo $label['name'] ?></abbr>
+          <?php else: ?>
+            <?php echo $label ?>
+          <?php endif ?></th>
         <?php endforeach ?>
         <th>На удаление</th>
       </tr>
@@ -38,7 +42,11 @@
     <?php if (isset($form['new_' . $relationName])): ?>
       <tr>
         <?php foreach ($columns as $column => $label): ?>
-          <th><?php echo $label ?></th>
+          <th><?php if ($label instanceof sfOutputEscaperArrayDecorator): ?>
+            <abbr title="<?php echo $label['title'] ?>"><?php echo $label['name'] ?></abbr>
+          <?php else: ?>
+            <?php echo $label ?>
+          <?php endif ?></th>
         <?php endforeach ?>
         <td></td>
       </tr>
