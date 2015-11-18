@@ -1,4 +1,25 @@
 $(function() {
+  $(".addNewOrdersTableFilter").click(function(event) {
+    var name = prompt("Название нового фильтра");
+    if (name === null) {
+      event.preventDefault();
+      return false;
+    }
+
+    if (name === "") {
+      alert("Имя обязательно для заполнения");
+      event.preventDefault();
+      return false;
+    }
+
+    var isDefault = confirm("Использовать по-умолчанию?");
+
+    $('#filter-saver-name').val(name);
+    $('#filter-saver-is-default').val(+isDefault);
+
+    $(this).parents('form').attr('action', App['add-new-orders-table-filter']);
+  });
+
   $(".submit-on-select-change")
     .find("select").eq(0)
     .change(function() {

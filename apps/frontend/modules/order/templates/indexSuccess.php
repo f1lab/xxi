@@ -39,7 +39,7 @@
 </div>
 
   <?php if (!$sf_user->hasGroup('monitor')): ?>
-    <div id="filterator" class="collapse"><?php include_partial('filter', array('form' => $filter)) ?></div>
+    <div id="filterator" class="collapse"><?php include_partial('filter', array('form' => $filter, 'filters' => $filters, 'currentFilter' => $currentFilter)) ?></div>
   <?php endif ?>
 
 <?php

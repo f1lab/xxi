@@ -126,7 +126,7 @@ class OrderFormFilter extends BaseOrderFormFilter
     ));
   }
 
-  public function getFilterQuery($request, $user)
+  public function getFilterQuery($filter, $user)
   {
     $query = Doctrine_Core::getTable('Order')->createQuery('a, a.Client, a.Creator');
 
@@ -165,8 +165,8 @@ class OrderFormFilter extends BaseOrderFormFilter
       ));
     }
 
-    if ($request->hasParameter($this->getName())) {
-      $this->bind($request->getParameter($this->getName()));
+    if ($filter !== null) {
+      $this->bind($filter);
     }
 
     if (true == ($values = array_merge($this->getDefaults(), $this->getValues()))) {

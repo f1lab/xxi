@@ -1,3 +1,33 @@
+<?php if (count($filters) > 0): ?>
+  <div class="well">
+    <form class="form-horizontal submit-on-select-change" method="get">
+      <div class="control-group">
+        <div class="control-label">
+          Сохранённый фильтр
+        </div>
+        <div class="controls">
+          <select name="filter_id" class="chzn-select" data-placeholder="Выберите">
+            <option value=""></option>
+          <?php foreach ($filters as $filter): ?>
+            <option value="<?php echo $filter->getId() ?>" <?php if ($currentFilter !== null and $currentFilter->getId() === $filter->getId()) echo 'selected' ?>>
+              <?php echo $filter ?>
+            </option>
+          <?php endforeach ?></select>
+        </div>
+      </div>
+
+      <?php if ($currentFilter !== null): ?>
+        <div class="control-group">
+          <div class="controls">
+            <a href="<?php echo url_for('OrdersTableFilter/setAsDefault?id=' . $currentFilter->getId()); ?>" class="btn">Сделать фильтром по-умолчанию</a>
+            <a href="<?php echo url_for('OrdersTableFilter/delete?id=' . $currentFilter->getId()); ?>" class="btn confirm">Удалить фильтр</a>
+          </div>
+        </div>
+      <?php endif ?>
+    </form>
+  </div>
+<?php endif ?>
+
 <form action="<?php echo url_for('@orders') ?>" method="get" class="well form-horizontal">
 
   <div class="control-group<?php if ($form['client_id']->hasError()): ?> error<?php endif ?>">
@@ -82,6 +112,13 @@
   <?php endif ?>
 
   <?php $form->renderHiddenFields() ?>
+
+  <?php if ($sf_request->getParameter($form->getName())): ?>
+    <input type="hidden" name="filter-name" id="filter-saver-name">
+    <input type="hidden" name="filter-is-default" id="filter-saver-is-default">
+    <button type="submit" class="btn addNewOrdersTableFilter">Сохранить как новый фильтр</button>
+  <?php endif ?>
+
   <button type="submit" class="btn btn-primary">Отфильтровать</button>
   <a href="<?php echo url_for('@orders') ?>" class="btn">Отменить</a>
 </form>

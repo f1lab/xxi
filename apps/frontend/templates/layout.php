@@ -25,6 +25,8 @@
       , 'dump-all-materials': '<?php echo url_for('material/dump') ?>'
 
       , 'get-client-credit-info': '<?php echo url_for('client/getCreditInfo') ?>'
+
+      , 'add-new-orders-table-filter': '<?php echo url_for('OrdersTableFilter/addNew') ?>'
     };
   </script>
 </head>

@@ -16,6 +16,11 @@ sfGuardUser:
       foreignType: one
       local: id
       foreign: user_id
+    OrdersTableFilter:
+      type: many
+      foreignType: one
+      local: id
+      foreign: user_id
 
 # Настройка отображения
 OrdersTableSettings:
@@ -82,4 +87,21 @@ OrdersTableSettings:
     comments_enabled:
       type: boolean
       default: true
+      notnull: true
+
+OrdersTableFilter:
+  actAs: [Timestampable]
+  columns:
+    user_id:
+      type: integer
+      notnull: true
+    name:
+      type: string(255)
+      notnull: true
+    is_default:
+      type: boolean
+      default: true
+      notnull: true
+    filter:
+      type: array
       notnull: true

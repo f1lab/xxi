@@ -12,8 +12,30 @@ class orderActions extends sfActions
 {
   public function executeIndex(sfWebRequest $request)
   {
+    $this->filters = Doctrine_Query::create()
+      ->from('OrdersTableFilter f INDEXBY f.id')
+      ->addWhere('f.user_id = ?', $this->getUser()->getGuardUser()->getId())
+      ->addOrderBy('f.is_default desc')
+      ->addOrderBy('f.updated_at desc')
+      ->execute()
+    ;
+
     $this->filter = new OrderFormFilter();
-    $filterQuery = $this->filter->getFilterQuery($request, $this->getUser());
+
+    if ($request->hasParameter($this->filter->getName())) { // filled filter form
+      $this->currentFilter = null;
+      $filterQueryFilterParameter = $request->getParameter($this->filter->getName());
+    } elseif ($request->hasParameter('filter_id')) { // selected saved filter
+      $this->currentFilter = $this->filters->contains($request->getParameter('filter_id', -1)) ? $this->filters->get($request->getParameter('filter_id', -1)) : null;
+      $filterQueryFilterParameter = $this->currentFilter ? $this->currentFilter->getFilter() : null;
+    } elseif (count($this->filters) > 0 and $this->filters->getFirst()->getIsDefault()) { // default saved filter
+      $this->currentFilter = $this->filters->getFirst();
+      $filterQueryFilterParameter = $this->currentFilter->getFilter();
+    } else { // default filter form values
+      $this->currentFilter = null;
+      $filterQueryFilterParameter = null;
+    }
+    $filterQuery = $this->filter->getFilterQuery($filterQueryFilterParameter, $this->getUser());
 
     $this->pager = new sfDoctrinePager(
       'Order',
