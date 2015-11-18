@@ -1,0 +1,85 @@
+sfGuardUser:
+  relations:
+    Orders:
+      class: Order
+      type: many
+      local: id
+      foreign: created_by
+      foreignAlias: Creator
+    CommentReads:
+      type: many
+      local: id
+      foreign: user_id
+      foreignAlias: Reader
+    OrdersTableSettings:
+      type: one
+      foreignType: one
+      local: id
+      foreign: user_id
+
+# Настройка отображения
+OrdersTableSettings:
+  columns:
+    user_id:
+      type: integer
+      notnull: true
+    id_enabled:
+      type: boolean
+      default: true
+      notnull: true
+    client_id_enabled:
+      type: boolean
+      default: true
+      notnull: true
+    approved_at_enabled:
+      type: boolean
+      default: true
+      notnull: true
+    due_date_enabled:
+      type: boolean
+      default: true
+      notnull: true
+    submited_at_enabled:
+      type: boolean
+      default: true
+      notnull: true
+    state_enabled:
+      type: boolean
+      default: true
+      notnull: true
+    cost_enabled:
+      type: boolean
+      default: true
+      notnull: true
+    payed_enabled:
+      type: boolean
+      default: true
+      notnull: true
+    pay_method_enabled:
+      type: boolean
+      default: true
+      notnull: true
+    payed_at_enabled:
+      type: boolean
+      default: true
+      notnull: true
+    manager_enabled:
+      type: boolean
+      default: true
+      notnull: true
+    bill_made_enabled:
+      type: boolean
+      default: true
+      notnull: true
+    bill_given_enabled:
+      type: boolean
+      default: true
+      notnull: true
+    docs_given_enabled:
+      type: boolean
+      default: true
+      notnull: true
+    comments_enabled:
+      type: boolean
+      default: true
+      notnull: true

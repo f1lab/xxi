@@ -12,31 +12,32 @@ class orderActions extends sfActions
 {
   public function executeIndex(sfWebRequest $request)
   {
-    $this->orders = array();
     $this->filter = new OrderFormFilter();
+    $filterQuery = $this->filter->getFilterQuery($request, $this->getUser());
 
     $this->pager = new sfDoctrinePager(
       'Order',
       100
     );
-
-    $filterQuery = $this->filter->getFilterQuery($request, $this->getUser());
     $this->pager->setQuery($filterQuery);
-
     $this->pager->setPage($request->getParameter('page', 1));
     $this->pager->init();
 
-    $orders = $this->pager->getResults();
-    foreach ($orders as &$order) {
-      $commentReads = Doctrine_Query::create()
-        ->select('*, (select count(*) from comment_reads where comment_id = c.id and user_id = ?) read')
-        ->from('Comment c')
-        ->andWhere('order_id = ?', $order->getId())
-        ->execute(array($this->getUser()->getGuardUser()->getId()))
-      ;
-      $order->setComments($commentReads);
+    $this->settings = $this->getUser()->getGuardUser()->getOrdersTableSettings();
+
+    if ($this->settings->getCommentsEnabled() === true) {
+      $orders = $this->pager->getResults();
+      foreach ($orders as &$order) {
+        $commentReads = Doctrine_Query::create()
+          ->select('*, (select count(*) from comment_reads where comment_id = c.id and user_id = ?) read')
+          ->from('Comment c')
+          ->andWhere('order_id = ?', $order->getId())
+          ->execute(array($this->getUser()->getGuardUser()->getId()))
+        ;
+        $order->setComments($commentReads);
+      }
+      $this->pager->setResults($orders);
     }
-    $this->pager->setResults($orders);
   }
 
   public function executeShow(sfWebRequest $request)

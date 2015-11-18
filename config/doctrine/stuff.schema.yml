@@ -77,20 +77,6 @@ CommentReads:
       fields: [comment_id, user_id]
       type: unique
 
-sfGuardUser:
-  relations:
-    Orders:
-      class: Order
-      type: many
-      local: id
-      foreign: created_by
-      foreignAlias: Creator
-    CommentReads:
-      type: many
-      local: id
-      foreign: user_id
-      foreignAlias: Reader
-
 #
 Nomenclature:
   actAs:
