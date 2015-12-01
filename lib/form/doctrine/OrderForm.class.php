@@ -147,12 +147,11 @@ class OrderForm extends BaseOrderForm
       'started_at' => 'Дата поступления в работу',
       'finished_at' => 'Дата выполнения',
       'submited_at' => 'Дата сдачи заказа',
-      'state' => 'Статус',
+      'state' => ' ',
       'pay_method' => 'Способ оплаты',
       'recoil' => 'Гарантийная сумма',
       'payed' => 'Внесённые средства',
       'payed_at' => 'Дата полной оплаты',
-      'state' => 'Статус',
       'expected_at' => 'Планируемая дата выполнения',
       'area' => 'Участок',
       'bill_made' => 'Счёт сформирован',
@@ -202,6 +201,9 @@ class OrderForm extends BaseOrderForm
       ->offsetSet('description', new sfValidatorString(array('required' => false), array('required' => 'Поле не должно быть пустым.')))
       ->offsetSet('expected_at', new sfValidatorBootstrapDateTime(array('required' => false)))
       ->offsetSet('cost', new sfValidatorNumber(['required' => true, 'min' => 0.01], ['min' => 'Стоимость не может быть нулевой']))
+      ->setPostValidator(
+        new sfValidatorCallback(['callback' => [$this, 'checkDatesRequiredOnAllStatusesExceptCalculating']])
+      )
     ;
 
     $editableFields = array_keys(array_filter([
@@ -245,5 +247,27 @@ class OrderForm extends BaseOrderForm
     ])); // empty callback for array_filter removes false values
 
     $this->useFields($editableFields);
+  }
+
+  public function checkDatesRequiredOnAllStatusesExceptCalculating($validator, $values)
+  {
+    if ($values['state'] !== 'calculating') {
+      $error = new sfValidatorError($validator, 'Обязательно для заполнения');
+
+      $errors = [];
+      if (empty($values['approved_at'])) {
+        $errors['approved_at'] =$error;
+      }
+
+      if (trim($values['due_date']) === '') {
+        $errors['due_date'] = $error;
+      }
+
+      if (count($errors)) {
+        throw new sfValidatorErrorSchema($validator, $errors);
+      }
+    }
+
+    return $values;
   }
 }
