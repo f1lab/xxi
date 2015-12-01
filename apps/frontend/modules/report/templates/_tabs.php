@@ -3,10 +3,11 @@
     'report-costs' => 'Просмотр стоимостей',
     // 'report-costs-active' => 'Просмотр текущих стоимостей',
     'report-managers' => 'Зарплата',
+    'report-masters' => 'Зарплата мастеров',
     'report-designers' => 'Дизайнеры',
     // 'report-workers' => 'Фонд ЗП цеха',
     'report-clients' => 'Клиенты',
-    'report-materials' => 'Материалы',
+    // 'report-materials' => 'Материалы',
     'report-debt' => 'Дебиторка',
     // 'export' => 'Выгрузка в 1С',
   );

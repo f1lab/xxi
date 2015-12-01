@@ -134,12 +134,6 @@ fieldset {
     margin: 0;
   }
 
-#add-new-client-from-order-form {
-  position: relative;
-  top: -8px;
-  left: 5px;
-}
-
 form.well .control-group:last-child {
   margin-bottom: 0;
 }
@@ -155,4 +149,13 @@ form.well .form-actions {
 
 .alert:empty {
   display: none;
+}
+
+.relations-table th:first-child,
+.relations-table td:first-child {
+  padding-left: 0;
+}
+.relations-table th {
+  font-weight: normal;
+  text-align: left;
 }

@@ -40,7 +40,7 @@ class sfWidgetFormBootstrapDateTime extends sfWidgetForm
       return $value;
     };
 
-    if ($value !== null) {
+    if ($value !== null && $value !== '') {
       $value = date(self::javascriptDateFormat2Php($this->getOption('format')), strtotime($value));
     }
 

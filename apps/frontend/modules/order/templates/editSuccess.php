@@ -74,14 +74,17 @@ HTML;
           "area_id" => "Участок",
           "work_id" => "Работа",
           "master_id" => "Мастер",
-          "labor" => "Трудозатраты",
+          "labor" => [
+            "name" => "Трудозатраты",
+            "title" => "Сумма, которая будет включена в заработную плату Мастера",
+          ],
           "comment" => "Комментарий",
         ],
         "noRelationsMessage" => "Нет работ",
       ]) ?>
     </fieldset>
 
-    <fieldset>
+    <fieldset class="hide">
       <legend>Планируемые затраты материала</legend>
       <?php include_partial("global/relation", [
         "form" => $form,

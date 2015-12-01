@@ -1,12 +1,16 @@
 <?php if (isset($form[$relationName]) or isset($form['new_' . $relationName])): ?>
-<table class="table-condensed add-remove-chzn-for-relations add-remove-datetimepicker-for-relations">
+<table class="table-condensed add-remove-chzn-for-relations add-remove-datetimepicker-for-relations relations-table">
   <tbody>
-    <?php if (isset($form[$relationName])): ?>
+    <?php if (!isset($onlyNew) and isset($form[$relationName])): ?>
       <tr>
         <?php foreach ($columns as $column => $label): ?>
-          <td><?php echo $label ?></td>
+          <th><?php if ($label instanceof sfOutputEscaperArrayDecorator): ?>
+            <abbr title="<?php echo $label['title'] ?>"><?php echo $label['name'] ?></abbr>
+          <?php else: ?>
+            <?php echo $label ?>
+          <?php endif ?></th>
         <?php endforeach ?>
-        <td>На удаление</td>
+        <th>На удаление</th>
       </tr>
       <?php if (count($form[$relationName])): ?>
         <?php foreach ($form[$relationName] as $i => $relation ):?>
@@ -30,7 +34,7 @@
         <?php endforeach ?>
       <?php else: ?>
         <tr>
-          <td colspan="3"><div class="alert alert-info"><?php echo $noRelationsMessage ?></div></td>
+          <td colspan="3"><div class="alert alert-info"><?php echo isset($noRelationsMessage) ? $noRelationsMessage : 'Ничего не найдено' ?></div></td>
         </tr>
       <?php endif ?>
     <?php endif ?>
@@ -38,7 +42,11 @@
     <?php if (isset($form['new_' . $relationName])): ?>
       <tr>
         <?php foreach ($columns as $column => $label): ?>
-          <td><?php echo $label ?></td>
+          <th><?php if ($label instanceof sfOutputEscaperArrayDecorator): ?>
+            <abbr title="<?php echo $label['title'] ?>"><?php echo $label['name'] ?></abbr>
+          <?php else: ?>
+            <?php echo $label ?>
+          <?php endif ?></th>
         <?php endforeach ?>
         <td></td>
       </tr>
@@ -58,7 +66,7 @@
         </td>
       </tr>
       <tr>
-        <td><button type="button" class="btn ahAddRelation" rel="new_<?php echo $relationName ?>">+</button></td>
+        <td><button type="button" class="btn ahAddRelation" rel="new_<?php echo $relationName ?>">+<?php echo isset($addLabel) ? ' ' . $addLabel : '' ?></button></td>
       </tr>
     <?php endif ?>
   </tbody>

@@ -68,6 +68,7 @@ class OrderFormFilter extends BaseOrderFormFilter
       ->offsetSet('submited_at_to', new sfWidgetFormBootstrapDate())
       ->offsetSet('payed_at_from', new sfWidgetFormBootstrapDate())
       ->offsetSet('payed_at_to', new sfWidgetFormBootstrapDate())
+      ->offsetSet('works_list', new sfWidgetFormChoice(array('choices' => array('' => 'без разницы', 'without' => 'не заполнен', 'completed' => 'выполнен'))))
       ->setLabels(array(
         'client_id' => 'Клиент',
         'created_by' => 'Менеджер',
@@ -81,6 +82,7 @@ class OrderFormFilter extends BaseOrderFormFilter
         'bill_made' => 'Счёт сформирован',
         'bill_given' => 'Счёт доставлен',
         'docs_given' => 'Документы выданы',
+        'works_list' => 'Список работ',
       ))
       ->setNameFormat('order_filters[%s]')
     ;
@@ -103,6 +105,7 @@ class OrderFormFilter extends BaseOrderFormFilter
       ->offsetSet('submited_at_to', new sfValidatorPass())
       ->offsetSet('payed_at_from', new sfValidatorPass())
       ->offsetSet('payed_at_to', new sfValidatorPass())
+      ->offsetSet('works_list', new sfValidatorPass())
     ;
 
     $this->setDefaults(array(
@@ -123,7 +126,7 @@ class OrderFormFilter extends BaseOrderFormFilter
     ));
   }
 
-  public function getFilterQuery($request, $user)
+  public function getFilterQuery($filter, $user)
   {
     $query = Doctrine_Core::getTable('Order')->createQuery('a, a.Client, a.Creator');
 
@@ -162,8 +165,8 @@ class OrderFormFilter extends BaseOrderFormFilter
       ));
     }
 
-    if ($request->hasParameter($this->getName())) {
-      $this->bind($request->getParameter($this->getName()));
+    if ($filter !== null) {
+      $this->bind($filter);
     }
 
     if (true == ($values = array_merge($this->getDefaults(), $this->getValues()))) {
@@ -217,6 +220,21 @@ class OrderFormFilter extends BaseOrderFormFilter
 
       if (isset($values['docs_given']) and in_array($values['docs_given'], array("0", "1"), true)) {
         $query->andWhere('docs_given = ?', (bool)$values['docs_given']);
+      }
+
+      if (isset($values['works_list'])) {
+        if ($values['works_list'] === 'without') {
+          $query
+            ->leftJoin('a.RefOrderWork rof')
+            ->addWhere('rof.id is null')
+          ;
+        } elseif ($values['works_list'] === 'completed') {
+          $query
+            ->leftJoin('a.RefOrderWork rof1')
+            ->addWhere('a.id NOT IN (SELECT a1.id from Order a1 LEFT JOIN a1.RefOrderWork rof2 WHERE rof2.is_completed = false)')
+            ->addWhere('rof1.id IS NOT NULL')
+          ;
+        }
       }
     }
 

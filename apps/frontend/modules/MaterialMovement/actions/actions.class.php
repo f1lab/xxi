@@ -146,7 +146,7 @@ class MaterialMovementActions extends sfActions
 
       case "utilization":
         $ref = Doctrine_Core::getTable("RefOrderWork")->find($request->getParameter("id"));
-        $this->forward404Unless($ref and $ref->getOrder());
+        $this->forward404Unless($ref and $ref->getOrder() and !$ref->getIsCompleted());
 
         $utilizatioForm = new MaterialMovementUtilizationForm();
         $utilizatioForm->setDefaults([

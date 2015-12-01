@@ -7,7 +7,7 @@
   <tbody>
     <tr>
       <th scope="row">Кредитная линия</th>
-      <td><?php echo $client->getCreditLine() ?></td>
+      <td><?php echo (int)$client->getCreditLine() ?></td>
     </tr>
     <tr>
       <th scope="row">Скидка</th>

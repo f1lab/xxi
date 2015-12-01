@@ -1,0 +1,170 @@
+# Заказ
+Order:
+  actAs:
+    Timestampable: ~
+    Signable: ~
+    SoftDelete: ~
+    Versionable:
+      className: '%CLASS%AutoVersion'
+  columns:
+    client_id:
+      type: integer
+      notnull: true
+    description:
+      type: clob
+      notnull: true
+    additional: clob
+    due_date: timestamp
+    approved_at: timestamp
+    files: clob
+    installation_cost:
+      type: decimal
+      notnull: true
+      default: 0
+      scale: 2
+    design_cost:
+      type: decimal
+      notnull: true
+      default: 0
+      scale: 2
+    contractors_cost:
+      type: decimal
+      notnull: true
+      default: 0
+      scale: 2
+    delivery_cost:
+      type: decimal
+      notnull: true
+      default: 0
+      scale: 2
+    cost:
+      type: decimal
+      notnull: true
+      default: 0
+      scale: 2
+    pay_method:
+      type: enum
+      values:
+        - ""
+        - cash
+        - non-cash
+        - barter
+        - settlement
+    recoil:
+      type: decimal
+      notnull: true
+      default: 0
+      scale: 2
+    payed:
+      type: decimal
+      notnull: true
+      default: 0
+      scale: 2
+    payed_at: timestamp
+    expected_at: timestamp
+    started_at: timestamp
+    finished_at: timestamp
+    submited_at: timestamp
+    execution_time: time
+    state:
+      type: enum
+      notnull: true
+      values:
+        - calculating # На просчёте
+
+        - prepress # Необходим дизайн
+        - prepress-working # Дизайн в работе
+        - prepress-done # Дизайн готов
+
+        - work # В цех
+        - working # В работе
+        - done # Всё готово
+
+        - submited
+        - archived
+        - debt
+        - deleted
+    area:
+      type: enum
+      values:
+        - pvc
+        - laser
+        - engraver
+        - mymaka
+        - outdoor
+        - lfp
+        - sublimation
+        - cutter
+        - serigraphy
+    bill_made:
+      type: boolean
+      notnull: true
+      default: false
+    bill_given:
+      type: boolean
+      notnull: true
+      default: false
+    docs_given:
+      type: boolean
+      notnull: true
+      default: false
+    waybill_number: integer
+  relations:
+    Comments:
+      class: Comment
+      type: many
+      local: id
+      foreign: order_id
+  indexes:
+    state:
+      fields: [state]
+    deleted_at:
+      fields: [deleted_at]
+    kasha_malasha:
+      fields: [submited_at, finished_at, payed_at, started_at, expected_at, due_date, created_at]
+    bills:
+      fields: [bill_made, bill_given]
+    area:
+      fields: [area]
+
+# Описание заказа
+Invoice:
+  columns:
+    order_id:
+      type: integer
+      notnull: true
+    description:
+      type: string(255)
+      notnull: true
+    number:
+      type: decimal
+    price:
+      type: decimal
+    sum:
+      type: decimal
+  relations:
+    Order:
+      local: order_id
+      foreign: id
+      onDelete: CASCADE
+      foreignAlias: Invoices
+
+# Внесённые средства
+Pay:
+  actAs:
+    Signable: ~
+    Timestampable: ~
+  columns:
+    order_id:
+      type: integer
+      notnull: true
+    payed_at: # когда заплатили
+      type: timestamp
+      notnull: true
+    amount: # сколько заплатили
+      type: decimal
+  relations:
+    Order:
+      local: order_id
+      foreign: id
+      foreignAlias: Pays

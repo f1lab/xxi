@@ -17,21 +17,6 @@
   <?php echo $form->renderHiddenFields()?>
 
   <fieldset>
-    <legend>Позиции заказа</legend>
-    <?php include_partial('global/relation', [
-      'form' => $form,
-      'relationName' => 'Invoices',
-      'columns' => [
-        'description' => 'Описание заказа',
-        'number' => 'Кол-во',
-        'price' => 'Цена',
-        'sum' => 'Сумма',
-      ],
-      'noRelationsMessage' => 'Нет описания',
-    ]) ?>
-  </fieldset>
-
-  <fieldset>
     <legend>Основная информация</legend>
 
     <div class="control-group">
@@ -41,6 +26,21 @@
 
         <a class="btn" href="#add-new-client" id="add-new-client-from-order-form">Добавить нового клиента</a>
       </div>
+    </div>
+
+    <div class="control-group">
+      <?php include_partial('global/relation', [
+        'form' => $form,
+        'relationName' => 'Invoices',
+        'columns' => [
+          'description' => 'Описание заказа',
+          'number' => 'Кол-во',
+          'price' => 'Цена',
+          'sum' => 'Сумма',
+        ],
+        'onlyNew' => true,
+        'addLabel' => 'Добавить позицию',
+      ]) ?>
     </div>
 
     <?php echo $form['description']->renderRowUsing('bootstrap')?>

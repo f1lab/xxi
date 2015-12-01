@@ -209,6 +209,10 @@ report-managers:
   url:   /reports/managers
   param: { module: report, action: managers }
 
+report-masters:
+  url:   /reports/masters
+  param: { module: report, action: masters }
+
 report-designers:
   url:   /reports/designers
   param: { module: report, action: designers }

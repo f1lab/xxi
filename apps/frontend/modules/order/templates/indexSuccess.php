@@ -25,18 +25,11 @@
     <?php endforeach ?>
     </div>
   <?php else: ?>
-    <?php if (
-      $sf_user->hasGroup("worker") || $sf_user->hasGroup("design-worker")
-      or $sf_user->hasCredential(["orders-filter-works-without", "order-filter-works-completed"])
-    ): ?>
-      <div class="btn-group pull-right">
-        <a href="<?php echo url_for('orders/index?filter-works=without') ?>" class="btn <?php
-          echo $sf_request->getParameter('filter-works') === 'without' ? 'active' : '' ?>">С незаполненым списком работ</a>
-        <a href="<?php echo url_for('orders/index?filter-works=completed') ?>" class="btn <?php
-          echo $sf_request->getParameter('filter-works') === 'completed' ? 'active' : '' ?>">С выполнеными списком работ</a>
-      </div>
-    <?php endif ?>
-
+    <div class="btn-group pull-right">
+      <a href="<?php echo url_for('OrdersTableSettings/edit?id=' . $settings->getId()) ?>" class="btn">
+        <i class="icon icon-cog"></i> Настроить вид
+      </a>
+    </div>
     <div class="btn-group pull-right">
       <a class="btn toggler collapsed" data-toggle="collapse" href="#filterator">
         <i class="icon icon-list"></i> Фильтровать…
@@ -46,50 +39,11 @@
 </div>
 
   <?php if (!$sf_user->hasGroup('monitor')): ?>
-    <div id="filterator" class="collapse"><?php include_partial('filter', array('form' => $filter)) ?></div>
+    <div id="filterator" class="collapse"><?php include_partial('filter', array('form' => $filter, 'filters' => $filters, 'currentFilter' => $currentFilter)) ?></div>
   <?php endif ?>
 
 <?php
-  $columns = array(
-    'id',
-    'client_id',
-    'approved_at',
-    'due_date',
-    'state',
-    'manager',
-    'comments',
-    'bill_made',
-    'bill_given',
-    'docs_given',
-  );
-
-  if ($sf_user->hasGroup('monitor')) {
-    unset (
-      $columns['client_id'],
-      $columns['bill_made'],
-      $columns['bill_given'],
-      $columns['docs_given']
-    );
-  }
-
-  if ($sf_user->hasGroup('buhgalter')) {
-    $columns = array(
-      'id',
-      'client_id',
-      'cost',
-      'payed',
-      'pay_method',
-      'payed_at',
-      'approved_at',
-      'submited_at',
-      'manager',
-      'comments',
-      'bill_made',
-      'bill_given',
-      'docs_given',
-    );
-  }
-
+  $columns = $settings->getColumnsForPartial();
   include_partial('global/orders', array('pager' => $pager, 'columns' => $columns));
 ?>
 

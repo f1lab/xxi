@@ -12,45 +12,54 @@ class orderActions extends sfActions
 {
   public function executeIndex(sfWebRequest $request)
   {
-    $this->orders = array();
+    $this->filters = Doctrine_Query::create()
+      ->from('OrdersTableFilter f INDEXBY f.id')
+      ->addWhere('f.user_id = ?', $this->getUser()->getGuardUser()->getId())
+      ->addOrderBy('f.is_default desc')
+      ->addOrderBy('f.updated_at desc')
+      ->execute()
+    ;
+
     $this->filter = new OrderFormFilter();
+
+    if ($request->hasParameter($this->filter->getName())) { // filled filter form
+      $this->currentFilter = null;
+      $filterQueryFilterParameter = $request->getParameter($this->filter->getName());
+    } elseif ($request->hasParameter('filter_id')) { // selected saved filter
+      $this->currentFilter = $this->filters->contains($request->getParameter('filter_id', -1)) ? $this->filters->get($request->getParameter('filter_id', -1)) : null;
+      $filterQueryFilterParameter = $this->currentFilter ? $this->currentFilter->getFilter() : null;
+    } elseif (count($this->filters) > 0 and $this->filters->getFirst()->getIsDefault()) { // default saved filter
+      $this->currentFilter = $this->filters->getFirst();
+      $filterQueryFilterParameter = $this->currentFilter->getFilter();
+    } else { // default filter form values
+      $this->currentFilter = null;
+      $filterQueryFilterParameter = null;
+    }
+    $filterQuery = $this->filter->getFilterQuery($filterQueryFilterParameter, $this->getUser());
 
     $this->pager = new sfDoctrinePager(
       'Order',
       100
     );
-
-    $filterQuery = $this->filter->getFilterQuery($request, $this->getUser());
-    if (true == ($worksFilter = $request->getParameter('filter-works'))) {
-      if ($worksFilter === 'without') {
-        $filterQuery
-          ->leftJoin('a.RefOrderWork rof')
-          ->addWhere('rof.id is null')
-        ;
-      } elseif ($worksFilter === 'completed') {
-        $filterQuery
-          ->leftJoin('a.RefOrderWork rof1')
-          ->addWhere('a.id NOT IN (SELECT a1.id from Order a1 LEFT JOIN a1.RefOrderWork rof2 WHERE rof2.is_completed = false)')
-          ->addWhere('rof1.id IS NOT NULL')
-        ;
-      }
-    }
     $this->pager->setQuery($filterQuery);
-
     $this->pager->setPage($request->getParameter('page', 1));
     $this->pager->init();
 
-    $orders = $this->pager->getResults();
-    foreach ($orders as &$order) {
-      $commentReads = Doctrine_Query::create()
-        ->select('*, (select count(*) from comment_reads where comment_id = c.id and user_id = ?) read')
-        ->from('Comment c')
-        ->andWhere('order_id = ?', $order->getId())
-        ->execute(array($this->getUser()->getGuardUser()->getId()))
-      ;
-      $order->setComments($commentReads);
+    $this->settings = $this->getUser()->getGuardUser()->getOrdersTableSettings();
+
+    if ($this->settings->getCommentsEnabled() === true) {
+      $orders = $this->pager->getResults();
+      foreach ($orders as &$order) {
+        $commentReads = Doctrine_Query::create()
+          ->select('*, (select count(*) from comment_reads where comment_id = c.id and user_id = ?) read')
+          ->from('Comment c')
+          ->andWhere('order_id = ?', $order->getId())
+          ->execute(array($this->getUser()->getGuardUser()->getId()))
+        ;
+        $order->setComments($commentReads);
+      }
+      $this->pager->setResults($orders);
     }
-    $this->pager->setResults($orders);
   }
 
   public function executeShow(sfWebRequest $request)

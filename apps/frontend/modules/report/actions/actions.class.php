@@ -224,7 +224,7 @@ class reportActions extends sfActions
 
     $this->period = array(
       'from' => date('Y') . '-01-01',
-      'to' => date('Y-m-d'),
+      'to' => date('Y-m-d 23:59:59'),
     );
 
     if ($request->isMethod('post')) {
@@ -274,6 +274,59 @@ class reportActions extends sfActions
         'debt',
       ])
       ->fetchOne()
+    ;
+  }
+
+  public function executeMasters(sfWebRequest $request)
+  {
+    $this->form = new sfForm();
+    $this->form->getWidgetSchema()
+      ->offsetSet('from', new sfWidgetFormBootstrapDate(array(
+        'label' => 'Период',
+      )))
+      ->offsetSet('to', new sfWidgetFormBootstrapDate(array(
+        //
+      )))
+      ->setNameFormat('filter[%s]')
+    ;
+    $this->form->addCSRFProtection('123456789');
+    $this->form->getValidatorSchema()
+      ->offsetSet('from', new sfValidatorDate())
+      ->offsetSet('to', new sfValidatorDate(array(
+        'required' => false,
+      )))
+    ;
+
+    $this->period = array(
+      'from' => date('Y') . '-01-01',
+      'to' => date('Y-m-d 23:59:59'),
+    );
+
+    if ($request->isMethod('post')) {
+      $this->form->bind($request->getParameter('filter'));
+
+      if ($this->form->isValid()) {
+        if ($this->form->getValue('from')) {
+          $this->period['from'] = $this->form->getValue('from');
+        }
+
+        if ($this->form->getValue('to')) {
+          $this->period['to'] = $this->form->getValue('to');
+        }
+      }
+    }
+
+    $this->reportMasters = Doctrine_Query::create()
+      ->from('sfGuardUser u')
+      ->select("u.*, count(w.id) payscount, sum(w.labor) payed")
+      ->leftJoin("u.Groups g")
+      ->leftJoin("u.Works w with (w.finished_at >= ? and w.finished_at <= ?)", array($this->period['from'], $this->period['to']))
+      ->leftJoin("w.Area a")
+      ->leftJoin("w.Order o")
+      ->andWhereIn("g.name", ["master"])
+      ->addWhere("w.is_completed = ?", true)
+      ->groupBy('u.id')
+      ->execute()
     ;
   }
 

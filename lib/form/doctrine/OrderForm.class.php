@@ -142,17 +142,16 @@ class OrderForm extends BaseOrderForm
       'installation_cost' => 'Монтаж',
       'design_cost' => 'Дизайн (препресс)',
       'contractors_cost' => 'Стоимость работ подрядчиков',
+      'delivery_cost' => 'Доставка',
       'cost' => 'Общая стоимость работ',
       'started_at' => 'Дата поступления в работу',
       'finished_at' => 'Дата выполнения',
       'submited_at' => 'Дата сдачи заказа',
-      'state' => 'Статус',
+      'state' => ' ',
       'pay_method' => 'Способ оплаты',
       'recoil' => 'Гарантийная сумма',
       'payed' => 'Внесённые средства',
-      'delivery_cost' => 'Доставка',
       'payed_at' => 'Дата полной оплаты',
-      'state' => 'Статус',
       'expected_at' => 'Планируемая дата выполнения',
       'area' => 'Участок',
       'bill_made' => 'Счёт сформирован',
@@ -166,10 +165,45 @@ class OrderForm extends BaseOrderForm
     $this->getWidgetSchema()->offsetGet('additional')->setAttribute('class', 'input-block-level');
     $this->getWidgetSchema()->offsetGet('files')->setAttribute('class', 'input-block-level');
 
+    $this->getWidgetSchema()->offsetGet('cost')
+      ->setAttribute('class', 'span1')
+      ->setAttribute('type', 'number')
+      ->setAttribute('min', 0.00)
+      ->setAttribute('step', 0.01)
+    ;
+    $this->getWidgetSchema()->offsetGet('design_cost')
+      ->setAttribute('class', 'span1')
+      ->setAttribute('type', 'number')
+      ->setAttribute('min', 0.00)
+      ->setAttribute('step', 0.01)
+    ;
+    $this->getWidgetSchema()->offsetGet('contractors_cost')
+      ->setAttribute('class', 'span1')
+      ->setAttribute('type', 'number')
+      ->setAttribute('min', 0.00)
+      ->setAttribute('step', 0.01)
+    ;
+    $this->getWidgetSchema()->offsetGet('installation_cost')
+      ->setAttribute('class', 'span1')
+      ->setAttribute('type', 'number')
+      ->setAttribute('min', 0.00)
+      ->setAttribute('step', 0.01)
+    ;
+    $this->getWidgetSchema()->offsetGet('delivery_cost')
+      ->setAttribute('class', 'span1')
+      ->setAttribute('type', 'number')
+      ->setAttribute('min', 0.00)
+      ->setAttribute('step', 0.01)
+    ;
+
     $this
       ->getValidatorSchema()
       ->offsetSet('description', new sfValidatorString(array('required' => false), array('required' => 'Поле не должно быть пустым.')))
       ->offsetSet('expected_at', new sfValidatorBootstrapDateTime(array('required' => false)))
+      ->offsetSet('cost', new sfValidatorNumber(['required' => true, 'min' => 0.01], ['min' => 'Стоимость не может быть нулевой']))
+      ->setPostValidator(
+        new sfValidatorCallback(['callback' => [$this, 'checkDatesRequiredOnAllStatusesExceptCalculating']])
+      )
     ;
 
     $editableFields = array_keys(array_filter([
@@ -213,5 +247,41 @@ class OrderForm extends BaseOrderForm
     ])); // empty callback for array_filter removes false values
 
     $this->useFields($editableFields);
+  }
+
+  public function checkDatesRequiredOnAllStatusesExceptCalculating($validator, $values)
+  {
+    $errors = [];
+    $errorRequired = new sfValidatorError($validator, 'Обязательно для заполнения');
+
+    // allow `costs` edit in states listed below only for credential holders
+    if (
+      !in_array($values['state'], ["calculating", "prepress", "prepress-working", "prepress-done"])
+      && !sfContext::getInstance()->getUser()->hasCredential('allow costs edit in all states')
+    ) {
+      $order = $this->getObject();
+      $errorString = 'Стоимость можно редактировать в статусах «На просчёте», «Необходим дизайн», «Дизайн в работе» и «Дизайн готов». Предыдущее значение «%value%».';
+      foreach (['installation_cost', 'design_cost', 'contractors_cost', 'delivery_cost', 'cost'] as $field) {
+        if ($order[$field] != str_replace(',', '.', $values[$field])) {
+          $errors[$field] = new sfValidatorError($validator, $errorString, ['value' => $order[$field]]);
+        }
+      }
+    }
+
+    // `approved_at` and `due_date` must be set for all states except `calculating`
+    if ($values['state'] !== 'calculating') {
+      if (empty($values['approved_at'])) {
+        $errors['approved_at'] =$errorRequired;
+      }
+
+      if (trim($values['due_date']) === '') {
+        $errors['due_date'] = $errorRequired;
+      }
+    }
+
+    if (count($errors)) {
+      throw new sfValidatorErrorSchema($validator, $errors);
+    }
+    return $values;
   }
 }

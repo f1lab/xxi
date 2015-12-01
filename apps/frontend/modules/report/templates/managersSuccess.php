@@ -65,7 +65,7 @@
     </table>
     <div class="alert alert-info"><small class="muted">Менеджер = (все оплаты по своим заказам за период)*3%</small></div>
 
-    <h3>Начальник отдела продаж</h3>
+    <!-- <h3>Начальник отдела продаж</h3>
     <div class="alert alert-info">
       <?php
         function computeResultMultiplier($result) {
@@ -86,9 +86,9 @@
       </abbr>
 
       <small class="muted" style="display: block;">Начальник отдела продаж (НОП) = (все оплаты за период)*x%. До 1млн х=1, от 1млн до 2млн х=1.5, от 2млн до 3млн х=2, больше 3млн х=2.5</small>
-    </div>
+    </div> -->
 
-    <h3>Начальник цеха</h3>
+    <!-- <h3>Начальник цеха</h3>
     <div class="alert alert-info">
       <?php
         $workersChiefResult = $workersChiefReport->getReport();
@@ -100,6 +100,6 @@
       </abbr>
 
       <small class="muted" style="display: block;">Начальник цеха = (сумма всех заказов в статусе сдан, архив, дебиторка – дизайн – работы подрядчиков – возвраты)*х%. До 1млн х=1, от 1млн до 2млн х=1.5, от 2млн до 3млн х=2, больше 3млн х=2.5</small>
-    </div>
+    </div> -->
   </div>
 </div>
