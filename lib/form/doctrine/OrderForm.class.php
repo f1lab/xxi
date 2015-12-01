@@ -201,6 +201,7 @@ class OrderForm extends BaseOrderForm
       ->getValidatorSchema()
       ->offsetSet('description', new sfValidatorString(array('required' => false), array('required' => 'Поле не должно быть пустым.')))
       ->offsetSet('expected_at', new sfValidatorBootstrapDateTime(array('required' => false)))
+      ->offsetSet('cost', new sfValidatorNumber(['required' => true, 'min' => 0.01], ['min' => 'Стоимость не может быть нулевой']))
     ;
 
     $editableFields = array_keys(array_filter([
