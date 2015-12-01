@@ -251,23 +251,37 @@ class OrderForm extends BaseOrderForm
 
   public function checkDatesRequiredOnAllStatusesExceptCalculating($validator, $values)
   {
-    if ($values['state'] !== 'calculating') {
-      $error = new sfValidatorError($validator, 'Обязательно для заполнения');
+    $errors = [];
+    $errorRequired = new sfValidatorError($validator, 'Обязательно для заполнения');
 
-      $errors = [];
-      if (empty($values['approved_at'])) {
-        $errors['approved_at'] =$error;
-      }
-
-      if (trim($values['due_date']) === '') {
-        $errors['due_date'] = $error;
-      }
-
-      if (count($errors)) {
-        throw new sfValidatorErrorSchema($validator, $errors);
+    // allow `costs` edit in states listed below only for credential holders
+    if (
+      !in_array($values['state'], ["calculating", "prepress", "prepress-working", "prepress-done"])
+      && !sfContext::getInstance()->getUser()->hasCredential('allow costs edit in all states')
+    ) {
+      $order = $this->getObject();
+      $errorString = 'Стоимость можно редактировать в статусах «На просчёте», «Необходим дизайн», «Дизайн в работе» и «Дизайн готов». Предыдущее значение «%value%».';
+      foreach (['installation_cost', 'design_cost', 'contractors_cost', 'delivery_cost', 'cost'] as $field) {
+        if ($order[$field] != str_replace(',', '.', $values[$field])) {
+          $errors[$field] = new sfValidatorError($validator, $errorString, ['value' => $order[$field]]);
+        }
       }
     }
 
+    // `approved_at` and `due_date` must be set for all states except `calculating`
+    if ($values['state'] !== 'calculating') {
+      if (empty($values['approved_at'])) {
+        $errors['approved_at'] =$errorRequired;
+      }
+
+      if (trim($values['due_date']) === '') {
+        $errors['due_date'] = $errorRequired;
+      }
+    }
+
+    if (count($errors)) {
+      throw new sfValidatorErrorSchema($validator, $errors);
+    }
     return $values;
   }
 }
