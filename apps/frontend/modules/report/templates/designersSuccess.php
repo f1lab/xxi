@@ -109,12 +109,14 @@
           </td>
         </tr>
       <?php endforeach ?>
+      </tbody>
+      <tfoot>
         <tr>
           <td><strong>Итого</strong></td>
           <td><strong><?php echo format_number($allCounterPays) ?></strong></td>
           <td><strong><?php echo format_currency($allSumm) ?></strong></td>
         </tr>
-      </tbody>
+      </tfoot>
     </table>
 
     <div class="alert alert-info">Клик по дизайнеру — показать подробный отчёт</div>

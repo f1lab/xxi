@@ -316,16 +316,13 @@ class reportActions extends sfActions
       }
     }
 
-    $this->reportMasters = Doctrine_Query::create()
+    $this->report = Doctrine_Query::create()
       ->from('sfGuardUser u')
-      ->select("u.*, count(w.id) payscount, sum(w.labor) payed")
       ->leftJoin("u.Groups g")
       ->leftJoin("u.Works w with (w.finished_at >= ? and w.finished_at <= ?)", array($this->period['from'], $this->period['to']))
-      ->leftJoin("w.Area a")
       ->leftJoin("w.Order o")
       ->andWhereIn("g.name", ["master"])
       ->addWhere("w.is_completed = ?", true)
-      ->groupBy('u.id')
       ->execute()
     ;
   }

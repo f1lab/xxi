@@ -29,12 +29,10 @@
       <small>за период <?php echo date('d.m.Y', strtotime($period['from'])) . '—' . date('d.m.Y', strtotime($period['to'])) ?></small>
     </h2>
 
-    <h3>Мастера</h3>
     <table class="table table-striped table-condensed">
       <colgroup>
         <col class="span4" />
         <col class="span" />
-        <col class="span2" />
         <col class="span2" />
       </colgroup>
       <thead>
@@ -45,21 +43,109 @@
         </tr>
       </thead>
       <tbody><?php
-      $allCounter = $allCounterPays = $allSumm = $allSummPercented = 0;
-      foreach ($reportMasters as $master): if (!$master->getPayscount()) continue; ?>
+      $allCounter = $allCounterPays = $allSumm = 0;
+      foreach ($report as $manager):
+        $count = $manager->getWorks()->count();
+        if (!$count) continue;
+
+        $sum = 0;
+        foreach ($manager->getWorks() as $work) {
+          $sum += $work->getLabor();
+        }
+      ?>
         <tr>
-          <td><?php echo $master ?></td>
-          <td><?php $allCounterPays += $master->getPayscount(); echo format_number($master->getPayscount()) ?></td>
-          <td><?php $allSumm += ($payed = (double)$master->getPayed()); echo format_currency($payed) ?></td>
+          <td><a href="#" onclick="
+            var modal = $(this).parents('tr').find('.modal')
+              , header = modal.find('.modal-header h3').clone()
+              , body = modal.find('.modal-body').contents().clone()
+            ;
+
+            modal.modal();
+            $([header, body]).appendTo($('body > .print'));
+
+            return false
+          "><?php echo $manager ?></a></td>
+          <td><?php $allCounterPays += $count; echo format_number($count) ?></td>
+          <td>
+            <?php $allSumm += $sum; echo format_currency($sum) ?>
+
+            <div class="modal hide fade" style="width: 50% !important">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3>Отчёт по выполненным работам, мастера</h3>
+              </div>
+              <div class="modal-body">
+                <p>Мастер: <?php echo $manager ?></p>
+                <p>Период: <?php echo date('d.m.Y', strtotime($period['from'])) . '—' . date('d.m.Y', strtotime($period['to'])) ?></p>
+
+                <table class="table table-bordered">
+                  <thead>
+                    <tr>
+                      <th>№ заказа</th>
+                      <th>Запланировано</th>
+                      <th>Выполнено</th>
+                      <th>Стоимость работы, руб.</th>
+                    </tr>
+                  </thead>
+                  <tbody><?php foreach ($manager->getWorks() as $work): ?>
+                    <tr>
+                      <td><a href="<?php echo url_for("order/show?id=" . $work->getOrder()->getId()) ?>" target="_blank">
+                        <?php echo $work->getOrder()->getId() ?>
+                      </a></td>
+                      <td><?php echo $work->getPlannedStart() ? date("d.m.Y H:i", strtotime($work->getPlannedStart())) : "" ?></td>
+                      <td><?php echo $work->getFinishedAt() ?></td>
+                      <td><?php echo $work->getLabor() ?></td>
+                    </tr>
+                  <?php endforeach ?></tbody>
+                </table>
+
+                <strong>Итого, выполнено <?php echo format_number($count); ?>
+                  работ общей стоимостью <?php echo format_currency($sum); ?> руб.</strong>
+              </div>
+              <div class="modal-footer">
+                <a href="#" class="btn btn-success" onclick="window.print(); return false">Распечатать</a>
+              </div>
+            </div>
+          </td>
         </tr>
       <?php endforeach ?>
+      </tbody>
+      <tfoot>
         <tr>
           <td><strong>Итого</strong></td>
           <td><strong><?php echo format_number($allCounterPays) ?></strong></td>
           <td><strong><?php echo format_currency($allSumm) ?></strong></td>
         </tr>
-      </tbody>
+      </tfoot>
     </table>
-    <div class="alert alert-info"><small class="muted">Мастер = стоимость всех выполненных работ</small></div>
+
+    <div class="alert alert-info">Клик по мастеру — показать подробный отчёт</div>
   </div>
 </div>
+
+<style>
+  @media print {
+    body > * {
+      display: none;
+    }
+
+    body > .print {
+      display: block !important;
+    }
+
+    table, td, th {
+      border: 1px solid !important;
+      border-collapse: collapse;
+      padding: 5px;
+    }
+
+    h3 {
+      text-align: center;
+    }
+
+    a {
+      td:none;
+      color: inherit;
+    }
+  }
+</style>

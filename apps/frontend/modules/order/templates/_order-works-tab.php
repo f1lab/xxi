@@ -13,7 +13,7 @@
     <tbody>
       <?php foreach ($refs as $ref): ?>
         <tr class="<?php echo $ref->getIsCompleted() ? 'success' : 'error' ?>">
-          <td><?php echo $ref->getWork()->getNameWithArea() ?></td>
+          <td><?php echo $ref->getWork() ? $ref->getWork()->getNameWithArea() : '' ?></td>
           <td><?php echo $ref->getMaster() ?></td>
           <td><?php echo $ref->getLabor() ?></td>
           <td><?php echo $ref->getComment() ?></td>
