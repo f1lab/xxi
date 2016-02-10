@@ -79,7 +79,7 @@
           <td><?php echo format_currency($report->getDesignCost()) ?></td>
         </tr>
         <tr>
-          <td>Стоимость работ подрядчиков</td>
+          <td>Стоимость производства</td>
           <td><?php echo format_currency($report->getContractorsCost()) ?></td>
         </tr>
         <tr>

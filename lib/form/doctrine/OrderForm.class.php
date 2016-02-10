@@ -141,7 +141,7 @@ class OrderForm extends BaseOrderForm
       'files' => 'Файлы',
       'installation_cost' => 'Монтаж',
       'design_cost' => 'Дизайн (препресс)',
-      'contractors_cost' => 'Стоимость работ подрядчиков',
+      'contractors_cost' => 'Стоимость производства',
       'delivery_cost' => 'Доставка',
       'cost' => 'Общая стоимость работ',
       'started_at' => 'Дата поступления в работу',

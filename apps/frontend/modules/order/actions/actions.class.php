@@ -107,7 +107,7 @@ class orderActions extends sfActions
       'files' => 'Файлы и комментарии к ним',
       'installationCost' => 'Стоимость монтажа',
       'designCost' => 'Стоимость дизайна (препресс)',
-      'contractorsCost' => 'Стоимость работ подрядчиков',
+      'contractorsCost' => 'Стоимость производства',
       'deliveryCost' => 'Стоимость доставки',
       'cost' => 'Стоимость работ',
       'recoil' => 'Гарантийная сумма',
