@@ -113,7 +113,7 @@ class OrderFormFilter extends BaseOrderFormFilter
       'created_by' => array(),
       'state' => array(),
       'area' => array(),
-      'created_at_from' => array('day' => '01', 'month' => '01', 'year' => date('Y')),
+      'created_at_from' => array('day' => '01', 'month' => '01', 'year' => '2015'),
       'created_at_to' => array('day' => '', 'month' => '', 'year' => ''),
       'approved_at_from' => array('day' => '', 'month' => '', 'year' => ''),
       'approved_at_to' => array('day' => '', 'month' => '', 'year' => ''),
