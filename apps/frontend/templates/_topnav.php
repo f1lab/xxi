@@ -25,7 +25,7 @@
       //   "isActive" => $sf_context->getModuleName() == "nomenclature",
       //   "href" => url_for("nomenclature/index"),
       // ],
-      "Участок" => [
+      "Участки" => [
         "credentials" => $sf_user->hasCredential("can_edit_area"),
         "isActive" => $sf_context->getModuleName() == "area",
         "href" => url_for("area/index"),
