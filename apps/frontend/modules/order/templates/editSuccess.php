@@ -46,6 +46,8 @@ HTML;
             "sum" => "Сумма",
           ],
           "noRelationsMessage" => "Нет описания",
+          'addLabel' => 'Добавить позицию',
+          'addCalculateButton' => true,
         ]) ?>
       </fieldset>
     <?php endif ?>
@@ -81,6 +83,7 @@ HTML;
           "comment" => "Комментарий",
         ],
         "noRelationsMessage" => "Нет работ",
+        'addLabel' => 'Добавить работу',
       ]) ?>
     </fieldset>
 
@@ -134,6 +137,7 @@ HTML;
           "amount" => "Сумма",
         ],
         "noRelationsMessage" => "Нет оплат",
+        'addLabel' => 'Добавить оплату',
       ]) ?>
     </fieldset>
   <?php endif ?>

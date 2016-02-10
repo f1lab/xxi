@@ -40,6 +40,7 @@
         ],
         'onlyNew' => true,
         'addLabel' => 'Добавить позицию',
+        'addCalculateButton' => true,
       ]) ?>
     </div>
 

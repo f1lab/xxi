@@ -66,7 +66,12 @@
         </td>
       </tr>
       <tr>
-        <td><button type="button" class="btn ahAddRelation" rel="new_<?php echo $relationName ?>">+<?php echo isset($addLabel) ? ' ' . $addLabel : '' ?></button></td>
+        <td>
+          <button type="button" class="btn ahAddRelation" rel="new_<?php echo $relationName ?>">+<?php echo isset($addLabel) ? ' ' . $addLabel : '' ?></button>
+          <?php if (isset($addCalculateButton)): ?>
+            <button type="button" class="btn calculate-cost">Рассчитать</button>
+          <?php endif ?>
+        </td>
       </tr>
     <?php endif ?>
   </tbody>

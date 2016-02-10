@@ -159,3 +159,7 @@ form.well .form-actions {
   font-weight: normal;
   text-align: left;
 }
+
+.invoice-number, .invoice-price, .invoice-sum {
+  width: auto;
+}
