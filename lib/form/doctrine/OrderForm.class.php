@@ -166,31 +166,31 @@ class OrderForm extends BaseOrderForm
     $this->getWidgetSchema()->offsetGet('files')->setAttribute('class', 'input-block-level');
 
     $this->getWidgetSchema()->offsetGet('cost')
-      ->setAttribute('class', 'span1')
+      ->setAttribute('class', 'span2')
       ->setAttribute('type', 'number')
       ->setAttribute('min', 0.00)
       ->setAttribute('step', 0.01)
     ;
     $this->getWidgetSchema()->offsetGet('design_cost')
-      ->setAttribute('class', 'span1')
+      ->setAttribute('class', 'span2')
       ->setAttribute('type', 'number')
       ->setAttribute('min', 0.00)
       ->setAttribute('step', 0.01)
     ;
     $this->getWidgetSchema()->offsetGet('contractors_cost')
-      ->setAttribute('class', 'span1')
+      ->setAttribute('class', 'span2')
       ->setAttribute('type', 'number')
       ->setAttribute('min', 0.00)
       ->setAttribute('step', 0.01)
     ;
     $this->getWidgetSchema()->offsetGet('installation_cost')
-      ->setAttribute('class', 'span1')
+      ->setAttribute('class', 'span2')
       ->setAttribute('type', 'number')
       ->setAttribute('min', 0.00)
       ->setAttribute('step', 0.01)
     ;
     $this->getWidgetSchema()->offsetGet('delivery_cost')
-      ->setAttribute('class', 'span1')
+      ->setAttribute('class', 'span2')
       ->setAttribute('type', 'number')
       ->setAttribute('min', 0.00)
       ->setAttribute('step', 0.01)
