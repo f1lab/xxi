@@ -21,7 +21,7 @@ default:
     #- bootstrap-responsive
     - chosen
     - fullcalendar.css
-    - main
+    - main.css?v=1
 
   javascripts:
     - jquery.min.js
@@ -38,7 +38,7 @@ default:
     - bootbox
     - jquery.serializeObject.js
     - "/ahDoctrineEasyEmbeddedRelationsPlugin/js/ahDoctrineEasyEmbeddedRelationsPlugin.jQuery.js"
-    - main
+    - main.js?v=1
 
   has_layout:     true
   layout:         layout
