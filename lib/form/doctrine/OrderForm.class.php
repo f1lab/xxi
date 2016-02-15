@@ -262,7 +262,7 @@ class OrderForm extends BaseOrderForm
       $order = $this->getObject();
       $errorString = 'Стоимость можно редактировать в статусах «На просчёте», «Необходим дизайн», «Дизайн в работе» и «Дизайн готов». Предыдущее значение «%value%».';
       foreach (['installation_cost', 'design_cost', 'contractors_cost', 'delivery_cost', 'cost'] as $field) {
-        if ($order[$field] != str_replace(',', '.', $values[$field])) {
+        if (isset($values[$field]) and $order[$field] != str_replace(',', '.', $values[$field])) {
           $errors[$field] = new sfValidatorError($validator, $errorString, ['value' => $order[$field]]);
         }
       }
@@ -270,11 +270,11 @@ class OrderForm extends BaseOrderForm
 
     // `approved_at` and `due_date` must be set for all states except `calculating`
     if ($values['state'] !== 'calculating') {
-      if (empty($values['approved_at'])) {
+      if (isset($values['approved_at']) and empty($values['approved_at'])) {
         $errors['approved_at'] =$errorRequired;
       }
 
-      if (trim($values['due_date']) === '') {
+      if (isset($values['due_date']) and trim($values['due_date']) === '') {
         $errors['due_date'] = $errorRequired;
       }
     }

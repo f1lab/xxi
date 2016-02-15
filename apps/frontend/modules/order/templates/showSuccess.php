@@ -51,7 +51,7 @@
     if ( //TODO: replace this mess with some permission or move this check to model
       $sf_user->hasGroup('manager')
         && $order->getCreatedBy() == $sf_user->getGuardUser()->getId()
-        && in_array($order->getState(), ['calculating', 'prepress', 'prepress-done', 'work'])
+        && in_array($order->getState(), ['calculating', 'prepress', 'prepress-done', 'work', 'working'])
       or $sf_user->hasCredential('can_edit_all_orders')
       or $sf_user->hasGroup('worker')
       or $sf_user->hasGroup('buhgalter')
