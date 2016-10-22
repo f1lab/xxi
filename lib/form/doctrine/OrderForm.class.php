@@ -256,11 +256,11 @@ class OrderForm extends BaseOrderForm
 
     // allow `costs` edit in states listed below only for credential holders
     if (
-      !in_array($values['state'], ["calculating", "prepress", "prepress-working", "prepress-done"])
+      !in_array($values['state'], ["calculating", "prepress", "prepress-working", "prepress-done", "work"])
       && !sfContext::getInstance()->getUser()->hasCredential('allow costs edit in all states')
     ) {
       $order = $this->getObject();
-      $errorString = 'Стоимость можно редактировать в статусах «На просчёте», «Необходим дизайн», «Дизайн в работе» и «Дизайн готов». Предыдущее значение «%value%».';
+      $errorString = 'Стоимость можно редактировать в статусах «На просчёте», «Необходим дизайн», «Дизайн в работе», «Дизайн готов» и «В цех». Предыдущее значение «%value%».';
       foreach (['installation_cost', 'design_cost', 'contractors_cost', 'delivery_cost', 'cost'] as $field) {
         if (isset($values[$field]) and $order[$field] != str_replace(',', '.', $values[$field])) {
           $errors[$field] = new sfValidatorError($validator, $errorString, ['value' => $order[$field]]);
