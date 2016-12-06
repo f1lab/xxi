@@ -12,80 +12,78 @@
  */
 class Order extends BaseOrder
 {
-  public function getStateTranslated()
-  {
-    return OrderTable::$states[ $this->_get('state') ];
-  }
-
-  public function getPayMethodTranslated()
-  {
-    return true == ($payMethod=$this->_get('pay_method'))
-      ? OrderTable::$payMethods[ $payMethod ]
-      : ''
-    ;
-  }
-
-  public function getAreaTranslated()
-  {
-    return OrderTable::$area[ $this->_get('area') ];
-  }
-
-  public function getColorIndicator()
-  {
-    $colors = array(
-      "calculating" => "",
-
-      "prepress" => "alert-error",
-      "prepress-working" => "alert",
-      "prepress-done" => "alert-info",
-
-      "work" => "alert-error",
-      "working" => "alert",
-      "done" => "alert-success",
-
-      "submited" => "",
-      "archived" => "",
-      "debt" => "",
-    );
-
-    return $colors[ $this->_get('state') ];
-  }
-
-  public function getClientFullestName()
-  {
-    return $this->getClient()->getName() . ' (' . $this->getClient()->getOwnershipTranslated() . ' «' . $this->getClient()->getFullName() . '»)';
-  }
-
-  public function preUpdate($event)
-  {
-    $order = $event->getInvoker();
-    $changes = $order->getModified(true);
-
-    if (isset($changes['state']) and $order->getState() !== $changes['state']) {
-      if ($order->getState() === 'done') {
-        $order->setFinishedAt(date('Y-m-d H:i:s'));
-
-      } elseif ($order->getState() === 'submited') {
-        $order->setSubmitedAt(date('Y-m-d H:i:s'));
-        if (!$order->getFinishedAt()) { // if u set state submited without setting state done there'll be no finishedAt date
-          $order->setFinishedAt(date('Y-m-d H:i:s'));
-        }
-      }
+    public function getStateTranslated()
+    {
+        return OrderTable::$states[$this->_get('state')];
     }
-  }
 
-  public function getPayed()
-  {
-    return Doctrine_Query::create()
-      ->from('Pay p')
-      ->select('sum(p.amount) as payed')
-      ->addWhere('p.order_id = ?', $this->getId())
-      ->execute([], Doctrine_Core::HYDRATE_SINGLE_SCALAR)
-    ;
-  }
+    public function getPayMethodTranslated()
+    {
+        return true == ($payMethod = $this->_get('pay_method'))
+            ? OrderTable::$payMethods[$payMethod]
+            : '';
+    }
 
-  public function getPayedOld()
-  {
-    return $this->_get('payed');
-  }
+    public function getAreaTranslated()
+    {
+        return OrderTable::$area[$this->_get('area')];
+    }
+
+    public function getColorIndicator()
+    {
+        $colors = array(
+            "calculating" => "",
+
+            "prepress" => "alert-error",
+            "prepress-working" => "alert",
+            "prepress-done" => "alert-info",
+
+            "work" => "alert-error",
+            "working" => "alert",
+            "done" => "alert-success",
+
+            "submited" => "",
+            "archived" => "",
+            "debt" => "",
+        );
+
+        return $colors[$this->_get('state')];
+    }
+
+    public function getClientFullestName()
+    {
+        return $this->getClient()->getName() . ' (' . $this->getClient()->getOwnershipTranslated() . ' «' . $this->getClient()->getFullName() . '»)';
+    }
+
+    public function preUpdate($event)
+    {
+        $order = $event->getInvoker();
+        $changes = $order->getModified(true);
+
+        if (isset($changes['state']) and $order->getState() !== $changes['state']) {
+            if ($order->getState() === 'done') {
+                $order->setFinishedAt(date('Y-m-d H:i:s'));
+
+            } elseif ($order->getState() === 'submited') {
+                $order->setSubmitedAt(date('Y-m-d H:i:s'));
+                if (!$order->getFinishedAt()) { // if u set state submitted without setting state done there'll be no finishedAt date
+                    $order->setFinishedAt(date('Y-m-d H:i:s'));
+                }
+            }
+        }
+    }
+
+    public function getPayed()
+    {
+        return Doctrine_Query::create()
+            ->from('Pay p')
+            ->select('sum(p.amount) as payed')
+            ->addWhere('p.order_id = ?', $this->getId())
+            ->execute([], Doctrine_Core::HYDRATE_SINGLE_SCALAR);
+    }
+
+    public function getPayedOld()
+    {
+        return $this->_get('payed');
+    }
 }

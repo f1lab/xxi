@@ -204,62 +204,64 @@ class reportActions extends sfActions
 
   public function executeManagers(sfWebRequest $request)
   {
-    $this->form = new sfForm();
-    $this->form->getWidgetSchema()
-      ->offsetSet('from', new sfWidgetFormBootstrapDate(array(
-        'label' => 'Период',
-      )))
-      ->offsetSet('to', new sfWidgetFormBootstrapDate(array(
-        //
-      )))
-      ->setNameFormat('filter[%s]')
-    ;
-    $this->form->addCSRFProtection('123456789');
-    $this->form->getValidatorSchema()
-      ->offsetSet('from', new sfValidatorDate())
-      ->offsetSet('to', new sfValidatorDate(array(
-        'required' => false,
-      )))
-    ;
+      $this->form = new sfForm();
+      $this->form->getWidgetSchema()
+          ->offsetSet('from', new sfWidgetFormBootstrapDate(array(
+              'label' => 'Период',
+          )))
+          ->offsetSet('to', new sfWidgetFormBootstrapDate(array(//
+          )))
+          ->setNameFormat('filter[%s]');
+      $this->form->addCSRFProtection('123456789');
+      $this->form->getValidatorSchema()
+          ->offsetSet('from', new sfValidatorDate())
+          ->offsetSet('to', new sfValidatorDate(array(
+              'required' => false,
+          )));
 
-    $this->period = array(
-      'from' => date('Y') . '-01-01',
-      'to' => date('Y-m-d 23:59:59'),
-    );
+      $this->period = array(
+          'from' => date('Y') . '-01-01',
+          'to' => date('Y-m-d 23:59:59'),
+      );
 
-    if ($request->isMethod('post')) {
-      $this->form->bind($request->getParameter('filter'));
+      if ($request->isMethod('post')) {
+          $this->form->bind($request->getParameter('filter'));
 
-      if ($this->form->isValid()) {
-        if ($this->form->getValue('from')) {
-          $this->period['from'] = $this->form->getValue('from');
-        }
+          if ($this->form->isValid()) {
+              if ($this->form->getValue('from')) {
+                  $this->period['from'] = $this->form->getValue('from');
+              }
 
-        if ($this->form->getValue('to')) {
-          $this->period['to'] = $this->form->getValue('to');
-        }
+              if ($this->form->getValue('to')) {
+                  $this->period['to'] = $this->form->getValue('to');
+              }
+          }
       }
-    }
 
-    $this->report = Doctrine_Query::create()
-      ->from('sfGuardUser b')
-      ->select('b.*, count(c.id) orderscount, count(p.id) payscount, sum(p.amount) payed')
-      ->leftJoin('b.Orders c')
-      ->leftJoin('c.Pays p with (p.payed_at >= ? and p.payed_at <= ?)', array($this->period['from'], $this->period['to']))
-      ->groupBy('b.id')
-      ->execute()
-    ;
+      $this->report = Doctrine_Query::create()
+          ->from('sfGuardUser b')
+          ->select('b.*, count(c.id) orderscount, count(p.id) payscount, sum(p.amount) payed, c.id, c.pay_method, p.payed_at, p.amount')
+          ->leftJoin('b.Orders c')
+          ->leftJoin('c.Pays p with (p.payed_at >= ? and p.payed_at <= ?)', array($this->period['from'], $this->period['to']))
+          ->groupBy('b.id')
+          ->execute();
 
-    $this->salesManagerReport = Doctrine_Query::create()
-      ->from('Order o')
-      ->select('count(o.id) orderscount, count(p.id) payscount, sum(p.amount) payedsum')
-      ->leftJoin('o.Pays p with (p.payed_at >= ? and p.payed_at <= ?)', array($this->period['from'], $this->period['to']))
-      ->fetchOne()
-    ;
+      $this->report = Doctrine_Query::create()
+          ->from('sfGuardUser u')
+          ->leftJoin('u.Orders o')
+          ->leftJoin('o.Pays p with (p.payed_at >= ? and p.payed_at <= ?)', array($this->period['from'], $this->period['to']))
+          ->groupBy('u.id')
+          ->execute();
 
-    $this->workersChiefReport = Doctrine_Query::create()
-      ->from('Order o')
-      ->select('
+      $this->salesManagerReport = Doctrine_Query::create()
+          ->from('Order o')
+          ->select('count(o.id) orderscount, count(p.id) payscount, sum(p.amount) payedsum')
+          ->leftJoin('o.Pays p with (p.payed_at >= ? and p.payed_at <= ?)', array($this->period['from'], $this->period['to']))
+          ->fetchOne();
+
+      $this->workersChiefReport = Doctrine_Query::create()
+          ->from('Order o')
+          ->select('
         count(o.id) orderscount,
         sum(o.cost) costed,
         sum(o.design_cost) designed,
@@ -267,14 +269,13 @@ class reportActions extends sfActions
         sum(o.recoil) recoiled,
         (sum(o.cost) - sum(o.design_cost) - sum(o.contractors_cost) - sum(o.recoil)) report
       ')
-      ->addWhere('o.submited_at >= ? and o.submited_at <= ?', array($this->period['from'], $this->period['to']))
-      ->andWhereIn('o.state', [
-        'submitted',
-        'archived',
-        'debt',
-      ])
-      ->fetchOne()
-    ;
+          ->addWhere('o.submited_at >= ? and o.submited_at <= ?', array($this->period['from'], $this->period['to']))
+          ->andWhereIn('o.state', [
+              'submitted',
+              'archived',
+              'debt',
+          ])
+          ->fetchOne();
   }
 
   public function executeMasters(sfWebRequest $request)

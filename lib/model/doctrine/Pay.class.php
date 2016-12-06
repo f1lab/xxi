@@ -12,23 +12,22 @@
  */
 class Pay extends BasePay
 {
-  public function postInsert($event)
-  {
-    $pay = $event->getInvoker();
-    $order = $pay->getOrder();
 
-    $payedSum = Doctrine_Query::create()
-      ->select('sum(p.amount) as payedSum')
-      ->from('Pay p')
-      ->addWhere('p.order_id = ?', $pay->getOrderId())
-      ->execute([], Doctrine_Core::HYDRATE_SINGLE_SCALAR)
-    ;
+    public function postSave($event)
+    {
+        $pay = $event->getInvoker();
+        $order = $pay->getOrder();
 
-    if ($payedSum >= $order->getCost()) {
-      $order
-        ->setPayedAt($pay->getPayedAt())
-        ->save()
-      ;
+        $payedSum = Doctrine_Query::create()
+            ->select('sum(p.amount) as payedSum')
+            ->from('Pay p')
+            ->addWhere('p.order_id = ?', $pay->getOrderId())
+            ->execute([], Doctrine_Core::HYDRATE_SINGLE_SCALAR);
+
+        if ($payedSum >= $order->getCost()) {
+            $order
+                ->setPayedAt($pay->getPayedAt())
+                ->save();
+        }
     }
-  }
 }
