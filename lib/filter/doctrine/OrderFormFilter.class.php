@@ -264,7 +264,7 @@ class OrderFormFilter extends BaseOrderFormFilter
                 $query->andWhereIn('area', $values['area']);
             }
 
-            if (count($values['pay_method'])) {
+            if (count($values['pay_method']) and $values['pay_method'][0]) {
                 $query->andWhereIn('pay_method', $values['pay_method']);
             }
 

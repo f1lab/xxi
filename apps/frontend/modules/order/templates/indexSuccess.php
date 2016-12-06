@@ -53,6 +53,12 @@ include_partial('global/orders', array('pager' => $pager, 'columns' => $columns)
 
 <?php if ($sf_user->hasCredential('can-view-orders-money-summary')): ?>
     <div class="well">
+        <h4>Сводка</h4>
+        Всего заказов: <?php echo count($pager->getResults()) ?> <br>
+        <?php $sum = 0; foreach ($pager->getResults() as $order) {
+            $sum += $order->getCost();
+        } ?>
+        На сумму: <?php echo $sum; ?>
         <h4>Внесённые средства</h4>
         <?php
         $summary = [
