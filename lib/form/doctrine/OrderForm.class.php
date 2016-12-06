@@ -263,11 +263,11 @@ class OrderForm extends BaseOrderForm
 
         // `approved_at` and `due_date` must be set for all states except `calculating`
         if ($values['state'] !== 'calculating') {
-            if (empty($values['approved_at'])) {
+            if (isset($this['approved_at']) && empty($values['approved_at'])) {
                 $errors['approved_at'] = $errorRequired;
             }
 
-            if (empty($values['due_date'])) {
+            if (isset($this['due_date']) && empty($values['due_date'])) {
                 $errors['due_date'] = $errorRequired;
             }
         }
