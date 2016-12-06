@@ -143,6 +143,7 @@ class OrderFormFilter extends BaseOrderFormFilter
             'payed_at_to' => array('day' => '', 'month' => '', 'year' => ''),
             'has_payments_from' => array('day' => '', 'month' => '', 'year' => ''),
             'has_payments_to' => array('day' => '', 'month' => '', 'year' => ''),
+            'pay_method' => array(),
         ));
     }
 
