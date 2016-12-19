@@ -238,20 +238,25 @@ class reportActions extends sfActions
           }
       }
 
-      $this->report = Doctrine_Query::create()
-          ->from('sfGuardUser b')
-          ->select('b.*, count(c.id) orderscount, count(p.id) payscount, sum(p.amount) payed, c.id, c.pay_method, p.payed_at, p.amount')
-          ->leftJoin('b.Orders c')
-          ->leftJoin('c.Pays p with (p.payed_at >= ? and p.payed_at <= ?)', array($this->period['from'], $this->period['to']))
-          ->groupBy('b.id')
-          ->execute();
-
-      $this->report = Doctrine_Query::create()
+      $report = Doctrine_Query::create()
           ->from('sfGuardUser u')
           ->leftJoin('u.Orders o')
-          ->leftJoin('o.Pays p with (p.payed_at >= ? and p.payed_at <= ?)', array($this->period['from'], $this->period['to']))
-          ->groupBy('u.id')
-          ->execute();
+          ->innerJoin('o.Pays p with (p.payed_at >= ? and p.payed_at <= ?)', array($this->period['from'], $this->period['to']))
+          ->groupBy('u.id, o.id, p.id')
+          ->fetchArray();
+
+      $result = [];
+      foreach ($report as $manager) {
+          $pays = [];
+          foreach ($manager['Orders'] as $order) {
+              foreach ($order['Pays'] as $pay) {
+                  $pay['Order'] = $order;
+                  $pays[] = $pay;
+              }
+          }
+          $result[] = compact('manager', 'pays');
+      }
+      $this->report = $result;
 
       $this->salesManagerReport = Doctrine_Query::create()
           ->from('Order o')

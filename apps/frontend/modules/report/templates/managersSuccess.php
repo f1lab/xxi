@@ -40,19 +40,78 @@
       <thead>
         <tr>
           <th>Менеджер</th>
-          <th>Количество проплат</th>
+          <th>Количество оплат</th>
           <th>Σ</th>
           <th>Σ * 0,03</th>
         </tr>
       </thead>
       <tbody><?php
       $allCounter = $allCounterPays = $allSumm = $allSummPercented = 0;
-      foreach ($report as $manager): if (!$manager->getPayscount()) continue; ?>
+      foreach ($report as $row):
+          $name = $row['manager']['first_name'] . ' ' . $row['manager']['last_name'] . ' (' . $row['manager']['username'] . ')';
+          $count = count($row['pays']);
+          if ($count === 0) continue;
+
+          $sum = 0;
+          foreach ($row['pays'] as $pay) {
+              $sum += $pay['amount'];
+          }
+      ?>
         <tr>
-          <td><?php echo $manager ?></td>
-          <td><?php $allCounterPays += $manager->getPayscount(); echo format_number($manager->getPayscount()) ?></td>
-          <td><?php $allSumm += ($payed = (double)$manager->getPayed()); echo format_currency($payed) ?></td>
-          <td><?php $allSummPercented += ($payed * 0.03); echo format_currency($payed * 0.03) ?></td>
+          <td><a href="#" onclick="
+            var modal = $(this).parents('tr').find('.modal')
+              , header = modal.find('.modal-header h3').clone()
+              , body = modal.find('.modal-body').contents().clone()
+            ;
+
+            modal.modal();
+            $([header, body]).appendTo($('body > .print'));
+
+            return false
+          "><?php echo $name ?></a></td>
+          <td><?php $allCounterPays += $count; echo format_number($count) ?></td>
+          <td><?php $allSumm += $sum; echo format_currency($sum) ?></td>
+          <td>
+              <?php $allSummPercented += ($sum * 0.03); echo format_currency($sum * 0.03) ?>
+
+              <div class="modal hide fade" style="width: 50% !important">
+                  <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                      <h3>Отчёт по оплатам по заказам менеджера</h3>
+                  </div>
+                  <div class="modal-body">
+                      <p>Менеджер: <?php echo $name ?></p>
+                      <p>Период: <?php echo date('d.m.Y', strtotime($period['from'])) . '—' . date('d.m.Y', strtotime($period['to'])) ?></p>
+
+                      <table class="table table-bordered">
+                          <thead>
+                          <tr>
+                              <th>№ заказа</th>
+                              <th>Сумма оплаты, руб.</th>
+                              <th>Способ оплаты</th>
+                              <th>Дата оплаты</th>
+                          </tr>
+                          </thead>
+                          <tbody><?php foreach ($row['pays'] as $pay): $id = $pay['Order']['id'] ?>
+                              <tr>
+                                  <td><a href="<?php echo url_for("order/show?id=" . $id) ?>" target="_blank">
+                                          <?php echo $id ?>
+                                      </a></td>
+                                  <td><?php echo $pay['amount'] ?></td>
+                                  <td><?php echo \OrderTable::$payMethods[$pay['Order']['pay_method']] ?></td>
+                                  <td><?php echo date("d.m.Y H:i", strtotime($pay['payed_at'])) ?></td>
+                              </tr>
+                          <?php endforeach; ?></tbody>
+                      </table>
+
+                      <strong>Итого, выполнено <?php echo format_number($count); ?>
+                          оплат по заказам, на сумму <?php echo format_currency($sum); ?> руб.</strong>
+                  </div>
+                  <div class="modal-footer">
+                      <a href="#" class="btn btn-success" onclick="window.print(); return false">Распечатать</a>
+                  </div>
+              </div>
+          </td>
         </tr>
       <?php endforeach ?>
         <tr>
@@ -103,3 +162,30 @@
     </div> -->
   </div>
 </div>
+
+<style>
+    @media print {
+        body > * {
+            display: none;
+        }
+
+        body > .print {
+            display: block !important;
+        }
+
+        table, td, th {
+            border: 1px solid !important;
+            border-collapse: collapse;
+            padding: 5px;
+        }
+
+        h3 {
+            text-align: center;
+        }
+
+        a {
+            td:none;
+            color: inherit;
+        }
+    }
+</style>
