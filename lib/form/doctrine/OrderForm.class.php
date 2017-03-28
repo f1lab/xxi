@@ -23,103 +23,120 @@ class OrderForm extends BaseOrderForm
             $this['version']
         );
 
-        $invoicesRelation = array('Invoices' => array(
-            'considerNewFormEmptyFields' => array('description', 'number', 'price', 'sum'),
-            'noNewForm' => false,
-            // 'noNewForm'                     => true,
-            'newFormLabel' => 'Новый выпрос',
-            'newFormClass' => 'InvoiceForm',
-            'newFormClassArgs' => array(array('sf_user' => $this->getOption('sf_user'))),
-            'displayEmptyRelations' => true,
-            'formClass' => 'InvoiceForm',
-            'formClassArgs' => array(array('ah_add_delete_checkbox' => true)),
-            'newFormAfterExistingRelations' => true,
-            'formFormatter' => null,
-            'multipleNewForms' => true,
-            'newFormsInitialCount' => 1,
-            'newFormsContainerForm' => null, // pass BaseForm object here or we will create ahNewRelationsContainerForm
-            'newRelationButtonLabel' => '+',
-            'newRelationAddByCloning' => true,
-            'newRelationUseJSFramework' => 'jQuery',
-            // 'customEmbeddedFormLabelMethod' => 'getLabelTitle'
-        ));
+        $invoicesRelation = [
+            'Invoices' => [
+                'considerNewFormEmptyFields' => ['description', 'number', 'price', 'sum'],
+                'noNewForm' => false,
+                // 'noNewForm'                     => true,
+                'newFormLabel' => 'Новый выпрос',
+                'newFormClass' => 'InvoiceForm',
+                'newFormClassArgs' => [['sf_user' => $this->getOption('sf_user')]],
+                'displayEmptyRelations' => true,
+                'formClass' => 'InvoiceForm',
+                'formClassArgs' => [['ah_add_delete_checkbox' => true]],
+                'newFormAfterExistingRelations' => true,
+                'formFormatter' => null,
+                'multipleNewForms' => true,
+                'newFormsInitialCount' => 1,
+                'newFormsContainerForm' => null,
+                // pass BaseForm object here or we will create ahNewRelationsContainerForm
+                'newRelationButtonLabel' => '+',
+                'newRelationAddByCloning' => true,
+                'newRelationUseJSFramework' => 'jQuery',
+                // 'customEmbeddedFormLabelMethod' => 'getLabelTitle'
+            ],
+        ];
 
-        $paysRelation = array('Pays' => array(
-            'considerNewFormEmptyFields' => array('payed_at', 'amount'),
-            'noNewForm' => false,
-            // 'noNewForm'                     => true,
-            'newFormLabel' => 'Новый выпрос',
-            'newFormClass' => 'PayForm',
-            'newFormClassArgs' => array(array('sf_user' => $this->getOption('sf_user'))),
-            'displayEmptyRelations' => true,
-            'formClass' => 'PayForm',
-            'formClassArgs' => array(array('ah_add_delete_checkbox' => true)),
-            'newFormAfterExistingRelations' => true,
-            'formFormatter' => null,
-            'multipleNewForms' => true,
-            'newFormsInitialCount' => 1,
-            'newFormsContainerForm' => null, // pass BaseForm object here or we will create ahNewRelationsContainerForm
-            'newRelationButtonLabel' => '+',
-            'newRelationAddByCloning' => false,
-            'newRelationUseJSFramework' => 'jQuery',
-            // 'customEmbeddedFormLabelMethod' => 'getLabelTitle'
-        ));
+        $paysRelation = [
+            'Pays' => [
+                'considerNewFormEmptyFields' => ['payed_at', 'amount'],
+                'noNewForm' => false,
+                // 'noNewForm'                     => true,
+                'newFormLabel' => 'Новый выпрос',
+                'newFormClass' => 'PayForm',
+                'newFormClassArgs' => [['sf_user' => $this->getOption('sf_user')]],
+                'displayEmptyRelations' => true,
+                'formClass' => 'PayForm',
+                'formClassArgs' => [['ah_add_delete_checkbox' => true]],
+                'newFormAfterExistingRelations' => true,
+                'formFormatter' => null,
+                'multipleNewForms' => true,
+                'newFormsInitialCount' => 1,
+                'newFormsContainerForm' => null,
+                // pass BaseForm object here or we will create ahNewRelationsContainerForm
+                'newRelationButtonLabel' => '+',
+                'newRelationAddByCloning' => false,
+                'newRelationUseJSFramework' => 'jQuery',
+                // 'customEmbeddedFormLabelMethod' => 'getLabelTitle'
+            ],
+        ];
 
-        $worksRelation = array('RefOrderWork' => array(
-            'considerNewFormEmptyFields' => array('work_id'),
-            'noNewForm' => false,
-            'newFormClassArgs' => array(array('sf_user' => $this->getOption('sf_user'))),
-            'displayEmptyRelations' => true,
-            'formClassArgs' => array(array('ah_add_delete_checkbox' => true)),
-            'newFormAfterExistingRelations' => true,
-            'formFormatter' => null,
-            'multipleNewForms' => true,
-            'newFormsInitialCount' => 1,
-            'newFormsContainerForm' => null, // pass BaseForm object here or we will create ahNewRelationsContainerForm
-            'newRelationButtonLabel' => '+',
-            'newRelationAddByCloning' => false,
-            'newRelationUseJSFramework' => 'jQuery',
-        ));
+        $worksRelation = [
+            'RefOrderWork' => [
+                'considerNewFormEmptyFields' => ['work_id'],
+                'noNewForm' => false,
+                'newFormClassArgs' => [['sf_user' => $this->getOption('sf_user')]],
+                'displayEmptyRelations' => true,
+                'formClassArgs' => [['ah_add_delete_checkbox' => true]],
+                'newFormAfterExistingRelations' => true,
+                'formFormatter' => null,
+                'multipleNewForms' => true,
+                'newFormsInitialCount' => 1,
+                'newFormsContainerForm' => null,
+                // pass BaseForm object here or we will create ahNewRelationsContainerForm
+                'newRelationButtonLabel' => '+',
+                'newRelationAddByCloning' => false,
+                'newRelationUseJSFramework' => 'jQuery',
+            ],
+        ];
 
-        $utilizationPlansRelation = array('UtilizationPlans' => array(
-            'considerNewFormEmptyFields' => array('material_id', 'amount'),
-            'noNewForm' => false,
-            'newFormClassArgs' => array(array('sf_user' => $this->getOption('sf_user'))),
-            'displayEmptyRelations' => true,
-            'formClassArgs' => array(array('ah_add_delete_checkbox' => true)),
-            'newFormAfterExistingRelations' => true,
-            'formFormatter' => null,
-            'multipleNewForms' => true,
-            'newFormsInitialCount' => 1,
-            'newFormsContainerForm' => null, // pass BaseForm object here or we will create ahNewRelationsContainerForm
-            'newRelationButtonLabel' => '+',
-            'newRelationAddByCloning' => false,
-            'newRelationUseJSFramework' => 'jQuery',
-        ));
+        $utilizationPlansRelation = [
+            'UtilizationPlans' => [
+                'considerNewFormEmptyFields' => ['material_id', 'amount'],
+                'noNewForm' => false,
+                'newFormClassArgs' => [['sf_user' => $this->getOption('sf_user')]],
+                'displayEmptyRelations' => true,
+                'formClassArgs' => [['ah_add_delete_checkbox' => true]],
+                'newFormAfterExistingRelations' => true,
+                'formFormatter' => null,
+                'multipleNewForms' => true,
+                'newFormsInitialCount' => 1,
+                'newFormsContainerForm' => null,
+                // pass BaseForm object here or we will create ahNewRelationsContainerForm
+                'newRelationButtonLabel' => '+',
+                'newRelationAddByCloning' => false,
+                'newRelationUseJSFramework' => 'jQuery',
+            ],
+        ];
 
         $user = sfContext::getInstance()->getUser();
         $this->embedRelations(array_merge(
             $user->hasCredential('can_set_order_works') && !$this->getObject()->isNew() ? $worksRelation : [],
-            $user->hasCredential('can_set_order_works') && !$this->getObject()->isNew() ? $utilizationPlansRelation : [],
-            $user->hasCredential("manager") || !($user->hasGroup('master') || $user->hasGroup('worker') || $user->hasGroup('design-master') || $user->hasGroup('design-worker')) ? $invoicesRelation : [],
-            (!$this->getObject()->isNew() and $user->hasCredential('director') || $user->hasGroup('buhgalter')) ? $paysRelation : []
+            $user->hasCredential('can_set_order_works') && !$this->getObject()->isNew() ? $utilizationPlansRelation
+                : [],
+            $user->hasCredential("manager")
+            || !($user->hasGroup('master') || $user->hasGroup('worker')
+                || $user->hasGroup('design-master')
+                || $user->hasGroup('design-worker')) ? $invoicesRelation : [],
+            (!$this->getObject()->isNew() and $user->hasCredential('director') || $user->hasGroup('buhgalter'))
+                ? $paysRelation : []
         ));
 
         $this->getWidgetSchema()
-            ->offsetSet('client_id', new sfWidgetFormDoctrineChoice(array(
+            ->offsetSet('client_id', new sfWidgetFormDoctrineChoice([
                 'model' => $this->getRelatedModelName('Client'),
                 'add_empty' => false,
-                'order_by' => array(
+                'order_by' => [
                     'name',
                     'asc',
-                ),
+                ],
                 'method' => 'getNameWithDiscount',
-            ), array(
+            ], [
                 'class' => 'chzn-select makePizdatoWithDiscount',
-            )))
-            ->offsetSet('state', new sfWidgetFormChoice(array(
+            ]))
+            ->offsetSet('state', new sfWidgetFormChoice([
                 'choices' => OrderTable::getSetableStatesWithNames(),
-            )))
+            ]))
             ->offsetSet('due_date', new sfWidgetFormBootstrapDateTime())
             ->offsetSet('approved_at', new sfWidgetFormBootstrapDate())
             ->offsetSet('expected_at', new sfWidgetFormBootstrapDateTime())
@@ -127,11 +144,11 @@ class OrderForm extends BaseOrderForm
             ->offsetSet('finished_at', new sfWidgetFormBootstrapDate())
             ->offsetSet('submited_at', new sfWidgetFormBootstrapDate())
             ->offsetSet('execution_time', new sfWidgetFormInputHidden())
-            ->offsetSet('pay_method', new sfWidgetFormChoice(array(
-                'choices' => OrderTable::$payMethods
-            )));
+            ->offsetSet('pay_method', new sfWidgetFormChoice([
+                'choices' => OrderTable::$payMethods,
+            ]));
 
-        $this->getWidgetSchema()->setLabels(array(
+        $this->getWidgetSchema()->setLabels([
             'client_id' => 'Клиент',
             'description' => 'Подробное описание заказа',
             'additional' => 'Доп. информация',
@@ -158,7 +175,7 @@ class OrderForm extends BaseOrderForm
             'docs_given' => 'Документы выданы',
             'execution_time' => 'Время',
             'waybill_number' => 'Номер ТТН',
-        ));
+        ]);
 
         $this->getWidgetSchema()->offsetGet('description')->setAttribute('class', 'input-block-level');
         $this->getWidgetSchema()->offsetGet('additional')->setAttribute('class', 'input-block-level');
@@ -190,14 +207,19 @@ class OrderForm extends BaseOrderForm
             ->setAttribute('min', 0.00)
             ->setAttribute('step', 0.01);
 
+        $postValidators = new sfValidatorAnd([
+            new sfValidatorCallback(['callback' => [$this, 'checkDatesRequiredOnAllStatusesExceptCalculating']]),
+            new sfValidatorCallback(['callback' => [$this, 'checkAllWorksMustBeFinishedBeforeStateSubmitted']]),
+        ]);
+
         $this
             ->getValidatorSchema()
-            ->offsetSet('description', new sfValidatorString(array('required' => false), array('required' => 'Поле не должно быть пустым.')))
-            ->offsetSet('expected_at', new sfValidatorBootstrapDateTime(array('required' => false)))
-            ->offsetSet('cost', new sfValidatorNumber(['required' => true, 'min' => 0.01], ['min' => 'Стоимость не может быть нулевой']))
-            ->setPostValidator(
-                new sfValidatorCallback(['callback' => [$this, 'checkDatesRequiredOnAllStatusesExceptCalculating']])
-            );
+            ->offsetSet('description',
+                new sfValidatorString(['required' => false], ['required' => 'Поле не должно быть пустым.']))
+            ->offsetSet('expected_at', new sfValidatorBootstrapDateTime(['required' => false]))
+            ->offsetSet('cost', new sfValidatorNumber(['required' => true, 'min' => 0.01],
+                ['min' => 'Стоимость не может быть нулевой']))
+            ->setPostValidator($postValidators);
 
         $editableFields = array_keys(array_filter([
             "client_id" => $user->hasGroup("director") or $user->hasGroup("manager"),
@@ -206,13 +228,13 @@ class OrderForm extends BaseOrderForm
             "approved_at" => $user->hasGroup("director") or $user->hasGroup("manager"),
             "files" => $user->hasGroup("director") or $user->hasGroup("manager") or $user->hasGroup("design-master"),
 
-            "installation_cost" => $user->hasGroup("director") or $user->hasGroup("manager"),
-            "design_cost" => $user->hasGroup("director") or $user->hasGroup("manager"),
-            "contractors_cost" => $user->hasGroup("director") or $user->hasGroup("manager"),
-            "delivery_cost" => $user->hasGroup("director") or $user->hasGroup("manager"),
-            "cost" => $user->hasGroup("director") or $user->hasGroup("manager") or $user->hasGroup("buhgalter"),
-            "pay_method" => $user->hasGroup("director") or $user->hasGroup("manager") or $user->hasGroup("buhgalter"),
-            "recoil" => $user->hasGroup("director") or $user->hasGroup("manager"),
+            "installation_cost" => $user->hasCredential(\sfGuardPermissionTable::CAN_EDIT_COSTS),
+            "design_cost" => $user->hasCredential(\sfGuardPermissionTable::CAN_EDIT_COSTS),
+            "contractors_cost" => $user->hasCredential(\sfGuardPermissionTable::CAN_EDIT_COSTS),
+            "delivery_cost" => $user->hasCredential(\sfGuardPermissionTable::CAN_EDIT_COSTS),
+            "cost" => $user->hasCredential(\sfGuardPermissionTable::CAN_EDIT_COSTS),
+            "pay_method" => $user->hasCredential(\sfGuardPermissionTable::CAN_EDIT_COSTS),
+            "recoil" => $user->hasCredential(\sfGuardPermissionTable::CAN_EDIT_COSTS),
 
             "expected_at" => $user->hasGroup("worker"),
             "started_at" => $user->hasGroup("director") or $user->hasGroup("worker"),
@@ -230,13 +252,19 @@ class OrderForm extends BaseOrderForm
             "new_UtilizationPlans" => !$this->getObject()->isNew() and $user->hasCredential("can_set_order_works"),
             "UtilizationPlans" => !$this->getObject()->isNew() and $user->hasCredential("can_set_order_works"),
 
-            "new_Invoices" => $user->hasCredential("manager") or (!$user->hasGroup("worker") and !$user->hasGroup("design-worker") and !$user->hasGroup("master") and !$user->hasGroup("design-master")),
-            "Invoices" => $user->hasCredential("manager") or (!$user->hasGroup("worker") and !$user->hasGroup("design-worker") and !$user->hasGroup("master") and !$user->hasGroup("design-master")),
+            "new_Invoices" => $user->hasCredential("manager") or (!$user->hasGroup("worker")
+                    and !$user->hasGroup("design-worker") and !$user->hasGroup("master")
+                    and !$user->hasGroup("design-master")),
+            "Invoices" => $user->hasCredential("manager") or (!$user->hasGroup("worker")
+                    and !$user->hasGroup("design-worker") and !$user->hasGroup("master")
+                    and !$user->hasGroup("design-master")),
 
-            "new_Pays" => !$this->getObject()->isNew() and $user->hasCredential("director") || $user->hasGroup("buhgalter"),
+            "new_Pays" => !$this->getObject()->isNew() and $user->hasCredential("director")
+                || $user->hasGroup("buhgalter"),
             "Pays" => !$this->getObject()->isNew() and $user->hasCredential("director") || $user->hasGroup("buhgalter"),
 
-            "state" => $user->hasGroup("director") or $user->hasGroup("worker") or $user->hasGroup("manager") or $user->hasGroup("design-worker"),
+            "state" => $user->hasGroup("director") or $user->hasGroup("worker") or $user->hasGroup("manager")
+                or $user->hasGroup("design-worker"),
         ])); // empty callback for array_filter removes false values
 
         $this->useFields($editableFields);
@@ -275,6 +303,25 @@ class OrderForm extends BaseOrderForm
         if (count($errors)) {
             throw new sfValidatorErrorSchema($validator, $errors);
         }
+
+        return $values;
+    }
+
+    public function checkAllWorksMustBeFinishedBeforeStateSubmitted($validator, $values)
+    {
+        if ($values['state'] === \OrderTable::STATE_SUBMITTED) {
+            /** @var \Order $order */
+            $order = $this->getObject();
+            /** @var \RefOrderWork $work */
+            foreach ($order->getRefOrderWork() as $work) {
+                if (!$work->getIsCompleted()) {
+                    $error = new sfValidatorError($validator,
+                        'Невозможно перевести в статус «Сдан», так как есть незакрытые работы');
+                    throw new sfValidatorErrorSchema($validator, ['state' => $error]);
+                }
+            }
+        }
+
         return $values;
     }
 }

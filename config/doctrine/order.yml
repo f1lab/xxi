@@ -80,7 +80,7 @@ Order:
         - working # В работе
         - done # Всё готово
 
-        - submited
+        - submited # Сдан
         - archived
         - debt
         - deleted

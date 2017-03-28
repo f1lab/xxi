@@ -7,6 +7,7 @@
  */
 class OrderTable extends Doctrine_Table
 {
+
   public static $states = array(
     "calculating" => "На просчёте",
 
@@ -16,9 +17,9 @@ class OrderTable extends Doctrine_Table
 
     "work" => "В цех",
     "working" => "В работе",
-    "done" => "Всё готово",
+    self::STATE_DONE => "Всё готово",
 
-    "submited" => "Сдан",
+      self::STATE_SUBMITTED => "Сдан",
 
     "archived" => "В архиве",
     "debt" => "Дебиторка",
@@ -26,7 +27,10 @@ class OrderTable extends Doctrine_Table
     "deleted" => "Удалён",
   );
 
-  public static function getSetableStates()
+    const STATE_DONE = 'done';
+    const STATE_SUBMITTED = 'submited';
+
+    public static function getSetableStates()
   {
     $user = sfContext::getInstance()->getUser();
 
@@ -49,12 +53,12 @@ class OrderTable extends Doctrine_Table
     $statesForWorker = [
       "work",
       "working",
-      "done",
-      "submited",
+        self::STATE_DONE,
+        self::STATE_SUBMITTED,
     ];
     $statesForMaster = [
       "working",
-      "done",
+        self::STATE_DONE,
     ];
 
     $statesForBuhgalter = [
@@ -65,7 +69,7 @@ class OrderTable extends Doctrine_Table
     $statesForMonitor = [
       "work",
       "working",
-      "done",
+        self::STATE_DONE,
     ];
 
     return array_unique(array_merge(
