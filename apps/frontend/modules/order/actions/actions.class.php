@@ -123,7 +123,7 @@ class orderActions extends sfActions
         );
 
         $selectedFields = [];
-        if ($this->getUser()->hasGroup('worker') or $this->getUser()->hasGroup('monitor') or $this->getUser()->hasGroup('master')) {
+        if ($this->getUser()->hasGroup('monitor') or $this->getUser()->hasGroup('master')) {
             $selectedFields = [
                 'creator',
                 'description',
@@ -147,6 +147,26 @@ class orderActions extends sfActions
                 'files',
                 'designCost',
             ];
+        } elseif ($this->getUser()->hasGroup('worker')) {
+            $selectedFields = [
+                'creator',
+                'description',
+                'dueDate',
+                'files',
+                'installationCost',
+                'designCost',
+                'contractorsCost',
+                'deliveryCost',
+                'cost',
+                'recoil',
+                'expectedAt',
+                'executionTime',
+                'startedAt',
+                'finishedAt',
+                'stateTranslated',
+                //'areaTranslated',
+                'submitedAt',
+            ];
         }
 
         if (count($selectedFields)) {
@@ -167,7 +187,6 @@ class orderActions extends sfActions
             ->leftJoin('mm.Material m')
             ->andWhereIn('mm.movement_id', $this->utilizationMovements ?: [-1])
             ->execute();
-
     }
 
     public function executeNew(sfWebRequest $request)
