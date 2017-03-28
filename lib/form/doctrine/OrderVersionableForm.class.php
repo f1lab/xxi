@@ -10,7 +10,7 @@
  */
 class OrderVersionableForm extends BaseOrderVersionableForm
 {
-  public function configure()
-  {
-  }
+    public function configure()
+    {
+    }
 }

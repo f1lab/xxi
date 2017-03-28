@@ -10,7 +10,7 @@
  */
 class sfGuardGroupForm extends PluginsfGuardGroupForm
 {
-  public function configure()
-  {
-  }
+    public function configure()
+    {
+    }
 }

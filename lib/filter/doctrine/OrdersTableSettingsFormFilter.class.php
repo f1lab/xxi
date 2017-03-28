@@ -10,7 +10,7 @@
  */
 class OrdersTableSettingsFormFilter extends BaseOrdersTableSettingsFormFilter
 {
-  public function configure()
-  {
-  }
+    public function configure()
+    {
+    }
 }

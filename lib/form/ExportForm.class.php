@@ -2,7 +2,6 @@
 
 /**
  * Export form.
- *
  * @method SetOfRule getObject() Returns the current form's model object
  *
  * @package    emr2.f1lab.ru
@@ -11,37 +10,37 @@
  */
 class ExportForm extends BaseForm
 {
-  public function setup()
-  {
-    $this->setWidgets(array(
-      'from'             => new sfWidgetFormBootstrapDate(array(), array(
-          'placeholder' => '-',
-          'class' => '',
-          'type' => 'date',
-        )),
-      'to'      => new sfWidgetFormBootstrapDate(array(), array(
-          'placeholder' => 'Сегодня',
-          'class' => '',
-          'type' => 'date',
-        )),
-      
-    ));
+    public function setup()
+    {
+        $this->setWidgets([
+            'from' => new sfWidgetFormBootstrapDate([], [
+                'placeholder' => '-',
+                'class' => '',
+                'type' => 'date',
+            ]),
+            'to' => new sfWidgetFormBootstrapDate([], [
+                'placeholder' => 'Сегодня',
+                'class' => '',
+                'type' => 'date',
+            ]),
 
-    $this->setValidators(array(
-      'from'             => new sfValidatorDate(array('required' => true)),
-      'to'             => new sfValidatorDate(array('required' => true)),
-      
-    ));
-    $this->getWidgetSchema()->setLabels(array(
-      'from' => 'C',
-      'to' => 'По'
-      ));
-    //$this->widgetSchema->setNameFormat('export[%s]');
+        ]);
 
-    $this->errorSchema = new sfValidatorErrorSchema($this->validatorSchema);
+        $this->setValidators([
+            'from' => new sfValidatorDate(['required' => true]),
+            'to' => new sfValidatorDate(['required' => true]),
 
-    //$this->setupInheritance();
+        ]);
+        $this->getWidgetSchema()->setLabels([
+            'from' => 'C',
+            'to' => 'По',
+        ]);
+        //$this->widgetSchema->setNameFormat('export[%s]');
 
-    //parent::setup();
-  }
+        $this->errorSchema = new sfValidatorErrorSchema($this->validatorSchema);
+
+        //$this->setupInheritance();
+
+        //parent::setup();
+    }
 }

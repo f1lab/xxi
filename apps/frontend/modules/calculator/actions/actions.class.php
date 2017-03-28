@@ -10,8 +10,8 @@
  */
 class calculatorActions extends sfActions
 {
-  public function executeIndex(sfWebRequest $request)
-  {
-    //
-  }
+    public function executeIndex(sfWebRequest $request)
+    {
+        //
+    }
 }

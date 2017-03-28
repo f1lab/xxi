@@ -10,7 +10,7 @@
  */
 class DimensionForm extends BaseDimensionForm
 {
-  public function configure()
-  {
-  }
+    public function configure()
+    {
+    }
 }

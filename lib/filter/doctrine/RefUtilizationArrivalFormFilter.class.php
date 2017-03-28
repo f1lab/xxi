@@ -10,7 +10,7 @@
  */
 class RefUtilizationArrivalFormFilter extends BaseRefUtilizationArrivalFormFilter
 {
-  public function configure()
-  {
-  }
+    public function configure()
+    {
+    }
 }

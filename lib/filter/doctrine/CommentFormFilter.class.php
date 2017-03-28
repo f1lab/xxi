@@ -10,7 +10,7 @@
  */
 class CommentFormFilter extends BaseCommentFormFilter
 {
-  public function configure()
-  {
-  }
+    public function configure()
+    {
+    }
 }

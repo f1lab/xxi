@@ -10,7 +10,7 @@
  */
 class OrderAutoVersionForm extends BaseOrderAutoVersionForm
 {
-  public function configure()
-  {
-  }
+    public function configure()
+    {
+    }
 }

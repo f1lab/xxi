@@ -10,22 +10,21 @@
  */
 class WorkForm extends BaseWorkForm
 {
-  public function configure()
-  {
-    unset (
-      $this['deleted_at'],
-      $this['created_at'],
-      $this['updated_at'],
-      $this['created_by'],
-      $this['updated_by']
-    );
+    public function configure()
+    {
+        unset (
+            $this['deleted_at'],
+            $this['created_at'],
+            $this['updated_at'],
+            $this['created_by'],
+            $this['updated_by']
+        );
 
-    $this->getWidgetSchema()
-      ->setLabels([
-        'area_id' => 'Участок',
-        'name' => 'Наименование',
-        'rate' => 'Ставка',
-      ])
-    ;
-  }
+        $this->getWidgetSchema()
+            ->setLabels([
+                'area_id' => 'Участок',
+                'name' => 'Наименование',
+                'rate' => 'Ставка',
+            ]);
+    }
 }

@@ -10,7 +10,7 @@
  */
 abstract class BaseFormDoctrine extends ahBaseFormDoctrine
 {
-  public function setup()
-  {
-  }
+    public function setup()
+    {
+    }
 }

@@ -10,7 +10,7 @@
  */
 class RefAreaUserFormFilter extends BaseRefAreaUserFormFilter
 {
-  public function configure()
-  {
-  }
+    public function configure()
+    {
+    }
 }

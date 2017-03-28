@@ -10,7 +10,7 @@
  */
 class NomenclatureFormFilter extends BaseNomenclatureFormFilter
 {
-  public function configure()
-  {
-  }
+    public function configure()
+    {
+    }
 }

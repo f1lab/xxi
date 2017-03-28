@@ -10,7 +10,7 @@
  */
 class UtilizationFormFilter extends BaseUtilizationFormFilter
 {
-  public function configure()
-  {
-  }
+    public function configure()
+    {
+    }
 }

@@ -10,7 +10,7 @@
  */
 class DimensionFormFilter extends BaseDimensionFormFilter
 {
-  public function configure()
-  {
-  }
+    public function configure()
+    {
+    }
 }

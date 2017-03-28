@@ -10,12 +10,12 @@
  */
 class sfValidatorBootstrapDateTime extends sfValidatorString
 {
-  protected function configure($options = array(), $messages = array())
-  {
-  }
+    protected function configure($options = [], $messages = [])
+    {
+    }
 
-  protected function doClean($value)
-  {
-    return date('Y-m-d H:i:s', strtotime($value));
-  }
+    protected function doClean($value)
+    {
+        return date('Y-m-d H:i:s', strtotime($value));
+    }
 }

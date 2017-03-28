@@ -10,25 +10,23 @@
  */
 class PayForm extends BasePayForm
 {
-  public function configure()
-  {
-    unset (
-      $this['created_at'],
-      $this['updated_at'],
-      $this['created_by'],
-      $this['updated_by']
-    );
+    public function configure()
+    {
+        unset (
+            $this['created_at'],
+            $this['updated_at'],
+            $this['created_by'],
+            $this['updated_by']
+        );
 
-    $this->getWidgetSchema()
-      ->offsetSet('order_id', new sfWidgetFormInputHidden())
-      ->offsetSet('payed_at', new sfWidgetFormBootstrapDateTime([
-        'format' => 'yyyy-mm-dd',
-        'minView' => '2',
-      ]))
-    ;
+        $this->getWidgetSchema()
+            ->offsetSet('order_id', new sfWidgetFormInputHidden())
+            ->offsetSet('payed_at', new sfWidgetFormBootstrapDateTime([
+                'format' => 'yyyy-mm-dd',
+                'minView' => '2',
+            ]));
 
-    $this->getValidatorSchema()
-      ->offsetSet('payed_at', new sfValidatorBootstrapDateTime())
-    ;
-  }
+        $this->getValidatorSchema()
+            ->offsetSet('payed_at', new sfValidatorBootstrapDateTime());
+    }
 }

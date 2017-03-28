@@ -10,7 +10,7 @@
  */
 class InvoiceFormFilter extends BaseInvoiceFormFilter
 {
-  public function configure()
-  {
-  }
+    public function configure()
+    {
+    }
 }

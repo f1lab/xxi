@@ -24,7 +24,8 @@
             echo !$hasToCheck ? ' active' : '' ?>">Текущие</a>
             <?php foreach (OrderTable::$statesForMonitor as $state => $stateTranslated): ?>
                 <a href="<?php echo url_for('@orders?order_filters[state][]=' . $state) ?>" class="btn<?php
-                echo $hasToCheck && in_array($state, $requestedState) ? ' active' : '' ?>"><?php echo $stateTranslated ?></a>
+                echo $hasToCheck && in_array($state, $requestedState) ? ' active'
+                    : '' ?>"><?php echo $stateTranslated ?></a>
             <?php endforeach ?>
         </div>
     <?php else: ?>
@@ -43,19 +44,21 @@
 
 <?php if (!$sf_user->hasGroup('monitor')): ?>
     <div id="filterator"
-         class="collapse"><?php include_partial('filter', array('form' => $filter, 'filters' => $filters, 'currentFilter' => $currentFilter)) ?></div>
+         class="collapse"><?php include_partial('filter',
+            ['form' => $filter, 'filters' => $filters, 'currentFilter' => $currentFilter]) ?></div>
 <?php endif ?>
 
 <?php
 $columns = $settings->getColumnsForPartial();
-include_partial('global/orders', array('pager' => $pager, 'columns' => $columns));
+include_partial('global/orders', ['pager' => $pager, 'columns' => $columns]);
 ?>
 
 <?php if ($sf_user->hasCredential('can-view-orders-money-summary')): ?>
     <div class="well">
         <h4>Сводка</h4>
         Всего заказов: <?php echo count($pager->getResults()) ?> <br>
-        <?php $sum = 0; foreach ($pager->getResults() as $order) {
+        <?php $sum = 0;
+        foreach ($pager->getResults() as $order) {
             $sum += $order->getCost();
         } ?>
         На сумму: <?php echo $sum; ?>

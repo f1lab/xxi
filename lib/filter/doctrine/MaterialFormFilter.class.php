@@ -10,7 +10,7 @@
  */
 class MaterialFormFilter extends BaseMaterialFormFilter
 {
-  public function configure()
-  {
-  }
+    public function configure()
+    {
+    }
 }

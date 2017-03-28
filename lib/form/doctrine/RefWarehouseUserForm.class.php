@@ -10,7 +10,7 @@
  */
 class RefWarehouseUserForm extends BaseRefWarehouseUserForm
 {
-  public function configure()
-  {
-  }
+    public function configure()
+    {
+    }
 }

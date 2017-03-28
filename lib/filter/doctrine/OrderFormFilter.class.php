@@ -27,50 +27,52 @@ class OrderFormFilter extends BaseOrderFormFilter
         $this->disableCSRFProtection();
 
         $this->getWidgetSchema()
-            ->offsetSet('client_id', new sfWidgetFormDoctrineChoice(array(
+            ->offsetSet('client_id', new sfWidgetFormDoctrineChoice([
                 'model' => $this->getRelatedModelName('Client'),
                 'add_empty' => false,
-                'order_by' => array(
+                'order_by' => [
                     'name',
                     'asc',
-                ),
+                ],
                 'multiple' => true,
-            ), array(
+            ], [
                 'class' => 'chzn-select',
                 'data-placeholder' => 'Выберите…',
-            )))
-            ->offsetSet('created_by', new sfWidgetFormDoctrineChoice(array(
+            ]))
+            ->offsetSet('created_by', new sfWidgetFormDoctrineChoice([
                 'model' => 'sfGuardUser',
                 'table_method' => 'getManagers',
                 'multiple' => true,
-            ), array(
+            ], [
                 'class' => 'chzn-select',
                 'data-placeholder' => 'Выберите…',
-            )))
-            ->offsetSet('state', new sfWidgetFormChoice(array(
+            ]))
+            ->offsetSet('state', new sfWidgetFormChoice([
                 'choices' => OrderTable::$states,
                 'multiple' => true,
-            ), array(
+            ], [
                 'class' => 'chzn-select',
                 'data-placeholder' => 'Выберите…',
-            )))
-            ->offsetSet('area', new sfWidgetFormChoice(array(
+            ]))
+            ->offsetSet('area', new sfWidgetFormChoice([
                 'choices' => OrderTable::$area,
                 'multiple' => true,
-            ), array(
+            ], [
                 'class' => 'chzn-select',
                 'data-placeholder' => 'Выберите…',
-            )))
-            ->offsetSet('pay_method', new sfWidgetFormChoice(array(
+            ]))
+            ->offsetSet('pay_method', new sfWidgetFormChoice([
                 'choices' => OrderTable::$payMethods,
                 'multiple' => true,
-            ), array(
+            ], [
                 'class' => 'chzn-select',
                 'data-placeholder' => 'Выберите…',
-            )))
-            ->offsetSet('bill_made', new sfWidgetFormChoice(array('choices' => array('' => 'да или нет', 1 => 'да', 0 => 'нет'))))
-            ->offsetSet('bill_given', new sfWidgetFormChoice(array('choices' => array('' => 'да или нет', 1 => 'да', 0 => 'нет'))))
-            ->offsetSet('docs_given', new sfWidgetFormChoice(array('choices' => array('' => 'да или нет', 1 => 'да', 0 => 'нет'))))
+            ]))
+            ->offsetSet('bill_made', new sfWidgetFormChoice(['choices' => ['' => 'да или нет', 1 => 'да', 0 => 'нет']]))
+            ->offsetSet('bill_given',
+                new sfWidgetFormChoice(['choices' => ['' => 'да или нет', 1 => 'да', 0 => 'нет']]))
+            ->offsetSet('docs_given',
+                new sfWidgetFormChoice(['choices' => ['' => 'да или нет', 1 => 'да', 0 => 'нет']]))
             ->offsetSet('created_at_from', new sfWidgetFormBootstrapDate())
             ->offsetSet('created_at_to', new sfWidgetFormBootstrapDate())
             ->offsetSet('approved_at_from', new sfWidgetFormBootstrapDate())
@@ -83,8 +85,12 @@ class OrderFormFilter extends BaseOrderFormFilter
             ->offsetSet('payed_at_to', new sfWidgetFormBootstrapDate())
             ->offsetSet('has_payments_from', new sfWidgetFormBootstrapDate())
             ->offsetSet('has_payments_to', new sfWidgetFormBootstrapDate())
-            ->offsetSet('works_list', new sfWidgetFormChoice(array('choices' => array('' => 'без разницы', 'without' => 'не заполнен', 'completed' => 'выполнен'))))
-            ->setLabels(array(
+            ->offsetSet('works_list', new sfWidgetFormChoice([
+                'choices' => [
+                    '' => 'без разницы', 'without' => 'не заполнен', 'completed' => 'выполнен',
+                ],
+            ]))
+            ->setLabels([
                 'client_id' => 'Клиент',
                 'created_by' => 'Менеджер',
                 'created_at_from' => 'Дата создания',
@@ -100,7 +106,7 @@ class OrderFormFilter extends BaseOrderFormFilter
                 'docs_given' => 'Документы выданы',
                 'works_list' => 'Список работ',
                 'pay_method' => 'Способ оплаты',
-            ))
+            ])
             ->setNameFormat('order_filters[%s]');
 
         $this->getValidatorSchema()
@@ -126,25 +132,25 @@ class OrderFormFilter extends BaseOrderFormFilter
             ->offsetSet('works_list', new sfValidatorPass())
             ->offsetSet('pay_method', new sfValidatorPass());
 
-        $this->setDefaults(array(
-            'client_id' => array(),
-            'created_by' => array(),
-            'state' => array(),
-            'area' => array(),
-            'created_at_from' => array('day' => '01', 'month' => '01', 'year' => '2015'),
-            'created_at_to' => array('day' => '', 'month' => '', 'year' => ''),
-            'approved_at_from' => array('day' => '', 'month' => '', 'year' => ''),
-            'approved_at_to' => array('day' => '', 'month' => '', 'year' => ''),
-            'submited_at_from' => array('day' => '', 'month' => '', 'year' => ''),
-            'submited_at_to' => array('day' => '', 'month' => '', 'year' => ''),
-            'finished_at_from' => array('day' => '', 'month' => '', 'year' => ''),
-            'finished_at_to' => array('day' => '', 'month' => '', 'year' => ''),
-            'payed_at_from' => array('day' => '', 'month' => '', 'year' => ''),
-            'payed_at_to' => array('day' => '', 'month' => '', 'year' => ''),
-            'has_payments_from' => array('day' => '', 'month' => '', 'year' => ''),
-            'has_payments_to' => array('day' => '', 'month' => '', 'year' => ''),
-            'pay_method' => array(),
-        ));
+        $this->setDefaults([
+            'client_id' => [],
+            'created_by' => [],
+            'state' => [],
+            'area' => [],
+            'created_at_from' => ['day' => '01', 'month' => '01', 'year' => '2015'],
+            'created_at_to' => ['day' => '', 'month' => '', 'year' => ''],
+            'approved_at_from' => ['day' => '', 'month' => '', 'year' => ''],
+            'approved_at_to' => ['day' => '', 'month' => '', 'year' => ''],
+            'submited_at_from' => ['day' => '', 'month' => '', 'year' => ''],
+            'submited_at_to' => ['day' => '', 'month' => '', 'year' => ''],
+            'finished_at_from' => ['day' => '', 'month' => '', 'year' => ''],
+            'finished_at_to' => ['day' => '', 'month' => '', 'year' => ''],
+            'payed_at_from' => ['day' => '', 'month' => '', 'year' => ''],
+            'payed_at_to' => ['day' => '', 'month' => '', 'year' => ''],
+            'has_payments_from' => ['day' => '', 'month' => '', 'year' => ''],
+            'has_payments_to' => ['day' => '', 'month' => '', 'year' => ''],
+            'pay_method' => [],
+        ]);
     }
 
     public function getFilterQuery($filter, $user)
@@ -152,29 +158,29 @@ class OrderFormFilter extends BaseOrderFormFilter
         $query = Doctrine_Core::getTable('Order')->createQuery('a, a.Client, a.Creator');
 
         if ($user->hasGroup('worker') or $user->hasGroup('monitor')) {
-            $this->setDefault('state', array(
+            $this->setDefault('state', [
                 'work',
                 'working',
                 'done',
-            ));
+            ]);
         } elseif ($user->hasGroup('master')) {
-            $this->setDefault('state', array(
+            $this->setDefault('state', [
                 'working',
-            ));
+            ]);
         } elseif ($user->hasGroup("design-worker")) {
-            $this->setDefault("state", array(
+            $this->setDefault("state", [
                 "prepress",
                 "prepress-working",
                 "prepress-done",
-            ));
+            ]);
         }
 
         if ($user->hasCredential('manager')) {
-            $this->setDefault('created_by', array(
+            $this->setDefault('created_by', [
                 $user->getGuardUser()->getId(),
-            ));
+            ]);
 
-            $this->setDefault('state', array(
+            $this->setDefault('state', [
                 'calculating',
                 'work',
                 'working',
@@ -183,7 +189,7 @@ class OrderFormFilter extends BaseOrderFormFilter
                 'prepress',
                 'prepress-working',
                 'prepress-done',
-            ));
+            ]);
         }
 
         if ($filter !== null) {
@@ -207,7 +213,8 @@ class OrderFormFilter extends BaseOrderFormFilter
                 ) {
                     $query->andWhere($attribute . "_at >= ?", date(
                         "Y-m-d 00:00:00",
-                        mktime(0, 0, 0, $values[$attribute . "_at_from"]["month"], $values[$attribute . "_at_from"]["day"], $values[$attribute . "_at_from"]["year"])
+                        mktime(0, 0, 0, $values[$attribute . "_at_from"]["month"],
+                            $values[$attribute . "_at_from"]["day"], $values[$attribute . "_at_from"]["year"])
                     ));
                 }
 
@@ -218,7 +225,8 @@ class OrderFormFilter extends BaseOrderFormFilter
                 ) {
                     $query->andWhere($attribute . "_at <= ?", date(
                         "Y-m-d 23:59:59",
-                        mktime(0, 0, 0, $values[$attribute . "_at_to"]["month"], $values[$attribute . "_at_to"]["day"], $values[$attribute . "_at_to"]["year"])
+                        mktime(0, 0, 0, $values[$attribute . "_at_to"]["month"], $values[$attribute . "_at_to"]["day"],
+                            $values[$attribute . "_at_to"]["year"])
                     ));
                 }
             });
@@ -233,7 +241,8 @@ class OrderFormFilter extends BaseOrderFormFilter
             ) {
                 $from = date(
                     "Y-m-d 00:00:00",
-                    mktime(0, 0, 0, $values[$attr . "_from"]["month"], $values[$attr . "_from"]["day"], $values[$attr . "_from"]["year"])
+                    mktime(0, 0, 0, $values[$attr . "_from"]["month"], $values[$attr . "_from"]["day"],
+                        $values[$attr . "_from"]["year"])
                 );
             }
             if (
@@ -243,7 +252,8 @@ class OrderFormFilter extends BaseOrderFormFilter
             ) {
                 $to = date(
                     "Y-m-d 23:59:59",
-                    mktime(0, 0, 0, $values[$attr . "_to"]["month"], $values[$attr . "_to"]["day"], $values[$attr . "_to"]["year"])
+                    mktime(0, 0, 0, $values[$attr . "_to"]["month"], $values[$attr . "_to"]["day"],
+                        $values[$attr . "_to"]["year"])
                 );
             }
             if ($from || $to) {
@@ -268,15 +278,15 @@ class OrderFormFilter extends BaseOrderFormFilter
                 $query->andWhereIn('pay_method', $values['pay_method']);
             }
 
-            if (isset($values['bill_made']) and in_array($values['bill_made'], array("0", "1"), true)) {
+            if (isset($values['bill_made']) and in_array($values['bill_made'], ["0", "1"], true)) {
                 $query->andWhere('bill_made = ?', (bool)$values['bill_made']);
             }
 
-            if (isset($values['bill_given']) and in_array($values['bill_given'], array("0", "1"), true)) {
+            if (isset($values['bill_given']) and in_array($values['bill_given'], ["0", "1"], true)) {
                 $query->andWhere('bill_given = ?', (bool)$values['bill_given']);
             }
 
-            if (isset($values['docs_given']) and in_array($values['docs_given'], array("0", "1"), true)) {
+            if (isset($values['docs_given']) and in_array($values['docs_given'], ["0", "1"], true)) {
                 $query->andWhere('docs_given = ?', (bool)$values['docs_given']);
             }
 

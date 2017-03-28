@@ -10,7 +10,7 @@
  */
 class sfGuardPermissionForm extends PluginsfGuardPermissionForm
 {
-  public function configure()
-  {
-  }
+    public function configure()
+    {
+    }
 }

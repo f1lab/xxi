@@ -10,7 +10,7 @@
  */
 class MaterialMovementTransferFormFilter extends BaseMaterialMovementTransferFormFilter
 {
-  public function configure()
-  {
-  }
+    public function configure()
+    {
+    }
 }

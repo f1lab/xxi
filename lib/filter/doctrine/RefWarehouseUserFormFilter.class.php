@@ -10,7 +10,7 @@
  */
 class RefWarehouseUserFormFilter extends BaseRefWarehouseUserFormFilter
 {
-  public function configure()
-  {
-  }
+    public function configure()
+    {
+    }
 }

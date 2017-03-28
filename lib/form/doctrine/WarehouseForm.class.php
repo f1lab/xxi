@@ -10,25 +10,24 @@
  */
 class WarehouseForm extends BaseWarehouseForm
 {
-  public function configure()
-  {
-    unset (
-      $this["created_at"]
-      , $this["created_by"]
-      , $this["updated_at"]
-      , $this["updated_by"]
-      , $this["deleted_at"]
-      , $this["version"]
-    );
+    public function configure()
+    {
+        unset (
+            $this["created_at"]
+            , $this["created_by"]
+            , $this["updated_at"]
+            , $this["updated_by"]
+            , $this["deleted_at"]
+            , $this["version"]
+        );
 
-    $this->getWidgetSchema()
-      ->offsetGet("users_list")
-        ->setAttribute("class", "chzn-select")
-        ->getParent()
-      ->setLabels([
-        "name" => "Наименование",
-        "users_list" => "Ответственные",
-      ])
-    ;
-  }
+        $this->getWidgetSchema()
+            ->offsetGet("users_list")
+            ->setAttribute("class", "chzn-select")
+            ->getParent()
+            ->setLabels([
+                "name" => "Наименование",
+                "users_list" => "Ответственные",
+            ]);
+    }
 }

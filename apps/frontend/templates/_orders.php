@@ -10,7 +10,7 @@ function pageLink($page)
 
     return url_for2(
         'orders',
-        array_merge($request->getParameterHolder()->getAll(), array('page' => $page))
+        array_merge($request->getParameterHolder()->getAll(), ['page' => $page])
     );
 }
 
@@ -61,24 +61,29 @@ if (
         </thead>
         <tbody><?php foreach ($orders as $order): ?>
             <tr
-                rel="popover"
-                data-placement="top"
-                data-title="Описание заказа"
-                data-content="<?php echo simple_format_text(str_replace('"', '&quot;', $order->getDescription())) ?>"
-                class="<?php echo $order->getColorIndicator() ?>"
+                    rel="popover"
+                    data-placement="top"
+                    data-title="Описание заказа"
+                    data-content="<?php echo simple_format_text(str_replace('"', '&quot;',
+                        $order->getDescription())) ?>"
+                    class="<?php echo $order->getColorIndicator() ?>"
             >
                 <?php if (in_array('id', $columns)): ?>
                     <td><a
-                        href="<?php echo url_for('@order?id=' . $order->getId()) ?>"><?php echo $order->getId() ?></a>
+                            href="<?php echo url_for('@order?id='
+                                . $order->getId()) ?>"><?php echo $order->getId() ?></a>
                     </td><?php endif ?>
                 <?php if (in_array('client_id', $columns)): ?>
                     <td><?php echo $order->getClient() ?></td><?php endif ?>
                 <?php if (in_array('approved_at', $columns)): ?>
-                    <td><?php echo $order->getApprovedAt() ? date('d-m-Y', strtotime($order->getApprovedAt())) : '' ?></td><?php endif ?>
+                    <td><?php echo $order->getApprovedAt() ? date('d-m-Y', strtotime($order->getApprovedAt()))
+                        : '' ?></td><?php endif ?>
                 <?php if (in_array('due_date', $columns)): ?>
-                    <td><?php echo $order->getDueDate() ? date('d-m-Y', strtotime($order->getDueDate())) : '' ?></td><?php endif ?>
+                    <td><?php echo $order->getDueDate() ? date('d-m-Y', strtotime($order->getDueDate()))
+                        : '' ?></td><?php endif ?>
                 <?php if (in_array('submited_at', $columns)): ?>
-                    <td><?php echo $order->getSubmitedAt() ? date('d-m-Y', strtotime($order->getSubmitedAt())) : '' ?></td><?php endif ?>
+                    <td><?php echo $order->getSubmitedAt() ? date('d-m-Y', strtotime($order->getSubmitedAt()))
+                        : '' ?></td><?php endif ?>
                 <?php if (in_array('state', $columns)): ?>
                     <td><?php echo $order->getStateTranslated() ?></td><?php endif ?>
                 <?php if (in_array('cost', $columns)): ?>
@@ -88,9 +93,11 @@ if (
                 <?php if (in_array('pay_method', $columns)): ?>
                     <td><?php echo $order->getPayMethodTranslated() ?></td><?php endif ?>
                 <?php if (in_array('payed_at', $columns)): ?>
-                    <td><?php echo $order->getPayedAt() ? date('d-m-Y', strtotime($order->getPayedAt())) : '' ?></td><?php endif ?>
+                    <td><?php echo $order->getPayedAt() ? date('d-m-Y', strtotime($order->getPayedAt()))
+                        : '' ?></td><?php endif ?>
                 <?php if (in_array('manager', $columns)): ?>
-                    <td><?php echo $order->getCreator()->getFirstName() . ' ' . $order->getCreator()->getLastName() ?></td><?php endif ?>
+                    <td><?php echo $order->getCreator()->getFirstName() . ' ' . $order->getCreator()
+                            ->getLastName() ?></td><?php endif ?>
                 <?php if (in_array('bill_made', $columns)): ?>
                     <td><input type="checkbox" readonly<?php echo $order->getBillMade() ? ' checked' : '' ?>>
                     </td><?php endif ?>
@@ -106,6 +113,7 @@ if (
                         if ($item['read'] > 0) {
                             $return++;
                         }
+
                         return $return;
                     });
                     ?>

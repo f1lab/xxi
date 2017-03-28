@@ -10,7 +10,7 @@
  */
 class CommentReadsFormFilter extends BaseCommentReadsFormFilter
 {
-  public function configure()
-  {
-  }
+    public function configure()
+    {
+    }
 }

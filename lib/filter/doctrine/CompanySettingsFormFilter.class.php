@@ -10,7 +10,7 @@
  */
 class CompanySettingsFormFilter extends BaseCompanySettingsFormFilter
 {
-  public function configure()
-  {
-  }
+    public function configure()
+    {
+    }
 }

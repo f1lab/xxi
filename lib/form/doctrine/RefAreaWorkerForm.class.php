@@ -10,7 +10,7 @@
  */
 class RefAreaWorkerForm extends BaseRefAreaWorkerForm
 {
-  public function configure()
-  {
-  }
+    public function configure()
+    {
+    }
 }

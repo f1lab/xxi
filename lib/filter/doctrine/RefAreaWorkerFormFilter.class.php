@@ -10,7 +10,7 @@
  */
 class RefAreaWorkerFormFilter extends BaseRefAreaWorkerFormFilter
 {
-  public function configure()
-  {
-  }
+    public function configure()
+    {
+    }
 }

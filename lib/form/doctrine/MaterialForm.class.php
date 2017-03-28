@@ -10,18 +10,17 @@
  */
 class MaterialForm extends BaseMaterialForm
 {
-  public function configure()
-  {
-    unset (
-      $this['deleted_at']
-    );
+    public function configure()
+    {
+        unset (
+            $this['deleted_at']
+        );
 
-    $this->getWidgetSchema()
-      ->setLabels(array(
-        'name' => 'Наименование',
-        'dimension_id' => 'Единица измерения',
-      ))
-      ->offsetGet('name')->setAttribute('class', 'input-block-level')
-    ;
-  }
+        $this->getWidgetSchema()
+            ->setLabels([
+                'name' => 'Наименование',
+                'dimension_id' => 'Единица измерения',
+            ])
+            ->offsetGet('name')->setAttribute('class', 'input-block-level');
+    }
 }

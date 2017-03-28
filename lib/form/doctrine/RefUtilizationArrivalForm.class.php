@@ -10,7 +10,7 @@
  */
 class RefUtilizationArrivalForm extends BaseRefUtilizationArrivalForm
 {
-  public function configure()
-  {
-  }
+    public function configure()
+    {
+    }
 }

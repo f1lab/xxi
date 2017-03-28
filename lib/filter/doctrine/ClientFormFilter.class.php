@@ -10,7 +10,7 @@
  */
 class ClientFormFilter extends BaseClientFormFilter
 {
-  public function configure()
-  {
-  }
+    public function configure()
+    {
+    }
 }

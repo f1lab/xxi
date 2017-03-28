@@ -10,7 +10,7 @@
  */
 class AreaFormFilter extends BaseAreaFormFilter
 {
-  public function configure()
-  {
-  }
+    public function configure()
+    {
+    }
 }

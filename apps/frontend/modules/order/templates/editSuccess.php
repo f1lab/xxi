@@ -89,8 +89,8 @@ HTML;
             </ul>
 
             <?php if (
-                    $sf_user->hasCredential(\sfGuardPermissionTable::CAN_VIEW_COSTS)
-                    && !$sf_user->hasCredential(\sfGuardPermissionTable::CAN_EDIT_COSTS)
+                $sf_user->hasCredential(\sfGuardPermissionTable::CAN_VIEW_COSTS)
+                && !$sf_user->hasCredential(\sfGuardPermissionTable::CAN_EDIT_COSTS)
             ): ?>
                 <h4>Стоимости</h4>
                 <b>Монтаж</b>: <?= $form->getObject()->getInstallationCost() ?><br>

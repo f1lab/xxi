@@ -10,7 +10,7 @@
  */
 class PayFormFilter extends BasePayFormFilter
 {
-  public function configure()
-  {
-  }
+    public function configure()
+    {
+    }
 }

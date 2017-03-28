@@ -10,7 +10,7 @@
  */
 class MaterialMovementMaterialsFormFilter extends BaseMaterialMovementMaterialsFormFilter
 {
-  public function configure()
-  {
-  }
+    public function configure()
+    {
+    }
 }

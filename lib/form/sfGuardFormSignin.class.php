@@ -10,23 +10,22 @@
  */
 class sfGuardFormSignin extends BasesfGuardFormSignin
 {
-  /**
-   * @see sfForm
-   */
-  public function configure()
-  {
-    //unset ($this['remember']);
+    /**
+     * @see sfForm
+     */
+    public function configure()
+    {
+        //unset ($this['remember']);
 
-    $this->getWidgetSchema()
-      ->offsetSet('username', new sfWidgetFormInputText(array(), array('tabindex' => 1)))
-      ->offsetSet('password', new sfWidgetFormInputPassword(array('type' => 'password'), array('tabindex' => 2)))
-      ->offsetSet('remember', new sfWidgetFormInputCheckbox(array(), array('tabindex' => 3)))
-    ;
+        $this->getWidgetSchema()
+            ->offsetSet('username', new sfWidgetFormInputText([], ['tabindex' => 1]))
+            ->offsetSet('password', new sfWidgetFormInputPassword(['type' => 'password'], ['tabindex' => 2]))
+            ->offsetSet('remember', new sfWidgetFormInputCheckbox([], ['tabindex' => 3]));
 
-    $this->getWidgetSchema()->setLabels(array(
-      'username' => 'Пользователь',
-      'password' => 'Пароль',
-      'remember' => 'Запомнить',
-    ));
-  }
+        $this->getWidgetSchema()->setLabels([
+            'username' => 'Пользователь',
+            'password' => 'Пароль',
+            'remember' => 'Запомнить',
+        ]);
+    }
 }

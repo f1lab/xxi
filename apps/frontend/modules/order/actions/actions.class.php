@@ -25,7 +25,8 @@ class orderActions extends sfActions
             $this->currentFilter = null;
             $filterQueryFilterParameter = $request->getParameter($this->filter->getName());
         } elseif ($request->hasParameter('filter_id')) { // selected saved filter
-            $this->currentFilter = $this->filters->contains($request->getParameter('filter_id', -1)) ? $this->filters->get($request->getParameter('filter_id', -1)) : null;
+            $this->currentFilter = $this->filters->contains($request->getParameter('filter_id', -1))
+                ? $this->filters->get($request->getParameter('filter_id', -1)) : null;
             $filterQueryFilterParameter = $this->currentFilter ? $this->currentFilter->getFilter() : null;
         } elseif (count($this->filters) > 0 and $this->filters->getFirst()->getIsDefault()) { // default saved filter
             $this->currentFilter = $this->filters->getFirst();
@@ -53,7 +54,7 @@ class orderActions extends sfActions
                     ->select('*, (select count(*) from comment_reads where comment_id = c.id and user_id = ?) read')
                     ->from('Comment c')
                     ->andWhere('order_id = ?', $order->getId())
-                    ->execute(array($this->getUser()->getGuardUser()->getId()));
+                    ->execute([$this->getUser()->getGuardUser()->getId()]);
                 $order->setComments($commentReads);
             }
             $this->pager->setResults($orders);
@@ -90,12 +91,12 @@ class orderActions extends sfActions
         $this->order->setComments(Doctrine_Core::getTable('Comment')->createQuery('a, a.Creator b')
             ->select('(select count(*) from comment_reads where comment_id = a.id and user_id = ?) read, a.*, b.*')
             ->andWhere('a.order_id = ?', $this->order->getId())
-            ->execute(array($this->getUser()->getGuardUser()->getId())));
+            ->execute([$this->getUser()->getGuardUser()->getId()]));
 
         $this->commentForm = new CommentForm();
         $this->commentForm->setDefault('order_id', $this->order->getId());
 
-        $this->fields = array(
+        $this->fields = [
             'clientFullestName' => 'Клиент',
             'creator' => 'Менеджер',
             'description' => 'Описание заказа',
@@ -120,7 +121,7 @@ class orderActions extends sfActions
             'billMade' => 'Счёт сформирован ',
             'billGiven' => 'Счёт получен заказчиком',
             'docsGiven' => 'Документы выданы',
-        );
+        ];
 
         $selectedFields = [];
         if ($this->getUser()->hasGroup('monitor') or $this->getUser()->hasGroup('master')) {
@@ -171,8 +172,10 @@ class orderActions extends sfActions
 
         if (count($selectedFields)) {
             // bidlo-magic: we need just part of fields, so bidlocode now
-            $selectedFields = array_fill_keys($selectedFields, ''); // => array('creator' => '', 'description' => '', etc…)
-            $this->fields = array_intersect_key($this->fields, $selectedFields); // => array('creator' => 'Клиент', etc…)
+            $selectedFields = array_fill_keys($selectedFields,
+                ''); // => array('creator' => '', 'description' => '', etc…)
+            $this->fields = array_intersect_key($this->fields,
+                $selectedFields); // => array('creator' => 'Клиент', etc…)
         }
 
         $this->utilizationMovements = Doctrine_Query::create()
@@ -237,7 +240,7 @@ class orderActions extends sfActions
             "state",
         ]);
 
-        $this->processForm($request, $this->form, array('success', 'Отлично!', 'Заказ добавлен.'), '@orders');
+        $this->processForm($request, $this->form, ['success', 'Отлично!', 'Заказ добавлен.'], '@orders');
         $this->setTemplate('new');
     }
 
@@ -321,7 +324,7 @@ class orderActions extends sfActions
         $this->processForm(
             $request,
             $this->form,
-            array('success', 'Отлично!', 'Изменения сохранены.'),
+            ['success', 'Отлично!', 'Изменения сохранены.'],
             '@order?id=' . $this->order->getId()
         );
         $this->setTemplate('edit');
@@ -353,7 +356,7 @@ class orderActions extends sfActions
                 $order->getDescription(),
                 $order->getDueDate() ? date("d.m.Y H:i", strtotime($order->getDueDate())) : '',
                 $order->getExecutionTime(),
-                $order->getStartedAt() ? date("d.m.Y H:i", strtotime($order->getStartedAt())) : ''
+                $order->getStartedAt() ? date("d.m.Y H:i", strtotime($order->getStartedAt())) : '',
             ],
         ], "Бланк заказа на №" . $order->getId());
     }
@@ -372,7 +375,8 @@ class orderActions extends sfActions
             ->andWhereIn("g.name", ["design-worker"])
             ->limit(1)
             ->fetchOne();
-        $this->forward404Unless($order and count($order["RefOrderWork"]) and true == ($ref = $order->getRefOrderWork()->getFirst()));
+        $this->forward404Unless($order and count($order["RefOrderWork"]) and true == ($ref = $order->getRefOrderWork()
+                ->getFirst()));
 
         $this->printTemplate("order-template", [
             "from" => [
@@ -462,7 +466,7 @@ class orderActions extends sfActions
     public function executeComment(sfWebRequest $request)
     {
         $form = new CommentForm();
-        $this->processForm($request, $form, array('success', 'Отлично!', 'Комментарий добавлен.'));
+        $this->processForm($request, $form, ['success', 'Отлично!', 'Комментарий добавлен.']);
         $this->redirect('@order?id=' . $request->getParameter('id'));
     }
 
@@ -526,9 +530,9 @@ class orderActions extends sfActions
             ->fetchAll(PDO::FETCH_COLUMN);
         $countUnreadedTickets = count($executedQuery);
 
-        return $this->renderText(json_encode(array(
+        return $this->renderText(json_encode([
             'countUnreadedTickets' => $countUnreadedTickets,
-        )));
+        ]));
     }
 
     public function executeInvoice(sfWebRequest $request)

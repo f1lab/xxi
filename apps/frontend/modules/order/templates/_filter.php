@@ -10,7 +10,9 @@
                         <option value=""></option>
                         <?php foreach ($filters as $filter): ?>
                             <option
-                                value="<?php echo $filter->getId() ?>" <?php if ($currentFilter !== null and $currentFilter->getId() === $filter->getId()) echo 'selected' ?>>
+                                    value="<?php echo $filter->getId() ?>" <?php if ($currentFilter !== null
+                                and $currentFilter->getId() === $filter->getId()
+                            ) echo 'selected' ?>>
                                 <?php echo $filter ?>
                             </option>
                         <?php endforeach ?></select>
@@ -34,7 +36,7 @@
 <form action="<?php echo url_for('@orders') ?>" method="get" class="well form-horizontal">
 
     <div class="control-group<?php if ($form['client_id']->hasError()): ?> error<?php endif ?>">
-        <?php echo $form['client_id']->renderLabel(null, array('class' => 'control-label')) ?>
+        <?php echo $form['client_id']->renderLabel(null, ['class' => 'control-label']) ?>
         <div class="controls">
             <?php echo $form['client_id']->render() ?>
             <?php if ($form['client_id']->hasError()): ?>
@@ -43,7 +45,7 @@
     </div>
 
     <div class="control-group<?php if ($form['created_by']->hasError()): ?> error<?php endif ?>">
-        <?php echo $form['created_by']->renderLabel(null, array('class' => 'control-label')) ?>
+        <?php echo $form['created_by']->renderLabel(null, ['class' => 'control-label']) ?>
         <div class="controls">
             <?php echo $form['created_by']->render() ?>
             <?php if ($form['created_by']->hasError()): ?>
@@ -53,19 +55,20 @@
 
     <?php foreach (OrderFormFilter::$attributesWithTimestamps as $attribute): ?>
         <div class="control-group<?php if ($form[$attribute . "_at_from"]->hasError()): ?> error<?php endif ?>">
-            <?php echo $form[$attribute . "_at_from"]->renderLabel(null, array('class' => 'control-label')) ?>
+            <?php echo $form[$attribute . "_at_from"]->renderLabel(null, ['class' => 'control-label']) ?>
             <div class="controls form-horizontal">
-                <?php echo $form[$attribute . "_at_from"]->render(array('placeholder' => 'from')) ?>
-                <?php echo $form[$attribute . "_at_to"]->render(array('placeholder' => 'to')) ?>
+                <?php echo $form[$attribute . "_at_from"]->render(['placeholder' => 'from']) ?>
+                <?php echo $form[$attribute . "_at_to"]->render(['placeholder' => 'to']) ?>
                 <?php if ($form[$attribute . "_at_from"]->hasError()): ?>
                     <div
-                        class="help-inline"><?php echo $form[$attribute . "_at_from"]->getError() ?></div><?php endif ?>
+                            class="help-inline"><?php echo $form[$attribute
+                    . "_at_from"]->getError() ?></div><?php endif ?>
             </div>
         </div>
     <?php endforeach ?>
 
     <div class="control-group<?php if ($form['pay_method']->hasError()): ?> error<?php endif ?>">
-        <?php echo $form['pay_method']->renderLabel(null, array('class' => 'control-label')) ?>
+        <?php echo $form['pay_method']->renderLabel(null, ['class' => 'control-label']) ?>
         <div class="controls">
             <?php echo $form['pay_method']->render() ?>
             <?php if ($form['pay_method']->hasError()): ?>
@@ -74,18 +77,18 @@
     </div>
 
     <div class="control-group<?php if ($form['has_payments_from']->hasError()): ?> error<?php endif ?>">
-        <?php echo $form['has_payments_from']->renderLabel(null, array('class' => 'control-label')) ?>
+        <?php echo $form['has_payments_from']->renderLabel(null, ['class' => 'control-label']) ?>
         <div class="controls form-horizontal">
-            <?php echo $form['has_payments_from']->render(array('placeholder' => 'from')) ?>
-            <?php echo $form['has_payments_to']->render(array('placeholder' => 'to')) ?>
+            <?php echo $form['has_payments_from']->render(['placeholder' => 'from']) ?>
+            <?php echo $form['has_payments_to']->render(['placeholder' => 'to']) ?>
             <?php if ($form['has_payments_from']->hasError()): ?>
                 <div
-                    class="help-inline"><?php echo $form['has_payments_from']->getError() ?></div><?php endif ?>
+                        class="help-inline"><?php echo $form['has_payments_from']->getError() ?></div><?php endif ?>
         </div>
     </div>
 
     <div class="control-group<?php if ($form['state']->hasError()): ?> error<?php endif ?>">
-        <?php echo $form['state']->renderLabel(null, array('class' => 'control-label')) ?>
+        <?php echo $form['state']->renderLabel(null, ['class' => 'control-label']) ?>
         <div class="controls form-horizontal">
             <?php echo $form['state']->render() ?>
             <?php if ($form['state']->hasError()): ?>
@@ -95,7 +98,7 @@
     </div>
 
     <div class="control-group<?php if ($form['area']->hasError()): ?> error<?php endif ?>">
-        <?php echo $form['area']->renderLabel(null, array('class' => 'control-label')) ?>
+        <?php echo $form['area']->renderLabel(null, ['class' => 'control-label']) ?>
         <div class="controls">
             <?php echo $form['area']->render() ?>
             <?php if ($form['area']->hasError()): ?>
@@ -104,7 +107,7 @@
     </div>
 
     <div class="control-group<?php if ($form['bill_made']->hasError()): ?> error<?php endif ?>">
-        <?php echo $form['bill_made']->renderLabel(null, array('class' => 'control-label')) ?>
+        <?php echo $form['bill_made']->renderLabel(null, ['class' => 'control-label']) ?>
         <div class="controls">
             <?php echo $form['bill_made']->render() ?>
             <?php if ($form['bill_made']->hasError()): ?>
@@ -113,7 +116,7 @@
     </div>
 
     <div class="control-group<?php if ($form['bill_given']->hasError()): ?> error<?php endif ?>">
-        <?php echo $form['bill_given']->renderLabel(null, array('class' => 'control-label')) ?>
+        <?php echo $form['bill_given']->renderLabel(null, ['class' => 'control-label']) ?>
         <div class="controls">
             <?php echo $form['bill_given']->render() ?>
             <?php if ($form['bill_given']->hasError()): ?>
@@ -122,7 +125,7 @@
     </div>
 
     <div class="control-group<?php if ($form['docs_given']->hasError()): ?> error<?php endif ?>">
-        <?php echo $form['docs_given']->renderLabel(null, array('class' => 'control-label')) ?>
+        <?php echo $form['docs_given']->renderLabel(null, ['class' => 'control-label']) ?>
         <div class="controls">
             <?php echo $form['docs_given']->render() ?>
             <?php if ($form['docs_given']->hasError()): ?>
@@ -135,7 +138,7 @@
         or $sf_user->hasCredential(["orders-filter-works-without", "order-filter-works-completed"])
     ): ?>
         <div class="control-group<?php if ($form['works_list']->hasError()): ?> error<?php endif ?>">
-            <?php echo $form['works_list']->renderLabel(null, array('class' => 'control-label')) ?>
+            <?php echo $form['works_list']->renderLabel(null, ['class' => 'control-label']) ?>
             <div class="controls">
                 <?php echo $form['works_list']->render() ?>
                 <?php if ($form['works_list']->hasError()): ?>

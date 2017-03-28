@@ -10,7 +10,7 @@
  */
 class MaterialMovementArrivalFormFilter extends BaseMaterialMovementArrivalFormFilter
 {
-  public function configure()
-  {
-  }
+    public function configure()
+    {
+    }
 }

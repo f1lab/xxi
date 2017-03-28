@@ -10,7 +10,7 @@
  */
 class WarehouseFormFilter extends BaseWarehouseFormFilter
 {
-  public function configure()
-  {
-  }
+    public function configure()
+    {
+    }
 }

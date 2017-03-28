@@ -10,7 +10,7 @@
  */
 class ArrivalFormFilter extends BaseArrivalFormFilter
 {
-  public function configure()
-  {
-  }
+    public function configure()
+    {
+    }
 }

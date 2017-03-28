@@ -10,7 +10,7 @@
  */
 class ShareSettingsFormFilter extends BaseShareSettingsFormFilter
 {
-  public function configure()
-  {
-  }
+    public function configure()
+    {
+    }
 }

@@ -10,7 +10,7 @@
  */
 class sfGuardUserFormFilter extends PluginsfGuardUserFormFilter
 {
-  public function configure()
-  {
-  }
+    public function configure()
+    {
+    }
 }

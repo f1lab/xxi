@@ -10,14 +10,14 @@
  */
 class MaterialMovementMaterialsForm extends BaseMaterialMovementMaterialsForm
 {
-  public function configure()
-  {
-    unset (
-      $this['deleted_at']
-      , $this['created_at']
-      , $this['updated_at']
-      , $this['created_by']
-      , $this['updated_by']
-    );
-  }
+    public function configure()
+    {
+        unset (
+            $this['deleted_at']
+            , $this['created_at']
+            , $this['updated_at']
+            , $this['created_by']
+            , $this['updated_by']
+        );
+    }
 }

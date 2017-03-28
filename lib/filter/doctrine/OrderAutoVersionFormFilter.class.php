@@ -10,7 +10,7 @@
  */
 class OrderAutoVersionFormFilter extends BaseOrderAutoVersionFormFilter
 {
-  public function configure()
-  {
-  }
+    public function configure()
+    {
+    }
 }

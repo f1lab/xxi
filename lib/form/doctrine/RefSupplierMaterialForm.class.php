@@ -10,7 +10,7 @@
  */
 class RefSupplierMaterialForm extends BaseRefSupplierMaterialForm
 {
-  public function configure()
-  {
-  }
+    public function configure()
+    {
+    }
 }

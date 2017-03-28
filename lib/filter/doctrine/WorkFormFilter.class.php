@@ -10,7 +10,7 @@
  */
 class WorkFormFilter extends BaseWorkFormFilter
 {
-  public function configure()
-  {
-  }
+    public function configure()
+    {
+    }
 }

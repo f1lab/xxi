@@ -10,7 +10,7 @@
  */
 class CommentReadsForm extends BaseCommentReadsForm
 {
-  public function configure()
-  {
-  }
+    public function configure()
+    {
+    }
 }

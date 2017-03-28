@@ -10,7 +10,7 @@
  */
 class SupplierFormFilter extends BaseSupplierFormFilter
 {
-  public function configure()
-  {
-  }
+    public function configure()
+    {
+    }
 }

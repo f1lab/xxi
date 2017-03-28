@@ -10,19 +10,18 @@
  */
 class MaterialMovementUtilizationForm extends BaseMaterialMovementUtilizationForm
 {
-  public function configure()
-  {
-    unset (
-      $this['deleted_at']
-      , $this['created_at']
-      , $this['updated_at']
-      , $this['created_by']
-      , $this['updated_by']
-    );
+    public function configure()
+    {
+        unset (
+            $this['deleted_at']
+            , $this['created_at']
+            , $this['updated_at']
+            , $this['created_by']
+            , $this['updated_by']
+        );
 
-    $this->getWidgetSchema()
-      ->offsetSet("work_id", new sfWidgetFormInputHidden())
-      ->offsetSet("order_id", new sfWidgetFormInputHidden())
-    ;
-  }
+        $this->getWidgetSchema()
+            ->offsetSet("work_id", new sfWidgetFormInputHidden())
+            ->offsetSet("order_id", new sfWidgetFormInputHidden());
+    }
 }

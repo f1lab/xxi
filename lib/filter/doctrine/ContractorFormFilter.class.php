@@ -10,7 +10,7 @@
  */
 class ContractorFormFilter extends BaseContractorFormFilter
 {
-  public function configure()
-  {
-  }
+    public function configure()
+    {
+    }
 }
