@@ -233,8 +233,9 @@ class OrderForm extends BaseOrderForm
             "contractors_cost" => $user->hasCredential(\sfGuardPermissionTable::CAN_EDIT_COSTS),
             "delivery_cost" => $user->hasCredential(\sfGuardPermissionTable::CAN_EDIT_COSTS),
             "cost" => $user->hasCredential(\sfGuardPermissionTable::CAN_EDIT_COSTS),
-            "pay_method" => $user->hasCredential(\sfGuardPermissionTable::CAN_EDIT_COSTS),
             "recoil" => $user->hasCredential(\sfGuardPermissionTable::CAN_EDIT_COSTS),
+
+            "pay_method" => $user->hasGroup("director") or $user->hasGroup("manager") or $user->hasGroup("buhgalter"),
 
             "expected_at" => $user->hasGroup("worker"),
             "started_at" => $user->hasGroup("director") or $user->hasGroup("worker"),
