@@ -58,7 +58,7 @@ class reportActions extends sfActions
             ]));
 
         $this->period = [
-            'from' => date('Y') . '-01-01',
+            'from' => (new DateTime('first day of this month'))->format('Y-m-d'),
             'to' => date('Y-m-d', strtotime('+1 day')),
         ];
         $this->manager = false;
@@ -214,7 +214,7 @@ class reportActions extends sfActions
             ]));
 
         $this->period = [
-            'from' => date('Y') . '-01-01',
+            'from' => (new DateTime('first day of this month'))->format('Y-m-d'),
             'to' => date('Y-m-d 23:59:59'),
         ];
 
@@ -298,7 +298,7 @@ class reportActions extends sfActions
             ]));
 
         $this->period = [
-            'from' => date('Y') . '-01-01',
+            'from' => (new DateTime('first day of this month'))->format('Y-m-d'),
             'to' => date('Y-m-d 23:59:59'),
         ];
 
@@ -412,7 +412,7 @@ class reportActions extends sfActions
 
         $this->client = false;
         $this->period = [
-            'from' => date('Y') . '-01-01',
+            'from' => (new DateTime('first day of this month'))->format('Y-m-d'),
             'to' => date('Y-m-d'),
         ];
 
@@ -716,7 +716,7 @@ class reportActions extends sfActions
             ]));
 
         $this->period = [
-            'from' => date('Y') . '-01-01',
+            'from' => (new DateTime('first day of this month'))->format('Y-m-d'),
             'to' => date('Y-m-d 23:59:59'),
         ];
         $this->manager = false;
